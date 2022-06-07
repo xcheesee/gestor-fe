@@ -46,7 +46,7 @@ const ListaAditamentos = (props) => {
 
     const [acao, setAcao] = useState('editar');
     const [carregando, setCarregando] = useState(false);
-    const [openFormAditamentos, setOpenFormAditamentos] = useState({
+    const [openFormAditamento, setOpenFormAditamento] = useState({
         open: false,
         acao: 'adicionar'
     });
@@ -54,7 +54,7 @@ const ListaAditamentos = (props) => {
         open: false,
         id: ''
     });
-    const [formAditamentos, setFormAditamentos] = useState({
+    const [formAditamento, setFormAditamento] = useState({
         contrato_id: numContrato,
         tipo_aditamentos: '',
         valor_aditamento: '',
@@ -63,6 +63,52 @@ const ListaAditamentos = (props) => {
         data_base_reajuste: '',
         valor_reajustado: ''
     });
+
+    const handleClickExcluir = (id) => {
+        setOpenConfirmacao({
+            open: true,
+            id: id
+        });
+        setAcao('excluir');
+    }
+
+    const excluiAditamento = (id) => {
+        const url = `http://${process.env.REACT_APP_API_URL}/contratos/api/aditamento/${id}`;
+        const token = sessionStorage.getItem('access_token');
+        const options = {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+                'Authorization': `Bearer ${token}`
+            }
+        }
+
+        setCarregando(true);
+
+        fetch(url, options)
+            .then(res => {
+                if (res.ok) {
+                    setOpenConfirmacao({ open: false, id: '' })
+                    setCarregando(false);
+                    setSnackbar({
+                        open: true,
+                        severity: 'success',
+                        text: 'Aditamento excluído com sucesso!',
+                        color: 'success'
+                    });
+                    return res.json();
+                } else {
+                    setCarregando(false);
+                    setSnackbar({
+                        open: true,
+                        severity: 'error',
+                        text: `Erro ${res.status} - Não foi possível excluir o aditamento`,
+                        color: 'error'
+                    });
+                }
+            })
+    }
 
     return (
         <Box>
@@ -101,12 +147,38 @@ const ListaAditamentos = (props) => {
 
                             <BotoesTab 
                                 // editar={(e) => { handleClickEditar(e,aditamento,aditamento.id); }}
-                                // excluir={() => { handleClickExcluir(aditaditamento.id); }}
+                                excluir={() => { handleClickExcluir(aditamento.id); }}
                             />
                         </Box>
                     </Box>
                 );
             })}
+
+            {/* <FormAditamento
+                formAditamento={formAditamento}
+                setFormAditamento={setFormAditamento}
+                openFormAditamento={openFormAditamento} 
+                setOpenFormAditamento={setOpenFormAditamento} 
+                enviaAditamento={enviaAditamento}
+                carregando={carregando}
+                setOpenConfirmacao={setOpenConfirmacao}
+            /> */}
+
+            <BotaoAdicionar 
+                // fnAdicionar={handleClickAdicionar}
+                texto="Adicionar aditamento"
+            />
+
+            <DialogConfirmacao
+                openConfirmacao={openConfirmacao} 
+                setOpenConfirmacao={setOpenConfirmacao}
+                acao={acao} 
+                fnExcluir={excluiAditamento}
+                // fnEditar={editaAditamento}
+                formInterno={formAditamento}
+                carregando={carregando}
+                texto="aditamento"
+            />
         </Box>
     );
 }
