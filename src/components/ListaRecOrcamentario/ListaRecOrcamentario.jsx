@@ -4,7 +4,7 @@ import {
     Divider,
     Paper
 } from '@mui/material';
-
+import FormRecOrcamentario from './FormRecOrcamentario';
 import DialogConfirmacao from '../DialogConfirmacao';
 import BotoesTab from '../BotoesTab';
 import BotaoAdicionar from '../BotaoAdicionar';
@@ -98,6 +98,70 @@ const ListaRecOrcamentario = (props) => {
                 }
             })
     }
+
+    const handleClickAdicionar = () => {
+        setOpenFormRecOrcamentario({
+            open: true,
+            acao: 'adicionar'
+        });
+        setFormRecOrcamentario({
+            contrato_id: numContrato,
+            nota_empenho: '',
+            saldo_empenho: '',
+            dotacao_orcamentaria: ''
+        });
+    }
+
+    const enviaRecOrcamentario = () => {
+        const url = `http://${process.env.REACT_APP_API_URL}/contratos/api/recursoorcamentario`
+        const token = sessionStorage.getItem('access_token');
+        const options = {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+                'Authorization': `Bearer ${token}`
+            },
+            body: JSON.stringify(formRecOrcamentario)
+        };
+
+        setCarregando(true);
+
+        fetch(url, options)
+            .then(res => {
+                if (res.ok) {
+                    setCarregando(false);
+                    setSnackbar({
+                        open: true,
+                        severity: 'success',
+                        text: 'Recurso orçamentário enviado com sucesso!',
+                        color: 'success'
+                    });
+                    setOpenFormRecOrcamentario({
+                        open: false,
+                        acao: 'adicionar'
+                    });
+                    setFormRecOrcamentario({
+                        ...formRecOrcamentario,
+                        nota_empenho: '',
+                        saldo_empenho: '',
+                        dotacao_orcamentaria: ''
+                    });
+                    return res.json();
+                } else {
+                    setCarregando(false);
+                    setSnackbar({
+                        open: true,
+                        severity: 'error',
+                        text: `Erro ${res.status} - Não foi possível registrar o recurso orçamentário`,
+                        color: 'error'
+                    });
+                }
+            })
+            .catch(err => {
+                console.log(err);
+            });
+    }
     
     return (
         <Box>
@@ -138,8 +202,20 @@ const ListaRecOrcamentario = (props) => {
                 );
             })}
 
+            <FormRecOrcamentario 
+                formRecOrcamentario={formRecOrcamentario}
+                setFormRecOrcamentario={setFormRecOrcamentario}
+                openFormRecOrcamentario={openFormRecOrcamentario} 
+                setOpenFormRecOrcamentario={setOpenFormRecOrcamentario} 
+                setSnackbar={setSnackbar}
+                enviaRecOrcamentario={enviaRecOrcamentario}
+                // editaRecOrcamentario={editaRecOrcamentario}
+                carregando={carregando}
+                setOpenConfirmacao={setOpenConfirmacao}
+            />
+
             <BotaoAdicionar 
-                // fnAdicionar={handleClickAdicionar}
+                fnAdicionar={handleClickAdicionar}
                 texto="Adicionar recurso orçamentário"
             />
 

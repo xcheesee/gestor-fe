@@ -209,7 +209,7 @@ const ListaCertidoes = (props) => {
                     setSnackbar({
                         open: true,
                         severity: 'error',
-                        text: `Erro ${res.status}. Não foi possível enviar a certidão.`,
+                        text: `Erro ${res.status} - Não foi possível enviar a certidão`,
                         color: 'error'
                     });
                 }
