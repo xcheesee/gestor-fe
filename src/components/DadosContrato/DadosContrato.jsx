@@ -10,8 +10,7 @@ import {
     Fade,
     Snackbar,
     Alert,
-    Fab,
-    Tooltip
+    Fab
 } from '@mui/material';
 import DadosEmpresa from './DadosEmpresa';
 import OutrasInformacoes from './OutrasInformacoes';
@@ -333,7 +332,7 @@ const DadosContrato = ({ snackbar, setSnackbar }) => {
 
                                 <Box sx={{ width: '100%' }}>
                                     <TabPanel value={value} index={0}>
-                                        <Box>
+                                        <Box component={Paper} elevation={3} sx={{ padding: '1rem' }}>
                                             <TabContrato 
                                                 processo_sei={dados.processo_sei}
                                                 credor={dados.credor}
@@ -351,22 +350,20 @@ const DadosContrato = ({ snackbar, setSnackbar }) => {
                                                 estaCarregado={estaCarregado}
                                             />
 
-                                            <Tooltip title="Editar contrato" arrow>
-                                                <Fab 
-                                                    sx={{ 
-                                                        position: 'sticky', 
-                                                        bottom: '0px', 
-                                                        left: '100%',
-                                                        zIndex: '80',
-                                                        textTransform: 'none',
-                                                        borderRadius: '5px'
-                                                    }}
-                                                    color="primary"
-                                                    variant="extended"
-                                                >
-                                                    <EditIcon sx={{ mr: '0.3rem' }} /> Editar dados
-                                                </Fab>
-                                            </Tooltip>
+                                            <Fab 
+                                                sx={{ 
+                                                    position: 'sticky', 
+                                                    bottom: '0px', 
+                                                    left: '100%',
+                                                    zIndex: '80',
+                                                    textTransform: 'none',
+                                                    borderRadius: '5px'
+                                                }}
+                                                color="primary"
+                                                variant="extended"
+                                            >
+                                                <EditIcon sx={{ mr: '0.3rem' }} /> Editar dados
+                                            </Fab>
                                         </Box>
                                     </TabPanel>
 
