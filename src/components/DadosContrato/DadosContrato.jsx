@@ -18,6 +18,7 @@ import OutrasInformacoes from './OutrasInformacoes';
 import ListaCertidoes from '../ListaCertidoes';
 import ListaGarantias from '../ListaGarantias/ListaGarantias';
 import ListaFiscalizacao from '../ListaFiscalizacoes';
+import ListaRecOrcamentario from '../ListaRecOrcamentario';
 import PropTypes from 'prop-types';
 import EditIcon from '@mui/icons-material/Edit';
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
@@ -150,22 +151,6 @@ const TabContrato = (props) => {
     return retornaCampoValor(campos, valores, props.estaCarregado);
 }
 
-const TabRecursoOrcamentario = (props) => {
-    const campos = [
-        "Nota de empenho",
-        "Saldo de empenho",
-        "Dotação orçamentária"
-    ];
-
-    const valores = [
-        props.nota_empenho,
-        props.saldo_empenho,
-        props.dotacao_orcamentaria
-    ];
-
-    return retornaCampoValor(campos, valores, props.estaCarregado);
-}
-
 const TabLocaisServico = (props) => {
     const campos = [
         "Distrito",
@@ -220,6 +205,7 @@ const DadosContrato = ({ snackbar, setSnackbar }) => {
     const [certidoes, setCertidoes] = useState([]);
     const [garantias, setGarantias] = useState([]);
     const [fiscalizacoes, setFiscalizacoes] = useState([]);
+    const [recOrcamentarios, setRecOrcamentarios] = useState([]);
     const [estaCarregado, setEstaCarregado] = useState(false);
     const { numContrato } = useParams();
     
@@ -258,6 +244,12 @@ const DadosContrato = ({ snackbar, setSnackbar }) => {
         .then(res => res.json())
         .then(data => {
             setFiscalizacoes(data.data);
+        })
+
+        fetch(`${url}/recursoorcamentarios/${numContrato}`, options)
+        .then(res => res.json())
+        .then(data => {
+            setRecOrcamentarios(data.data);
         })
 
     }, [numContrato, snackbar])
@@ -415,11 +407,13 @@ const DadosContrato = ({ snackbar, setSnackbar }) => {
                                     </TabPanel>
 
                                     <TabPanel value={value} index={4}>
-                                        <TabRecursoOrcamentario 
-                                            nota_empenho=""
-                                            saldo_empenho=""
-                                            dotacao_orcamentaria=""
+                                        <ListaRecOrcamentario 
+                                            recOrcamentarios={recOrcamentarios}
                                             estaCarregado={estaCarregado}
+                                            formataValores={formataValores}
+                                            retornaCampoValor={retornaCampoValor}
+                                            numContrato={numContrato}
+                                            setSnackbar={setSnackbar}
                                         />
                                     </TabPanel>
 
