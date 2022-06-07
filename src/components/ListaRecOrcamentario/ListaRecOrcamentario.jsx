@@ -62,7 +62,7 @@ const ListaRecOrcamentario = (props) => {
     }
 
     const excluiRecOrcamentario = (id) => {
-        const url = `http://${process.env.REACT_APP_API_URL}/contratos/api/recursoorcamentario/${id}`
+        const url = `http://${process.env.REACT_APP_API_URL}/contratos/api/recursoorcamentario/${id}`;
         const token = sessionStorage.getItem('access_token');
         const options = {
             method: 'DELETE',
@@ -99,6 +99,69 @@ const ListaRecOrcamentario = (props) => {
             })
     }
 
+    const handleClickEditar = (e, recOrcamentario) => {
+        setFormRecOrcamentario({
+            id: recOrcamentario.id,
+            contrato_id: recOrcamentario.contrato_id,
+            nota_empenho: recOrcamentario.nota_empenho,
+            saldo_empenho: recOrcamentario.saldo_empenho,
+            dotacao_orcamentaria: recOrcamentario.dotacao_orcamentaria
+        });
+        setOpenFormRecOrcamentario({
+            open: true,
+            acao: 'editar'
+        });
+        setAcao('editar');
+    }
+
+    const editaRecOrcamentario = (id, formRecOrcamentarioEdit) => {
+        const url = `http://${process.env.REACT_APP_API_URL}/contratos/api/recursoorcamentario/${id}`;
+        const token = sessionStorage.getItem('access_token');
+        const options = {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+                'Authorization': `Bearer ${token}`
+            },
+            body: JSON.stringify(formRecOrcamentarioEdit)
+        };
+
+        setCarregando(true);
+
+        fetch(url, options)
+            .then(res => {
+                if (res.ok) {
+                    setCarregando(false);
+                    setSnackbar({
+                        open: true,
+                        severity: 'success',
+                        text: 'Recurso orçamentário editado com sucesso!',
+                        color: 'success'
+                    });
+                    setOpenFormRecOrcamentario({
+                        open: false,
+                        acao: 'adicionar'
+                    });
+                    setFormRecOrcamentario({
+                        ...formRecOrcamentario,
+                        nota_empenho: '',
+                        saldo_empenho: '',
+                        dotacao_orcamentaria: ''
+                    });
+                    return res.json();
+                } else {
+                    setCarregando(false);
+                    setSnackbar({
+                        open: true,
+                        severity: 'error',
+                        text: `Erro ${res.status} - Não foi possível editar os dados de recurso orçamentário`,
+                        color: 'error'
+                    });
+                }
+            });
+    }
+
     const handleClickAdicionar = () => {
         setOpenFormRecOrcamentario({
             open: true,
@@ -113,7 +176,7 @@ const ListaRecOrcamentario = (props) => {
     }
 
     const enviaRecOrcamentario = () => {
-        const url = `http://${process.env.REACT_APP_API_URL}/contratos/api/recursoorcamentario`
+        const url = `http://${process.env.REACT_APP_API_URL}/contratos/api/recursoorcamentario`;
         const token = sessionStorage.getItem('access_token');
         const options = {
             method: 'POST',
@@ -194,7 +257,7 @@ const ListaRecOrcamentario = (props) => {
                             />
 
                             <BotoesTab 
-                                // editar={(e) => { handleClickEditar(e, recOrcamentario, recOrcamentario.id); }}
+                                editar={(e) => { handleClickEditar(e, recOrcamentario, recOrcamentario.id); }}
                                 excluir={() => { handleClickExcluir(recOrcamentario.id); }}
                             />
                         </Box>
@@ -209,7 +272,7 @@ const ListaRecOrcamentario = (props) => {
                 setOpenFormRecOrcamentario={setOpenFormRecOrcamentario} 
                 setSnackbar={setSnackbar}
                 enviaRecOrcamentario={enviaRecOrcamentario}
-                // editaRecOrcamentario={editaRecOrcamentario}
+                editaRecOrcamentario={editaRecOrcamentario}
                 carregando={carregando}
                 setOpenConfirmacao={setOpenConfirmacao}
             />
@@ -224,7 +287,7 @@ const ListaRecOrcamentario = (props) => {
                 setOpenConfirmacao={setOpenConfirmacao}
                 acao={acao} 
                 fnExcluir={excluiRecOrcamentario}
-                // fnEditar={editaCertidao}
+                fnEditar={editaRecOrcamentario}
                 formInterno={formRecOrcamentario}
                 carregando={carregando}
                 texto="recurso orçamentário"

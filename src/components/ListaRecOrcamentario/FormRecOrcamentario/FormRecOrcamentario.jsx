@@ -35,12 +35,12 @@ const FormRecOrcamentario = (props) => {
     const handleClickConfirmar = () => {
         if (openFormRecOrcamentario.acao === 'adicionar') {
             enviaRecOrcamentario();
-        } // else if (openFormRecOrcamentario.acao === 'editar') {
-        //     setOpenConfirmacao({
-        //         open: true,
-        //         id: formRecOrcamentario.id
-        //     });
-        // }
+        } else if (openFormRecOrcamentario.acao === 'editar') {
+            setOpenConfirmacao({
+                open: true,
+                id: formRecOrcamentario.id
+            });
+        }
     }
     
     return (
