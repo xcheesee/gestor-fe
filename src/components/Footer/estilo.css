@@ -1,0 +1,14 @@
+.footer {
+    align-items: center;
+    display: flex;
+    justify-content: center;
+}
+
+.footer__texto {
+    color: #555555;
+    padding: 1rem;
+}
+
+.footer__imagem {
+    height: 1.5rem;
+}
