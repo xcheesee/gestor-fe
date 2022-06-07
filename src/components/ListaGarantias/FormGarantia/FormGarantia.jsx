@@ -19,12 +19,9 @@ const FormGarantia = (props) => {
         setFormGarantia,
         openFormGarantia,
         setOpenFormGarantia,
-        setSnackbar,
         enviaGarantia,
-        editaGarantia,
         carregando,
-        setOpenConfirmacao,
-        ...other
+        setOpenConfirmacao
     } = props;
 
     const handleInputChange = (e) => {

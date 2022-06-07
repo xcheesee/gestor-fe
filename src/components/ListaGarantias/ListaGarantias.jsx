@@ -286,9 +286,7 @@ const ListaGarantias = (props) => {
             <FormGarantia 
                 formGarantia={formGarantia}
                 setFormGarantia={setFormGarantia}
-                setSnackbar={setSnackbar}
                 enviaGarantia={enviaGarantia}
-                editaGarantia={editaGarantia}
                 carregando={carregando}
                 openFormGarantia={openFormGarantia}
                 setOpenFormGarantia={setOpenFormGarantia}

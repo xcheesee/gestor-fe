@@ -270,9 +270,7 @@ const ListaRecOrcamentario = (props) => {
                 setFormRecOrcamentario={setFormRecOrcamentario}
                 openFormRecOrcamentario={openFormRecOrcamentario} 
                 setOpenFormRecOrcamentario={setOpenFormRecOrcamentario} 
-                setSnackbar={setSnackbar}
                 enviaRecOrcamentario={enviaRecOrcamentario}
-                editaRecOrcamentario={editaRecOrcamentario}
                 carregando={carregando}
                 setOpenConfirmacao={setOpenConfirmacao}
             />

@@ -267,9 +267,7 @@ const ListaFiscalizacoes = (props) => {
             <FormGestaoFiscalizacao 
                 formFiscalizacao={formFiscalizacao}
                 setFormFiscalizacao={setFormFiscalizacao}
-                setSnackbar={setSnackbar}
                 enviaFiscalizacao={enviaFiscalizacao}
-                editaFiscalizacao={editaFiscalizacao}
                 carregando={carregando}
                 openFormFiscalizacao={openFormFiscalizacao}
                 setOpenFormFiscalizacao={setOpenFormFiscalizacao}

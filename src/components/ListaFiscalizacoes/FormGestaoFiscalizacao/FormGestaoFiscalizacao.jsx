@@ -15,14 +15,11 @@ const FormGestaoFiscalizacao = (props) => {
     const {
         formFiscalizacao,
         setFormFiscalizacao,
-        setSnackbar,
         enviaFiscalizacao,
-        editaFiscalizacao,
         carregando,
         openFormFiscalizacao,
         setOpenFormFiscalizacao,
-        setOpenConfirmacao,
-        ...other
+        setOpenConfirmacao
     } = props;
 
     const handleInputChange = (e) => {

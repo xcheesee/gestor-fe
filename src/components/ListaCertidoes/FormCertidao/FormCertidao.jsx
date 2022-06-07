@@ -18,12 +18,9 @@ const FormCertidao = (props) => {
         setFormCertidao, 
         openFormCertidao, 
         setOpenFormCertidao, 
-        setSnackbar, 
         enviaCertidao,
-        editaCertidao,
         carregando,
-        setOpenConfirmacao,
-        ...other 
+        setOpenConfirmacao
     } = props;
 
     const handleInputChange = (e) => {

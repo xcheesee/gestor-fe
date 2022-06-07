@@ -262,9 +262,7 @@ const ListaCertidoes = (props) => {
                 setFormCertidao={setFormCertidao} 
                 openFormCertidao={openFormCertidao}
                 setOpenFormCertidao={setOpenFormCertidao}
-                setSnackbar={setSnackbar}
                 enviaCertidao={enviaCertidao}
-                editaCertidao={editaCertidao}
                 carregando={carregando}
                 setOpenConfirmacao={setOpenConfirmacao}
             />

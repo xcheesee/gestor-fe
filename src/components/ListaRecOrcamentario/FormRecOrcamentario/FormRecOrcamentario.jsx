@@ -18,11 +18,9 @@ const FormRecOrcamentario = (props) => {
         setFormRecOrcamentario, 
         openFormRecOrcamentario, 
         setOpenFormRecOrcamentario, 
-        setSnackbar, 
         enviaRecOrcamentario,
-        editaRecOrcamentario,
         carregando,
-        setOpenConfirmacao,
+        setOpenConfirmacao
     } = props;
 
     const handleInputChange = (e) => {
