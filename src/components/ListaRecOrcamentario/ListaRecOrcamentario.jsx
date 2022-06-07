@@ -19,7 +19,7 @@ const TabRecursoOrcamentario = (props) => {
     const valores = [
         props.nota_empenho,
         props.formataValores(props.saldo_empenho),
-        props.formataValores(props.dotacao_empenho)
+        props.formataValores(props.dotacao_orcamentaria)
     ];
 
     return props.retornaCampoValor(campos, valores, props.estaCarregado);
@@ -50,8 +50,54 @@ const ListaRecOrcamentario = (props) => {
         contrato_id: numContrato,
         nota_empenho: '',
         saldo_empenho: '',
-        dotacao_empenho: ''
+        dotacao_orcamentaria: ''
     });
+
+    const handleClickExcluir = (id) => {
+        setOpenConfirmacao({
+            open: true,
+            id: id
+        });
+        setAcao('excluir');
+    }
+
+    const excluiRecOrcamentario = (id) => {
+        const url = `http://${process.env.REACT_APP_API_URL}/contratos/api/recursoorcamentario/${id}`
+        const token = sessionStorage.getItem('access_token');
+        const options = {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+                'Authorization': `Bearer ${token}`
+            }
+        }
+
+        setCarregando(true);
+
+        fetch(url, options)
+            .then(res => {
+                if (res.ok) {
+                    setOpenConfirmacao({ open: false, id: '' });
+                    setCarregando(false);
+                    setSnackbar({
+                        open: true,
+                        severity: 'success',
+                        text: 'Certidão excluída com sucesso!',
+                        color: 'success'
+                    });
+                    return res.json();
+                } else {
+                    setCarregando(false);
+                    setSnackbar({
+                        open: true,
+                        severity: 'error',
+                        text: `Erro ${res.status} - Não foi possível excluir a certidão`,
+                        color: 'error'
+                    });
+                }
+            })
+    }
     
     return (
         <Box>
@@ -77,7 +123,7 @@ const ListaRecOrcamentario = (props) => {
                             <TabRecursoOrcamentario 
                                 nota_empenho={recOrcamentario.nota_empenho}
                                 saldo_empenho={recOrcamentario.saldo_empenho}
-                                dotacao_empenho={recOrcamentario.dotacao_empenho}
+                                dotacao_orcamentaria={recOrcamentario.dotacao_orcamentaria}
                                 estaCarregado={estaCarregado}
                                 formataValores={formataValores}
                                 retornaCampoValor={retornaCampoValor}
@@ -85,7 +131,7 @@ const ListaRecOrcamentario = (props) => {
 
                             <BotoesTab 
                                 // editar={(e) => { handleClickEditar(e, recOrcamentario, recOrcamentario.id); }}
-                                // excluir={() => { handleClickExcluir(recOrcamentario.id); }}
+                                excluir={() => { handleClickExcluir(recOrcamentario.id); }}
                             />
                         </Box>
                     </Box>
@@ -97,6 +143,16 @@ const ListaRecOrcamentario = (props) => {
                 texto="Adicionar recurso orçamentário"
             />
 
+            <DialogConfirmacao
+                openConfirmacao={openConfirmacao} 
+                setOpenConfirmacao={setOpenConfirmacao}
+                acao={acao} 
+                fnExcluir={excluiRecOrcamentario}
+                // fnEditar={editaCertidao}
+                formInterno={formRecOrcamentario}
+                carregando={carregando}
+                texto="recurso orçamentário"
+            />
         </Box>
     );
 }
