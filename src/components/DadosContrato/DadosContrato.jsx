@@ -18,6 +18,7 @@ import ListaCertidoes from '../ListaCertidoes';
 import ListaGarantias from '../ListaGarantias/ListaGarantias';
 import ListaFiscalizacao from '../ListaFiscalizacoes';
 import ListaRecOrcamentario from '../ListaRecOrcamentario';
+import ListaAditamentos from '../ListaAdimentos';
 import PropTypes from 'prop-types';
 import EditIcon from '@mui/icons-material/Edit';
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
@@ -114,6 +115,18 @@ const formataCpfCnpj = (cpfCnpj) => {
     }
 }
 
+const formataPorcentagem = (valor) => {
+    const porcentagem = new Intl.NumberFormat('pt-BR', {
+        style: "decimal"
+    });
+
+    if (valor === "") {
+        return "";
+    } else {
+        return `${porcentagem.format(valor)} %`;
+    }
+}
+
 const TabContrato = (props) => {
     const campos = [
         "Processo SEI",
@@ -166,28 +179,6 @@ const TabLocaisServico = (props) => {
     return retornaCampoValor(campos, valores, props.estaCarregado);
 }
 
-const TabAditamentos = (props) => {
-    const campos = [
-        "Tipo",
-        "Valor",
-        "Fim da vigência atualizada",
-        "Taxa de reajuste",
-        "Data base do reajuste",
-        "Valor reajustado"
-    ];
-
-    const valores = [
-        props.tipo_aditamentos,
-        props.valor_aditamento,
-        props.data_fim_vigencia_atualizada,
-        props.indice_reajuste,
-        props.data_base_reajuste,
-        props.valor_reajustado
-    ];
-
-    return retornaCampoValor(campos, valores, props.estaCarregado);
-}
-
 const ListaTabs = [
     'Contrato',
     'Certidões',
@@ -205,6 +196,8 @@ const DadosContrato = ({ snackbar, setSnackbar }) => {
     const [garantias, setGarantias] = useState([]);
     const [fiscalizacoes, setFiscalizacoes] = useState([]);
     const [recOrcamentarios, setRecOrcamentarios] = useState([]);
+    // const [locais, setLocais] = useState([]);
+    const [aditamentos, setAditamentos] = useState([]);
     const [estaCarregado, setEstaCarregado] = useState(false);
     const { numContrato } = useParams();
     
@@ -249,6 +242,12 @@ const DadosContrato = ({ snackbar, setSnackbar }) => {
         .then(res => res.json())
         .then(data => {
             setRecOrcamentarios(data.data);
+        })
+
+        fetch(`${url}/aditamentos/${numContrato}`, options)
+        .then(res => res.json())
+        .then(data => {
+            setAditamentos(data.data);
         })
 
     }, [numContrato, snackbar])
@@ -422,16 +421,17 @@ const DadosContrato = ({ snackbar, setSnackbar }) => {
                                             estaCarregado={estaCarregado}
                                         />
                                     </TabPanel>
-
+                                        
                                     <TabPanel value={value} index={6}>
-                                        <TabAditamentos 
-                                            tipo_aditamentos=""
-                                            valor_aditamento=""
-                                            data_fim_vigencia_atualizada=""
-                                            indice_reajuste=""
-                                            data_base_reajuste=""
-                                            valor_reajustado=""
+                                        <ListaAditamentos 
+                                            aditamentos={aditamentos}
                                             estaCarregado={estaCarregado}
+                                            formataValores={formataValores}
+                                            formataData={formataData}
+                                            formataPorcentagem={formataPorcentagem}
+                                            retornaCampoValor={retornaCampoValor}
+                                            numContrato={numContrato}
+                                            setSnackbar={setSnackbar}
                                         />
                                     </TabPanel>
                                 </Box>
