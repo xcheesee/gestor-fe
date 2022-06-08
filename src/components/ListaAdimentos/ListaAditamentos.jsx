@@ -4,7 +4,7 @@ import {
     Divider,
     Paper
 } from '@mui/material';
-
+import FormAditamento from './FormAditamento';
 import DialogConfirmacao from '../DialogConfirmacao';
 import BotoesTab from '../BotoesTab';
 import BotaoAdicionar from '../BotaoAdicionar';
@@ -110,6 +110,72 @@ const ListaAditamentos = (props) => {
             })
     }
 
+    const handleClickAdicionar = () => {
+        setOpenFormAditamento({
+            open: true,
+            acao: 'adicionar'
+        });
+        setFormAditamento({
+            contrato_id: numContrato,
+            tipo_aditamentos: '',
+            valor_aditamento: '',
+            data_fim_vigencia_atualizada: '',
+            indice_reajuste: '',
+            data_base_reajuste: '',
+            valor_reajustado: ''
+        });
+    }
+
+    const enviaAditamento = () => {
+        const url = `http://${process.env.REACT_APP_API_URL}/contratos/api/aditamento`;
+        const token = sessionStorage.getItem('access_token');
+        const options = {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+                'Authorization': `Bearer ${token}`
+            },
+            body: JSON.stringify(formAditamento)
+        };
+
+        setCarregando(true);
+
+        fetch(url, options)
+            .then(res => {
+                if (res.ok) {
+                    setCarregando(false);
+                    setSnackbar({
+                        open: true,
+                        severity: 'success',
+                        text: 'Aditamento enviado com sucesso!',
+                        color: 'success'
+                    });
+                    setOpenFormAditamento({
+                        ...formAditamento,
+                        tipo_aditamentos: '',
+                        valor_aditamento: '',
+                        data_fim_vigencia_atualizada: '',
+                        indice_reajuste: '',
+                        data_base_reajuste: '',
+                        valor_reajustado: ''
+                    });
+                    return res.json();
+                } else {
+                    setCarregando(false);
+                    setSnackbar({
+                        open: true,
+                        severity: 'error',
+                        text: `Erro ${res.status} - Não foi possível enviar o aditamento`,
+                        color: 'error'
+                    });
+                }
+            })
+            .catch(err => {
+                console.log(err);
+            });
+    }
+
     return (
         <Box>
             {aditamentos.map((aditamento, index) => {
@@ -154,7 +220,7 @@ const ListaAditamentos = (props) => {
                 );
             })}
 
-            {/* <FormAditamento
+            <FormAditamento
                 formAditamento={formAditamento}
                 setFormAditamento={setFormAditamento}
                 openFormAditamento={openFormAditamento} 
@@ -162,10 +228,10 @@ const ListaAditamentos = (props) => {
                 enviaAditamento={enviaAditamento}
                 carregando={carregando}
                 setOpenConfirmacao={setOpenConfirmacao}
-            /> */}
+            />
 
             <BotaoAdicionar 
-                // fnAdicionar={handleClickAdicionar}
+                fnAdicionar={handleClickAdicionar}
                 texto="Adicionar aditamento"
             />
 
