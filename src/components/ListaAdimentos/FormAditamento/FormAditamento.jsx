@@ -38,12 +38,12 @@ const FormAditamento = (props) => {
     const handleClickConfirmar = () => {
         if (openFormAditamento.acao === 'adicionar') {
             enviaAditamento();
-        } // else if (openFormAditamento.acao === 'editar') {
-        //     setOpenConfirmacao({
-        //         open: true,
-        //         id: formAditamento.id
-        //     });
-        // }
+        } else if (openFormAditamento.acao === 'editar') {
+            setOpenConfirmacao({
+                open: true,
+                id: formAditamento.id
+            });
+        }
     }
 
     return (

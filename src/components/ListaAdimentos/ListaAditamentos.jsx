@@ -110,6 +110,75 @@ const ListaAditamentos = (props) => {
             })
     }
 
+    const handleClickEditar = (e, aditamento) => {
+        setFormAditamento({
+            id: aditamento.id,
+            contrato_id: aditamento.contrato_id,
+            tipo_aditamentos: aditamento.tipo_aditamentos,
+            valor_aditamento: aditamento.valor_aditamento,
+            data_fim_vigencia_atualizada: aditamento.data_fim_vigencia_atualizada,
+            indice_reajuste: aditamento.indice_reajuste,
+            data_base_reajuste: aditamento.data_base_reajuste,
+            valor_reajustado: aditamento.valor_reajustado
+        });
+        setOpenFormAditamento({
+            open: true,
+            acao: 'editar'
+        });
+        setAcao('editar');
+    }
+
+    const editaAditamento = (id, formAditamentoEdit) => {
+        const url = `http://${process.env.REACT_APP_API_URL}/contratos/api/aditamento/${id}`;
+        const token = sessionStorage.getItem('access_token');
+        const options = {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+                'Authorization': `Bearer ${token}`
+            },
+            body: JSON.stringify(formAditamentoEdit)
+        };
+
+        setCarregando(true);
+
+        fetch(url, options)
+            .then(res => {
+                if (res.ok) {
+                    setCarregando(false);
+                    setSnackbar({
+                        open: true,
+                        severity: 'success',
+                        text: 'Aditamento editado com sucesso!',
+                        color: 'success'
+                    });
+                    setOpenFormAditamento({
+                        open: false,
+                        acao: 'adicionar'
+                    });
+                    setFormAditamento({
+                        ...formAditamento,
+                        tipo_aditamentos: '',
+                        valor_aditamento: '',
+                        data_fim_vigencia_atualizada: '',
+                        indice_reajuste: '',
+                        data_base_reajuste: '',
+                        valor_reajustado: ''
+                    });
+                    return res.json();
+                } else {
+                    setCarregando(false);
+                    setSnackbar({
+                        open: true,
+                        severity: 'error',
+                        text: `Erro ${res.status} - Não foi possível editar o aditamento`,
+                        color: 'error'
+                    });
+                }
+            });
+    }
+
     const handleClickAdicionar = () => {
         setOpenFormAditamento({
             open: true,
@@ -212,7 +281,7 @@ const ListaAditamentos = (props) => {
                             />
 
                             <BotoesTab 
-                                // editar={(e) => { handleClickEditar(e,aditamento,aditamento.id); }}
+                                editar={(e) => { handleClickEditar(e, aditamento, aditamento.id); }}
                                 excluir={() => { handleClickExcluir(aditamento.id); }}
                             />
                         </Box>
@@ -240,7 +309,7 @@ const ListaAditamentos = (props) => {
                 setOpenConfirmacao={setOpenConfirmacao}
                 acao={acao} 
                 fnExcluir={excluiAditamento}
-                // fnEditar={editaAditamento}
+                fnEditar={editaAditamento}
                 formInterno={formAditamento}
                 carregando={carregando}
                 texto="aditamento"
