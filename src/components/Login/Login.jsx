@@ -103,10 +103,10 @@ const Login = () => {
         <Box className="login__container">
             <Fade in={true}>
                 <Paper sx={{ padding: '1rem' }} className="login" elevation={3}>
-                    <Typography variant="h2" component="h1" sx={{ fontSize: '3rem' }}>Entrar</Typography>
+                    <Typography variant="h2" component="h1" sx={{ fontSize: '2rem' }}>Entrar</Typography>
 
                     <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-around', padding: '1rem 1rem 0 1rem' }}>
-                        <EmailIcon sx={{ mr: '1rem', color: 'action.active', fontSize: "1.75rem" }} />
+                        <EmailIcon sx={{ mr: '1rem', color: 'action.active', fontSize: "1.5rem" }} />
                         <TextField 
                             value={email}
                             label="E-mail"
@@ -120,7 +120,7 @@ const Login = () => {
                     </Box>
 
                     <Box sx={{ display: 'flex', alignItems: 'center', padding: '0 1rem' }}>
-                        <LockIcon sx={{ mr: '1rem', color: 'action.active', fontSize: "1.75rem" }} />
+                        <LockIcon sx={{ mr: '1rem', color: 'action.active', fontSize: "1.5rem" }} />
                         <TextField 
                             value={senha}
                             label="Senha"

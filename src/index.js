@@ -9,9 +9,10 @@ import { BrowserRouter } from 'react-router-dom';
 const theme = createTheme(
   {
     palette: {
-      primary: { main: '#2B5F50' },
+      primary: { main: '#3b948c' },
       success: { main: '#4D8A79' },
-      error: { main: '#873939' }
+      error: { main: '#873939' },
+      color: { main: '#FFFFFF' }
     },
   },
   ptBR,

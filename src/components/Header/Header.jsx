@@ -72,29 +72,29 @@ const Header = (props) => {
 
     return (
         <Box sx={{ minHeight: '72px', mb: '1rem' }}>
-            <Box component={'header'} className="header">
+            <Box component={'header'} className="header" sx={{ background: (theme) => theme.palette.primary.main }}>
                 <DialogLogout />
                 <Link to="../principal">
-                    <Typography variant="h1" className="header__titulo" sx={{ fontSize: '1.5rem', margin: '0 0.5rem', padding: '0 0.5rem' }}>Sisgecon</Typography>
+                    <Typography variant="h1" className="header__titulo" sx={{ fontSize: '1.5rem', margin: '0 0.5rem', padding: '0 0.5rem', color: (theme) => theme.palette.color.main }}>Sisgecon</Typography>
                 </Link>
                 {location.pathname !== "/" && sessionStorage.getItem('access_token')
                     ? 
-                    <Box>
-                        <IconButton sx={{ margin: '0 0.5rem', borderRadius: 3 }}>
-                            <AccountBoxIcon sx={{ color: '#FFFFFF' }} />
-                            <Typography sx={{ margin: '0 0.5rem', color: '#FFFFFF' }}>Olá, {username}</Typography>
-                        </IconButton>
-                        <Fade in={true} timeout={500}>
+                    <Fade in={true} timeout={500}>
+                        <Box>
+                            <IconButton sx={{ margin: '0 0.5rem', borderRadius: 3 }}>
+                                <AccountBoxIcon sx={{ color: (theme) => theme.palette.color.main }} />
+                                <Typography sx={{ margin: '0 0.5rem', color: (theme) => theme.palette.color.main }}>Olá, {username}</Typography>
+                            </IconButton>
                             <Tooltip title="Sair" arrow>
-                                <IconButton sx={{ margin: '0 0.5rem' }} onClick={() => { handleLogout();}}>
+                                <IconButton sx={{ margin: '0 0.5rem' }} onClick={() => { handleLogout(); }}>
                                     {carregando
-                                        ? <CircularProgress size={24} sx={{ color: '#FFFFFF' }} />
-                                        : <LogoutIcon sx={{ color: '#FFFFFF' }} />
+                                        ? <CircularProgress size={24} sx={{ color: (theme) => theme.palette.color.main }} />
+                                        : <LogoutIcon sx={{ color: (theme) => theme.palette.color.main }} />
                                     }
                                 </IconButton>
                             </Tooltip>
-                        </Fade>
-                    </Box>
+                        </Box>
+                    </Fade>
                     :
                     ""
                 }

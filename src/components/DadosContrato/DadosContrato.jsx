@@ -304,7 +304,12 @@ const DadosContrato = ({ snackbar, setSnackbar }) => {
                                                 index === 0 
                                                 ?
                                                 <Tab 
-                                                    sx={{ '&.Mui-selected': { background: '#2B5F50', color: 'white', borderTopLeftRadius: '3px', transition: '1s' }, 
+                                                    sx={{ '&.Mui-selected': { 
+                                                        background: (theme) => theme.palette.primary.main, 
+                                                        color: (theme) => theme.palette.color.main, 
+                                                        borderTopLeftRadius: '3px', 
+                                                        transition: '0.5s' 
+                                                    }, 
                                                     alignItems: 'flex-start', 
                                                     textAlign: 'left', 
                                                     textTransform: 'none' }} 
@@ -314,7 +319,11 @@ const DadosContrato = ({ snackbar, setSnackbar }) => {
                                                 />
                                                 :
                                                 <Tab 
-                                                    sx={{ '&.Mui-selected': { background: '#2B5F50', color: 'white', transition: '1s' }, 
+                                                    sx={{ '&.Mui-selected': { 
+                                                        background: (theme) => theme.palette.primary.main, 
+                                                        color: (theme) => theme.palette.color.main, 
+                                                        transition: '0.5s' 
+                                                    }, 
                                                     alignItems: 'flex-start', 
                                                     textAlign: 'left', 
                                                     textTransform: 'none' }} 

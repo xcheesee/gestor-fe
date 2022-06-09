@@ -144,11 +144,11 @@ const NovoContrato = ({ setSnackbar }) => {
                     component="h1" 
                     sx={{ 
                         padding: '1rem', 
-                        background: 'linear-gradient(159deg, rgba(43,95,80,1) 27%, rgba(120,194,173,1) 120%)', 
-                        color: '#FFFFFF',
+                        background: (theme) => theme.palette.primary.main,
+                        color: (theme) => theme.palette.color.main,
                         borderTopLeftRadius: '3px',
                         borderTopRightRadius: '3px',
-                        fontWeight: 'light'
+                        fontWeight: 'light',
                     }}
                 >
                     Novo contrato
@@ -168,10 +168,10 @@ const NovoContrato = ({ setSnackbar }) => {
                         <DialogContentText sx={{ mt: '1rem' }}>Confirma o envio do novo contrato?</DialogContentText>
                     </DialogContent>
                     <DialogActions>
-                        <Button sx={{ textTransform: 'none', color: '#821f1f' }} onClick={handleCloseConfirm}>
+                        <Button sx={{ textTransform: 'none', color: (theme) => theme.palette.color.main }} onClick={handleCloseConfirm}>
                             <CloseIcon fontSize="small" sx={{ mr: '0.2rem' }} /> Não
                         </Button>
-                        <Button sx={{ textTransform: 'none' }} onClick={handleClickEnviarFormulario}>
+                        <Button sx={{ textTransform: 'none', color: (theme) => theme.palette.success.main }} onClick={handleClickEnviarFormulario}>
                             {carregando
                                 ? <CircularProgress size={16} sx={{ mr: '0.4rem' }} />
                                 : <CheckIcon fontSize="small" sx={{ mr: '0.2rem' }} />
@@ -186,11 +186,11 @@ const NovoContrato = ({ setSnackbar }) => {
                         <DialogContentText sx={{ mt: '1rem' }}>Tem certeza que deseja cancelar o envio do novo contrato e voltar à página principal?</DialogContentText>
                     </DialogContent>
                     <DialogActions>
-                        <Button sx={{ textTransform: 'none', color: '#821f1f' }} onClick={handleCloseConfirmSair}>
+                        <Button sx={{ textTransform: 'none', color: (theme) => theme.palette.error.main }} onClick={handleCloseConfirmSair}>
                             <CloseIcon fontSize="small" sx={{ mr: '0.2rem' }} /> Não
                         </Button>
                         <Link to="../principal">
-                            <Button sx={{ textTransform: 'none' }}>
+                            <Button sx={{ textTransform: 'none', color: (theme) => theme.palette.success.main }}>
                                 <CheckIcon fontSize="small" sx={{ mr: '0.2rem' }} /> Sim
                             </Button>
                         </Link>

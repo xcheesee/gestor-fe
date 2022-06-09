@@ -89,22 +89,22 @@ const Principal = ({ snackbar, setSnackbar }) => {
         return (
             <TableContainer component={Paper} elevation={3} sx={{ width: '100%', margin: '1rem auto 0 auto' }}>
                 <Table size="small">
-                    <TableHead sx={{ background: '#2B5F50' }}>
+                    <TableHead sx={{ background: (theme) => theme.palette.primary.main }}>
                         <TableRow>
-                            <TableCell sx={{ color: '#ffffff' }} align="center">ID</TableCell>
-                            <TableCell sx={{ color: '#ffffff' }} align="center">Processo SEI</TableCell>
-                            <TableCell sx={{ color: '#ffffff' }} align="center">Credor</TableCell>
-                            <TableCell sx={{ color: '#ffffff' }} align="center">Nome da empresa</TableCell>
-                            <TableCell sx={{ color: '#ffffff' }} align="center">Número do contrato</TableCell>
-                            <TableCell sx={{ color: '#ffffff' }} align="center">Data de início da vigência</TableCell>
-                            <TableCell sx={{ color: '#ffffff' }} align="center">Data de fim da vigência</TableCell>
-                            <TableCell sx={{ color: '#ffffff' }} align="center">Prazo do contrato</TableCell>
-                            <TableCell sx={{ color: '#ffffff' }} align="center">Visualizar contrato</TableCell>
+                            <TableCell sx={{ color: (theme) => theme.palette.color.main }} align="center">ID</TableCell>
+                            <TableCell sx={{ color: (theme) => theme.palette.color.main }} align="center">Processo SEI</TableCell>
+                            <TableCell sx={{ color: (theme) => theme.palette.color.main }} align="center">Credor</TableCell>
+                            <TableCell sx={{ color: (theme) => theme.palette.color.main }} align="center">Nome da empresa</TableCell>
+                            <TableCell sx={{ color: (theme) => theme.palette.color.main }} align="center">Número do contrato</TableCell>
+                            <TableCell sx={{ color: (theme) => theme.palette.color.main }} align="center">Data de início da vigência</TableCell>
+                            <TableCell sx={{ color: (theme) => theme.palette.color.main }} align="center">Data de fim da vigência</TableCell>
+                            <TableCell sx={{ color: (theme) => theme.palette.color.main }} align="center">Prazo do contrato</TableCell>
+                            <TableCell sx={{ color: (theme) => theme.palette.color.main }} align="center">Visualizar contrato</TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
                         {rows.map((row, index) => {
-                            const background = {background: index % 2 === 0 ? '#ffffff' : '#f5f5f5'};
+                            const background = {background: index % 2 === 0 ? '#FFFFFF' : '#f5f5f5'};
                             return (
                                 <TableRow
                                     key={row.id}
@@ -169,7 +169,7 @@ const Principal = ({ snackbar, setSnackbar }) => {
 
                         <Box sx={{ alignSelf: 'flex-start' }}>
                             <Button
-                                sx={{ margin: '1rem', color: 'white', textTransform: 'none' }}
+                                sx={{ margin: '1rem', color: (theme) => theme.palette.color.main, textTransform: 'none' }}
                                 variant="contained"
                             >
                                 <TuneIcon sx={{ mr: '0.5rem' }} /> Filtrar
@@ -207,7 +207,7 @@ const Principal = ({ snackbar, setSnackbar }) => {
                                 <Link to="../novo-contrato">
                                     <Button 
                                         variant="contained" 
-                                        sx={{ color: 'white', margin: '2rem 0', textTransform: 'none' }}
+                                        sx={{ color: (theme) => theme.palette.color.main, margin: '2rem 0', textTransform: 'none' }}
                                         onClick={irParaTopo}
                                     >
                                         <AddIcon /> Novo contrato
