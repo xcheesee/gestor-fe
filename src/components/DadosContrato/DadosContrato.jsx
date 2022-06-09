@@ -18,6 +18,7 @@ import ListaCertidoes from '../ListaCertidoes';
 import ListaGarantias from '../ListaGarantias/ListaGarantias';
 import ListaFiscalizacao from '../ListaFiscalizacoes';
 import ListaRecOrcamentario from '../ListaRecOrcamentario';
+import ListaLocais from '../ListaLocais';
 import ListaAditamentos from '../ListaAdimentos';
 import PropTypes from 'prop-types';
 import EditIcon from '@mui/icons-material/Edit';
@@ -163,22 +164,6 @@ const TabContrato = (props) => {
     return retornaCampoValor(campos, valores, props.estaCarregado);
 }
 
-const TabLocaisServico = (props) => {
-    const campos = [
-        "Distrito",
-        "Subprefeitura",
-        "Região"
-    ];
-
-    const valores = [
-        props.distrito,
-        props.subprefeitura,
-        props.regiao
-    ];
-
-    return retornaCampoValor(campos, valores, props.estaCarregado);
-}
-
 const ListaTabs = [
     'Contrato',
     'Certidões',
@@ -196,7 +181,7 @@ const DadosContrato = ({ snackbar, setSnackbar }) => {
     const [garantias, setGarantias] = useState([]);
     const [fiscalizacoes, setFiscalizacoes] = useState([]);
     const [recOrcamentarios, setRecOrcamentarios] = useState([]);
-    // const [locais, setLocais] = useState([]);
+    const [locais, setLocais] = useState([]);
     const [aditamentos, setAditamentos] = useState([]);
     const [estaCarregado, setEstaCarregado] = useState(false);
     const { numContrato } = useParams();
@@ -242,6 +227,12 @@ const DadosContrato = ({ snackbar, setSnackbar }) => {
         .then(res => res.json())
         .then(data => {
             setRecOrcamentarios(data.data);
+        })
+
+        fetch(`${url}/servicoslocais/${numContrato}`, options)
+        .then(res => res.json())
+        .then(data => {
+            setLocais(data.data);
         })
 
         fetch(`${url}/aditamentos/${numContrato}`, options)
@@ -423,11 +414,12 @@ const DadosContrato = ({ snackbar, setSnackbar }) => {
                                     </TabPanel>
 
                                     <TabPanel value={value} index={5}>
-                                        <TabLocaisServico 
-                                            distrito=""
-                                            subprefeitura=""
-                                            regiao=""
+                                        <ListaLocais 
+                                            locais={locais}
                                             estaCarregado={estaCarregado}
+                                            retornaCampoValor={retornaCampoValor}
+                                            numContrato={numContrato}
+                                            setSnackbar={setSnackbar}
                                         />
                                     </TabPanel>
                                         
