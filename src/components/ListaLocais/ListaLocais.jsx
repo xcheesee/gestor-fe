@@ -59,6 +59,52 @@ const ListaLocais = (props) => {
         distrito_id: ''
     });
 
+    const handleClickExcluir = (id) => {
+        setOpenConfirmacao({
+            open: true,
+            id: id
+        });
+        setAcao('excluir');
+    }
+
+    const excluiLocal = (id) => {
+        const url = `http://${process.env.REACT_APP_API_URL}/contratos/api/servicolocal/${id}`;
+        const token = sessionStorage.getItem('access_token');
+        const options = {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+                'Authorization': `Bearer ${token}`
+            }
+        }
+
+        setCarregando(true);
+
+        fetch(url, options)
+            .then(res => {
+                if (res.ok) {
+                    setOpenConfirmacao({ open: false, id: '' });
+                    setCarregando(false);
+                    setSnackbar({
+                        open: true,
+                        severity: 'success',
+                        text: 'Local de serviço excluído com sucesso!',
+                        color: 'success'
+                    });
+                    return res.json();
+                } else {
+                    setCarregando(false);
+                    setSnackbar({
+                        open: true,
+                        severity: 'error',
+                        text: `Erro ${res.status} - Não foi possível excluir o local`,
+                        color: 'error'
+                    });
+                }
+            })
+    }
+
     return (
         <Box>
             {locais.map((local, index) => {
@@ -90,7 +136,7 @@ const ListaLocais = (props) => {
 
                             <BotoesTab 
                                 // editar={(e) => { handleClickEditar(e, aditamento, aditamento.id); }}
-                                // excluir={() => { handleClickExcluir(aditamento.id); }}
+                                excluir={() => { handleClickExcluir(local.id); }}
                             />
                         </Box>
                     </Box>
@@ -102,6 +148,16 @@ const ListaLocais = (props) => {
                 texto="Adicionar local"
             />
 
+            <DialogConfirmacao
+                openConfirmacao={openConfirmacao} 
+                setOpenConfirmacao={setOpenConfirmacao}
+                acao={acao} 
+                fnExcluir={excluiLocal}
+                //fnEditar={editaLocal}
+                formInterno={formLocal}
+                carregando={carregando}
+                texto="local de serviço"
+            />
         </Box>
     );
 }
