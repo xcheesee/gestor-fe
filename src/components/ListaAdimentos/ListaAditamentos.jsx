@@ -220,7 +220,11 @@ const ListaAditamentos = (props) => {
                         text: 'Aditamento enviado com sucesso!',
                         color: 'success'
                     });
-                    setOpenFormAditamento({
+                    setOpenFormAditamento({ 
+                        open: false, 
+                        acao: 'adicionar' 
+                    });
+                    setFormAditamento({
                         ...formAditamento,
                         tipo_aditamentos: '',
                         valor_aditamento: '',

@@ -7,6 +7,7 @@ import {
 import DialogConfirmacao from '../DialogConfirmacao';
 import BotoesTab from '../BotoesTab';
 import BotaoAdicionar from '../BotaoAdicionar';
+import FormLocais from './FormLocais';
 
 const dicionarioRegioes = {
     "CO": "Centro-Oeste",
@@ -105,6 +106,62 @@ const ListaLocais = (props) => {
             })
     }
 
+    const handleClickAdicionar = () => {
+        setOpenFormLocal({
+            open: true,
+            acao: 'adicionar'
+        });
+    }
+
+    const enviaLocal = (form) => {
+        const url = `http://${process.env.REACT_APP_API_URL}/contratos/api/servicolocal`;
+        const token = sessionStorage.getItem('access_token');
+        const options = {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+                'Authorization': `Bearer ${token}`
+            },
+            body: JSON.stringify(form)
+        };
+
+        setCarregando(true);
+
+        fetch(url, options)
+            .then(res => {
+                if (res.ok) {
+                    setCarregando(false);
+                    setSnackbar({
+                        open: true,
+                        severity: 'success',
+                        text: 'Local de serviço enviado com sucesso!',
+                        color: 'success'
+                    });
+                    setOpenFormLocal({
+                        open: false,
+                        acao: 'adicionar'
+                    });
+                    setFormLocal({
+                        ...formLocal,
+                        regiao: '',
+                        subprefeitura_id: '',
+                        distrito_id: ''
+                    });
+                    return res.json();
+                } else {
+                    setCarregando(false);
+                    setSnackbar({
+                        open: true,
+                        severity: 'error',
+                        text: `Erro ${res.status} - Não foi possível enviar o local`,
+                        color: 'error'
+                    });
+                }
+            })
+            .catch(err => console.log(err));
+    }
+
     return (
         <Box>
             {locais.map((local, index) => {
@@ -143,8 +200,18 @@ const ListaLocais = (props) => {
                 )
             })}
 
+            <FormLocais 
+                formLocal={formLocal}
+                setFormLocal={setFormLocal}
+                openFormLocal={openFormLocal}
+                setOpenFormLocal={setOpenFormLocal}
+                enviaLocal={enviaLocal}
+                carregando={carregando}
+                setOpenConfirmacao={setOpenConfirmacao}
+            />
+
             <BotaoAdicionar 
-                // fnAdicionar={handleClickAdicionar}
+                fnAdicionar={handleClickAdicionar}
                 texto="Adicionar local"
             />
 
