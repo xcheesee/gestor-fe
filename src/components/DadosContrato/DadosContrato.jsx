@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { 
+    Backdrop,
+    CircularProgress,
     Paper,
     Typography, 
     Box, 
@@ -23,7 +25,7 @@ import ListaAditamentos from '../ListaAdimentos';
 import PropTypes from 'prop-types';
 import EditIcon from '@mui/icons-material/Edit';
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
-import { useParams, Link } from 'react-router-dom';
+import { useParams, useNavigate, Link } from 'react-router-dom';
 import { cpf, cnpj } from 'cpf-cnpj-validator';
 
 const TabPanel = (props) => {
@@ -186,7 +188,8 @@ const DadosContrato = ({ snackbar, setSnackbar }) => {
     const [estaCarregado, setEstaCarregado] = useState(false);
     const { numContrato } = useParams();
     
-    
+    const navigate = useNavigate();
+
     useEffect(() => {
         const url = `http://${process.env.REACT_APP_API_URL}/contratos/api`
         const token = sessionStorage.getItem('access_token');
@@ -199,7 +202,13 @@ const DadosContrato = ({ snackbar, setSnackbar }) => {
         }
         
         fetch(`${url}/contrato/${numContrato}`, options)
-        .then(res => res.json())
+        .then(res => {
+            if (res.status === 404) {
+                navigate("../404", { replace: true });
+            } else {
+                return res.json();
+            }
+        })
         .then(data => {
             setEstaCarregado(true);
             setDados(data.data);
@@ -261,6 +270,16 @@ const DadosContrato = ({ snackbar, setSnackbar }) => {
                     {snackbar.text}
                 </Alert>
             </Snackbar>
+
+            <Backdrop 
+                open={!estaCarregado}
+                sx={{ zIndex: '200' }}
+                transitionDuration={850}
+            >
+                <CircularProgress
+                    sx={{ color: (theme) => theme.palette.color.main }}
+                />
+            </Backdrop>
             
             <Fade in={true} timeout={750}>
 
