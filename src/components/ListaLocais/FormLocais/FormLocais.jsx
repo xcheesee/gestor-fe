@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { 
-    Box,
     Dialog,
     DialogTitle,
     DialogContent,
@@ -10,9 +9,7 @@ import {
     InputLabel,
     Select,
     MenuItem,
-    LinearProgress,
-    CircularProgress,
-    InputAdornment
+    CircularProgress
 } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import CheckIcon from '@mui/icons-material/Check';
@@ -25,7 +22,8 @@ const FormLocais = (props) => {
         setOpenFormLocal,
         enviaLocal,
         carregando,
-        setOpenConfirmacao
+        setOpenConfirmacao,
+        acao
     } = props;
 
     const [regiao, setRegiao] = useState(formLocal.regiao);
@@ -43,17 +41,29 @@ const FormLocais = (props) => {
     });
 
     useEffect(() => {
-        setRegiao(formLocal.regiao);
-        setSubprefeitura({ ...subprefeitura, value: formLocal.subprefeitura_id });
-        setDistrito({ ...distrito, value: formLocal.distrito_id });
+        if (acao === "adicionar") {
+            setRegiao('');
+            setSubprefeitura({ 
+                disabled: true,
+                carregando: false, 
+                value: '' 
+            });
+            setDistrito({ 
+                disabled: true,
+                carregando: false, 
+                value: '' 
+            });
+        } else if (acao === "editar") {
+            handleChangeRegiao(formLocal.regiao);
+        }
     }, [openFormLocal.open])
     
-    const handleChangeRegiao = (e) => {
+    const handleChangeRegiao = (valor) => {
         setSubprefeitura({ disabled: true, carregando: true, value: '' });
         setDistrito({ disabled: true, carregando: true, value: '' });
-        setRegiao(e.target.value);
+        setRegiao(valor);
 
-        const url = `http://${process.env.REACT_APP_API_URL}/contratos/api/subprefeituras/${e.target.value}`;
+        const url = `http://${process.env.REACT_APP_API_URL}/contratos/api/subprefeituras/${valor}`;
         const token = sessionStorage.getItem('access_token');
         const options = {
             method: 'GET',
@@ -79,17 +89,19 @@ const FormLocais = (props) => {
                     value: '' 
                 });
             });
+
+        return listaSubpref;
     }
 
-    const handleChangeSubprefeitura = (e) => {
+    const handleChangeSubprefeitura = (valor) => {
         setDistrito({ disabled: true, carregando: true, value: '' });
         setSubprefeitura({
             disabled: false,
             carregando: false,
-            value: e.target.value
+            value: valor
         });
 
-        const url = `http://${process.env.REACT_APP_API_URL}/contratos/api/distritos/${e.target.value}`;
+        const url = `http://${process.env.REACT_APP_API_URL}/contratos/api/distritos/${valor}`;
         const token = sessionStorage.getItem('access_token');
         const options = {
             method: 'GET',
@@ -112,16 +124,16 @@ const FormLocais = (props) => {
             });
     }
 
-    const handleChangeDistrito = (e) => {
+    const handleChangeDistrito = (valor) => {
         setDistrito({
             disabled: false,
             carregando: false,
-            value: e.target.value
+            value: valor
         });
     }
 
     const cancelar = () => {
-        setRegiao("");
+        setRegiao(formLocal.regiao);
         setSubprefeitura({...subprefeitura, value: ''});
         setDistrito({...distrito, value: ''});
         setOpenFormLocal({ ...openFormLocal, open: false });
@@ -135,6 +147,16 @@ const FormLocais = (props) => {
                 distrito_id: distrito.value
             };
             enviaLocal(form);
+        } else if (openFormLocal.acao === 'editar') {
+            setFormLocal({
+                ...formLocal,
+                subprefeitura_id: subprefeitura.value,
+                distrito_id: distrito.value
+            });
+            setOpenConfirmacao({
+                open: true,
+                id: formLocal.id
+            });
         }
     }
 
@@ -156,7 +178,7 @@ const FormLocais = (props) => {
                         label="Região"
                         value={regiao}
                         name="regiao"
-                        onChange={handleChangeRegiao}
+                        onChange={(e) => { handleChangeRegiao(e.target.value); }}
                         fullWidth
                     >
                         <MenuItem value={"CO"}>Centro-Oeste</MenuItem>
@@ -174,7 +196,7 @@ const FormLocais = (props) => {
                         label="Subprefeitura"
                         value={subprefeitura.value}
                         name="subprefeitura"
-                        onChange={handleChangeSubprefeitura}
+                        onChange={(e) => { handleChangeSubprefeitura(e.target.value); }}
                         disabled={subprefeitura.disabled}
                         fullWidth
                     >
@@ -208,7 +230,7 @@ const FormLocais = (props) => {
                         label="Distrito"
                         value={distrito.value}
                         name="distrito"
-                        onChange={handleChangeDistrito}
+                        onChange={(e) => { handleChangeDistrito(e.target.value); }}
                         disabled={distrito.disabled}
                         fullWidth
                     >
