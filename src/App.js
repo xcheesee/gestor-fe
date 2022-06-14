@@ -4,6 +4,7 @@ import Header from './components/Header';
 import Login from './components/Login';
 import Principal from './components/Principal';
 import DadosContrato from './components/DadosContrato';
+import EditarContrato from './components/EditarContrato';
 import NovoContrato from './components/NovoContrato';
 import PaginaNaoEncontrada from './components/PaginaNaoEncontrada';
 import Auth from './components/Auth';
@@ -35,6 +36,12 @@ function App() {
         <Route path="/contrato/:numContrato" element={ 
           <Auth> 
             <DadosContrato snackbar={snackbar} setSnackbar={setSnackbar} /> 
+          </Auth>
+        } />
+
+        <Route path="/contrato/:numContrato/editar" element={
+          <Auth>
+            <EditarContrato snackbar={snackbar} setSnackbar={setSnackbar} />
           </Auth>
         } />
 

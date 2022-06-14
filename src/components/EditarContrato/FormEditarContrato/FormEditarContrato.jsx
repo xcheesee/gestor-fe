@@ -1,22 +1,40 @@
 import React, { useState } from 'react';
-import { TextField, Typography, Box, Divider, Button } from '@mui/material';
-import CampoCpfCnpj from '../CampoCpfCnpj';
-import CampoValores from '../CampoValores';
-import CampoData from '../CampoData';
-import CampoTelefone from '../CampoTelefone';
+import { 
+    TextField, 
+    Typography, 
+    Box, 
+    Divider, 
+    Button
+} from '@mui/material';
+import CampoCpfCnpj from '../../CampoCpfCnpj';
+import CampoValores from '../../CampoValores';
+import CampoData from '../../CampoData';
+import CampoTelefone from '../../CampoTelefone';
 import CheckIcon from '@mui/icons-material/Check';
 import CloseIcon from '@mui/icons-material/Close';
 import * as EmailValidator from 'email-validator';
-import './estilo.css';
+import '../../NovoContrato/FormNovoContrato/estilo.css';
 
-const FormNovoContrato = ({ formContrato, setFormContrato, error, setError, setOpenConfirm, setOpenConfirmSair }) => {
+const FormEditarContrato = (props) => {
+    const { 
+        formContrato, 
+        setFormContrato, 
+        error, 
+        setError, 
+        setOpenConfirm, 
+        setOpenConfirmSair
+    } = props;
+
+    const [contratoEditado, setContratoEditado] = useState(formContrato)
+
     const handleClickOpenConfirm = () => {
         setOpenConfirm(true);
-    };
+        setFormContrato(contratoEditado);
+    }
 
     const handleClickOpenConfirmSair = () => {
         setOpenConfirmSair(true);
-    };
+    }
 
     const [errosContrato, setErrosContrato] = useState({
         processo_sei: {
@@ -90,11 +108,11 @@ const FormNovoContrato = ({ formContrato, setFormContrato, error, setError, setO
     });
     
     const handleInputChange = (event) => {
-        setFormContrato({
-            ...formContrato,
+        setContratoEditado({
+            ...contratoEditado,
             [event.target.name]: event.target.value
         });
-    };
+    }
 
     const checaErros = (event) => {
         if (event.target.required && event.target.value === "") {
@@ -115,8 +133,8 @@ const FormNovoContrato = ({ formContrato, setFormContrato, error, setError, setO
                 }
             });
             setError(false);
-        };
-    };
+        }
+    }
 
     const checaErrosEmail = (event) => {
         if (EmailValidator.validate(event.target.value) === true) {
@@ -137,8 +155,8 @@ const FormNovoContrato = ({ formContrato, setFormContrato, error, setError, setO
                 }
             });
             setError(true);
-        };
-    };
+        }
+    }
 
     const checaErroRequired = () => {
         const form = document.querySelector(".form_formulario").elements;
@@ -146,8 +164,8 @@ const FormNovoContrato = ({ formContrato, setFormContrato, error, setError, setO
         for (let i = 0; i < form.length; i++) {
             if (form[i].tagName === 'INPUT') {
                 inputArr.push(form[i]);
-            };
-        };
+            }
+        }
 
         let formErrosTemp = {};
 
@@ -159,7 +177,7 @@ const FormNovoContrato = ({ formContrato, setFormContrato, error, setError, setO
                         error: true,
                         helperText: "Campo obrigatório"
                     }
-                };
+                }
 
                 setError(true);
             } else {
@@ -170,11 +188,11 @@ const FormNovoContrato = ({ formContrato, setFormContrato, error, setError, setO
                         helperText: " "
                     }
                 };
-            };
+            }
         });
         
         setErrosContrato(formErrosTemp);
-    };
+    }
 
     return (
         <Box className="form">
@@ -185,7 +203,7 @@ const FormNovoContrato = ({ formContrato, setFormContrato, error, setError, setO
 
                 <TextField
                     variant="outlined"
-                    value={formContrato.processo_sei}
+                    value={contratoEditado.processo_sei}
                     name="processo_sei"
                     onChange={handleInputChange}
                     className="form__campo"
@@ -200,7 +218,7 @@ const FormNovoContrato = ({ formContrato, setFormContrato, error, setError, setO
 
                 <TextField
                     variant="outlined"
-                    value={formContrato.credor}
+                    value={contratoEditado.credor}
                     name="credor"
                     onChange={handleInputChange}
                     className="form__campo"
@@ -215,8 +233,8 @@ const FormNovoContrato = ({ formContrato, setFormContrato, error, setError, setO
 
                 <CampoCpfCnpj
                     className="form__campo"
-                    formContrato={formContrato}
-                    setFormContrato={setFormContrato}
+                    formContrato={contratoEditado}
+                    setFormContrato={setContratoEditado}
                     error={errosContrato.cnpj_cpf.error}
                     setError={setError}
                     errosContrato={errosContrato}
@@ -227,7 +245,7 @@ const FormNovoContrato = ({ formContrato, setFormContrato, error, setError, setO
 
                 <TextField
                     variant="outlined"
-                    value={formContrato.objeto}
+                    value={contratoEditado.objeto}
                     name="objeto"
                     onChange={handleInputChange}
                     className="form__campo"
@@ -242,7 +260,7 @@ const FormNovoContrato = ({ formContrato, setFormContrato, error, setError, setO
 
                 <TextField
                     variant="outlined"
-                    value={formContrato.numero_contrato}
+                    value={contratoEditado.numero_contrato}
                     name="numero_contrato"
                     onChange={handleInputChange}
                     className="form__campo"
@@ -258,7 +276,7 @@ const FormNovoContrato = ({ formContrato, setFormContrato, error, setError, setO
                 <CampoData
                     className="form__campo"
                     label="Data de assinatura"
-                    value={formContrato.data_assinatura}
+                    value={contratoEditado.data_assinatura}
                     name="data_assinatura"
                     onChange={handleInputChange}
                     margin="1rem 0"
@@ -272,9 +290,9 @@ const FormNovoContrato = ({ formContrato, setFormContrato, error, setError, setO
                     index=""
                     className="form__campo"
                     label="Valor"
-                    value={formContrato.valor_contrato}
-                    state={formContrato}
-                    setState={setFormContrato}
+                    value={contratoEditado.valor_contrato}
+                    state={contratoEditado}
+                    setState={setContratoEditado}
                     name="valor_contrato"
                     onChange={(e) => { handleInputChange(e); }}
                     checaErros={checaErros}
@@ -287,7 +305,7 @@ const FormNovoContrato = ({ formContrato, setFormContrato, error, setError, setO
                 <CampoData
                     className="form__campo"
                     label="Início da Vigência"
-                    value={formContrato.data_inicio_vigencia}
+                    value={contratoEditado.data_inicio_vigencia}
                     name="data_inicio_vigencia"
                     onChange={handleInputChange}
                     helperText={errosContrato.data_inicio_vigencia.helperText}
@@ -301,7 +319,7 @@ const FormNovoContrato = ({ formContrato, setFormContrato, error, setError, setO
                 <CampoData
                     className="form__campo"
                     label="Fim da Vigência"
-                    value={formContrato.data_fim_vigencia}
+                    value={contratoEditado.data_fim_vigencia}
                     name="data_fim_vigencia"
                     onChange={handleInputChange}
                     helperText={errosContrato.data_fim_vigencia.helperText}
@@ -313,7 +331,7 @@ const FormNovoContrato = ({ formContrato, setFormContrato, error, setError, setO
 
                 <TextField
                     variant="outlined"
-                    value={formContrato.condicao_pagamento}
+                    value={contratoEditado.condicao_pagamento}
                     name="condicao_pagamento"
                     onChange={handleInputChange}
                     className="form__campo"
@@ -328,7 +346,7 @@ const FormNovoContrato = ({ formContrato, setFormContrato, error, setError, setO
 
                 <TextField
                     variant="outlined"
-                    value={formContrato.prazo_contrato_meses.replace(/[^\d]+/g,'')}
+                    value={contratoEditado.prazo_contrato_meses}
                     name="prazo_contrato_meses"
                     onChange={handleInputChange}
                     className="form__campo"
@@ -343,7 +361,7 @@ const FormNovoContrato = ({ formContrato, setFormContrato, error, setError, setO
 
                 <TextField
                     variant="outlined"
-                    value={formContrato.prazo_a_partir_de}
+                    value={contratoEditado.prazo_a_partir_de}
                     name="prazo_a_partir_de"
                     onChange={handleInputChange}
                     className="form__campo"
@@ -358,7 +376,7 @@ const FormNovoContrato = ({ formContrato, setFormContrato, error, setError, setO
                 <CampoData
                     className="form__campo"
                     label="Prazo Máximo Prorrogável"
-                    value={formContrato.data_prazo_maximo}
+                    value={contratoEditado.data_prazo_maximo}
                     name="data_prazo_maximo"
                     onChange={handleInputChange}
                     helperText={errosContrato.data_prazo_maximo.helperText}
@@ -377,7 +395,7 @@ const FormNovoContrato = ({ formContrato, setFormContrato, error, setError, setO
                     variant="outlined"
                     className="form__campo"
                     label="Nome da empresa"
-                    value={formContrato.nome_empresa}
+                    value={contratoEditado.nome_empresa}
                     name="nome_empresa"
                     onChange={handleInputChange}
                     onBlur={checaErros}
@@ -390,8 +408,8 @@ const FormNovoContrato = ({ formContrato, setFormContrato, error, setError, setO
 
                 <CampoTelefone 
                     className="contrato-empresa__campo"
-                    formContrato={formContrato}
-                    setFormContrato={setFormContrato}
+                    formContrato={contratoEditado}
+                    setFormContrato={setContratoEditado}
                     onBlur={checaErros}
                     helperText={errosContrato.telefone_empresa.helperText}
                     error={errosContrato.telefone_empresa.error}
@@ -402,7 +420,7 @@ const FormNovoContrato = ({ formContrato, setFormContrato, error, setError, setO
                     variant="outlined"
                     className="form__campo"
                     label="E-mail da empresa"
-                    value={formContrato.email_empresa}
+                    value={contratoEditado.email_empresa}
                     name="email_empresa"
                     onChange={handleInputChange}
                     onBlur={(e) => { e.target.value === "" ? checaErros(e) : checaErrosEmail(e) }}
@@ -426,7 +444,11 @@ const FormNovoContrato = ({ formContrato, setFormContrato, error, setError, setO
                     minRows={6}
                     className="form__campo"
                     label="Informações adicionais"
-                    value={formContrato.outras_informacoes}
+                    value={
+                        contratoEditado.outras_informacoes !== null 
+                        ? contratoEditado.outras_informacoes
+                        : ""
+                    }
                     name="outras_informacoes"
                     onChange={handleInputChange}
                     helperText=" "
@@ -437,14 +459,14 @@ const FormNovoContrato = ({ formContrato, setFormContrato, error, setError, setO
 
             <Box sx={{ display: 'flex', justifyContent: 'flex-end', margin: '2rem 0', mt: '0' }}>
                 <Button 
-                    sx={{ textTransform: 'none', mr: '2rem', color: '#821f1f' }} 
+                    sx={{ textTransform: 'none', mr: '2rem', color: (theme) => theme.palette.error.main }} 
                     onClick={handleClickOpenConfirmSair}
                 >
                     <CloseIcon fontSize="small" sx={{ mr: '0.5rem' }} /> Cancelar e voltar
                 </Button>
                 <Button 
                     variant="contained" 
-                    sx={{ textTransform: 'none' }} 
+                    sx={{ color: (theme) => theme.palette.color.main, textTransform: 'none' }} 
                     disabled={error}
                     onMouseDown={checaErroRequired}
                     onMouseUp={handleClickOpenConfirm} 
@@ -452,8 +474,8 @@ const FormNovoContrato = ({ formContrato, setFormContrato, error, setError, setO
                     <CheckIcon fontSize="small" sx={{ mr: '0.5rem' }} /> Salvar
                 </Button>
             </Box>
-        </Box>
+        </Box> 
     );
-};
+}
 
-export default FormNovoContrato;
+export default FormEditarContrato;

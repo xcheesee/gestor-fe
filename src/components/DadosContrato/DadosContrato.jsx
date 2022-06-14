@@ -368,20 +368,22 @@ const DadosContrato = ({ snackbar, setSnackbar }) => {
                                                 estaCarregado={estaCarregado}
                                             />
 
-                                            <Fab 
-                                                sx={{ 
-                                                    position: 'sticky', 
-                                                    bottom: '0px', 
-                                                    left: '100%',
-                                                    zIndex: '80',
-                                                    textTransform: 'none',
-                                                    borderRadius: '5px'
-                                                }}
-                                                color="primary"
-                                                variant="extended"
-                                            >
-                                                <EditIcon sx={{ mr: '0.3rem' }} /> Editar dados
-                                            </Fab>
+                                            <Link to={`../contrato/${numContrato}/editar`}>
+                                                <Fab 
+                                                    sx={{ 
+                                                        position: 'sticky', 
+                                                        bottom: '0px', 
+                                                        left: '100%',
+                                                        zIndex: '80',
+                                                        textTransform: 'none',
+                                                        borderRadius: '5px'
+                                                    }}
+                                                    color="primary"
+                                                    variant="extended"
+                                                >
+                                                    <EditIcon sx={{ mr: '0.3rem' }} /> Editar dados
+                                                </Fab>
+                                            </Link>
                                         </Box>
                                     </TabPanel>
 

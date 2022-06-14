@@ -328,8 +328,7 @@ const FormNovoContrato = ({ formContrato, setFormContrato, error, setError, setO
 
                 <TextField
                     variant="outlined"
-                    // value={formContrato.prazo_contrato_meses.replace(/[^\d]+/g,'')}
-                    value=""
+                    value={formContrato.prazo_contrato_meses.replace(/[^\d]+/g,'')}
                     name="prazo_contrato_meses"
                     onChange={handleInputChange}
                     className="form__campo"

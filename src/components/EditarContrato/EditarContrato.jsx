@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { 
     Paper, 
     Box, 
@@ -9,20 +9,23 @@ import {
     DialogContent, 
     DialogActions,
     DialogContentText,
-    CircularProgress
+    CircularProgress,
+    IconButton,
+    Tooltip
 } from '@mui/material';
-import FormNovoContrato from './FormNovoContrato';
+import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
+import FormEditarContrato from './FormEditarContrato';
 import CheckIcon from '@mui/icons-material/Check';
 import CloseIcon from '@mui/icons-material/Close';
-import { useNavigate, Link } from 'react-router-dom';
+import { useParams, useNavigate, Link } from 'react-router-dom';
 
-const NovoContrato = ({ setSnackbar }) => {
+const EditarContrato = ({ setSnackbar }) => {
     const [error, setError] = useState(false);
     const [openConfirm, setOpenConfirm] = useState(false);
     const [openConfirmSair, setOpenConfirmSair] = useState(false);
     const [openErro, setOpenErro] = useState(false);
     const [carregando, setCarregando] = useState(false);
-    const [novoContrato, setNovoContrato] = useState({
+    const [contrato, setContrato] = useState({
         processo_sei: "",
         credor: "",
         cnpj_cpf: "",
@@ -41,57 +44,59 @@ const NovoContrato = ({ setSnackbar }) => {
         email_empresa: "",
         outras_informacoes: ""
     });
-
+    const { numContrato } = useParams();
     const navigate = useNavigate();
 
-    const limpaFormulario = () => {
-        setNovoContrato({
-            processo_sei: "",
-            credor: "",
-            cnpj_cpf: "",
-            objeto: "",
-            numero_contrato: "",
-            data_assinatura: "",
-            valor_contrato: "",
-            data_inicio_vigencia: "",
-            data_fim_vigencia: "",
-            condicao_pagamento: "",
-            prazo_contrato_meses: "",
-            prazo_a_partir_de: "",
-            data_prazo_maximo: "",
-            nome_empresa: "",
-            telefone_empresa: "",
-            email_empresa: "",
-            outras_informacoes: ""
-        });
-    }
+    useEffect(() => {
+        const url = `http://${process.env.REACT_APP_API_URL}/contratos/api/contrato/${numContrato}`;
+        const token = sessionStorage.getItem('access_token');
+        const options = {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+                'Authorization': `Bearer ${token}`
+            }
+        }
+
+        fetch(url, options)
+            .then(res => {
+                if (res.status === 404) {
+                    navigate('../404', { replace: true });
+                } else {
+                    return res.json();
+                }
+            })
+            .then(data => {
+                setContrato(data.data);
+            })
+    }, [])
 
     const handleClickEnviarFormulario = () => {
         setCarregando(true);
 
         if (!error) {
-            const url = `http://${process.env.REACT_APP_API_URL}/contratos/api/contrato`
+            const url = `http://${process.env.REACT_APP_API_URL}/contratos/api/contrato/${numContrato}`;
             const token = sessionStorage.getItem('access_token');
             const options = {
-                method: 'post',
+                method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
                     'Accept': 'application/json',
                     'Authorization': `Bearer ${token}`
                 },
-                body: JSON.stringify(novoContrato)
-            }
+                body: JSON.stringify(contrato)
+            };
 
             fetch(url, options)
                 .then(res => {
                     if (res.ok) {
                         setCarregando(false);
-                        limpaFormulario();
                         handleCloseConfirm();
                         setSnackbar({
                             open: true,
                             severity: 'success',
-                            text: 'Contrato enviado com sucesso!',
+                            text: 'Contrato editado com sucesso!',
                             color: 'success'
                         });
                     } else {
@@ -103,13 +108,13 @@ const NovoContrato = ({ setSnackbar }) => {
                     return res.json();
                 })
                 .then(data => {
-                    navigate(`../contrato/${data.data.id}`, { replace: true });
+                    navigate(`../contrato/${numContrato}`, { replace: true });
                     window.scrollTo(0, 0);
-                })
+                });
         }
     }
 
-    const handleCloseConfirm = (event, reason) => {
+    const handleCloseConfirm = (e, reason) => {
         if (reason === 'backdropClick') {
             return;
         } else {
@@ -117,7 +122,7 @@ const NovoContrato = ({ setSnackbar }) => {
         }
     }
 
-    const handleCloseConfirmSair = (event, reason) => {
+    const handleCloseConfirmSair = (e, reason) => {
         if (reason === 'backdropClick') {
             return;
         } else {
@@ -125,47 +130,77 @@ const NovoContrato = ({ setSnackbar }) => {
         }
     }
 
-    return(
+    const ConteudoPrincipal = () => {
+        if (carregando) {
+            return (
+                <FormEditarContrato 
+                    formContrato={contrato}
+                    setFormContrato={setContrato}
+                    error={error}
+                    setError={setError}
+                    setOpenConfirm={setOpenConfirm}
+                    setOpenConfirmSair={setOpenConfirmSair}
+                    carregando={carregando}
+                />
+            );
+        } else {
+            return (
+                <FormEditarContrato 
+                    formContrato={contrato}
+                    setFormContrato={setContrato}
+                    error={error}
+                    setError={setError}
+                    setOpenConfirm={setOpenConfirm}
+                    setOpenConfirmSair={setOpenConfirmSair}
+                    carregando={carregando}
+                />
+            );
+        }
+    }
+    
+    return (
         <Box
             component={Fade}
-            in={true} 
-            timeout={850} 
-            sx={{ 
-                alignSelf: 'center', 
-                display: 'flex', 
-                flexDirection: 'column', 
-                margin: '2rem 1rem', 
-                maxWidth: '1280px' 
+            in={true}
+            timeout={850}
+            sx={{
+                alignSelf: 'center',
+                display: 'flex',
+                flexDirection: 'column',
+                margin: '2rem 1rem',
+                maxWidth: '1280px'
             }}
         >
             <Box component={Paper} elevation={5}>
-                <Typography 
-                    variant="h5" 
-                    component="h1" 
-                    sx={{ 
-                        padding: '1rem', 
+                <Typography
+                    variant="h5"
+                    component="h1"
+                    sx={{
+                        padding: '1rem',
                         background: (theme) => theme.palette.primary.main,
                         color: (theme) => theme.palette.color.main,
                         borderTopLeftRadius: '3px',
                         borderTopRightRadius: '3px',
                         fontWeight: 'light',
+                        display: 'flex',
+                        alignItems: 'center'
                     }}
                 >
-                    Novo contrato
+                    <Link to={`../contrato/${numContrato}`}>
+                        <Tooltip title="Voltar" arrow>
+                            <IconButton sx={{ mr: '0.5rem' }}>
+                                <ArrowBackIosNewIcon sx={{ color: (theme) => theme.palette.color.main }} />
+                            </IconButton>
+                        </Tooltip>
+                    </Link>
+                    {`Editar contrato # ${numContrato}`}
                 </Typography>
                 
-                <FormNovoContrato 
-                    formContrato={novoContrato} 
-                    setFormContrato={setNovoContrato} 
-                    error={error}
-                    setError={setError} 
-                    setOpenConfirm={setOpenConfirm}
-                    setOpenConfirmSair={setOpenConfirmSair}
-                />
+                <ConteudoPrincipal />
 
                 <Dialog open={openConfirm} onClose={handleCloseConfirm} fullWidth>
                     <DialogContent>
-                        <DialogContentText sx={{ mt: '1rem' }}>Confirma o envio do novo contrato?</DialogContentText>
+                        <DialogContentText sx={{ mt: '1rem' }}>{`Confirma a edição do contrato # ${numContrato}?`}</DialogContentText>
                     </DialogContent>
                     <DialogActions>
                         <Button sx={{ textTransform: 'none', color: (theme) => theme.palette.error.main }} onClick={handleCloseConfirm}>
@@ -183,13 +218,13 @@ const NovoContrato = ({ setSnackbar }) => {
 
                 <Dialog open={openConfirmSair} onClose={handleCloseConfirmSair} fullWidth>
                     <DialogContent>
-                        <DialogContentText sx={{ mt: '1rem' }}>Tem certeza que deseja cancelar o envio do novo contrato e voltar à página principal?</DialogContentText>
+                        <DialogContentText sx={{ mt: '1rem' }}>{`Tem certeza que deseja cancelar a edição do contrato # ${numContrato}?`}</DialogContentText>
                     </DialogContent>
                     <DialogActions>
                         <Button sx={{ textTransform: 'none', color: (theme) => theme.palette.error.main }} onClick={handleCloseConfirmSair}>
                             <CloseIcon fontSize="small" sx={{ mr: '0.2rem' }} /> Não
                         </Button>
-                        <Link to="../principal">
+                        <Link to={`../contrato/${numContrato}`}>
                             <Button sx={{ textTransform: 'none', color: (theme) => theme.palette.success.main }}>
                                 <CheckIcon fontSize="small" sx={{ mr: '0.2rem' }} /> Sim
                             </Button>
@@ -210,4 +245,4 @@ const NovoContrato = ({ setSnackbar }) => {
     );
 }
 
-export default NovoContrato;
+export default EditarContrato;
