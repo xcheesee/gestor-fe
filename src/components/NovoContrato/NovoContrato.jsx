@@ -23,46 +23,62 @@ const NovoContrato = ({ setSnackbar }) => {
     const [openErro, setOpenErro] = useState(false);
     const [carregando, setCarregando] = useState(false);
     const [novoContrato, setNovoContrato] = useState({
+        tipo_contratacao: "",
         processo_sei: "",
+        dotacao_orcamentaria: "",
         credor: "",
         cnpj_cpf: "",
+        tipo_objeto: "",
         objeto: "",
         numero_contrato: "",
         data_assinatura: "",
         valor_contrato: "",
+        valor_mensal_estimativo: "",
         data_inicio_vigencia: "",
-        data_fim_vigencia: "",
+        data_vencimento: "",
         condicao_pagamento: "",
-        prazo_contrato_meses: "",
         prazo_a_partir_de: "",
         data_prazo_maximo: "",
         nome_empresa: "",
         telefone_empresa: "",
         email_empresa: "",
-        outras_informacoes: ""
+        outras_informacoes: "",
+        envio_material_tecnico: "",
+        minuta_edital: "",
+        abertura_certame: "",
+        homologacao: "",
+        fonte_recurso: "",
     });
 
     const navigate = useNavigate();
 
     const limpaFormulario = () => {
         setNovoContrato({
+            tipo_contratacao: "",
             processo_sei: "",
+            dotacao_orcamentaria: "",
             credor: "",
             cnpj_cpf: "",
+            tipo_objeto: "",
             objeto: "",
             numero_contrato: "",
             data_assinatura: "",
             valor_contrato: "",
+            valor_mensal_estimativo: "",
             data_inicio_vigencia: "",
-            data_fim_vigencia: "",
+            data_vencimento: "",
             condicao_pagamento: "",
-            prazo_contrato_meses: "",
             prazo_a_partir_de: "",
             data_prazo_maximo: "",
             nome_empresa: "",
             telefone_empresa: "",
             email_empresa: "",
-            outras_informacoes: ""
+            outras_informacoes: "",
+            envio_material_tecnico: "",
+            minuta_edital: "",
+            abertura_certame: "",
+            homologacao: "",
+            fonte_recurso: "",
         });
     }
 

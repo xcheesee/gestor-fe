@@ -80,8 +80,7 @@ const Principal = ({ snackbar, setSnackbar }) => {
                     nome_empresa: contrato.nome_empresa,
                     numero_contrato: contrato.numero_contrato,
                     data_inicio_vigencia: contrato.data_inicio_vigencia,
-                    data_fim_vigencia: contrato.data_fim_vigencia,
-                    prazo_contrato_meses: contrato.prazo_contrato_meses
+                    data_vencimento: contrato.data_vencimento
                 }
             );
         });
@@ -97,8 +96,7 @@ const Principal = ({ snackbar, setSnackbar }) => {
                             <TableCell sx={{ color: (theme) => theme.palette.color.main }} align="center">Nome da empresa</TableCell>
                             <TableCell sx={{ color: (theme) => theme.palette.color.main }} align="center">Número do contrato</TableCell>
                             <TableCell sx={{ color: (theme) => theme.palette.color.main }} align="center">Data de início da vigência</TableCell>
-                            <TableCell sx={{ color: (theme) => theme.palette.color.main }} align="center">Data de fim da vigência</TableCell>
-                            <TableCell sx={{ color: (theme) => theme.palette.color.main }} align="center">Prazo do contrato</TableCell>
+                            <TableCell sx={{ color: (theme) => theme.palette.color.main }} align="center">Data de vencimento</TableCell>
                             <TableCell sx={{ color: (theme) => theme.palette.color.main }} align="center">Visualizar contrato</TableCell>
                         </TableRow>
                     </TableHead>
@@ -116,8 +114,7 @@ const Principal = ({ snackbar, setSnackbar }) => {
                                     <TableCell align="center" sx={background}>{row.nome_empresa}</TableCell>
                                     <TableCell align="center" sx={background}>{row.numero_contrato}</TableCell>
                                     <TableCell align="center" sx={background}>{row.data_inicio_vigencia}</TableCell>
-                                    <TableCell align="center" sx={background}>{row.data_fim_vigencia}</TableCell>
-                                    <TableCell align="center" sx={background}>{row.prazo_contrato_meses} {row.prazo_contrato_meses > 1 ? "meses" : "mês"}</TableCell>
+                                    <TableCell align="center" sx={background}>{row.data_vencimento}</TableCell>
                                     <TableCell align="center" sx={background}>
                                         <IconButton onClick={(e) => { handleClickVerContrato(e, row.id); irParaTopo(); }}>
                                             <ManageSearchIcon />
@@ -136,7 +133,7 @@ const Principal = ({ snackbar, setSnackbar }) => {
         <Box sx={{ padding: '0 1rem' }}>
 
             <Fade in={true} timeout={500}>
-                <Box sx={{ padding: '1rem', maxWidth: '1560px', margin: '2rem auto' }} component={Paper} elevation={5}>
+                <Box sx={{ padding: '1rem', maxWidth: '1280px', margin: '2rem auto' }} component={Paper} elevation={5}>
                     <Typography variant="h2" component="h1" sx={{ fontSize: '2rem' }}>Contratos vigentes</Typography>
 
                     <Box sx={{ display: 'flex', flexDirection: 'column', margin: '1rem' }}>

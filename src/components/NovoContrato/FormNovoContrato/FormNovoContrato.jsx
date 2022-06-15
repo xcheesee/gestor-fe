@@ -12,14 +12,22 @@ import './estilo.css';
 const FormNovoContrato = ({ formContrato, setFormContrato, error, setError, setOpenConfirm, setOpenConfirmSair }) => {
     const handleClickOpenConfirm = () => {
         setOpenConfirm(true);
-    };
+    }
 
     const handleClickOpenConfirmSair = () => {
         setOpenConfirmSair(true);
-    };
+    }
 
     const [errosContrato, setErrosContrato] = useState({
+        tipo_contratacao: {
+            error: false,
+            helperText: " ",
+        },
         processo_sei: {
+            error: false,
+            helperText: " ",
+        },
+        dotacao_orcamentaria: {
             error: false,
             helperText: " ",
         },
@@ -30,6 +38,10 @@ const FormNovoContrato = ({ formContrato, setFormContrato, error, setError, setO
         cnpj_cpf: {
             error: false,
             helperText: "Somente números",
+        },
+        tipo_objeto: {
+            error: false,
+            helperText: " ",
         },
         objeto: {
             error: false,
@@ -47,21 +59,21 @@ const FormNovoContrato = ({ formContrato, setFormContrato, error, setError, setO
             error: false,
             helperText: " ",
         },
+        valor_mensal_estimativo: {
+            error: false,
+            helperText: " "
+        },
         data_inicio_vigencia: {
             error: false,
             helperText: " ",
         },
-        data_fim_vigencia: {
+        data_vencimento: {
             error: false,
             helperText: " ",
         },
         condicao_pagamento: {
             error: false,
             helperText: "Ex: Em até 30 dias após o adimplemento.",
-        },
-        prazo_contrato_meses: {
-            error: false,
-            helperText: "Valor em meses. Ex: 5, 6, 12, etc.",
         },
         prazo_a_partir_de: {
             error: false,
@@ -86,6 +98,26 @@ const FormNovoContrato = ({ formContrato, setFormContrato, error, setError, setO
         outras_informacoes: {
             error: false,
             helperText: " "
+        },
+        envio_material_tecnico: {
+            error: false,
+            helperText: " "
+        },
+        minuta_edital: {
+            error: false,
+            helperText: " "
+        },
+        abertura_certame: {
+            error: false,
+            helperText: " "
+        },
+        homologacao: {
+            error: false,
+            helperText: " "
+        },
+        fonte_recurso: {
+            error: false,
+            helperText: " "
         }
     });
     
@@ -94,7 +126,7 @@ const FormNovoContrato = ({ formContrato, setFormContrato, error, setError, setO
             ...formContrato,
             [event.target.name]: event.target.value
         });
-    };
+    }
 
     const checaErros = (event) => {
         if (event.target.required && event.target.value === "") {
@@ -115,8 +147,8 @@ const FormNovoContrato = ({ formContrato, setFormContrato, error, setError, setO
                 }
             });
             setError(false);
-        };
-    };
+        }
+    }
 
     const checaErrosEmail = (event) => {
         if (EmailValidator.validate(event.target.value) === true) {
@@ -137,8 +169,8 @@ const FormNovoContrato = ({ formContrato, setFormContrato, error, setError, setO
                 }
             });
             setError(true);
-        };
-    };
+        }
+    }
 
     const checaErroRequired = () => {
         const form = document.querySelector(".form_formulario").elements;
@@ -146,8 +178,8 @@ const FormNovoContrato = ({ formContrato, setFormContrato, error, setError, setO
         for (let i = 0; i < form.length; i++) {
             if (form[i].tagName === 'INPUT') {
                 inputArr.push(form[i]);
-            };
-        };
+            }
+        }
 
         let formErrosTemp = {};
 
@@ -159,7 +191,7 @@ const FormNovoContrato = ({ formContrato, setFormContrato, error, setError, setO
                         error: true,
                         helperText: "Campo obrigatório"
                     }
-                };
+                }
 
                 setError(true);
             } else {
@@ -170,11 +202,11 @@ const FormNovoContrato = ({ formContrato, setFormContrato, error, setError, setO
                         helperText: " "
                     }
                 };
-            };
+            }
         });
         
         setErrosContrato(formErrosTemp);
-    };
+    }
 
     return (
         <Box className="form">
@@ -182,6 +214,8 @@ const FormNovoContrato = ({ formContrato, setFormContrato, error, setError, setO
                 <Divider sx={{ mt: '1.5rem', mb: '1.25rem' }} textAlign="left"> 
                     <Typography variant="h5" sx={{ fontWeight: 'light' }}>Dados do contrato</Typography> 
                 </Divider>
+
+                {/* tipo_contratacao */}
 
                 <TextField
                     variant="outlined"
@@ -194,6 +228,20 @@ const FormNovoContrato = ({ formContrato, setFormContrato, error, setError, setO
                     error={errosContrato.processo_sei.error}
                     onBlur={checaErros}
                     required
+                    sx={{ margin: '1rem 0' }}
+                    fullWidth
+                />
+
+                <TextField
+                    variant="outlined"
+                    value={formContrato.dotacao_orcamentaria}
+                    name="dotacao_orcamentaria"
+                    onChange={handleInputChange}
+                    className="form__campo"
+                    label="Dotação orçamentária"
+                    helperText={errosContrato.dotacao_orcamentaria.helperText}
+                    error={errosContrato.dotacao_orcamentaria.error}
+                    onBlur={checaErros}
                     sx={{ margin: '1rem 0' }}
                     fullWidth
                 />
@@ -224,6 +272,8 @@ const FormNovoContrato = ({ formContrato, setFormContrato, error, setError, setO
                     checaErros={checaErros}
                     fullWidth
                 />
+
+                {/* tipo_objeto */}
 
                 <TextField
                     variant="outlined"
@@ -284,6 +334,21 @@ const FormNovoContrato = ({ formContrato, setFormContrato, error, setError, setO
                     fullWidth
                 />
 
+                <CampoValores
+                    index=""
+                    className="form__campo"
+                    label="Valor mensal estimativo"
+                    value={formContrato.valor_mensal_estimativo}
+                    state={formContrato}
+                    setState={setFormContrato}
+                    name="valor_mensal_estimativo"
+                    onChange={(e) => { handleInputChange(e); }}
+                    checaErros={checaErros}
+                    helperText={errosContrato.valor_mensal_estimativo.helperText}
+                    error={errosContrato.valor_mensal_estimativo.error}
+                    fullWidth
+                />
+
                 <CampoData
                     className="form__campo"
                     label="Início da Vigência"
@@ -301,11 +366,11 @@ const FormNovoContrato = ({ formContrato, setFormContrato, error, setError, setO
                 <CampoData
                     className="form__campo"
                     label="Fim da Vigência"
-                    value={formContrato.data_fim_vigencia}
-                    name="data_fim_vigencia"
+                    value={formContrato.data_vencimento}
+                    name="data_vencimento"
                     onChange={handleInputChange}
-                    helperText={errosContrato.data_fim_vigencia.helperText}
-                    error={errosContrato.data_fim_vigencia.error}
+                    helperText={errosContrato.data_vencimento.helperText}
+                    error={errosContrato.data_vencimento.error}
                     onBlur={checaErros}
                     margin="1rem 0"
                     fullWidth
@@ -320,21 +385,6 @@ const FormNovoContrato = ({ formContrato, setFormContrato, error, setError, setO
                     label="Condição de Pagamento"
                     helperText={errosContrato.condicao_pagamento.helperText}
                     error={errosContrato.condicao_pagamento.error}
-                    onBlur={checaErros}
-                    required
-                    sx={{ margin: '1rem 0' }}
-                    fullWidth
-                />
-
-                <TextField
-                    variant="outlined"
-                    value={formContrato.prazo_contrato_meses.replace(/[^\d]+/g,'')}
-                    name="prazo_contrato_meses"
-                    onChange={handleInputChange}
-                    className="form__campo"
-                    label="Prazo em meses"
-                    helperText={errosContrato.prazo_contrato_meses.helperText}
-                    error={errosContrato.prazo_contrato_meses.error}
                     onBlur={checaErros}
                     required
                     sx={{ margin: '1rem 0' }}
@@ -433,6 +483,72 @@ const FormNovoContrato = ({ formContrato, setFormContrato, error, setError, setO
                     sx={{ margin: '1rem 0' }}
                     fullWidth
                 />
+
+                <CampoData
+                    className="form__campo"
+                    label="Envio material técnico"
+                    value={formContrato.envio_material_tecnico}
+                    name="envio_material_tecnico"
+                    onChange={handleInputChange}
+                    helperText={errosContrato.envio_material_tecnico.helperText}
+                    error={errosContrato.envio_material_tecnico.error}
+                    onBlur={checaErros}
+                    margin="1rem 0"
+                    fullWidth
+                />
+
+                <CampoData
+                    className="form__campo"
+                    label="Minuta edital"
+                    value={formContrato.minuta_edital}
+                    name="minuta_edital"
+                    onChange={handleInputChange}
+                    helperText={errosContrato.minuta_edital.helperText}
+                    error={errosContrato.minuta_edital.error}
+                    onBlur={checaErros}
+                    margin="1rem 0"
+                    fullWidth
+                />
+
+                <CampoData
+                    className="form__campo"
+                    label="Abertura certame"
+                    value={formContrato.abertura_certame}
+                    name="abertura_certame"
+                    onChange={handleInputChange}
+                    helperText={errosContrato.abertura_certame.helperText}
+                    error={errosContrato.abertura_certame.error}
+                    onBlur={checaErros}
+                    margin="1rem 0"
+                    fullWidth
+                />
+
+                <CampoData
+                    className="form__campo"
+                    label="Homolagação"
+                    value={formContrato.homologacao}
+                    name="homologacao"
+                    onChange={handleInputChange}
+                    helperText={errosContrato.homologacao.helperText}
+                    error={errosContrato.homologacao.error}
+                    onBlur={checaErros}
+                    margin="1rem 0"
+                    fullWidth
+                />
+
+                <TextField
+                    variant="outlined"
+                    className="form__campo"
+                    label="Fonte de recurso"
+                    value={formContrato.fonte_recurso}
+                    name="fonte_recurso"
+                    onChange={handleInputChange}
+                    onBlur={checaErros}
+                    helperText={errosContrato.fonte_recurso.helperText}
+                    error={errosContrato.fonte_recurso.error}
+                    sx={{ margin: '1rem 0' }}
+                    fullWidth
+                />
             </Box>
 
             <Box sx={{ display: 'flex', justifyContent: 'flex-end', margin: '2rem 0', mt: '0' }}>
@@ -454,6 +570,6 @@ const FormNovoContrato = ({ formContrato, setFormContrato, error, setError, setO
             </Box>
         </Box>
     );
-};
+}
 
 export default FormNovoContrato;
