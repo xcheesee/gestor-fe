@@ -51,7 +51,7 @@ const Header = (props) => {
 
     const handleLogout = () => {
         setCarregando(true);
-        const url = `http://${process.env.REACT_APP_API_URL}/contratos/api/logout`
+        const url = `${process.env.REACT_APP_API_URL}/logout`
         const options = {
             method: 'POST',
             headers: {

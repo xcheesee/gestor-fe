@@ -52,7 +52,7 @@ const Login = () => {
     }
 
     const handleClickEntrar = (e) => {
-        const url = `http://${process.env.REACT_APP_API_URL}/contratos/api/login`;
+        const url = `${process.env.REACT_APP_API_URL}/login`;
         const options = {
             method: 'POST',
             headers: {
@@ -68,11 +68,7 @@ const Login = () => {
         setCarregando(true);
 
         fetch(url, options)
-            .then(res => {
-                if (res.ok) {
-                    return res.json();
-                }
-            })
+            .then(res => res.json())
             .then((data) => {
                 if (data.access_token) {
                     sessionStorage.setItem('access_token', data.access_token);

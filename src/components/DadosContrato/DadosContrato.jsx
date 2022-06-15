@@ -191,7 +191,7 @@ const DadosContrato = ({ snackbar, setSnackbar }) => {
     const navigate = useNavigate();
 
     useEffect(() => {
-        const url = `http://${process.env.REACT_APP_API_URL}/contratos/api`
+        const url = `${process.env.REACT_APP_API_URL}`
         const token = sessionStorage.getItem('access_token');
         const options = {
             headers: {

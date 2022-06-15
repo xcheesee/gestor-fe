@@ -59,7 +59,7 @@ const ListaCertidoes = (props) => {
     }
 
     const excluiCertidao = (id) => {
-        const url = `http://${process.env.REACT_APP_API_URL}/contratos/api/certidao/${id}`;
+        const url = `${process.env.REACT_APP_API_URL}/certidao/${id}`;
         const token = sessionStorage.getItem('access_token');
         const options = {
             method: 'DELETE',
@@ -111,7 +111,7 @@ const ListaCertidoes = (props) => {
     }
 
     const editaCertidao = (id, formCertidaoEdit) => {
-        const url = `http://${process.env.REACT_APP_API_URL}/contratos/api/certidao/${id}`;
+        const url = `${process.env.REACT_APP_API_URL}/certidao/${id}`;
         const token = sessionStorage.getItem('access_token');
         const options = {
             method: 'PUT',
@@ -170,7 +170,7 @@ const ListaCertidoes = (props) => {
     }
 
     const enviaCertidao = () => {
-        const url = `http://${process.env.REACT_APP_API_URL}/contratos/api/certidao`;
+        const url = `${process.env.REACT_APP_API_URL}/certidao`;
         const token = sessionStorage.getItem('access_token');
         const options = {
             method: 'POST',

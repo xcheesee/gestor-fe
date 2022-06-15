@@ -46,7 +46,7 @@ const Principal = ({ snackbar, setSnackbar }) => {
     }
 
     useEffect(() => {
-        const url = `http://${process.env.REACT_APP_API_URL}/contratos/api/contratos?page=${page}`
+        const url = `${process.env.REACT_APP_API_URL}/contratos?page=${page}`
         const token = sessionStorage.getItem('access_token');
         const options = {
             method: 'GET',

@@ -73,7 +73,7 @@ const ListaAditamentos = (props) => {
     }
 
     const excluiAditamento = (id) => {
-        const url = `http://${process.env.REACT_APP_API_URL}/contratos/api/aditamento/${id}`;
+        const url = `${process.env.REACT_APP_API_URL}/aditamento/${id}`;
         const token = sessionStorage.getItem('access_token');
         const options = {
             method: 'DELETE',
@@ -129,7 +129,7 @@ const ListaAditamentos = (props) => {
     }
 
     const editaAditamento = (id, formAditamentoEdit) => {
-        const url = `http://${process.env.REACT_APP_API_URL}/contratos/api/aditamento/${id}`;
+        const url = `${process.env.REACT_APP_API_URL}/aditamento/${id}`;
         const token = sessionStorage.getItem('access_token');
         const options = {
             method: 'PUT',
@@ -196,7 +196,7 @@ const ListaAditamentos = (props) => {
     }
 
     const enviaAditamento = () => {
-        const url = `http://${process.env.REACT_APP_API_URL}/contratos/api/aditamento`;
+        const url = `${process.env.REACT_APP_API_URL}/aditamento`;
         const token = sessionStorage.getItem('access_token');
         const options = {
             method: 'POST',

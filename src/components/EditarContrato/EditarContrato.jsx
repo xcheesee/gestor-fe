@@ -48,7 +48,7 @@ const EditarContrato = ({ setSnackbar }) => {
     const navigate = useNavigate();
 
     useEffect(() => {
-        const url = `http://${process.env.REACT_APP_API_URL}/contratos/api/contrato/${numContrato}`;
+        const url = `${process.env.REACT_APP_API_URL}/contrato/${numContrato}`;
         const token = sessionStorage.getItem('access_token');
         const options = {
             method: 'GET',
@@ -76,7 +76,7 @@ const EditarContrato = ({ setSnackbar }) => {
         setCarregando(true);
 
         if (!error) {
-            const url = `http://${process.env.REACT_APP_API_URL}/contratos/api/contrato/${numContrato}`;
+            const url = `${process.env.REACT_APP_API_URL}/contrato/${numContrato}`;
             const token = sessionStorage.getItem('access_token');
             const options = {
                 method: 'PUT',
