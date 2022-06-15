@@ -41,8 +41,19 @@ const FormLocais = (props) => {
     });
 
     useEffect(() => {
-        if (acao === "adicionar") {
-            setRegiao('');
+        const urlSubpref = `http://${process.env.REACT_APP_API_URL}/contratos/api/subprefeituras/${formLocal.regiao}`;
+        const urlDistrito = `http://${process.env.REACT_APP_API_URL}/contratos/api/distritos/${formLocal.subprefeitura_id}`;
+        const token = sessionStorage.getItem('access_token');
+        const options = {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+                'Authorization': `Bearer ${token}`
+            }
+        }
+
+        setRegiao('');
             setSubprefeitura({ 
                 disabled: true,
                 carregando: false, 
@@ -53,8 +64,29 @@ const FormLocais = (props) => {
                 carregando: false, 
                 value: '' 
             });
-        } else if (acao === "editar") {
-            handleChangeRegiao(formLocal.regiao);
+
+        if (acao === "editar") {
+            setRegiao(formLocal.regiao);
+            fetch(urlSubpref, options)
+                .then(res => res.json())
+                .then(data => {
+                    setListaSubpref(data.data);
+                    setSubprefeitura({
+                        disabled: false,
+                        carregando: false,
+                        value: formLocal.subprefeitura_id
+                    });
+                });
+            fetch(urlDistrito, options)
+                .then(res => res.json())
+                .then(data => {
+                    setListaDistrito(data.data);
+                    setDistrito({
+                        disabled: false,
+                        carregando: false,
+                        value: formLocal.distrito_id
+                    })
+                });
         }
     }, [openFormLocal.open])
     
@@ -133,9 +165,6 @@ const FormLocais = (props) => {
     }
 
     const cancelar = () => {
-        setRegiao(formLocal.regiao);
-        setSubprefeitura({...subprefeitura, value: ''});
-        setDistrito({...distrito, value: ''});
         setOpenFormLocal({ ...openFormLocal, open: false });
     }
 
