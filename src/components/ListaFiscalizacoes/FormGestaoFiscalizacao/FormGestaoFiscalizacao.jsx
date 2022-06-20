@@ -60,6 +60,16 @@ const FormGestaoFiscalizacao = (props) => {
                     fullWidth
                     required
                 />
+                <TextField
+                    variant="outlined"
+                    value={formFiscalizacao.email_gestor}
+                    name="email_gestor"
+                    onChange={handleInputChange}
+                    label="E-mail do Gestor"
+                    sx={{ margin: '1rem 0' }}
+                    fullWidth
+                    required
+                />
 
                 <TextField
                     variant="outlined"
@@ -71,6 +81,16 @@ const FormGestaoFiscalizacao = (props) => {
                     fullWidth
                     required
                 />
+                <TextField
+                    variant="outlined"
+                    value={formFiscalizacao.email_fiscal}
+                    name="email_fiscal"
+                    onChange={handleInputChange}
+                    label="E-mail do Fiscal"
+                    sx={{ margin: '1rem 0' }}
+                    fullWidth
+                    required
+                />
 
                 <TextField
                     variant="outlined"
@@ -78,6 +98,16 @@ const FormGestaoFiscalizacao = (props) => {
                     name="nome_suplente"
                     onChange={handleInputChange}
                     label="Suplente"
+                    sx={{ margin: '1rem 0' }}
+                    fullWidth
+                    required
+                />
+                <TextField
+                    variant="outlined"
+                    value={formFiscalizacao.email_suplente}
+                    name="email_suplente"
+                    onChange={handleInputChange}
+                    label="E-mail do Suplente"
                     sx={{ margin: '1rem 0' }}
                     fullWidth
                     required

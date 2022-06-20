@@ -8,6 +8,7 @@ import {
     FormControl,
     InputLabel,
     Select,
+    TextField,
     MenuItem
 } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
@@ -65,6 +66,7 @@ const FormAditamento = (props) => {
                         value={formAditamento.tipo_aditamentos}
                         name="tipo_aditamentos"
                         onChange={handleInputChange}
+                        required
                         fullWidth
                     >
                         <MenuItem value="Acréscimo de valor">Acréscimo de valor</MenuItem>
@@ -86,54 +88,38 @@ const FormAditamento = (props) => {
                     onChange={(e) => { handleInputChange(e); }}
                     checaErros={() => {}}
                     helperText=""
-                    required
                     fullWidth
                 />
 
-                <CampoData
-                    label="Fim da vigência atualizada"
-                    value={formAditamento.data_fim_vigencia_atualizada}
-                    name="data_fim_vigencia_atualizada"
+                <TextField
+                    variant="outlined"
+                    value={formAditamento.dias_reajuste}
+                    name="dias_reajuste"
                     onChange={handleInputChange}
-                    margin="1rem 0"
+                    label="Dias Reajuste"
+                    sx={{ margin: '1rem 0' }}
                     fullWidth
-                    required
+                />
+                <TextField
+                    variant="outlined"
+                    value={formAditamento.indice_reajuste}
+                    name="indice_reajuste"
+                    onChange={handleInputChange}
+                    label="Índice Reajuste"
+                    sx={{ margin: '1rem 0' }}
+                    fullWidth
                 />
 
                 <CampoPorcentagem 
-                    label="Taxa de reajuste"
-                    value={formAditamento.indice_reajuste}
-                    name="indice_reajuste"
+                    label="Porcentagem reajuste"
+                    value={formAditamento.pct_reajuste}
+                    name="pct_reajuste"
                     state={formAditamento}
                     setState={setFormAditamento}
                     helperText=""
-                    required
                     fullWidth
                 />
 
-                <CampoData
-                    label="Data base de reajuste"
-                    value={formAditamento.data_base_reajuste}
-                    name="data_base_reajuste"
-                    onChange={handleInputChange}
-                    margin="1rem 0"
-                    fullWidth
-                    required
-                />
-
-                <CampoValores
-                    index=""
-                    label="Valor reajustado"
-                    value={formAditamento.valor_reajustado}
-                    state={formAditamento}
-                    setState={setFormAditamento}
-                    name="valor_reajustado"
-                    onChange={(e) => { handleInputChange(e); }}
-                    checaErros={() => {}}
-                    helperText=""
-                    required
-                    fullWidth
-                />
             </DialogContent>
 
             <DialogActions sx={{ margin: '1rem' }}>

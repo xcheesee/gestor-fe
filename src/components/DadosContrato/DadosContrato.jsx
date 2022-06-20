@@ -14,6 +14,7 @@ import {
     Alert,
     Fab
 } from '@mui/material';
+import ExecucaoFinanceira from './ExecucaoFinanceira';
 import DadosEmpresa from './DadosEmpresa';
 import OutrasInformacoes from './OutrasInformacoes';
 import ListaCertidoes from '../ListaCertidoes';
@@ -133,34 +134,49 @@ const formataPorcentagem = (valor) => {
 const TabContrato = (props) => {
     const campos = [
         "Processo SEI",
+        "Dotação Orçamentária",
         "Credor",
         "CPF/CNPJ",
+        "Tipo de contratação",
+        "Tipo de objeto",
         "Objeto",
         "Número do contrato",
         "Data de assinatura",
         "Valor do contrato",
         "Data de início da vigência",
-        "Data de fim da vigência",
+        "Data de vencimento",
         "Condição de pagamento",
-        "Prazo do contrato",
         "Prazo a partir de",
-        "Prazo máximo"
+        "Prazo máximo",
+        "Envio do Material Técnico",
+        "Minuta Edital",
+        "Abertura Certame",
+        "Data Homologação",
+        "Fonte do Recurso"
     ];
 
     const valores = [
         props.processo_sei,
+        props.dotacao_orcamentaria,
         props.credor,
         formataCpfCnpj(props.cnpj_cpf),
+        props.tipo_contratacao,
+        props.tipo_objeto,
         props.objeto,
         props.numero_contrato ,
         formataData(props.data_assinatura),
         formataValores(props.valor_contrato),
         formataData(props.data_inicio_vigencia),
-        formataData(props.data_fim_vigencia),
+        formataData(props.data_vencimento),
         props.condicao_pagamento,
-        `${props.prazo_contrato_meses} ${props.prazo_contrato_meses > 1 ? "meses" : "mês"}`,
+        //`${props.prazo_contrato_meses} ${props.prazo_contrato_meses > 1 ? "meses" : "mês"}`,
         props.prazo_a_partir_de,
-        formataData(props.data_prazo_maximo)
+        formataData(props.data_prazo_maximo),
+        formataData(props.envio_material_tecnico),
+        formataData(props.minuta_edital),
+        formataData(props.abertura_certame),
+        formataData(props.homologacao),
+        props.fonte_recurso
     ];
 
     return retornaCampoValor(campos, valores, props.estaCarregado);
@@ -171,7 +187,7 @@ const ListaTabs = [
     'Certidões',
     'Garantias',
     'Fiscalização',
-    'Recursos orçamentários',
+    'Planejadas',
     'Locais de serviço',
     'Aditamentos'
 ];
@@ -191,7 +207,7 @@ const DadosContrato = ({ snackbar, setSnackbar }) => {
     const navigate = useNavigate();
 
     useEffect(() => {
-        const url = `http://${process.env.REACT_APP_API_URL}/contratos/api`
+        const url = `http://${process.env.REACT_APP_API_URL}/api`
         const token = sessionStorage.getItem('access_token');
         const options = {
             headers: {
@@ -232,11 +248,11 @@ const DadosContrato = ({ snackbar, setSnackbar }) => {
             setFiscalizacoes(data.data);
         })
 
-        fetch(`${url}/recursoorcamentarios/${numContrato}`, options)
+        /*fetch(`${url}/recursoorcamentarios/${numContrato}`, options)
         .then(res => res.json())
         .then(data => {
             setRecOrcamentarios(data.data);
-        })
+        })*/
 
         fetch(`${url}/servicoslocais/${numContrato}`, options)
         .then(res => res.json())
@@ -292,7 +308,7 @@ const DadosContrato = ({ snackbar, setSnackbar }) => {
                     </Link>
                         <Box sx={{ display: 'flex', flexDirection: 'column', margin: '1rem' }}>
                             <Typography variant="h2" component="h1" sx={{ fontSize: '2rem' }}>
-                                Contrato número <strong>{dados.id}</strong>
+                                Contrato # <strong>{dados.id}</strong>
                             </Typography>
 
                             <Box sx={{ display: 'flex', width: '100%', margin: '2rem 0' }} component={Paper} elevation={3}>
@@ -353,18 +369,25 @@ const DadosContrato = ({ snackbar, setSnackbar }) => {
                                         <Box component={Paper} elevation={3} sx={{ padding: '1rem' }}>
                                             <TabContrato 
                                                 processo_sei={dados.processo_sei}
+                                                dotacao_orcamentaria={dados.dotacao_orcamentaria}
                                                 credor={dados.credor}
                                                 cnpj_cpf={dados.cnpj_cpf}
+                                                tipo_contratacao={dados.tipo_contratacao}
+                                                tipo_objeto={dados.tipo_objeto}
                                                 objeto={dados.objeto}
                                                 numero_contrato={dados.numero_contrato}
                                                 data_assinatura={dados.data_assinatura}
                                                 valor_contrato={dados.valor_contrato}
                                                 data_inicio_vigencia={dados.data_inicio_vigencia}
-                                                data_fim_vigencia={dados.data_fim_vigencia}
+                                                data_vencimento={dados.data_vencimento}
                                                 condicao_pagamento={dados.condicao_pagamento}
-                                                prazo_contrato_meses={dados.prazo_contrato_meses}
                                                 prazo_a_partir_de={dados.prazo_a_partir_de}
                                                 data_prazo_maximo={dados.data_prazo_maximo}
+                                                envio_material_tecnico={dados.envio_material_tecnico}
+                                                minuta_edital={dados.minuta_edital}
+                                                abertura_certame={dados.abertura_certame}
+                                                homologacao={dados.homologacao}
+                                                fonte_recurso={dados.fonte_recurso}
                                                 estaCarregado={estaCarregado}
                                             />
 
@@ -458,6 +481,11 @@ const DadosContrato = ({ snackbar, setSnackbar }) => {
                                     </TabPanel>
                                 </Box>
                             </Box>
+
+                            <ExecucaoFinanceira 
+                                execucao_financeira={dados.execucao_financeira}
+                                formataValores={formataValores}
+                            />
 
                             <DadosEmpresa
                                 nome_empresa={dados.nome_empresa}

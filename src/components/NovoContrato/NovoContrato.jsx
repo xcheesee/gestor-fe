@@ -70,7 +70,7 @@ const NovoContrato = ({ setSnackbar }) => {
         setCarregando(true);
 
         if (!error) {
-            const url = `http://${process.env.REACT_APP_API_URL}/contratos/api/contrato`
+            const url = `http://${process.env.REACT_APP_API_URL}/api/contrato`
             const token = sessionStorage.getItem('access_token');
             const options = {
                 method: 'post',

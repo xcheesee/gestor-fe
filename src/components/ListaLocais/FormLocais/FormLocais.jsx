@@ -9,6 +9,7 @@ import {
     InputLabel,
     Select,
     MenuItem,
+    TextField,
     CircularProgress
 } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
@@ -41,8 +42,8 @@ const FormLocais = (props) => {
     });
 
     useEffect(() => {
-        const urlSubpref = `http://${process.env.REACT_APP_API_URL}/contratos/api/subprefeituras/${formLocal.regiao}`;
-        const urlDistrito = `http://${process.env.REACT_APP_API_URL}/contratos/api/distritos/${formLocal.subprefeitura_id}`;
+        const urlSubpref = `http://${process.env.REACT_APP_API_URL}/api/subprefeituras/${formLocal.regiao}`;
+        const urlDistrito = `http://${process.env.REACT_APP_API_URL}/api/distritos/${formLocal.subprefeitura_id}`;
         const token = sessionStorage.getItem('access_token');
         const options = {
             method: 'GET',
@@ -95,7 +96,7 @@ const FormLocais = (props) => {
         setDistrito({ disabled: true, carregando: true, value: '' });
         setRegiao(valor);
 
-        const url = `http://${process.env.REACT_APP_API_URL}/contratos/api/subprefeituras/${valor}`;
+        const url = `http://${process.env.REACT_APP_API_URL}/api/subprefeituras/${valor}`;
         const token = sessionStorage.getItem('access_token');
         const options = {
             method: 'GET',
@@ -133,7 +134,7 @@ const FormLocais = (props) => {
             value: valor
         });
 
-        const url = `http://${process.env.REACT_APP_API_URL}/contratos/api/distritos/${valor}`;
+        const url = `http://${process.env.REACT_APP_API_URL}/api/distritos/${valor}`;
         const token = sessionStorage.getItem('access_token');
         const options = {
             method: 'GET',
@@ -162,6 +163,13 @@ const FormLocais = (props) => {
             carregando: false,
             value: valor
         });
+    }
+
+    const handleInputChange = (e) => {
+        setFormLocal({
+            ...formLocal,
+            [e.target.name]: e.target.value
+        })
     }
 
     const cancelar = () => {
@@ -284,6 +292,17 @@ const FormLocais = (props) => {
                         : ""
                     }
                 </FormControl>
+
+                <TextField
+                    variant="outlined"
+                    value={formLocal.unidade}
+                    name="unidade"
+                    onChange={handleInputChange}
+                    label="Unidade"
+                    sx={{ margin: '1rem 0' }}
+                    fullWidth
+                    required
+                />
                     
             </DialogContent>
 

@@ -46,7 +46,7 @@ const Principal = ({ snackbar, setSnackbar }) => {
     }
 
     useEffect(() => {
-        const url = `http://${process.env.REACT_APP_API_URL}/contratos/api/contratos?page=${page}`
+        const url = `http://${process.env.REACT_APP_API_URL}/api/contratos?page=${page}`
         const token = sessionStorage.getItem('access_token');
         const options = {
             method: 'GET',
@@ -80,7 +80,7 @@ const Principal = ({ snackbar, setSnackbar }) => {
                     nome_empresa: contrato.nome_empresa,
                     numero_contrato: contrato.numero_contrato,
                     data_inicio_vigencia: contrato.data_inicio_vigencia,
-                    data_fim_vigencia: contrato.data_fim_vigencia,
+                    data_vencimento: contrato.data_vencimento,
                     prazo_contrato_meses: contrato.prazo_contrato_meses
                 }
             );
@@ -97,7 +97,7 @@ const Principal = ({ snackbar, setSnackbar }) => {
                             <TableCell sx={{ color: (theme) => theme.palette.color.main }} align="center">Nome da empresa</TableCell>
                             <TableCell sx={{ color: (theme) => theme.palette.color.main }} align="center">Número do contrato</TableCell>
                             <TableCell sx={{ color: (theme) => theme.palette.color.main }} align="center">Data de início da vigência</TableCell>
-                            <TableCell sx={{ color: (theme) => theme.palette.color.main }} align="center">Data de fim da vigência</TableCell>
+                            <TableCell sx={{ color: (theme) => theme.palette.color.main }} align="center">Data de vencimento</TableCell>
                             <TableCell sx={{ color: (theme) => theme.palette.color.main }} align="center">Prazo do contrato</TableCell>
                             <TableCell sx={{ color: (theme) => theme.palette.color.main }} align="center">Visualizar contrato</TableCell>
                         </TableRow>
@@ -116,7 +116,7 @@ const Principal = ({ snackbar, setSnackbar }) => {
                                     <TableCell align="center" sx={background}>{row.nome_empresa}</TableCell>
                                     <TableCell align="center" sx={background}>{row.numero_contrato}</TableCell>
                                     <TableCell align="center" sx={background}>{row.data_inicio_vigencia}</TableCell>
-                                    <TableCell align="center" sx={background}>{row.data_fim_vigencia}</TableCell>
+                                    <TableCell align="center" sx={background}>{row.data_vencimento}</TableCell>
                                     <TableCell align="center" sx={background}>{row.prazo_contrato_meses} {row.prazo_contrato_meses > 1 ? "meses" : "mês"}</TableCell>
                                     <TableCell align="center" sx={background}>
                                         <IconButton onClick={(e) => { handleClickVerContrato(e, row.id); irParaTopo(); }}>
@@ -160,7 +160,7 @@ const Principal = ({ snackbar, setSnackbar }) => {
                             />
                             <CampoData 
                                 label="Data final"
-                                name="data_fim_vigencia"
+                                name="data_vencimento"
                                 helperText=""
                                 size="small"
                                 margin="1rem"

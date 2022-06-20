@@ -52,7 +52,7 @@ const Login = () => {
     }
 
     const handleClickEntrar = (e) => {
-        const url = `http://${process.env.REACT_APP_API_URL}/contratos/api/login`;
+        const url = `http://${process.env.REACT_APP_API_URL}/api/login`;
         const options = {
             method: 'POST',
             headers: {

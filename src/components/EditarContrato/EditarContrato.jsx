@@ -27,18 +27,25 @@ const EditarContrato = ({ setSnackbar }) => {
     const [carregando, setCarregando] = useState(false);
     const [contrato, setContrato] = useState({
         processo_sei: "",
+        dotacao_orcamentaria: "",
         credor: "",
         cnpj_cpf: "",
+        tipo_contratacao: "",
+        tipo_objeto: "",
         objeto: "",
         numero_contrato: "",
         data_assinatura: "",
         valor_contrato: "",
         data_inicio_vigencia: "",
-        data_fim_vigencia: "",
+        data_vencimento: "",
         condicao_pagamento: "",
-        prazo_contrato_meses: "",
         prazo_a_partir_de: "",
         data_prazo_maximo: "",
+        envio_material_tecnico: "",
+        minuta_edital: "",
+        abertura_certame: "",
+        homologacao: "",
+        fonte_recurso: "",
         nome_empresa: "",
         telefone_empresa: "",
         email_empresa: "",
@@ -48,7 +55,7 @@ const EditarContrato = ({ setSnackbar }) => {
     const navigate = useNavigate();
 
     useEffect(() => {
-        const url = `http://${process.env.REACT_APP_API_URL}/contratos/api/contrato/${numContrato}`;
+        const url = `http://${process.env.REACT_APP_API_URL}/api/contrato/${numContrato}`;
         const token = sessionStorage.getItem('access_token');
         const options = {
             method: 'GET',
@@ -76,7 +83,7 @@ const EditarContrato = ({ setSnackbar }) => {
         setCarregando(true);
 
         if (!error) {
-            const url = `http://${process.env.REACT_APP_API_URL}/contratos/api/contrato/${numContrato}`;
+            const url = `http://${process.env.REACT_APP_API_URL}/api/contrato/${numContrato}`;
             const token = sessionStorage.getItem('access_token');
             const options = {
                 method: 'PUT',

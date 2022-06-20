@@ -20,13 +20,15 @@ const TabLocaisServico = (props) => {
     const campos = [
         "Região",
         "Subprefeitura",
-        "Distrito"
+        "Distrito",
+        "Unidade"
     ];
 
     const valores = [
         dicionarioRegioes[props.regiao],
         props.subprefeitura,
-        props.distrito
+        props.distrito,
+        props.unidade
     ];
 
     return props.retornaCampoValor(campos, valores, props.estaCarregado);
@@ -57,7 +59,8 @@ const ListaLocais = (props) => {
         contrato_id: numContrato,
         regiao: '',
         subprefeitura_id: '',
-        distrito_id: ''
+        distrito_id: '',
+        unidade: ''
     });
 
     const handleClickExcluir = (id) => {
@@ -69,7 +72,7 @@ const ListaLocais = (props) => {
     }
 
     const excluiLocal = (id) => {
-        const url = `http://${process.env.REACT_APP_API_URL}/contratos/api/servicolocal/${id}`;
+        const url = `http://${process.env.REACT_APP_API_URL}/api/servicolocal/${id}`;
         const token = sessionStorage.getItem('access_token');
         const options = {
             method: 'DELETE',
@@ -112,7 +115,8 @@ const ListaLocais = (props) => {
             contrato_id: local.contrato_id,
             regiao: local.regiao,
             subprefeitura_id: local.subprefeitura_id,
-            distrito_id: local.distrito_id
+            distrito_id: local.distrito_id,
+            unidade: local.unidade
         });
         setOpenFormLocal({
             open: true,
@@ -122,7 +126,7 @@ const ListaLocais = (props) => {
     }
 
     const editaLocal = (id, formLocalEdit) => {
-        const url = `http://${process.env.REACT_APP_API_URL}/contratos/api/servicolocal/${id}`;
+        const url = `http://${process.env.REACT_APP_API_URL}/api/servicolocal/${id}`;
         const token = sessionStorage.getItem('access_token');
         const options = {
             method: 'PUT',
@@ -154,7 +158,8 @@ const ListaLocais = (props) => {
                         ...formLocal,
                         regiao: '',
                         subprefeitura_id: '',
-                        distrito_id: ''
+                        distrito_id: '',
+                        unidade: ''
                     });
                     return res.json();
                 } else {
@@ -178,7 +183,7 @@ const ListaLocais = (props) => {
     }
 
     const enviaLocal = (form) => {
-        const url = `http://${process.env.REACT_APP_API_URL}/contratos/api/servicolocal`;
+        const url = `http://${process.env.REACT_APP_API_URL}/api/servicolocal`;
         const token = sessionStorage.getItem('access_token');
         const options = {
             method: 'POST',
@@ -210,7 +215,8 @@ const ListaLocais = (props) => {
                         ...formLocal,
                         regiao: '',
                         subprefeitura_id: '',
-                        distrito_id: ''
+                        distrito_id: '',
+                        unidade: ''
                     });
                     return res.json();
                 } else {
@@ -251,6 +257,7 @@ const ListaLocais = (props) => {
                                 regiao={local.regiao}
                                 subprefeitura={local.subprefeitura}
                                 distrito={local.distrito}
+                                unidade={local.unidade}
                                 estaCarregado={estaCarregado}
                                 retornaCampoValor={retornaCampoValor}
                             />

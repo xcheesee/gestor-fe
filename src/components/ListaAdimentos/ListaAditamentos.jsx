@@ -13,19 +13,17 @@ const TabAditamentos = (props) => {
     const campos = [
         "Tipo",
         "Valor",
-        "Fim da vigência atualizada",
-        "Taxa de reajuste",
-        "Data base do reajuste",
-        "Valor reajustado"
+        "Dias Reajuste",
+        "Índice reajuste",
+        "Porcentagem reajuste"
     ];
 
     const valores = [
         props.tipo_aditamentos,
         props.formataValores(props.valor_aditamento),
-        props.formataData(props.data_fim_vigencia_atualizada),
-        props.formataPorcentagem(props.indice_reajuste),
-        props.formataData(props.data_base_reajuste),
-        props.formataValores(props.valor_reajustado)
+        props.dias_reajuste,
+        props.indice_reajuste,
+        props.formataPorcentagem(props.pct_reajuste)
     ];
 
     return props.retornaCampoValor(campos, valores, props.estaCarregado);
@@ -58,10 +56,9 @@ const ListaAditamentos = (props) => {
         contrato_id: numContrato,
         tipo_aditamentos: '',
         valor_aditamento: '',
-        data_fim_vigencia_atualizada: '',
+        dias_reajuste: '',
         indice_reajuste: '',
-        data_base_reajuste: '',
-        valor_reajustado: ''
+        pct_reajuste: ''
     });
 
     const handleClickExcluir = (id) => {
@@ -73,7 +70,7 @@ const ListaAditamentos = (props) => {
     }
 
     const excluiAditamento = (id) => {
-        const url = `http://${process.env.REACT_APP_API_URL}/contratos/api/aditamento/${id}`;
+        const url = `http://${process.env.REACT_APP_API_URL}/api/aditamento/${id}`;
         const token = sessionStorage.getItem('access_token');
         const options = {
             method: 'DELETE',
@@ -116,10 +113,9 @@ const ListaAditamentos = (props) => {
             contrato_id: aditamento.contrato_id,
             tipo_aditamentos: aditamento.tipo_aditamentos,
             valor_aditamento: aditamento.valor_aditamento,
-            data_fim_vigencia_atualizada: aditamento.data_fim_vigencia_atualizada,
+            dias_reajuste: aditamento.dias_reajuste,
             indice_reajuste: aditamento.indice_reajuste,
-            data_base_reajuste: aditamento.data_base_reajuste,
-            valor_reajustado: aditamento.valor_reajustado
+            pct_reajuste: aditamento.pct_reajuste
         });
         setOpenFormAditamento({
             open: true,
@@ -129,7 +125,7 @@ const ListaAditamentos = (props) => {
     }
 
     const editaAditamento = (id, formAditamentoEdit) => {
-        const url = `http://${process.env.REACT_APP_API_URL}/contratos/api/aditamento/${id}`;
+        const url = `http://${process.env.REACT_APP_API_URL}/api/aditamento/${id}`;
         const token = sessionStorage.getItem('access_token');
         const options = {
             method: 'PUT',
@@ -161,10 +157,9 @@ const ListaAditamentos = (props) => {
                         ...formAditamento,
                         tipo_aditamentos: '',
                         valor_aditamento: '',
-                        data_fim_vigencia_atualizada: '',
+                        dias_reajuste: '',
                         indice_reajuste: '',
-                        data_base_reajuste: '',
-                        valor_reajustado: ''
+                        pct_reajuste: ''
                     });
                     return res.json();
                 } else {
@@ -188,15 +183,14 @@ const ListaAditamentos = (props) => {
             contrato_id: numContrato,
             tipo_aditamentos: '',
             valor_aditamento: '',
-            data_fim_vigencia_atualizada: '',
+            dias_reajuste: '',
             indice_reajuste: '',
-            data_base_reajuste: '',
-            valor_reajustado: ''
+            pct_reajuste: ''
         });
     }
 
     const enviaAditamento = () => {
-        const url = `http://${process.env.REACT_APP_API_URL}/contratos/api/aditamento`;
+        const url = `http://${process.env.REACT_APP_API_URL}/api/aditamento`;
         const token = sessionStorage.getItem('access_token');
         const options = {
             method: 'POST',
@@ -228,10 +222,9 @@ const ListaAditamentos = (props) => {
                         ...formAditamento,
                         tipo_aditamentos: '',
                         valor_aditamento: '',
-                        data_fim_vigencia_atualizada: '',
+                        dias_reajuste: '',
                         indice_reajuste: '',
-                        data_base_reajuste: '',
-                        valor_reajustado: ''
+                        pct_reajuste: ''
                     });
                     return res.json();
                 } else {
@@ -273,10 +266,9 @@ const ListaAditamentos = (props) => {
                             <TabAditamentos 
                                 tipo_aditamentos={aditamento.tipo_aditamentos}
                                 valor_aditamento={aditamento.valor_aditamento}
-                                data_fim_vigencia_atualizada={aditamento.data_fim_vigencia_atualizada}
+                                dias_reajuste={aditamento.dias_reajuste}
                                 indice_reajuste={aditamento.indice_reajuste}
-                                data_base_reajuste={aditamento.data_base_reajuste}
-                                valor_reajustado={aditamento.valor_reajustado}
+                                pct_reajuste={aditamento.pct_reajuste}
                                 estaCarregado={estaCarregado}
                                 formataValores={formataValores}
                                 formataData={formataData}

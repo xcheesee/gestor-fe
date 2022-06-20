@@ -12,14 +12,20 @@ import BotaoAdicionar from '../BotaoAdicionar';
 const TabFiscalizacao = (props) => {
     const campos = [
         "Gestor",
+        "E-mail Gestor",
         "Fiscal",
-        "Suplente"
+        "E-mail Fiscal",
+        "Suplente",
+        "E-mail Suplente"
     ];
 
     const valores = [
         props.nome_gestor,
+        props.email_gestor,
         props.nome_fiscal,
-        props.nome_suplente
+        props.email_fiscal,
+        props.nome_suplente,
+        props.email_suplente
     ];
 
     return props.retornaCampoValor(campos, valores, props.estaCarregado);
@@ -49,8 +55,11 @@ const ListaFiscalizacoes = (props) => {
     const [formFiscalizacao, setFormFiscalizacao] = useState({
         contrato_id: numContrato,
         nome_gestor: '',
+        email_gestor: '',
         nome_fiscal: '',
-        nome_suplente: ''
+        email_fiscal: '',
+        nome_suplente: '',
+        email_suplente: ''
     });
 
     const handleClickExcluir = (id) => {
@@ -62,7 +71,7 @@ const ListaFiscalizacoes = (props) => {
     }
 
     const excluiFiscalizacao = (id) => {
-        const url = `http://${process.env.REACT_APP_API_URL}/contratos/api/gestaofiscalizacao/${id}`
+        const url = `http://${process.env.REACT_APP_API_URL}/api/gestaofiscalizacao/${id}`
         const token = sessionStorage.getItem('access_token');
         const option = {
             method: 'DELETE',
@@ -104,8 +113,11 @@ const ListaFiscalizacoes = (props) => {
             id: fiscalizacao.id,
             contrato_id: fiscalizacao.contrato_id,
             nome_gestor: fiscalizacao.nome_gestor,
+            email_gestor: fiscalizacao.email_gestor,
             nome_fiscal: fiscalizacao.nome_fiscal,
-            nome_suplente: fiscalizacao.nome_suplente
+            email_fiscal: fiscalizacao.email_fiscal,
+            nome_suplente: fiscalizacao.nome_suplente,
+            email_suplente: fiscalizacao.email_suplente
         });
         setOpenFormFiscalizacao({
             open: true,
@@ -115,7 +127,7 @@ const ListaFiscalizacoes = (props) => {
     }
 
     const editaFiscalizacao = (id, formFiscalizacaoEdit) => {
-        const url = `http://${process.env.REACT_APP_API_URL}/contratos/api/gestaofiscalizacao/${id}`
+        const url = `http://${process.env.REACT_APP_API_URL}/api/gestaofiscalizacao/${id}`
         const token = sessionStorage.getItem('access_token');
         const options = {
             method: 'PUT',
@@ -146,8 +158,11 @@ const ListaFiscalizacoes = (props) => {
                     setFormFiscalizacao({
                         ...formFiscalizacao,
                         nome_gestor: '',
-                        nome_fiscual: '',
-                        nome_suplente: ''
+                        email_gestor: '',
+                        nome_fiscal: '',
+                        email_fiscal: '',
+                        nome_suplente: '',
+                        email_suplente: ''
                     });
                     return res.json();
                 } else {
@@ -170,13 +185,16 @@ const ListaFiscalizacoes = (props) => {
         setFormFiscalizacao({
             contrato_id: numContrato,
             nome_gestor: '',
+            email_gestor: '',
             nome_fiscal: '',
-            nome_suplente: ''
+            email_fiscal: '',
+            nome_suplente: '',
+            email_suplente: ''
         });
     }
 
     const enviaFiscalizacao = () => {
-        const url = `http://${process.env.REACT_APP_API_URL}/contratos/api/gestaofiscalizacao`
+        const url = `http://${process.env.REACT_APP_API_URL}/api/gestaofiscalizacao`
         const token = sessionStorage.getItem('access_token');
         const options = {
             method: 'POST',
@@ -207,8 +225,11 @@ const ListaFiscalizacoes = (props) => {
                     setFormFiscalizacao({
                         ...formFiscalizacao,
                         nome_gestor: '',
+                        email_gestor: '',
                         nome_fiscal: '',
+                        email_fiscal: '',
                         nome_suplente: '',
+                        email_suplente: ''
                     });
                     return res.json();
                 } else {
@@ -249,8 +270,11 @@ const ListaFiscalizacoes = (props) => {
                         <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
                             <TabFiscalizacao 
                                 nome_gestor={fiscalizacao.nome_gestor}
+                                email_gestor={fiscalizacao.email_gestor}
                                 nome_fiscal={fiscalizacao.nome_fiscal}
+                                email_fiscal={fiscalizacao.email_fiscal}
                                 nome_suplente={fiscalizacao.nome_suplente}
+                                email_suplente={fiscalizacao.email_suplente}
                                 retornaCampoValor={retornaCampoValor}
                                 estaCarregado={estaCarregado}
                             />
