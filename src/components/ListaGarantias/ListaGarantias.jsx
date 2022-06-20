@@ -74,7 +74,7 @@ const ListaGarantias = (props) => {
     }
 
     const excluiGarantia = (id) => {
-        const url = `http://${process.env.REACT_APP_API_URL}/api/garantia/${id}`;
+        const url = `${process.env.REACT_APP_API_URL}/garantia/${id}`;
         const token = sessionStorage.getItem('access_token');
         const options = {
             method: 'DELETE',
@@ -128,7 +128,7 @@ const ListaGarantias = (props) => {
     }
 
     const editaGarantia = (id, formGarantiaEdit) => {
-        const url = `http://${process.env.REACT_APP_API_URL}/api/garantia/${id}`
+        const url = `${process.env.REACT_APP_API_URL}/garantia/${id}`
         const token = sessionStorage.getItem('access_token');
         const options = {
             method: 'PUT',
@@ -191,7 +191,7 @@ const ListaGarantias = (props) => {
     }
 
     const enviaGarantia = () => {
-        const url = `http://${process.env.REACT_APP_API_URL}/api/garantia/`
+        const url = `${process.env.REACT_APP_API_URL}/garantia/`
         const token = sessionStorage.getItem('access_token');
         const options = {
             method: 'POST',

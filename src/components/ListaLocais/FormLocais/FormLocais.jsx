@@ -42,8 +42,8 @@ const FormLocais = (props) => {
     });
 
     useEffect(() => {
-        const urlSubpref = `http://${process.env.REACT_APP_API_URL}/api/subprefeituras/${formLocal.regiao}`;
-        const urlDistrito = `http://${process.env.REACT_APP_API_URL}/api/distritos/${formLocal.subprefeitura_id}`;
+        const urlSubpref = `${process.env.REACT_APP_API_URL}/subprefeituras/${formLocal.regiao}`;
+        const urlDistrito = `${process.env.REACT_APP_API_URL}/distritos/${formLocal.subprefeitura_id}`;
         const token = sessionStorage.getItem('access_token');
         const options = {
             method: 'GET',
@@ -96,7 +96,7 @@ const FormLocais = (props) => {
         setDistrito({ disabled: true, carregando: true, value: '' });
         setRegiao(valor);
 
-        const url = `http://${process.env.REACT_APP_API_URL}/api/subprefeituras/${valor}`;
+        const url = `${process.env.REACT_APP_API_URL}/subprefeituras/${valor}`;
         const token = sessionStorage.getItem('access_token');
         const options = {
             method: 'GET',
@@ -134,7 +134,7 @@ const FormLocais = (props) => {
             value: valor
         });
 
-        const url = `http://${process.env.REACT_APP_API_URL}/api/distritos/${valor}`;
+        const url = `${process.env.REACT_APP_API_URL}/distritos/${valor}`;
         const token = sessionStorage.getItem('access_token');
         const options = {
             method: 'GET',
