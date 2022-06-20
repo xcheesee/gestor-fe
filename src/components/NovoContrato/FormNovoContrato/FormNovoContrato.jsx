@@ -1,5 +1,17 @@
-import React, { useState } from 'react';
-import { TextField, Typography, Box, Divider, Button } from '@mui/material';
+import React, { useEffect, useState } from 'react';
+import { 
+    TextField, 
+    Typography, 
+    Box, 
+    Divider, 
+    Button,
+    FormControl,
+    InputLabel,
+    Select,
+    MenuItem,
+    FormHelperText,
+    CircularProgress
+} from '@mui/material';
 import CampoCpfCnpj from '../../CampoCpfCnpj';
 import CampoValores from '../../CampoValores';
 import CampoData from '../../CampoData';
@@ -10,14 +22,6 @@ import * as EmailValidator from 'email-validator';
 import './estilo.css';
 
 const FormNovoContrato = ({ formContrato, setFormContrato, error, setError, setOpenConfirm, setOpenConfirmSair }) => {
-    const handleClickOpenConfirm = () => {
-        setOpenConfirm(true);
-    }
-
-    const handleClickOpenConfirmSair = () => {
-        setOpenConfirmSair(true);
-    }
-
     const [errosContrato, setErrosContrato] = useState({
         tipo_contratacao: {
             error: false,
@@ -120,11 +124,49 @@ const FormNovoContrato = ({ formContrato, setFormContrato, error, setError, setO
             helperText: " "
         }
     });
+    const [tipoContratacoes, setTipoContratacoes] = useState([]);
+    const [carregando, setCarregando] = useState(true);
     
+    useEffect(() => {
+        const url = `${process.env.REACT_APP_API_URL}/tipocontratacoes`;
+        const token = sessionStorage.getItem('access_token');
+        const options = {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+                'Authorization': `Bearer ${token}`
+            }
+        };
+
+        fetch(url, options)
+            .then(res => res.json())
+            .then(data => { 
+                setCarregando(false);
+                setTipoContratacoes(data.data); 
+            });
+    }, [])
+
+    const handleClickOpenConfirm = () => {
+        setOpenConfirm(true);
+    }
+
+    const handleClickOpenConfirmSair = () => {
+        setOpenConfirmSair(true);
+    }
+
     const handleInputChange = (event) => {
         setFormContrato({
             ...formContrato,
             [event.target.name]: event.target.value
+        });
+    }
+
+    const handleChangeTipoContrato = (event) => {
+        setFormContrato({
+            ...formContrato,
+            tipo_contratacao_id: event.target.value,
+            tipo_contratacao: event.explicitOriginalTarget.innerText
         });
     }
 
@@ -215,7 +257,43 @@ const FormNovoContrato = ({ formContrato, setFormContrato, error, setError, setO
                     <Typography variant="h5" sx={{ fontWeight: 'light' }}>Dados do contrato</Typography> 
                 </Divider>
 
-                {/* tipo_contratacao */}
+                <FormControl fullWidth sx={{ margin: '1rem 0' }}>
+                    <InputLabel id="tipo_contratacao-label">Tipo de contratação</InputLabel>
+                    <Select
+                        labelId="tipo_contratacao-label"
+                        id="tipo_contratacao"
+                        label="Tipo de contratação"
+                        value={formContrato.tipo_contratacao_id === undefined ? "" : formContrato.tipo_contratacao_id}
+                        name="tipo_contratacao"
+                        onChange={handleChangeTipoContrato}
+                        disabled={tipoContratacoes.length === 0}
+                        error={errosContrato.tipo_contratacao.error}
+                        onBlur={checaErros}
+                        fullWidth
+                    >
+                        <MenuItem value={""}>---</MenuItem>
+                        {tipoContratacoes.map((tipoContratacao, index) => {
+                            return (
+                                <MenuItem key={index} value={tipoContratacao.id}>{tipoContratacao.nome}</MenuItem>
+                            );
+                        })}
+                    </Select>
+                    <FormHelperText>{errosContrato.tipo_contratacao.helperText}</FormHelperText>
+
+                    {carregando === true
+                        ? 
+                        <CircularProgress 
+                            size={20} 
+                            sx={{ 
+                                margin: '1rem',
+                                position: 'absolute',
+                                left: '50%',
+                                top: '3%'
+                            }} 
+                        />
+                        : ""
+                    }
+                </FormControl>
 
                 <TextField
                     variant="outlined"
@@ -243,6 +321,7 @@ const FormNovoContrato = ({ formContrato, setFormContrato, error, setError, setO
                     error={errosContrato.dotacao_orcamentaria.error}
                     onBlur={checaErros}
                     sx={{ margin: '1rem 0' }}
+                    required
                     fullWidth
                 />
 
@@ -273,7 +352,27 @@ const FormNovoContrato = ({ formContrato, setFormContrato, error, setError, setO
                     fullWidth
                 />
 
-                {/* tipo_objeto */}
+                <FormControl fullWidth sx={{ margin: '1rem 0' }}>
+                    <InputLabel id="tipo_objeto-label">Tipo de objeto</InputLabel>
+                    <Select
+                        labelId="tipo_objeto-label"
+                        id="tipo_objeto"
+                        label="Tipo de objeto"
+                        value={formContrato.tipo_objeto}
+                        name="tipo_objeto"
+                        onChange={handleInputChange}
+                        error={errosContrato.tipo_contratacao.error}
+                        onBlur={checaErros}
+                        fullWidth
+                    >
+                        <MenuItem value={""}>---</MenuItem>
+                        <MenuItem value={"Obra"}>Obra</MenuItem>
+                        <MenuItem value={"Projeto"}>Projeto</MenuItem>
+                        <MenuItem value={"Serviço"}>Serviço</MenuItem>
+                        <MenuItem value={"Aquisição"}>Aquisição</MenuItem>
+                    </Select>
+                    <FormHelperText>{errosContrato.tipo_objeto.helperText}</FormHelperText>
+                </FormControl>
 
                 <TextField
                     variant="outlined"
@@ -563,7 +662,7 @@ const FormNovoContrato = ({ formContrato, setFormContrato, error, setError, setO
                     sx={{ color: (theme) => theme.palette.color.main, textTransform: 'none' }} 
                     disabled={error}
                     onMouseDown={checaErroRequired}
-                    onMouseUp={handleClickOpenConfirm} 
+                    onMouseUp={handleClickOpenConfirm}
                 >
                     <CheckIcon fontSize="small" sx={{ mr: '0.5rem' }} /> Salvar
                 </Button>
