@@ -163,11 +163,16 @@ const FormNovoContrato = ({ formContrato, setFormContrato, error, setError, setO
     }
 
     const handleChangeTipoContrato = (event) => {
-        setFormContrato({
-            ...formContrato,
-            tipo_contratacao_id: event.target.value,
-            tipo_contratacao: event.explicitOriginalTarget.innerText
+        tipoContratacoes.map((tipoContratacao, index) => {
+            if (tipoContratacao.id === event.target.value) {
+                setFormContrato({
+                    ...formContrato,
+                    tipo_contratacao_id: event.target.value,
+                    tipo_contratacao: tipoContratacoes[index].nome
+                });
+            }
         });
+
     }
 
     const checaErros = (event) => {
@@ -464,7 +469,7 @@ const FormNovoContrato = ({ formContrato, setFormContrato, error, setError, setO
 
                 <CampoData
                     className="form__campo"
-                    label="Fim da Vigência"
+                    label="Data de vencimento"
                     value={formContrato.data_vencimento}
                     name="data_vencimento"
                     onChange={handleInputChange}
