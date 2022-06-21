@@ -172,7 +172,6 @@ const FormNovoContrato = ({ formContrato, setFormContrato, error, setError, setO
                 });
             }
         });
-
     }
 
     const checaErros = (event) => {

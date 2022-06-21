@@ -26,36 +26,39 @@ const EditarContrato = ({ setSnackbar }) => {
     const [openErro, setOpenErro] = useState(false);
     const [carregando, setCarregando] = useState(false);
     const [contrato, setContrato] = useState({
+        tipo_contratacao: "",
         processo_sei: "",
         dotacao_orcamentaria: "",
         credor: "",
         cnpj_cpf: "",
-        tipo_contratacao: "",
         tipo_objeto: "",
         objeto: "",
         numero_contrato: "",
         data_assinatura: "",
         valor_contrato: "",
+        valor_mensal_estimativo: "",
         data_inicio_vigencia: "",
         data_vencimento: "",
         condicao_pagamento: "",
         prazo_a_partir_de: "",
         data_prazo_maximo: "",
+        nome_empresa: "",
+        telefone_empresa: "",
+        email_empresa: "",
+        outras_informacoes: "",
         envio_material_tecnico: "",
         minuta_edital: "",
         abertura_certame: "",
         homologacao: "",
         fonte_recurso: "",
-        nome_empresa: "",
-        telefone_empresa: "",
-        email_empresa: "",
-        outras_informacoes: ""
     });
+    const [tipoContratacoes, setTipoContratacoes] = useState([]);
     const { numContrato } = useParams();
     const navigate = useNavigate();
 
     useEffect(() => {
-        const url = `${process.env.REACT_APP_API_URL}/contrato/${numContrato}`;
+        const urlContrato = `${process.env.REACT_APP_API_URL}/contrato/${numContrato}`;
+        const urlTiposContratacoes = `${process.env.REACT_APP_API_URL}/tipocontratacoes`
         const token = sessionStorage.getItem('access_token');
         const options = {
             method: 'GET',
@@ -64,9 +67,9 @@ const EditarContrato = ({ setSnackbar }) => {
                 'Accept': 'application/json',
                 'Authorization': `Bearer ${token}`
             }
-        }
+        };
 
-        fetch(url, options)
+        fetch(urlContrato, options)
             .then(res => {
                 if (res.status === 404) {
                     navigate('../404', { replace: true });
@@ -77,6 +80,12 @@ const EditarContrato = ({ setSnackbar }) => {
             .then(data => {
                 setContrato(data.data);
             })
+
+        fetch(urlTiposContratacoes, options)
+            .then(res => res.json())
+            .then(data => {
+                setTipoContratacoes(data.data); 
+            });
     }, [])
 
     const handleClickEnviarFormulario = () => {
@@ -106,13 +115,12 @@ const EditarContrato = ({ setSnackbar }) => {
                             text: 'Contrato editado com sucesso!',
                             color: 'success'
                         });
+                        return res.json();
                     } else {
                         handleCloseConfirm();
                         setCarregando(false);
                         setOpenErro(true);
                     }
-
-                    return res.json();
                 })
                 .then(data => {
                     navigate(`../contrato/${numContrato}`, { replace: true });
@@ -148,6 +156,8 @@ const EditarContrato = ({ setSnackbar }) => {
                     setOpenConfirm={setOpenConfirm}
                     setOpenConfirmSair={setOpenConfirmSair}
                     carregando={carregando}
+                    tipoContratacoes={tipoContratacoes}
+                    setTipoContratacoes={setTipoContratacoes}
                 />
             );
         } else {
@@ -160,6 +170,8 @@ const EditarContrato = ({ setSnackbar }) => {
                     setOpenConfirm={setOpenConfirm}
                     setOpenConfirmSair={setOpenConfirmSair}
                     carregando={carregando}
+                    tipoContratacoes={tipoContratacoes}
+                    setTipoContratacoes={setTipoContratacoes}
                 />
             );
         }
