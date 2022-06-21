@@ -8,7 +8,7 @@ const DadosEmpresa = (props) => {
                 Dados da empresa
             </Typography>
 
-            <Box sx={{ padding: '1rem', margin: '2rem 0' }} component={Paper} elevation={3}>
+            <Box sx={{ padding: '1rem', margin: '2rem 0' }} component={Paper} elevation={5}>
                 <Typography sx={{ fontWeight: 'medium' }} component="span">
                     Nome
                     <Fade in={props.estaCarregado} timeout={250}>

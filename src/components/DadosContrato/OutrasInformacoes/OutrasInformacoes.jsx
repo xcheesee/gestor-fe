@@ -8,7 +8,7 @@ const OutrasInformacoes = (props) => {
                 Outras informações
             </Typography>
 
-            <Box sx={{ width: '100%', margin: '2rem 0', padding: '0.1rem 0' }} component={Paper} elevation={3}>
+            <Box sx={{ width: '100%', margin: '2rem 0', padding: '0.1rem 0' }} component={Paper} elevation={5}>
                 <Box sx={{ border: '1px solid #cdcdcd', borderRadius: '3px', margin: '1rem' }}>
                     <Typography sx={{ margin: '1rem' }} component="pre">
                         {props.outras_informacoes !== null ? props.outras_informacoes : "---"}

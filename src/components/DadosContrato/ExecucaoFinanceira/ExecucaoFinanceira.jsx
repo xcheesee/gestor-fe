@@ -1,50 +1,68 @@
 import React from 'react';
-import { Box, Typography, Divider, Paper } from '@mui/material';
+import { 
+    Box, 
+    Typography, 
+    Divider, 
+    Paper,
+    IconButton,
+    Tooltip
+} from '@mui/material';
+import EditIcon from '@mui/icons-material/Edit';
 
 const ExecucaoFinanceira = (props) => {
-    const execucao_financeira = typeof props.execucao_financeira != 'undefined' ? props.execucao_financeira : [];
-                    
+    const execucao_financeira = typeof props.execucao_financeira != 'undefined' ? props.execucao_financeira : []; 
+    
     return (
         <Box>
             <Typography variant="h2" sx={{ fontSize: '2rem', margin: '2rem 0 0 0' }}>
                 Execução Financeira do Contrato
             </Typography>
 
-            <Box sx={{ padding: '1rem', margin: '2rem 0' }} component={Paper} elevation={3}>
+            <Box sx={{ padding: '1rem', margin: '2rem 0', display: 'flex', background: '#F8FAF8', overflow: 'scroll' }} component={Paper} elevation={5}>
                 {
                     Object.keys(execucao_financeira).map((execucao) => {
                         return (
                             <Box
                                 elevation={3}
                                 component={Paper}
-                                sx={{ padding: '1rem', mb: '2rem' }}
+                                sx={{ padding: '1rem', margin: '0 1rem', width: '180px' }}
                             >
                                 <Divider
-                                    textAlign='left'
+                                    textAlign='right'
                                     sx={{
                                         fontWeight: 'light',
-                                        fontSize: '1.25rem'
+                                        fontSize: '1rem',
+                                        mb: '1rem'
                                     }}
                                 >
                                     {execucao_financeira[execucao].mes}
                                 </Divider>
-        
+
                                 <Typography sx={{ fontWeight: 'medium' }} component="span">
                                     Planejado
                                     <Typography sx={{ padding: '0 1rem', mb: '0.5rem' }}>
                                         {props.formataValores(execucao_financeira[execucao].planejado)}
                                     </Typography>
                                 </Typography>
+
                                 <Typography sx={{ fontWeight: 'medium' }} component="span">
                                     Executado
                                     <Typography sx={{ padding: '0 1rem', mb: '0.5rem' }}>
                                         {props.formataValores(execucao_financeira[execucao].executado)}
                                     </Typography>
                                 </Typography>
+                                
+                                <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
+                                    <Tooltip title="Editar" arrow>
+                                        <IconButton>
+                                            <EditIcon />
+                                        </IconButton>
+                                    </Tooltip>
+                                </Box>
                             </Box>
                         );
                     })
-                }       
+                }
             </Box>
         </Box>
     );
