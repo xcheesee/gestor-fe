@@ -102,7 +102,7 @@ const Principal = ({ snackbar, setSnackbar }) => {
                     </TableHead>
                     <TableBody>
                         {rows.map((row, index) => {
-                            const background = {background: index % 2 === 0 ? '#FFFFFF' : '#f5f5f5'};
+                            const background = { background: index % 2 === 0 ? '#FFFFFF' : '#f3f6f3', borderBottom: 0 };
                             return (
                                 <TableRow
                                     key={row.id}
@@ -114,7 +114,7 @@ const Principal = ({ snackbar, setSnackbar }) => {
                                     <TableCell align="center" sx={background}>{row.nome_empresa}</TableCell>
                                     <TableCell align="center" sx={background}>{row.numero_contrato}</TableCell>
                                     <TableCell align="center" sx={background}>{row.data_inicio_vigencia}</TableCell>
-                                    <TableCell align="center" sx={background}>{row.data_vencimento}</TableCell>
+                                    <TableCell align="center" sx={background}>{row.data_vencimento === null ? "- - -" : row.data_vencimento}</TableCell>
                                     <TableCell align="center" sx={background}>
                                         <IconButton onClick={(e) => { handleClickVerContrato(e, row.id); irParaTopo(); }}>
                                             <ManageSearchIcon />

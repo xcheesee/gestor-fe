@@ -256,7 +256,7 @@ const FormEditarContrato = (props) => {
                         labelId="tipo_contratacao-label"
                         id="tipo_contratacao"
                         label="Tipo de contratação"
-                        value={contratoEditado.tipo_contratacao_id === undefined ? "" : contratoEditado.tipo_contratacao_id}
+                        value={contratoEditado.tipo_contratacao_id === undefined || contratoEditado.tipo_contratacao_id === null ? "" : contratoEditado.tipo_contratacao_id}
                         name="tipo_contratacao"
                         onChange={handleChangeTipoContrato}
                         disabled={tipoContratacoes.length === 0}

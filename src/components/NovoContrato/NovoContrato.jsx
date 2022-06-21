@@ -9,9 +9,12 @@ import {
     DialogContent, 
     DialogActions,
     DialogContentText,
-    CircularProgress
+    CircularProgress,
+    IconButton,
+    Tooltip
 } from '@mui/material';
 import FormNovoContrato from './FormNovoContrato';
+import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import CheckIcon from '@mui/icons-material/Check';
 import CloseIcon from '@mui/icons-material/Close';
 import { useNavigate, Link } from 'react-router-dom';
@@ -165,8 +168,17 @@ const NovoContrato = ({ setSnackbar }) => {
                         borderTopLeftRadius: '3px',
                         borderTopRightRadius: '3px',
                         fontWeight: 'light',
+                        display: 'flex',
+                        alignItems: 'center'
                     }}
                 >
+                    <Link to="/principal">
+                        <Tooltip title="Voltar" arrow>
+                            <IconButton sx={{ mr: '0.5rem' }}>
+                                <ArrowBackIosNewIcon sx={{ color: (theme) => theme.palette.color.main }} />
+                            </IconButton>
+                        </Tooltip>
+                    </Link>
                     Novo contrato
                 </Typography>
                 

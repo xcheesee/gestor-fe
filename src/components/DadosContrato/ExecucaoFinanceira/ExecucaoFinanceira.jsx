@@ -3,7 +3,6 @@ import { Box, Typography, Divider, Paper } from '@mui/material';
 
 const ExecucaoFinanceira = (props) => {
     const execucao_financeira = typeof props.execucao_financeira != 'undefined' ? props.execucao_financeira : [];
-    //console.log(execucao_financeira);
                     
     return (
         <Box>
@@ -14,7 +13,6 @@ const ExecucaoFinanceira = (props) => {
             <Box sx={{ padding: '1rem', margin: '2rem 0' }} component={Paper} elevation={3}>
                 {
                     Object.keys(execucao_financeira).map((execucao) => {
-                        console.log(execucao_financeira[execucao]);
                         return (
                             <Box
                                 elevation={3}
