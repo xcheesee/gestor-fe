@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { 
     Dialog,
     DialogTitle,
@@ -21,8 +21,14 @@ const FormGarantia = (props) => {
         setOpenFormGarantia,
         enviaGarantia,
         carregando,
-        setOpenConfirmacao
+        setOpenConfirmacao,
+        errors,
+        setErrors
     } = props;
+
+    useEffect(() => {
+        setErrors({});
+    }, [])
 
     const handleInputChange = (e) => {
         setFormGarantia({
@@ -59,6 +65,8 @@ const FormGarantia = (props) => {
                     onChange={handleInputChange}
                     label="Instituição financeira"
                     sx={{ margin: '1rem 0' }}
+                    errors={errors.hasOwnProperty('instituicao_financeira')}
+                    helperText={errors.instituicao_financeira}
                     fullWidth
                     required
                 />
@@ -70,6 +78,8 @@ const FormGarantia = (props) => {
                     onChange={handleInputChange}
                     label="Número do documento"
                     sx={{ margin: '1rem 0' }}
+                    errors={errors.hasOwnProperty('numero_documento')}
+                    helperText={errors.numero_documento}
                     fullWidth
                     required
                 />
@@ -81,6 +91,8 @@ const FormGarantia = (props) => {
                     setState={setFormGarantia}
                     name="valor_garantia"
                     checaErros={() => {}}
+                    errors={errors.hasOwnProperty('valor_garantia')}
+                    helperText={errors.valor_garantia}
                     fullWidth
                     required
                 />
@@ -91,6 +103,8 @@ const FormGarantia = (props) => {
                     name="data_validade_garantia"
                     onChange={handleInputChange}
                     margin="1rem 0"
+                    errors={errors.hasOwnProperty('data_validade_garantia')}
+                    helperText={errors.data_validade_garantia}
                     fullWidth
                     required
                 />

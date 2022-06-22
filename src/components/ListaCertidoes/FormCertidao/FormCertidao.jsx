@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { 
     Dialog,
     DialogTitle,
@@ -20,8 +20,14 @@ const FormCertidao = (props) => {
         setOpenFormCertidao, 
         enviaCertidao,
         carregando,
-        setOpenConfirmacao
+        setOpenConfirmacao,
+        errors,
+        setErrors
     } = props;
+
+    useEffect(() => {
+        setErrors({});
+    }, [openFormCertidao.open]);
 
     const handleInputChange = (e) => {
         setFormCertidao({
@@ -57,8 +63,9 @@ const FormCertidao = (props) => {
                     name="certidoes"
                     onChange={handleInputChange}
                     label="Certidão"
-                    helperText="Ex: Certidão negativa de débitos"
                     sx={{ margin: '1rem 0' }}
+                    error={errors.hasOwnProperty('certidoes')}
+                    helperText={errors.hasOwnProperty('certidoes') ? errors.certidoes : "Ex: Certidão negativa de débitos"}
                     fullWidth
                     required
                 />
@@ -69,6 +76,8 @@ const FormCertidao = (props) => {
                     name="validade_certidoes"
                     onChange={handleInputChange}
                     margin="1rem 0"
+                    error={errors.hasOwnProperty('validade_certidoes')}
+                    helperText={errors.validade_certidoes}
                     fullWidth
                     required
                 />

@@ -49,6 +49,7 @@ const ListaCertidoes = (props) => {
         certidoes: '',
         validade_certidoes: ''
     });
+    const [errors, setErrors] = useState({});
 
     const handleClickExcluir = (id) => {
         setOpenConfirmacao({ 
@@ -265,6 +266,8 @@ const ListaCertidoes = (props) => {
                 enviaCertidao={enviaCertidao}
                 carregando={carregando}
                 setOpenConfirmacao={setOpenConfirmacao}
+                errors={errors}
+                setErrors={setErrors}
             />
 
             <BotaoAdicionar 

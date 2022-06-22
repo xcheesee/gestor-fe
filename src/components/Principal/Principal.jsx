@@ -86,10 +86,10 @@ const Principal = ({ snackbar, setSnackbar }) => {
         });
 
         return (
-            <TableContainer component={Paper} elevation={3} sx={{ width: '100%', margin: '1rem auto 0 auto' }}>
+            <TableContainer component={Paper} elevation={3} sx={{ width: '100%', margin: '1rem auto 0 auto'}}>
                 <Table size="small">
-                    <TableHead sx={{ background: (theme) => theme.palette.primary.main }}>
-                        <TableRow>
+                    <TableHead sx={{ background: (theme) => theme.palette.primary.main  }}>
+                        <TableRow sx={{ height: '61px' }}>
                             <TableCell sx={{ color: (theme) => theme.palette.color.main }} align="center">ID</TableCell>
                             <TableCell sx={{ color: (theme) => theme.palette.color.main }} align="center">Processo SEI</TableCell>
                             <TableCell sx={{ color: (theme) => theme.palette.color.main }} align="center">Credor</TableCell>

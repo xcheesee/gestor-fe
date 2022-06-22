@@ -64,6 +64,7 @@ const ListaGarantias = (props) => {
         valor_garantia: '',
         data_validade_garantia: '',
     });
+    const [errors, setErrors] = useState({});
     
     const handleClickExcluir = (id) => {
         setOpenConfirmacao({
@@ -291,6 +292,8 @@ const ListaGarantias = (props) => {
                 openFormGarantia={openFormGarantia}
                 setOpenFormGarantia={setOpenFormGarantia}
                 setOpenConfirmacao={setOpenConfirmacao}
+                errors={errors}
+                setErrors={setErrors}
             />
 
             <BotaoAdicionar 
