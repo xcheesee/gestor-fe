@@ -20,12 +20,13 @@ const ExecucaoFinanceira = (props) => {
 
             <Box sx={{ padding: '1rem', margin: '2rem 0', display: 'flex', background: '#F8FAF8', overflow: 'scroll' }} component={Paper} elevation={5}>
                 {
-                    Object.keys(execucao_financeira).map((execucao) => {
+                    Object.keys(execucao_financeira).map((execucao, index) => {
                         return (
                             <Box
                                 elevation={3}
                                 component={Paper}
                                 sx={{ padding: '1rem', margin: '0 1rem', width: '180px' }}
+                                key={index}
                             >
                                 <Divider
                                     textAlign='right'

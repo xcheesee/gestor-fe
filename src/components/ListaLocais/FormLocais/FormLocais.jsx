@@ -10,7 +10,8 @@ import {
     Select,
     MenuItem,
     TextField,
-    CircularProgress
+    CircularProgress,
+    FormHelperText
 } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import CheckIcon from '@mui/icons-material/Check';
@@ -24,7 +25,9 @@ const FormLocais = (props) => {
         enviaLocal,
         carregando,
         setOpenConfirmacao,
-        acao
+        acao,
+        errors,
+        setErrors
     } = props;
 
     const [regiao, setRegiao] = useState(formLocal.regiao);
@@ -40,6 +43,7 @@ const FormLocais = (props) => {
         carregando: false,
         value: formLocal.distrito_id
     });
+    const [unidade, setUnidade] = useState(formLocal.regiao);
 
     useEffect(() => {
         const urlSubpref = `${process.env.REACT_APP_API_URL}/subprefeituras/${formLocal.regiao}`;
@@ -174,9 +178,22 @@ const FormLocais = (props) => {
 
     const cancelar = () => {
         setOpenFormLocal({ ...openFormLocal, open: false });
+        setErrors({
+            regiao: "",
+            subprefeitura_id: "",
+            distrito_id: "",
+            unidade: ""
+        });
     }
 
     const confirmar = () => {
+        setErrors({
+            regiao: "",
+            subprefeitura_id: "",
+            distrito_id: "",
+            unidade: ""
+        });
+
         if (openFormLocal.acao === 'adicionar') {
             const form = {
                 ...formLocal,
@@ -207,7 +224,12 @@ const FormLocais = (props) => {
             </DialogTitle>
 
             <DialogContent>
-                <FormControl fullWidth sx={{ margin: '1rem 0' }}>
+                <FormControl 
+                    sx={{ margin: '1rem 0' }}
+                    error={errors.regiao !== ""}
+                    fullWidth 
+                    required
+                >
                     <InputLabel id="regiao-label">Região</InputLabel>
                     <Select
                         labelId="regiao-label"
@@ -216,6 +238,7 @@ const FormLocais = (props) => {
                         value={regiao}
                         name="regiao"
                         onChange={(e) => { handleChangeRegiao(e.target.value); }}
+                        onBlur={(e) => { setErrors({...errors, regiao: ""}); }}
                         fullWidth
                     >
                         <MenuItem value={"CO"}>Centro-Oeste</MenuItem>
@@ -223,9 +246,15 @@ const FormLocais = (props) => {
                         <MenuItem value={"N"}>Norte</MenuItem>
                         <MenuItem value={"S"}>Sul</MenuItem>
                     </Select>
+                <FormHelperText>{errors.regiao}</FormHelperText>
                 </FormControl>
 
-                <FormControl fullWidth sx={{ margin: '1rem 0', position: 'relative' }}>
+                <FormControl 
+                    sx={{ margin: '1rem 0', position: 'relative' }} 
+                    error={errors.subprefeitura_id !== ""}
+                    fullWidth 
+                    required 
+                >
                     <InputLabel id="subprefeitura-label">Subprefeitura</InputLabel>
                     <Select
                         labelId="subprefeitura-label"
@@ -234,6 +263,7 @@ const FormLocais = (props) => {
                         value={subprefeitura.value}
                         name="subprefeitura"
                         onChange={(e) => { handleChangeSubprefeitura(e.target.value); }}
+                        onBlur={(e) => { setErrors({...errors, subprefeitura_id: ""}); }}
                         disabled={subprefeitura.disabled}
                         fullWidth
                     >
@@ -257,9 +287,15 @@ const FormLocais = (props) => {
                         />
                         : ""
                     }
+                    <FormHelperText>{errors.subprefeitura_id}</FormHelperText>
                 </FormControl>
 
-                <FormControl fullWidth sx={{ margin: '1rem 0', position: 'relative' }}>
+                <FormControl 
+                    sx={{ margin: '1rem 0', position: 'relative' }} 
+                    error={errors.distrito_id !== ""}
+                    fullWidth 
+                    required
+                >
                     <InputLabel id="distrito-label">Distrito</InputLabel>
                     <Select
                         labelId="distrito-label"
@@ -268,6 +304,7 @@ const FormLocais = (props) => {
                         value={distrito.value}
                         name="distrito"
                         onChange={(e) => { handleChangeDistrito(e.target.value); }}
+                        onBlur={(e) => { setErrors({...errors, distrito_id: ""}); }}
                         disabled={distrito.disabled}
                         fullWidth
                     >
@@ -291,6 +328,7 @@ const FormLocais = (props) => {
                         />
                         : ""
                     }
+                    <FormHelperText>{errors.distrito_id}</FormHelperText>
                 </FormControl>
 
                 <TextField
@@ -298,8 +336,11 @@ const FormLocais = (props) => {
                     value={formLocal.unidade}
                     name="unidade"
                     onChange={handleInputChange}
+                    onBlur={(e) => { setErrors({...errors, unidade: ""}); }}
                     label="Unidade"
                     sx={{ margin: '1rem 0' }}
+                    error={errors.unidade !== ""}
+                    helperText={errors.unidade}
                     fullWidth
                     required
                 />

@@ -62,6 +62,12 @@ const ListaLocais = (props) => {
         distrito_id: '',
         unidade: ''
     });
+    const [errors, setErrors] = useState({
+        regiao: "",
+        subprefeitura_id: "",
+        distrito_id: "",
+        unidade: ""
+    });
 
     const handleClickExcluir = (id) => {
         setOpenConfirmacao({
@@ -219,6 +225,18 @@ const ListaLocais = (props) => {
                         unidade: ''
                     });
                     return res.json();
+                } else if (res.status === 422) {
+                    setCarregando(false);
+                    setSnackbar({
+                        open: true,
+                        severity: 'error',
+                        text: `Erro ${res.status} - Não foi possível enviar o local`,
+                        color: 'error'
+                    });
+                    return res.json()
+                        .then(data => {
+                            setErrors(data.errors);
+                        });
                 } else {
                     setCarregando(false);
                     setSnackbar({
@@ -229,7 +247,7 @@ const ListaLocais = (props) => {
                     });
                 }
             })
-            .catch(err => console.log(err));
+            
     }
 
     return (
@@ -280,6 +298,8 @@ const ListaLocais = (props) => {
                 carregando={carregando}
                 setOpenConfirmacao={setOpenConfirmacao}
                 acao={acao}
+                errors={errors}
+                setErrors={setErrors}
             />
 
             <BotaoAdicionar 

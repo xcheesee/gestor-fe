@@ -311,7 +311,7 @@ const DadosContrato = ({ snackbar, setSnackbar }) => {
                                 Contrato # <strong>{dados.id}</strong>
                             </Typography>
 
-                            <Box sx={{ display: 'flex', width: '100%', margin: '2rem 0' }} component={Paper} elevation={3}>
+                            <Box sx={{ display: 'flex', width: '100%', margin: '2rem 0' }} component={Paper} elevation={5}>
                                 <Box sx={{ display: 'flex'}}>
                                     <Tabs 
                                         orientation="vertical" 
@@ -331,14 +331,16 @@ const DadosContrato = ({ snackbar, setSnackbar }) => {
                                                 ?
                                                 <Tab 
                                                     sx={{ '&.Mui-selected': { 
-                                                        background: (theme) => theme.palette.primary.main, 
-                                                        color: (theme) => theme.palette.color.main, 
-                                                        borderTopLeftRadius: '3px', 
-                                                        transition: '0.5s' 
-                                                    }, 
-                                                    alignItems: 'flex-start', 
-                                                    textAlign: 'left', 
-                                                    textTransform: 'none' }} 
+                                                            background: (theme) => theme.palette.primary.main, 
+                                                            color: (theme) => theme.palette.color.main, 
+                                                            borderTopLeftRadius: '3px', 
+                                                            transition: '0.5s' 
+                                                        }, 
+                                                        alignItems: 'flex-start', 
+                                                        textAlign: 'left', 
+                                                        textTransform: 'none',
+                                                        width: '180px'    
+                                                    }} 
                                                     label={label}
                                                     {...a11yProps(index)} 
                                                     key={index}
@@ -346,13 +348,15 @@ const DadosContrato = ({ snackbar, setSnackbar }) => {
                                                 :
                                                 <Tab 
                                                     sx={{ '&.Mui-selected': { 
-                                                        background: (theme) => theme.palette.primary.main, 
-                                                        color: (theme) => theme.palette.color.main, 
-                                                        transition: '0.5s' 
-                                                    }, 
-                                                    alignItems: 'flex-start', 
-                                                    textAlign: 'left', 
-                                                    textTransform: 'none' }} 
+                                                            background: (theme) => theme.palette.primary.main, 
+                                                            color: (theme) => theme.palette.color.main, 
+                                                            transition: '0.5s' 
+                                                        }, 
+                                                        alignItems: 'flex-start', 
+                                                        textAlign: 'left', 
+                                                        textTransform: 'none',
+                                                        width: '180px'
+                                                    }} 
                                                     label={label}
                                                     {...a11yProps(index)}
                                                     key={index} 
