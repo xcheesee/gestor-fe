@@ -179,20 +179,12 @@ const FormLocais = (props) => {
     }
 
     const handleInputChange = (e) => {
-        setFormLocal({
-            ...formLocal,
-            [e.target.name]: e.target.value
-        })
+        setUnidade(e.target.value);
     }
 
     const cancelar = () => {
         setOpenFormLocal({ ...openFormLocal, open: false });
-        setErrors({
-            regiao: "",
-            subprefeitura_id: "",
-            distrito_id: "",
-            unidade: ""
-        });
+        setErrors({});
         setFormLocal({
             ...formLocal,
             regiao: '',
@@ -203,12 +195,7 @@ const FormLocais = (props) => {
     }
 
     const confirmar = () => {
-        setErrors({
-            regiao: "",
-            subprefeitura_id: "",
-            distrito_id: "",
-            unidade: ""
-        });
+        setErrors({});
 
         if (openFormLocal.acao === 'adicionar') {
             const form = {
@@ -244,7 +231,7 @@ const FormLocais = (props) => {
             <DialogContent>
                 <FormControl 
                     sx={{ margin: '1rem 0' }}
-                    error={errors.regiao !== ""}
+                    error={errors.hasOwnProperty('regiao')}
                     fullWidth 
                     required
                 >
@@ -256,7 +243,6 @@ const FormLocais = (props) => {
                         value={regiao}
                         name="regiao"
                         onChange={(e) => { handleChangeRegiao(e.target.value); }}
-                        onBlur={(e) => { setErrors({...errors, regiao: ""}); }}
                         fullWidth
                     >
                         <MenuItem value={"CO"}>Centro-Oeste</MenuItem>
@@ -269,7 +255,7 @@ const FormLocais = (props) => {
 
                 <FormControl 
                     sx={{ margin: '1rem 0', position: 'relative' }} 
-                    error={errors.subprefeitura_id !== ""}
+                    error={errors.hasOwnProperty('subprefeitura_id')}
                     fullWidth 
                     required 
                 >
@@ -281,7 +267,6 @@ const FormLocais = (props) => {
                         value={subprefeitura.value}
                         name="subprefeitura"
                         onChange={(e) => { handleChangeSubprefeitura(e.target.value); }}
-                        onBlur={(e) => { setErrors({...errors, subprefeitura_id: ""}); }}
                         disabled={subprefeitura.disabled}
                         fullWidth
                     >
@@ -310,7 +295,7 @@ const FormLocais = (props) => {
 
                 <FormControl 
                     sx={{ margin: '1rem 0', position: 'relative' }} 
-                    error={errors.distrito_id !== ""}
+                    error={errors.hasOwnProperty('distrito_id')}
                     fullWidth 
                     required
                 >
@@ -322,7 +307,6 @@ const FormLocais = (props) => {
                         value={distrito.value}
                         name="distrito"
                         onChange={(e) => { handleChangeDistrito(e.target.value); }}
-                        onBlur={(e) => { setErrors({...errors, distrito_id: ""}); }}
                         disabled={distrito.disabled}
                         fullWidth
                     >
@@ -354,10 +338,9 @@ const FormLocais = (props) => {
                     value={unidade}
                     name="unidade"
                     onChange={handleInputChange}
-                    onBlur={(e) => { setErrors({...errors, unidade: ""}); }}
                     label="Unidade"
                     sx={{ margin: '1rem 0' }}
-                    error={errors.unidade !== ""}
+                    error={errors.hasOwnProperty('unidade')}
                     helperText={errors.unidade}
                     fullWidth
                     required

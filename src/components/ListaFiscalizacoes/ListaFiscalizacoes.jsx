@@ -61,6 +61,7 @@ const ListaFiscalizacoes = (props) => {
         nome_suplente: '',
         email_suplente: ''
     });
+    const [errors, setErrors] = useState({});
 
     const handleClickExcluir = (id) => {
         setOpenConfirmacao({
@@ -232,6 +233,18 @@ const ListaFiscalizacoes = (props) => {
                         email_suplente: ''
                     });
                     return res.json();
+                } else if (res.status === 422) {
+                    setCarregando(false);
+                    setSnackbar({
+                        open: true,
+                        severity: 'error',
+                        text: `Erro ${res.status} - Não foi possível enviar o local`,
+                        color: 'error'
+                    });
+                    return res.json()
+                        .then(data => {
+                            setErrors(data.errors);
+                        });
                 } else {
                     setCarregando(false);
                     setSnackbar({
@@ -296,6 +309,8 @@ const ListaFiscalizacoes = (props) => {
                 openFormFiscalizacao={openFormFiscalizacao}
                 setOpenFormFiscalizacao={setOpenFormFiscalizacao}
                 setOpenConfirmacao={setOpenConfirmacao}
+                errors={errors}
+                setErrors={setErrors}
             />
 
             <BotaoAdicionar 

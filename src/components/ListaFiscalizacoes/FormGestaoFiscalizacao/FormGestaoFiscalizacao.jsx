@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { 
     Dialog,
     DialogTitle,
@@ -19,8 +19,14 @@ const FormGestaoFiscalizacao = (props) => {
         carregando,
         openFormFiscalizacao,
         setOpenFormFiscalizacao,
-        setOpenConfirmacao
+        setOpenConfirmacao,
+        errors,
+        setErrors
     } = props;
+
+    useEffect(() => {
+        setErrors({});
+    }, [openFormFiscalizacao.open])
 
     const handleInputChange = (e) => {
         setFormFiscalizacao({
@@ -57,9 +63,12 @@ const FormGestaoFiscalizacao = (props) => {
                     onChange={handleInputChange}
                     label="Gestor"
                     sx={{ margin: '1rem 0' }}
+                    error={errors.hasOwnProperty('nome_gestor')}
+                    helperText={errors.nome_gestor}
                     fullWidth
                     required
                 />
+
                 <TextField
                     variant="outlined"
                     value={formFiscalizacao.email_gestor}
@@ -67,6 +76,8 @@ const FormGestaoFiscalizacao = (props) => {
                     onChange={handleInputChange}
                     label="E-mail do Gestor"
                     sx={{ margin: '1rem 0' }}
+                    error={errors.hasOwnProperty('email_gestor')}
+                    helperText={errors.email_gestor}
                     fullWidth
                     required
                 />
@@ -78,9 +89,12 @@ const FormGestaoFiscalizacao = (props) => {
                     onChange={handleInputChange}
                     label="Fiscal"
                     sx={{ margin: '1rem 0' }}
+                    error={errors.hasOwnProperty('nome_fiscal')}
+                    helperText={errors.nome_fiscal}
                     fullWidth
                     required
                 />
+
                 <TextField
                     variant="outlined"
                     value={formFiscalizacao.email_fiscal}
@@ -88,6 +102,8 @@ const FormGestaoFiscalizacao = (props) => {
                     onChange={handleInputChange}
                     label="E-mail do Fiscal"
                     sx={{ margin: '1rem 0' }}
+                    error={errors.hasOwnProperty('email_fiscal')}
+                    helperText={errors.email_fiscal}
                     fullWidth
                     required
                 />
@@ -99,9 +115,12 @@ const FormGestaoFiscalizacao = (props) => {
                     onChange={handleInputChange}
                     label="Suplente"
                     sx={{ margin: '1rem 0' }}
+                    error={errors.hasOwnProperty('nome_suplente')}
+                    helperText={errors.nome_suplente}
                     fullWidth
                     required
                 />
+
                 <TextField
                     variant="outlined"
                     value={formFiscalizacao.email_suplente}
@@ -109,6 +128,8 @@ const FormGestaoFiscalizacao = (props) => {
                     onChange={handleInputChange}
                     label="E-mail do Suplente"
                     sx={{ margin: '1rem 0' }}
+                    error={errors.hasOwnProperty('email_fiscal')}
+                    helperText={errors.email_fiscal}
                     fullWidth
                     required
                 />

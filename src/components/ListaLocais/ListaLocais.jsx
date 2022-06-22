@@ -62,12 +62,7 @@ const ListaLocais = (props) => {
         distrito_id: '',
         unidade: ''
     });
-    const [errors, setErrors] = useState({
-        regiao: "",
-        subprefeitura_id: "",
-        distrito_id: "",
-        unidade: ""
-    });
+    const [errors, setErrors] = useState({});
 
     const handleClickExcluir = (id) => {
         setOpenConfirmacao({
