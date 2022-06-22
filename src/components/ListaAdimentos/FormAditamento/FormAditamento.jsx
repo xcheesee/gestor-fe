@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { 
     Dialog,
     DialogTitle,
@@ -6,6 +6,7 @@ import {
     DialogActions,
     Button,
     FormControl,
+    FormHelperText,
     InputLabel,
     Select,
     TextField,
@@ -14,7 +15,6 @@ import {
 import CloseIcon from '@mui/icons-material/Close';
 import CheckIcon from '@mui/icons-material/Check';
 import CircularProgress from '@mui/material/CircularProgress';
-import CampoData from '../../CampoData';
 import CampoValores from '../../CampoValores';
 import CampoPorcentagem from '../../CampoPorcentagem';
 
@@ -27,7 +27,13 @@ const FormAditamento = (props) => {
         enviaAditamento,
         carregando,
         setOpenConfirmacao,
+        errors,
+        setErrors
     } = props;
+
+    useEffect(() => {
+        setErrors({});
+    }, [openFormAditamento.open]);
 
     const handleInputChange = (e) => {
         setFormAditamento({
@@ -57,7 +63,11 @@ const FormAditamento = (props) => {
             </DialogTitle>
 
             <DialogContent>
-                <FormControl fullWidth sx={{ margin: '1rem 0' }}>
+                <FormControl 
+                    sx={{ margin: '1rem 0' }}
+                    error={errors.hasOwnProperty('tipo_aditamentos')}
+                    fullWidth 
+                >
                     <InputLabel id="tipo_aditamentos-label">Tipo</InputLabel>
                     <Select
                         labelId="tipo_aditamentos-label"
@@ -76,6 +86,7 @@ const FormAditamento = (props) => {
                         <MenuItem value="Suspensão">Suspensão</MenuItem>
                         <MenuItem value="Rescisão">Rescisão</MenuItem>
                     </Select>
+                    <FormHelperText>{errors.tipo_aditamentos}</FormHelperText>
                 </FormControl>
 
                 <CampoValores
@@ -87,7 +98,8 @@ const FormAditamento = (props) => {
                     name="valor_aditamento"
                     onChange={(e) => { handleInputChange(e); }}
                     checaErros={() => {}}
-                    helperText=""
+                    error={errors.hasOwnProperty('valor_aditamento')}
+                    helperText={errors.valor_aditamento}
                     fullWidth
                 />
 
@@ -100,6 +112,7 @@ const FormAditamento = (props) => {
                     sx={{ margin: '1rem 0' }}
                     fullWidth
                 />
+
                 <TextField
                     variant="outlined"
                     value={formAditamento.indice_reajuste}
@@ -107,6 +120,8 @@ const FormAditamento = (props) => {
                     onChange={handleInputChange}
                     label="Índice Reajuste"
                     sx={{ margin: '1rem 0' }}
+                    error={errors.hasOwnProperty('indice_reajuste')}
+                    helperText={errors.indice_reajuste}
                     fullWidth
                 />
 
@@ -116,7 +131,8 @@ const FormAditamento = (props) => {
                     name="pct_reajuste"
                     state={formAditamento}
                     setState={setFormAditamento}
-                    helperText=""
+                    error={errors.hasOwnProperty('pct_reajuste')}
+                    helperText={errors.pct_reajuste}
                     fullWidth
                 />
 

@@ -60,6 +60,7 @@ const ListaAditamentos = (props) => {
         indice_reajuste: '',
         pct_reajuste: ''
     });
+    const [errors, setErrors] = useState({});
 
     const handleClickExcluir = (id) => {
         setOpenConfirmacao({
@@ -227,6 +228,16 @@ const ListaAditamentos = (props) => {
                         pct_reajuste: ''
                     });
                     return res.json();
+                } else if (res.status === 422) {
+                    setCarregando(false);
+                    setSnackbar({
+                        open: true,
+                        severity: 'error',
+                        text: `Erro ${res.status} - Não foi possível enviar o aditamento`,
+                        color: 'error'
+                    });
+                    return res.json()
+                        .then(data => setErrors(data.errors));
                 } else {
                     setCarregando(false);
                     setSnackbar({
@@ -293,6 +304,8 @@ const ListaAditamentos = (props) => {
                 enviaAditamento={enviaAditamento}
                 carregando={carregando}
                 setOpenConfirmacao={setOpenConfirmacao}
+                errors={errors}
+                setErrors={setErrors}
             />
 
             <BotaoAdicionar 
