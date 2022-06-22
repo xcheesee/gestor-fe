@@ -59,16 +59,24 @@ const FormLocais = (props) => {
         }
 
         setRegiao('');
-            setSubprefeitura({ 
-                disabled: true,
-                carregando: false, 
-                value: '' 
-            });
-            setDistrito({ 
-                disabled: true,
-                carregando: false, 
-                value: '' 
-            });
+        setSubprefeitura({ 
+            disabled: true,
+            carregando: false, 
+            value: '' 
+        });
+        setDistrito({ 
+            disabled: true,
+            carregando: false, 
+            value: '' 
+        });
+        setUnidade('');
+        setFormLocal({
+            ...formLocal,
+            regiao: '',
+            subprefeitura_id: '',
+            distrito_id: '',
+            unidade: ''
+        });
 
         if (acao === "editar") {
             setRegiao(formLocal.regiao);
@@ -92,6 +100,7 @@ const FormLocais = (props) => {
                         value: formLocal.distrito_id
                     })
                 });
+            setUnidade(formLocal.unidade);
         }
     }, [openFormLocal.open])
     
@@ -184,6 +193,13 @@ const FormLocais = (props) => {
             distrito_id: "",
             unidade: ""
         });
+        setFormLocal({
+            ...formLocal,
+            regiao: '',
+            subprefeitura_id: '',
+            distrito_id: '',
+            unidade: ''
+        });
     }
 
     const confirmar = () => {
@@ -198,14 +214,16 @@ const FormLocais = (props) => {
             const form = {
                 ...formLocal,
                 subprefeitura_id: subprefeitura.value,
-                distrito_id: distrito.value
+                distrito_id: distrito.value,
+                unidade: unidade
             };
             enviaLocal(form);
         } else if (openFormLocal.acao === 'editar') {
             setFormLocal({
                 ...formLocal,
                 subprefeitura_id: subprefeitura.value,
-                distrito_id: distrito.value
+                distrito_id: distrito.value,
+                unidade: unidade
             });
             setOpenConfirmacao({
                 open: true,
@@ -333,7 +351,7 @@ const FormLocais = (props) => {
 
                 <TextField
                     variant="outlined"
-                    value={formLocal.unidade}
+                    value={unidade}
                     name="unidade"
                     onChange={handleInputChange}
                     onBlur={(e) => { setErrors({...errors, unidade: ""}); }}
