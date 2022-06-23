@@ -28,7 +28,9 @@ const FormEditarContrato = (props) => {
         setError, 
         setOpenConfirm, 
         setOpenConfirmSair,
-        tipoContratacoes
+        tipoContratacoes,
+        errors,
+        setErrors
     } = props;
 
     const [contratoEditado, setContratoEditado] = useState(formContrato);
@@ -134,7 +136,7 @@ const FormEditarContrato = (props) => {
             helperText: " "
         }
     });
-
+    
     const handleClickOpenConfirm = () => {
         setOpenConfirm(true);
         setFormContrato(contratoEditado);
@@ -163,28 +165,6 @@ const FormEditarContrato = (props) => {
         });
     }
 
-    const checaErros = (event) => {
-        if (event.target.required && event.target.value === "") {
-            setErrosContrato({
-                ...errosContrato,
-                [event.target.name]: {
-                    error: true,
-                    helperText: "Campo obrigatório"
-                }
-            });
-            setError(true);
-        } else {
-            setErrosContrato({
-                ...errosContrato,
-                [event.target.name]: {
-                    error: false,
-                    helperText: " "
-                }
-            });
-            setError(false);
-        }
-    }
-
     const checaErrosEmail = (event) => {
         if (EmailValidator.validate(event.target.value) === true) {
             setErrosContrato({
@@ -207,42 +187,6 @@ const FormEditarContrato = (props) => {
         }
     }
 
-    const checaErroRequired = () => {
-        const form = document.querySelector(".form_formulario").elements;
-        const inputArr = [];
-        for (let i = 0; i < form.length; i++) {
-            if (form[i].tagName === 'INPUT') {
-                inputArr.push(form[i]);
-            }
-        }
-
-        let formErrosTemp = {};
-
-        inputArr.forEach((input) => {
-            if (input.required && input.value === "") {
-                formErrosTemp = {
-                    ...formErrosTemp,
-                    [input.name]: {
-                        error: true,
-                        helperText: "Campo obrigatório"
-                    }
-                }
-
-                setError(true);
-            } else {
-                formErrosTemp = {
-                    ...formErrosTemp,
-                    [input.name]: {
-                        error: false,
-                        helperText: " "
-                    }
-                };
-            }
-        });
-        
-        setErrosContrato(formErrosTemp);
-    }
-
     return (
         <Box className="form">
             <Box className="form_formulario" component="form">
@@ -250,7 +194,11 @@ const FormEditarContrato = (props) => {
                     <Typography variant="h5" sx={{ fontWeight: 'light' }}>Dados do contrato</Typography> 
                 </Divider>
 
-                <FormControl fullWidth sx={{ margin: '1rem 0' }}>
+                <FormControl 
+                    sx={{ margin: '1rem 0' }}
+                    error={errors.hasOwnProperty('tipo_contratacao')}    
+                    fullWidth 
+                >
                     <InputLabel id="tipo_contratacao-label">Tipo de contratação</InputLabel>
                     <Select
                         labelId="tipo_contratacao-label"
@@ -260,8 +208,6 @@ const FormEditarContrato = (props) => {
                         name="tipo_contratacao"
                         onChange={handleChangeTipoContrato}
                         disabled={tipoContratacoes.length === 0}
-                        error={errosContrato.tipo_contratacao.error}
-                        onBlur={checaErros}
                         fullWidth
                     >
                         <MenuItem value={""}>---</MenuItem>
@@ -271,7 +217,9 @@ const FormEditarContrato = (props) => {
                             );
                         })}
                     </Select>
-                    <FormHelperText>{errosContrato.tipo_contratacao.helperText}</FormHelperText>
+                    <FormHelperText>
+                        {errors.hasOwnProperty('tipo_contratacao') ? errors.tipo_contratacao : " "}
+                    </FormHelperText>
                 </FormControl>
 
                 <TextField
@@ -281,11 +229,10 @@ const FormEditarContrato = (props) => {
                     onChange={handleInputChange}
                     className="form__campo"
                     label="Processo SEI"
-                    helperText={errosContrato.processo_sei.helperText}
-                    error={errosContrato.processo_sei.error}
-                    onBlur={checaErros}
-                    required
                     sx={{ margin: '1rem 0' }}
+                    error={errors.hasOwnProperty('processo_sei')}
+                    helperText={errors.hasOwnProperty('processo_sei') ? errors.processo_sei : " "}
+                    required
                     fullWidth
                 />
 
@@ -296,10 +243,9 @@ const FormEditarContrato = (props) => {
                     onChange={handleInputChange}
                     className="form__campo"
                     label="Dotação orçamentária"
-                    helperText={errosContrato.dotacao_orcamentaria.helperText}
-                    error={errosContrato.dotacao_orcamentaria.error}
-                    onBlur={checaErros}
                     sx={{ margin: '1rem 0' }}
+                    error={errors.hasOwnProperty('dotacao_orcamentaria')}
+                    helperText={errors.hasOwnProperty('dotacao_orcamentaria') ? errors.dotacao_orcamentaria : " "}
                     required
                     fullWidth
                 />
@@ -311,11 +257,10 @@ const FormEditarContrato = (props) => {
                     onChange={handleInputChange}
                     className="form__campo"
                     label="Credor"
-                    helperText={errosContrato.credor.helperText}
-                    error={errosContrato.credor.error}
-                    onBlur={checaErros}
-                    required
                     sx={{ margin: '1rem 0' }}
+                    error={errors.hasOwnProperty('credor')}
+                    helperText={errors.hasOwnProperty('credor') ? errors.credor : " "}
+                    required
                     fullWidth
                 />
 
@@ -323,15 +268,18 @@ const FormEditarContrato = (props) => {
                     className="form__campo"
                     formContrato={contratoEditado}
                     setFormContrato={setContratoEditado}
-                    error={errosContrato.cnpj_cpf.error}
                     setError={setError}
-                    errosContrato={errosContrato}
-                    setErrosContrato={setErrosContrato}
-                    checaErros={checaErros}
+                    error={errors.hasOwnProperty('cnpj_cpf')}
+                    errors={errors}
+                    setErrors={setErrors}
                     fullWidth
                 />
 
-                <FormControl fullWidth sx={{ margin: '1rem 0' }}>
+                <FormControl 
+                    sx={{ margin: '1rem 0' }}
+                    error={errors.hasOwnProperty('tipo_contratacao')}
+                    fullWidth 
+                >
                     <InputLabel id="tipo_objeto-label">Tipo de objeto</InputLabel>
                     <Select
                         labelId="tipo_objeto-label"
@@ -340,8 +288,6 @@ const FormEditarContrato = (props) => {
                         value={contratoEditado.tipo_objeto}
                         name="tipo_objeto"
                         onChange={handleInputChange}
-                        error={errosContrato.tipo_contratacao.error}
-                        onBlur={checaErros}
                         fullWidth
                     >
                         <MenuItem value={""}>---</MenuItem>
@@ -350,7 +296,9 @@ const FormEditarContrato = (props) => {
                         <MenuItem value={"serviço"}>Serviço</MenuItem>
                         <MenuItem value={"aquisição"}>Aquisição</MenuItem>
                     </Select>
-                    <FormHelperText>{errosContrato.tipo_objeto.helperText}</FormHelperText>
+                    <FormHelperText>
+                        {errors.hasOwnProperty('tipo_contratacao') ? errors.tipo_objeto : " "}
+                    </FormHelperText>
                 </FormControl>
 
                 <TextField
@@ -360,11 +308,10 @@ const FormEditarContrato = (props) => {
                     onChange={handleInputChange}
                     className="form__campo"
                     label="Objeto"
-                    helperText={errosContrato.objeto.helperText}
-                    error={errosContrato.objeto.error}
-                    onBlur={checaErros}
-                    required
                     sx={{ margin: '1rem 0' }}
+                    error={errors.hasOwnProperty('objeto')}
+                    helperText={errors.hasOwnProperty('objeto') ? errors.objeto : " "}
+                    required
                     fullWidth
                 />
 
@@ -375,11 +322,10 @@ const FormEditarContrato = (props) => {
                     onChange={handleInputChange}
                     className="form__campo"
                     label="Nº Contrato / Nota de Empenho Inicial"
-                    helperText={errosContrato.numero_contrato.helperText}
-                    error={errosContrato.numero_contrato.error}
-                    onBlur={checaErros}
-                    required
                     sx={{ margin: '1rem 0' }}
+                    error={error.hasOwnProperty('numero_contrato')}
+                    helperText={error.hasOwnProperty('numero_contrato') ? errors.numero_contrato : " "}
+                    required
                     fullWidth
                 />
 
@@ -390,9 +336,8 @@ const FormEditarContrato = (props) => {
                     name="data_assinatura"
                     onChange={handleInputChange}
                     margin="1rem 0"
-                    helperText={errosContrato.data_assinatura.helperText}
-                    error={errosContrato.data_assinatura.error}
-                    onBlur={checaErros}
+                    error={errors.hasOwnProperty('data_assinatura')}
+                    helperText={errors.hasOwnProperty('data_assinatura') ? errors.data_assinatura : " "}
                     fullWidth
                 />
 
@@ -405,9 +350,9 @@ const FormEditarContrato = (props) => {
                     setState={setContratoEditado}
                     name="valor_contrato"
                     onChange={(e) => { handleInputChange(e); }}
-                    checaErros={checaErros}
-                    helperText={errosContrato.valor_contrato.helperText}
-                    error={errosContrato.valor_contrato.error}
+                    checaErros={() => {}}
+                    error={errors.hasOwnProperty('valor_contrato.error')}
+                    helperText={errors.hasOwnProperty('valor_contrato.error') ? errors.valor_contrato : " "}
                     required
                     fullWidth
                 />
@@ -421,9 +366,9 @@ const FormEditarContrato = (props) => {
                     setState={setContratoEditado}
                     name="valor_mensal_estimativo"
                     onChange={(e) => { handleInputChange(e); }}
-                    checaErros={checaErros}
-                    helperText={errosContrato.valor_mensal_estimativo.helperText}
-                    error={errosContrato.valor_mensal_estimativo.error}
+                    checaErros={() => {}}
+                    error={errors.hasOwnProperty('valor_mensal_estimativo')}
+                    helperText={errors.hasOwnProperty('valor_mensal_estimativo') ? errors.valor_mensal_estimativo : " "}
                     fullWidth
                 />
 
@@ -433,10 +378,9 @@ const FormEditarContrato = (props) => {
                     value={contratoEditado.data_inicio_vigencia}
                     name="data_inicio_vigencia"
                     onChange={handleInputChange}
-                    helperText={errosContrato.data_inicio_vigencia.helperText}
-                    error={errosContrato.data_inicio_vigencia.error}
-                    onBlur={checaErros}
                     margin="1rem 0"
+                    error={errors.hasOwnProperty('data_inicio_vigencia')}
+                    helperText={errors.hasOwnProperty('data_inicio_vigencia') ? errors.data_inicio_vigencia : " "}
                     required
                     fullWidth
                 />
@@ -447,10 +391,9 @@ const FormEditarContrato = (props) => {
                     value={contratoEditado.data_vencimento}
                     name="data_vencimento"
                     onChange={handleInputChange}
-                    helperText={errosContrato.data_vencimento.helperText}
-                    error={errosContrato.data_vencimento.error}
-                    onBlur={checaErros}
                     margin="1rem 0"
+                    error={errors.hasOwnProperty('data_vencimento')}
+                    helperText={errors.hasOwnProperty('data_vencimento') ? errors.data_vencimento : " "}
                     fullWidth
                 />
 
@@ -461,11 +404,10 @@ const FormEditarContrato = (props) => {
                     onChange={handleInputChange}
                     className="form__campo"
                     label="Condição de Pagamento"
-                    helperText={errosContrato.condicao_pagamento.helperText}
-                    error={errosContrato.condicao_pagamento.error}
-                    onBlur={checaErros}
-                    required
                     sx={{ margin: '1rem 0' }}
+                    error={errors.hasOwnProperty('condicao_pagamento')}
+                    helperText={errors.hasOwnProperty('condicao_pagamento') ? errors.condicao_pagamento : "Ex: Em até 30 dias após o adimplemento."}
+                    required
                     fullWidth
                 />
 
@@ -476,10 +418,9 @@ const FormEditarContrato = (props) => {
                     onChange={handleInputChange}
                     className="form__campo"
                     label="Prazo a partir de"
-                    helperText={errosContrato.prazo_a_partir_de.helperText}
-                    error={errosContrato.prazo_a_partir_de.error}
-                    onBlur={checaErros}
                     sx={{ margin: '1rem 0' }}
+                    error={errors.hasOwnProperty('prazo_a_partir_de')}
+                    helperText={errors.hasOwnProperty('prazo_a_partir_de') ? errors.prazo_a_partir_de : "Ex: A contar da ordem de início; A partir da assinatura; A partir da ordem de fornecimento..."}
                     fullWidth
                 />
 
@@ -489,10 +430,9 @@ const FormEditarContrato = (props) => {
                     value={contratoEditado.data_prazo_maximo}
                     name="data_prazo_maximo"
                     onChange={handleInputChange}
-                    helperText={errosContrato.data_prazo_maximo.helperText}
-                    error={errosContrato.data_prazo_maximo.error}
-                    onBlur={checaErros}
                     margin="1rem 0"
+                    error={errors.hasOwnProperty('data_prazo_maximo')}
+                    helperText={errors.hasOwnProperty('data_prazo_maximo') ? errors.data_prazo_maximo : " "}
                     required
                     fullWidth
                 />
@@ -508,11 +448,10 @@ const FormEditarContrato = (props) => {
                     value={contratoEditado.nome_empresa}
                     name="nome_empresa"
                     onChange={handleInputChange}
-                    onBlur={checaErros}
-                    helperText={errosContrato.nome_empresa.helperText}
-                    error={errosContrato.nome_empresa.error}
-                    required
                     sx={{ margin: '1rem 0' }}
+                    error={errors.hasOwnProperty('nome_empresa')}
+                    helperText={errors.hasOwnProperty('nome_empresa') ? errors.nome_empresa : " "}
+                    required
                     fullWidth
                 />
 
@@ -520,9 +459,8 @@ const FormEditarContrato = (props) => {
                     className="contrato-empresa__campo"
                     formContrato={contratoEditado}
                     setFormContrato={setContratoEditado}
-                    onBlur={checaErros}
-                    helperText={errosContrato.telefone_empresa.helperText}
-                    error={errosContrato.telefone_empresa.error}
+                    error={errors.hasOwnProperty('telefone_empresa')}
+                    helperText={errors.hasOwnProperty('telefone_empresa') ? errors.telefone_empresa : " "}
                     name="telefone_empresa"
                 />
 
@@ -533,12 +471,12 @@ const FormEditarContrato = (props) => {
                     value={contratoEditado.email_empresa}
                     name="email_empresa"
                     onChange={handleInputChange}
-                    onBlur={(e) => { e.target.value === "" ? checaErros(e) : checaErrosEmail(e) }}
-                    helperText={errosContrato.email_empresa.helperText}
-                    error={errosContrato.email_empresa.error}
+                    onBlur={checaErrosEmail}
                     type="email"
-                    required
                     sx={{ margin: '1rem 0' }}
+                    error={errors.hasOwnProperty('email_empresa')}
+                    helperText={errors.hasOwnProperty('email_empresa') ? errors.email_empresa : " "}
+                    required
                     fullWidth
                 />
 
@@ -561,8 +499,9 @@ const FormEditarContrato = (props) => {
                     }
                     name="outras_informacoes"
                     onChange={handleInputChange}
-                    helperText=" "
                     sx={{ margin: '1rem 0' }}
+                    error={errors.hasOwnProperty('outras_informacoes')}
+                    helperText={errors.hasOwnProperty('outras_informacoes') ? errors.outras_informacoes : " "}
                     fullWidth
                 />
 
@@ -572,10 +511,9 @@ const FormEditarContrato = (props) => {
                     value={contratoEditado.envio_material_tecnico}
                     name="envio_material_tecnico"
                     onChange={handleInputChange}
-                    helperText={errosContrato.envio_material_tecnico.helperText}
-                    error={errosContrato.envio_material_tecnico.error}
-                    onBlur={checaErros}
                     margin="1rem 0"
+                    error={errors.hasOwnProperty('envio_material_tecnico')}
+                    helperText={errors.hasOwnProperty('envio_material_tecnico') ? errors.envio_material_tecnico : " "}
                     fullWidth
                 />
 
@@ -585,10 +523,9 @@ const FormEditarContrato = (props) => {
                     value={contratoEditado.minuta_edital}
                     name="minuta_edital"
                     onChange={handleInputChange}
-                    helperText={errosContrato.minuta_edital.helperText}
-                    error={errosContrato.minuta_edital.error}
-                    onBlur={checaErros}
                     margin="1rem 0"
+                    error={errors.hasOwnProperty('minuta_edital')}
+                    helperText={errors.hasOwnProperty('minuta_edital') ? errors.minuta_edital : " "}
                     fullWidth
                 />
 
@@ -598,10 +535,9 @@ const FormEditarContrato = (props) => {
                     value={contratoEditado.abertura_certame}
                     name="abertura_certame"
                     onChange={handleInputChange}
-                    helperText={errosContrato.abertura_certame.helperText}
-                    error={errosContrato.abertura_certame.error}
-                    onBlur={checaErros}
                     margin="1rem 0"
+                    error={errors.hasOwnProperty('abertura_certame')}
+                    helperText={errors.hasOwnProperty('abertura_certame') ? errors.abertura_certame : " "}
                     fullWidth
                 />
 
@@ -611,10 +547,9 @@ const FormEditarContrato = (props) => {
                     value={contratoEditado.homologacao}
                     name="homologacao"
                     onChange={handleInputChange}
-                    helperText={errosContrato.homologacao.helperText}
-                    error={errosContrato.homologacao.error}
-                    onBlur={checaErros}
                     margin="1rem 0"
+                    error={errors.hasOwnProperty('homologacao')}
+                    helperText={errors.hasOwnProperty('homologacao') ? errors.homologacao : " "}
                     fullWidth
                 />
 
@@ -625,9 +560,8 @@ const FormEditarContrato = (props) => {
                     value={contratoEditado.fonte_recurso}
                     name="fonte_recurso"
                     onChange={handleInputChange}
-                    onBlur={checaErros}
-                    helperText={errosContrato.fonte_recurso.helperText}
-                    error={errosContrato.fonte_recurso.error}
+                    error={errors.hasOwnProperty('fonte_recurso')}
+                    helperText={errors.hasOwnProperty('fonte_recurso') ? errors.fonte_recurso : " "}
                     sx={{ margin: '1rem 0' }}
                     fullWidth
                 />
@@ -644,8 +578,7 @@ const FormEditarContrato = (props) => {
                     variant="contained" 
                     sx={{ color: (theme) => theme.palette.color.main, textTransform: 'none' }} 
                     disabled={error}
-                    onMouseDown={checaErroRequired}
-                    onMouseUp={handleClickOpenConfirm} 
+                    onClick={handleClickOpenConfirm} 
                 >
                     <CheckIcon fontSize="small" sx={{ mr: '0.5rem' }} /> Salvar
                 </Button>

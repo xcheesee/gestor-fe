@@ -21,9 +21,13 @@ import { useParams, useNavigate, Link } from 'react-router-dom';
 
 const EditarContrato = ({ setSnackbar }) => {
     const [error, setError] = useState(false);
+    const [errors, setErrors] = useState({});
     const [openConfirm, setOpenConfirm] = useState(false);
     const [openConfirmSair, setOpenConfirmSair] = useState(false);
-    const [openErro, setOpenErro] = useState(false);
+    const [openErro, setOpenErro] = useState({
+        status: '',
+        open: false
+    });
     const [carregando, setCarregando] = useState(false);
     const [contrato, setContrato] = useState({
         tipo_contratacao: "",
@@ -54,6 +58,7 @@ const EditarContrato = ({ setSnackbar }) => {
     });
     const [tipoContratacoes, setTipoContratacoes] = useState([]);
     const { numContrato } = useParams();
+    
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -115,17 +120,24 @@ const EditarContrato = ({ setSnackbar }) => {
                             text: 'Contrato editado com sucesso!',
                             color: 'success'
                         });
-                        return res.json();
+                        return res.json()
+                            .then(data => {
+                                navigate(`../contrato/${numContrato}`, { replace: true });
+                                window.scrollTo(0, 0);
+                            });
+                    } else if (res.status === 422) {
+                        handleCloseConfirm();
+                        setCarregando(false);
+                        setOpenErro({ status: res.status, open: true });
+                        return res.json()
+                            .then(data => setErrors(data.errors));
                     } else {
                         handleCloseConfirm();
                         setCarregando(false);
                         setOpenErro(true);
+                        setOpenErro({ ...openErro, open: true });
                     }
                 })
-                .then(data => {
-                    navigate(`../contrato/${numContrato}`, { replace: true });
-                    window.scrollTo(0, 0);
-                });
         }
     }
 
@@ -251,12 +263,25 @@ const EditarContrato = ({ setSnackbar }) => {
                     </DialogActions>
                 </Dialog>
 
-                <Dialog open={openErro} onClose={() => { setOpenErro(false); }}>
+                <Dialog 
+                    open={openErro.open} 
+                    onClose={() => { 
+                        setOpenErro({ ...openErro, open: false }); 
+                    }}
+                >
                     <DialogContent>
-                        <DialogContentText sx={{ mt: '1rem' }}>Não foi possível enviar o contrato, tente novamente.</DialogContentText>
+                        <DialogContentText sx={{ mt: '1rem' }}>
+                            <strong>Erro {openErro.status}:</strong> Não foi possível enviar o contrato. {openErro.status === 422 ? "Revise os dados informados e tente novamente" : ""}
+                        </DialogContentText>
                     </DialogContent>
                     <DialogActions>
-                        <Button onClick={() => { setOpenErro(false); }} >Ok</Button>
+                        <Button 
+                            onClick={() => { 
+                                setOpenErro({ ...openErro, open: false }); 
+                            }} 
+                        >
+                            Ok
+                        </Button>
                     </DialogActions>
                 </Dialog>
             </Box>
