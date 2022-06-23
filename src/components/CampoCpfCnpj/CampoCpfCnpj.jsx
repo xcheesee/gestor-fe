@@ -27,7 +27,16 @@ NumberFormatCustom.propTypes = {
     onChange: PropTypes.func.isRequired,
 };
 
-const CampoCpfCnpj = ({ formContrato, setFormContrato, setError, errosContrato, setErrosContrato, checaErros, fullWidth }) => {
+const CampoCpfCnpj = (props) => {
+    const {
+        formContrato, 
+        setFormContrato, 
+        setError,
+        fullWidth, 
+        errors, 
+        setErrors,
+    } = props;
+
     const [cpfCnpj, setCpfCnpj] = useState(formContrato.cnpj_cpf);
 
     const mudaCpfCnpj = (event) => {
@@ -37,50 +46,30 @@ const CampoCpfCnpj = ({ formContrato, setFormContrato, setError, errosContrato, 
     const validaCpfCnpj = (event) => {
         if (cpfCnpj.length > 0 && cpfCnpj.length <= 11) {
             if (cpf.isValid(cpfCnpj)) {
+                const errorsTemp = {...errors}
+                delete errorsTemp.cnpj_cpf;
                 setError(false);
-                setErrosContrato({
-                    ...errosContrato,
-                    cnpj_cpf: {
-                        error: false,
-                        helperText: " "
-                    }
-                });
+                setErrors(errorsTemp);
                 setFormContrato({
                     ...formContrato,
                     cnpj_cpf: cpfCnpj,
                 });
             } else {
-                setErrosContrato({
-                    ...errosContrato,
-                    cnpj_cpf: {
-                        error: true,
-                        helperText: "CPF Inválido"
-                    }
-                });
+                setErrors({...errors, cnpj_cpf: "CPF Inválido"});
                 setError(true);
             }
         } else if (cpfCnpj.length > 0 && cpfCnpj.length <= 14) {
             if (cnpj.isValid(cpfCnpj)) {
+                const errorsTemp = {...errors}
+                delete errorsTemp.cnpj_cpf;
                 setError(false);
-                setErrosContrato({
-                    ...errosContrato,
-                    cnpj_cpf: {
-                        error: false,
-                        helperText: " "
-                    }
-                });
+                setErrors(errorsTemp)
                 setFormContrato({
                     ...formContrato,
                     cnpj_cpf: cpfCnpj,
                 });
             } else {
-                setErrosContrato({
-                    ...errosContrato,
-                    cnpj_cpf: {
-                        error: true,
-                        helperText: "CNPJ Inválido"
-                    }
-                });
+                setErrors({...errors, cnpj_cpf: "CNPJ Inválido"});
                 setError(true);
             }
         }
@@ -90,21 +79,21 @@ const CampoCpfCnpj = ({ formContrato, setFormContrato, setError, errosContrato, 
         <TextField
             variant="outlined"
             label="CNPJ/CPF"
-            helperText={errosContrato.cnpj_cpf.helperText}
             value={cpfCnpj}
             name="cnpj_cpf"
             onChange={mudaCpfCnpj}
-            onBlur={(e) => {checaErros(e); validaCpfCnpj(e);}}
+            onBlur={validaCpfCnpj}
             InputProps={{
                 inputComponent: NumberFormatCustom,
                 inputProps: {
                     format: cpfCnpj.length > 11 ? "##.###.###/####-##" : "###.###.###-#####"
                 },
             }}
-            required
             sx={{ margin: '1rem 0' }}
-            error={errosContrato.cnpj_cpf.error}
+            error={errors.hasOwnProperty('cnpj_cpf')}
+            helperText={errors.hasOwnProperty('cnpj_cpf') ? errors.cnpj_cpf : "Somente números"}
             fullWidth={fullWidth}
+            required
         />
     );
 }

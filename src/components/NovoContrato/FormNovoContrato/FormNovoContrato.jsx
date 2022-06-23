@@ -21,109 +21,18 @@ import CloseIcon from '@mui/icons-material/Close';
 import * as EmailValidator from 'email-validator';
 import './estilo.css';
 
-const FormNovoContrato = ({ formContrato, setFormContrato, error, setError, setOpenConfirm, setOpenConfirmSair }) => {
-    const [errosContrato, setErrosContrato] = useState({
-        tipo_contratacao: {
-            error: false,
-            helperText: " ",
-        },
-        processo_sei: {
-            error: false,
-            helperText: " ",
-        },
-        dotacao_orcamentaria: {
-            error: false,
-            helperText: " ",
-        },
-        credor: {
-            error: false,
-            helperText: " ",
-        },
-        cnpj_cpf: {
-            error: false,
-            helperText: "Somente números",
-        },
-        tipo_objeto: {
-            error: false,
-            helperText: " ",
-        },
-        objeto: {
-            error: false,
-            helperText: " ",
-        },
-        numero_contrato: {
-            error: false,
-            helperText: " ",
-        },
-        data_assinatura: {
-            error: false,
-            helperText: " ",
-        },
-        valor_contrato: {
-            error: false,
-            helperText: " ",
-        },
-        valor_mensal_estimativo: {
-            error: false,
-            helperText: " "
-        },
-        data_inicio_vigencia: {
-            error: false,
-            helperText: " ",
-        },
-        data_vencimento: {
-            error: false,
-            helperText: " ",
-        },
-        condicao_pagamento: {
-            error: false,
-            helperText: "Ex: Em até 30 dias após o adimplemento.",
-        },
-        prazo_a_partir_de: {
-            error: false,
-            helperText: "Ex: A contar da ordem de início; A partir da assinatura; A partir da ordem de fornecimento...",
-        },
-        data_prazo_maximo: {
-            error: false,
-            helperText: " ",
-        },
-        nome_empresa: {
-            error: false,
-            helperText: " ",
-        },
-        telefone_empresa: {
-            error: false,
-            helperText: " ",
-        },
-        email_empresa: {
-            error: false,
-            helperText: " ",
-        },
-        outras_informacoes: {
-            error: false,
-            helperText: " "
-        },
-        envio_material_tecnico: {
-            error: false,
-            helperText: " "
-        },
-        minuta_edital: {
-            error: false,
-            helperText: " "
-        },
-        abertura_certame: {
-            error: false,
-            helperText: " "
-        },
-        homologacao: {
-            error: false,
-            helperText: " "
-        },
-        fonte_recurso: {
-            error: false,
-            helperText: " "
-        }
-    });
+const FormNovoContrato = (props) => {
+    const {
+        formContrato, 
+        setFormContrato, 
+        error, 
+        setError, 
+        setOpenConfirm, 
+        setOpenConfirmSair, 
+        errors, 
+        setErrors
+    } = props;
+
     const [tipoContratacoes, setTipoContratacoes] = useState([]);
     const [carregando, setCarregando] = useState(true);
     
@@ -138,6 +47,8 @@ const FormNovoContrato = ({ formContrato, setFormContrato, error, setError, setO
                 'Authorization': `Bearer ${token}`
             }
         };
+
+        setErrors({});
 
         fetch(url, options)
             .then(res => res.json())
@@ -174,84 +85,19 @@ const FormNovoContrato = ({ formContrato, setFormContrato, error, setError, setO
         });
     }
 
-    const checaErros = (event) => {
-        if (event.target.required && event.target.value === "") {
-            setErrosContrato({
-                ...errosContrato,
-                [event.target.name]: {
-                    error: true,
-                    helperText: "Campo obrigatório"
-                }
-            });
-            setError(true);
-        } else {
-            setErrosContrato({
-                ...errosContrato,
-                [event.target.name]: {
-                    error: false,
-                    helperText: " "
-                }
-            });
-            setError(false);
-        }
-    }
-
     const checaErrosEmail = (event) => {
         if (EmailValidator.validate(event.target.value) === true) {
-            setErrosContrato({
-                ...errosContrato,
-                [event.target.name]: {
-                    error: false,
-                    helperText: " "
-                }
-            });
+            const errorsTemp = {...errors};
+            delete errorsTemp.email_empresa;
+            setErrors(errorsTemp);
             setError(false);
         } else {
-            setErrosContrato({
-                ...errosContrato,
-                [event.target.name]: {
-                    error: true,
-                    helperText: "Insira um e-mail válido"
-                }
+            setErrors({
+                ...errors,
+                email_empresa: "Insira um e-mail válido"
             });
             setError(true);
         }
-    }
-
-    const checaErroRequired = () => {
-        const form = document.querySelector(".form_formulario").elements;
-        const inputArr = [];
-        for (let i = 0; i < form.length; i++) {
-            if (form[i].tagName === 'INPUT') {
-                inputArr.push(form[i]);
-            }
-        }
-
-        let formErrosTemp = {};
-
-        inputArr.forEach((input) => {
-            if (input.required && input.value === "") {
-                formErrosTemp = {
-                    ...formErrosTemp,
-                    [input.name]: {
-                        error: true,
-                        helperText: "Campo obrigatório"
-                    }
-                }
-
-                setError(true);
-            } else {
-                formErrosTemp = {
-                    ...formErrosTemp,
-                    [input.name]: {
-                        error: false,
-                        helperText: " "
-                    }
-                };
-            }
-        });
-        
-        setErrosContrato(formErrosTemp);
     }
 
     return (
@@ -261,7 +107,11 @@ const FormNovoContrato = ({ formContrato, setFormContrato, error, setError, setO
                     <Typography variant="h5" sx={{ fontWeight: 'light' }}>Dados do contrato</Typography> 
                 </Divider>
 
-                <FormControl fullWidth sx={{ margin: '1rem 0' }}>
+                <FormControl 
+                    sx={{ margin: '1rem 0' }}
+                    error={errors.hasOwnProperty('tipo_contratacao')}    
+                    fullWidth 
+                >
                     <InputLabel id="tipo_contratacao-label">Tipo de contratação</InputLabel>
                     <Select
                         labelId="tipo_contratacao-label"
@@ -271,8 +121,6 @@ const FormNovoContrato = ({ formContrato, setFormContrato, error, setError, setO
                         name="tipo_contratacao"
                         onChange={handleChangeTipoContrato}
                         disabled={tipoContratacoes.length === 0}
-                        error={errosContrato.tipo_contratacao.error}
-                        onBlur={checaErros}
                         fullWidth
                     >
                         <MenuItem value={""}>---</MenuItem>
@@ -282,7 +130,9 @@ const FormNovoContrato = ({ formContrato, setFormContrato, error, setError, setO
                             );
                         })}
                     </Select>
-                    <FormHelperText>{errosContrato.tipo_contratacao.helperText}</FormHelperText>
+                    <FormHelperText>
+                        {errors.hasOwnProperty('tipo_contratacao') ? errors.tipo_contratacao : " "}
+                    </FormHelperText>
 
                     {carregando === true
                         ? 
@@ -306,11 +156,10 @@ const FormNovoContrato = ({ formContrato, setFormContrato, error, setError, setO
                     onChange={handleInputChange}
                     className="form__campo"
                     label="Processo SEI"
-                    helperText={errosContrato.processo_sei.helperText}
-                    error={errosContrato.processo_sei.error}
-                    onBlur={checaErros}
-                    required
                     sx={{ margin: '1rem 0' }}
+                    error={errors.hasOwnProperty('processo_sei')}
+                    helperText={errors.hasOwnProperty('processo_sei') ? errors.processo_sei : " "}
+                    required
                     fullWidth
                 />
 
@@ -321,10 +170,9 @@ const FormNovoContrato = ({ formContrato, setFormContrato, error, setError, setO
                     onChange={handleInputChange}
                     className="form__campo"
                     label="Dotação orçamentária"
-                    helperText={errosContrato.dotacao_orcamentaria.helperText}
-                    error={errosContrato.dotacao_orcamentaria.error}
-                    onBlur={checaErros}
                     sx={{ margin: '1rem 0' }}
+                    error={errors.hasOwnProperty('dotacao_orcamentaria')}
+                    helperText={errors.hasOwnProperty('dotacao_orcamentaria') ? errors.dotacao_orcamentaria : " "}
                     required
                     fullWidth
                 />
@@ -336,11 +184,10 @@ const FormNovoContrato = ({ formContrato, setFormContrato, error, setError, setO
                     onChange={handleInputChange}
                     className="form__campo"
                     label="Credor"
-                    helperText={errosContrato.credor.helperText}
-                    error={errosContrato.credor.error}
-                    onBlur={checaErros}
-                    required
                     sx={{ margin: '1rem 0' }}
+                    error={errors.hasOwnProperty('credor')}
+                    helperText={errors.hasOwnProperty('credor') ? errors.credor : " "}
+                    required
                     fullWidth
                 />
 
@@ -348,15 +195,18 @@ const FormNovoContrato = ({ formContrato, setFormContrato, error, setError, setO
                     className="form__campo"
                     formContrato={formContrato}
                     setFormContrato={setFormContrato}
-                    error={errosContrato.cnpj_cpf.error}
                     setError={setError}
-                    errosContrato={errosContrato}
-                    setErrosContrato={setErrosContrato}
-                    checaErros={checaErros}
+                    error={errors.hasOwnProperty('cnpj_cpf')}
+                    errors={errors}
+                    setErrors={setErrors}
                     fullWidth
                 />
 
-                <FormControl fullWidth sx={{ margin: '1rem 0' }}>
+                <FormControl 
+                    sx={{ margin: '1rem 0' }}
+                    error={errors.hasOwnProperty('tipo_contratacao')}
+                    fullWidth 
+                >
                     <InputLabel id="tipo_objeto-label">Tipo de objeto</InputLabel>
                     <Select
                         labelId="tipo_objeto-label"
@@ -365,8 +215,6 @@ const FormNovoContrato = ({ formContrato, setFormContrato, error, setError, setO
                         value={formContrato.tipo_objeto}
                         name="tipo_objeto"
                         onChange={handleInputChange}
-                        error={errosContrato.tipo_contratacao.error}
-                        onBlur={checaErros}
                         fullWidth
                     >
                         <MenuItem value={""}>---</MenuItem>
@@ -375,7 +223,9 @@ const FormNovoContrato = ({ formContrato, setFormContrato, error, setError, setO
                         <MenuItem value={"Serviço"}>Serviço</MenuItem>
                         <MenuItem value={"Aquisição"}>Aquisição</MenuItem>
                     </Select>
-                    <FormHelperText>{errosContrato.tipo_objeto.helperText}</FormHelperText>
+                    <FormHelperText>
+                        {errors.hasOwnProperty('tipo_contratacao') ? errors.tipo_objeto : " "}
+                    </FormHelperText>
                 </FormControl>
 
                 <TextField
@@ -385,11 +235,10 @@ const FormNovoContrato = ({ formContrato, setFormContrato, error, setError, setO
                     onChange={handleInputChange}
                     className="form__campo"
                     label="Objeto"
-                    helperText={errosContrato.objeto.helperText}
-                    error={errosContrato.objeto.error}
-                    onBlur={checaErros}
-                    required
                     sx={{ margin: '1rem 0' }}
+                    error={errors.hasOwnProperty('objeto')}
+                    helperText={errors.hasOwnProperty('objeto') ? errors.objeto : " "}
+                    required
                     fullWidth
                 />
 
@@ -400,11 +249,10 @@ const FormNovoContrato = ({ formContrato, setFormContrato, error, setError, setO
                     onChange={handleInputChange}
                     className="form__campo"
                     label="Nº Contrato / Nota de Empenho Inicial"
-                    helperText={errosContrato.numero_contrato.helperText}
-                    error={errosContrato.numero_contrato.error}
-                    onBlur={checaErros}
-                    required
                     sx={{ margin: '1rem 0' }}
+                    error={error.hasOwnProperty('numero_contrato')}
+                    helperText={error.hasOwnProperty('numero_contrato') ? errors.numero_contrato : " "}
+                    required
                     fullWidth
                 />
 
@@ -415,9 +263,8 @@ const FormNovoContrato = ({ formContrato, setFormContrato, error, setError, setO
                     name="data_assinatura"
                     onChange={handleInputChange}
                     margin="1rem 0"
-                    helperText={errosContrato.data_assinatura.helperText}
-                    error={errosContrato.data_assinatura.error}
-                    onBlur={checaErros}
+                    error={errors.hasOwnProperty('data_assinatura')}
+                    helperText={errors.hasOwnProperty('data_assinatura') ? errors.data_assinatura : " "}
                     fullWidth
                 />
 
@@ -430,9 +277,9 @@ const FormNovoContrato = ({ formContrato, setFormContrato, error, setError, setO
                     setState={setFormContrato}
                     name="valor_contrato"
                     onChange={(e) => { handleInputChange(e); }}
-                    checaErros={checaErros}
-                    helperText={errosContrato.valor_contrato.helperText}
-                    error={errosContrato.valor_contrato.error}
+                    checaErros={() => {}}
+                    error={errors.hasOwnProperty('valor_contrato.error')}
+                    helperText={errors.hasOwnProperty('valor_contrato.error') ? errors.valor_contrato : " "}
                     required
                     fullWidth
                 />
@@ -446,9 +293,9 @@ const FormNovoContrato = ({ formContrato, setFormContrato, error, setError, setO
                     setState={setFormContrato}
                     name="valor_mensal_estimativo"
                     onChange={(e) => { handleInputChange(e); }}
-                    checaErros={checaErros}
-                    helperText={errosContrato.valor_mensal_estimativo.helperText}
-                    error={errosContrato.valor_mensal_estimativo.error}
+                    checaErros={() => {}}
+                    error={errors.hasOwnProperty('valor_mensal_estimativo')}
+                    helperText={errors.hasOwnProperty('valor_mensal_estimativo') ? errors.valor_mensal_estimativo : " "}
                     fullWidth
                 />
 
@@ -458,10 +305,9 @@ const FormNovoContrato = ({ formContrato, setFormContrato, error, setError, setO
                     value={formContrato.data_inicio_vigencia}
                     name="data_inicio_vigencia"
                     onChange={handleInputChange}
-                    helperText={errosContrato.data_inicio_vigencia.helperText}
-                    error={errosContrato.data_inicio_vigencia.error}
-                    onBlur={checaErros}
                     margin="1rem 0"
+                    error={errors.hasOwnProperty('data_inicio_vigencia')}
+                    helperText={errors.hasOwnProperty('data_inicio_vigencia') ? errors.data_inicio_vigencia : " "}
                     required
                     fullWidth
                 />
@@ -472,10 +318,9 @@ const FormNovoContrato = ({ formContrato, setFormContrato, error, setError, setO
                     value={formContrato.data_vencimento}
                     name="data_vencimento"
                     onChange={handleInputChange}
-                    helperText={errosContrato.data_vencimento.helperText}
-                    error={errosContrato.data_vencimento.error}
-                    onBlur={checaErros}
                     margin="1rem 0"
+                    error={errors.hasOwnProperty('data_vencimento')}
+                    helperText={errors.hasOwnProperty('data_vencimento') ? errors.data_vencimento : " "}
                     fullWidth
                 />
 
@@ -486,11 +331,10 @@ const FormNovoContrato = ({ formContrato, setFormContrato, error, setError, setO
                     onChange={handleInputChange}
                     className="form__campo"
                     label="Condição de Pagamento"
-                    helperText={errosContrato.condicao_pagamento.helperText}
-                    error={errosContrato.condicao_pagamento.error}
-                    onBlur={checaErros}
-                    required
                     sx={{ margin: '1rem 0' }}
+                    error={errors.hasOwnProperty('condicao_pagamento')}
+                    helperText={errors.hasOwnProperty('condicao_pagamento') ? errors.condicao_pagamento : "Ex: Em até 30 dias após o adimplemento."}
+                    required
                     fullWidth
                 />
 
@@ -501,10 +345,9 @@ const FormNovoContrato = ({ formContrato, setFormContrato, error, setError, setO
                     onChange={handleInputChange}
                     className="form__campo"
                     label="Prazo a partir de"
-                    helperText={errosContrato.prazo_a_partir_de.helperText}
-                    error={errosContrato.prazo_a_partir_de.error}
-                    onBlur={checaErros}
                     sx={{ margin: '1rem 0' }}
+                    error={errors.hasOwnProperty('prazo_a_partir_de')}
+                    helperText={errors.hasOwnProperty('prazo_a_partir_de') ? errors.prazo_a_partir_de : "Ex: A contar da ordem de início; A partir da assinatura; A partir da ordem de fornecimento..."}
                     fullWidth
                 />
 
@@ -514,10 +357,9 @@ const FormNovoContrato = ({ formContrato, setFormContrato, error, setError, setO
                     value={formContrato.data_prazo_maximo}
                     name="data_prazo_maximo"
                     onChange={handleInputChange}
-                    helperText={errosContrato.data_prazo_maximo.helperText}
-                    error={errosContrato.data_prazo_maximo.error}
-                    onBlur={checaErros}
                     margin="1rem 0"
+                    error={errors.hasOwnProperty('data_prazo_maximo')}
+                    helperText={errors.hasOwnProperty('data_prazo_maximo') ? errors.data_prazo_maximo : " "}
                     required
                     fullWidth
                 />
@@ -533,11 +375,10 @@ const FormNovoContrato = ({ formContrato, setFormContrato, error, setError, setO
                     value={formContrato.nome_empresa}
                     name="nome_empresa"
                     onChange={handleInputChange}
-                    onBlur={checaErros}
-                    helperText={errosContrato.nome_empresa.helperText}
-                    error={errosContrato.nome_empresa.error}
-                    required
                     sx={{ margin: '1rem 0' }}
+                    error={errors.hasOwnProperty('nome_empresa')}
+                    helperText={errors.hasOwnProperty('nome_empresa') ? errors.nome_empresa : " "}
+                    required
                     fullWidth
                 />
 
@@ -545,9 +386,8 @@ const FormNovoContrato = ({ formContrato, setFormContrato, error, setError, setO
                     className="contrato-empresa__campo"
                     formContrato={formContrato}
                     setFormContrato={setFormContrato}
-                    onBlur={checaErros}
-                    helperText={errosContrato.telefone_empresa.helperText}
-                    error={errosContrato.telefone_empresa.error}
+                    error={errors.hasOwnProperty('telefone_empresa')}
+                    helperText={errors.hasOwnProperty('telefone_empresa') ? errors.telefone_empresa : " "}
                     name="telefone_empresa"
                 />
 
@@ -558,12 +398,12 @@ const FormNovoContrato = ({ formContrato, setFormContrato, error, setError, setO
                     value={formContrato.email_empresa}
                     name="email_empresa"
                     onChange={handleInputChange}
-                    onBlur={(e) => { e.target.value === "" ? checaErros(e) : checaErrosEmail(e) }}
-                    helperText={errosContrato.email_empresa.helperText}
-                    error={errosContrato.email_empresa.error}
+                    onBlur={checaErrosEmail}
                     type="email"
-                    required
                     sx={{ margin: '1rem 0' }}
+                    error={errors.hasOwnProperty('email_empresa')}
+                    helperText={errors.hasOwnProperty('email_empresa') ? errors.email_empresa : " "}
+                    required
                     fullWidth
                 />
 
@@ -582,8 +422,9 @@ const FormNovoContrato = ({ formContrato, setFormContrato, error, setError, setO
                     value={formContrato.outras_informacoes}
                     name="outras_informacoes"
                     onChange={handleInputChange}
-                    helperText=" "
                     sx={{ margin: '1rem 0' }}
+                    error={errors.hasOwnProperty('outras_informacoes')}
+                    helperText={errors.hasOwnProperty('outras_informacoes') ? errors.outras_informacoes : " "}
                     fullWidth
                 />
 
@@ -593,10 +434,9 @@ const FormNovoContrato = ({ formContrato, setFormContrato, error, setError, setO
                     value={formContrato.envio_material_tecnico}
                     name="envio_material_tecnico"
                     onChange={handleInputChange}
-                    helperText={errosContrato.envio_material_tecnico.helperText}
-                    error={errosContrato.envio_material_tecnico.error}
-                    onBlur={checaErros}
                     margin="1rem 0"
+                    error={errors.hasOwnProperty('envio_material_tecnico')}
+                    helperText={errors.hasOwnProperty('envio_material_tecnico') ? errors.envio_material_tecnico : " "}
                     fullWidth
                 />
 
@@ -606,10 +446,9 @@ const FormNovoContrato = ({ formContrato, setFormContrato, error, setError, setO
                     value={formContrato.minuta_edital}
                     name="minuta_edital"
                     onChange={handleInputChange}
-                    helperText={errosContrato.minuta_edital.helperText}
-                    error={errosContrato.minuta_edital.error}
-                    onBlur={checaErros}
                     margin="1rem 0"
+                    error={errors.hasOwnProperty('minuta_edital')}
+                    helperText={errors.hasOwnProperty('minuta_edital') ? errors.minuta_edital : " "}
                     fullWidth
                 />
 
@@ -619,10 +458,9 @@ const FormNovoContrato = ({ formContrato, setFormContrato, error, setError, setO
                     value={formContrato.abertura_certame}
                     name="abertura_certame"
                     onChange={handleInputChange}
-                    helperText={errosContrato.abertura_certame.helperText}
-                    error={errosContrato.abertura_certame.error}
-                    onBlur={checaErros}
                     margin="1rem 0"
+                    error={errors.hasOwnProperty('abertura_certame')}
+                    helperText={errors.hasOwnProperty('abertura_certame') ? errors.abertura_certame : " "}
                     fullWidth
                 />
 
@@ -632,10 +470,9 @@ const FormNovoContrato = ({ formContrato, setFormContrato, error, setError, setO
                     value={formContrato.homologacao}
                     name="homologacao"
                     onChange={handleInputChange}
-                    helperText={errosContrato.homologacao.helperText}
-                    error={errosContrato.homologacao.error}
-                    onBlur={checaErros}
                     margin="1rem 0"
+                    error={errors.hasOwnProperty('homologacao')}
+                    helperText={errors.hasOwnProperty('homologacao') ? errors.homologacao : " "}
                     fullWidth
                 />
 
@@ -646,10 +483,9 @@ const FormNovoContrato = ({ formContrato, setFormContrato, error, setError, setO
                     value={formContrato.fonte_recurso}
                     name="fonte_recurso"
                     onChange={handleInputChange}
-                    onBlur={checaErros}
-                    helperText={errosContrato.fonte_recurso.helperText}
-                    error={errosContrato.fonte_recurso.error}
                     sx={{ margin: '1rem 0' }}
+                    error={errors.hasOwnProperty('fonte_recurso')}
+                    helperText={errors.hasOwnProperty('fonte_recurso') ? errors.fonte_recurso : " "}
                     fullWidth
                 />
             </Box>
@@ -665,8 +501,7 @@ const FormNovoContrato = ({ formContrato, setFormContrato, error, setError, setO
                     variant="contained" 
                     sx={{ color: (theme) => theme.palette.color.main, textTransform: 'none' }} 
                     disabled={error}
-                    onMouseDown={checaErroRequired}
-                    onMouseUp={handleClickOpenConfirm}
+                    onClick={handleClickOpenConfirm}
                 >
                     <CheckIcon fontSize="small" sx={{ mr: '0.5rem' }} /> Salvar
                 </Button>

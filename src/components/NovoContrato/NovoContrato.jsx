@@ -21,9 +21,13 @@ import { useNavigate, Link } from 'react-router-dom';
 
 const NovoContrato = ({ setSnackbar }) => {
     const [error, setError] = useState(false);
+    const [errors, setErrors] = useState({});
     const [openConfirm, setOpenConfirm] = useState(false);
     const [openConfirmSair, setOpenConfirmSair] = useState(false);
-    const [openErro, setOpenErro] = useState(false);
+    const [openErro, setOpenErro] = useState({
+        status: '',
+        open: false
+    });
     const [carregando, setCarregando] = useState(false);
     const [novoContrato, setNovoContrato] = useState({
         tipo_contratacao: "",
@@ -113,18 +117,23 @@ const NovoContrato = ({ setSnackbar }) => {
                             text: 'Contrato enviado com sucesso!',
                             color: 'success'
                         });
+                        return res.json()
+                            .then(data => {
+                                navigate(`../contrato/${data.data.id}`, { replace: true });
+                                window.scrollTo(0, 0);
+                            });
+                    } else if (res.status === 422) {
+                        handleCloseConfirm();
+                        setCarregando(false);
+                        setOpenErro({ status: res.status, open: true });
+                        return res.json()
+                            .then(data => setErrors(data.errors));
                     } else {
                         handleCloseConfirm();
                         setCarregando(false);
-                        setOpenErro(true);
+                        setOpenErro({ ...openErro, open: true });
                     }
-
-                    return res.json();
-                })
-                .then(data => {
-                    navigate(`../contrato/${data.data.id}`, { replace: true });
-                    window.scrollTo(0, 0);
-                })
+                });
         }
     }
 
@@ -189,6 +198,8 @@ const NovoContrato = ({ setSnackbar }) => {
                     setError={setError} 
                     setOpenConfirm={setOpenConfirm}
                     setOpenConfirmSair={setOpenConfirmSair}
+                    errors={errors}
+                    setErrors={setErrors}
                 />
 
                 <Dialog open={openConfirm} onClose={handleCloseConfirm} fullWidth>
@@ -225,12 +236,25 @@ const NovoContrato = ({ setSnackbar }) => {
                     </DialogActions>
                 </Dialog>
 
-                <Dialog open={openErro} onClose={() => { setOpenErro(false); }}>
+                <Dialog 
+                    open={openErro.open} 
+                    onClose={() => { 
+                        setOpenErro({ ...openErro, open: false });
+                    }}
+                >
                     <DialogContent>
-                        <DialogContentText sx={{ mt: '1rem' }}>Não foi possível enviar o contrato, tente novamente.</DialogContentText>
+                        <DialogContentText sx={{ mt: '1rem' }}>
+                            <strong>Erro {openErro.status}:</strong> Não foi possível enviar o contrato. {openErro.status === 422 ? "Revise os dados informados e tente novamente" : ""}
+                        </DialogContentText>
                     </DialogContent>
                     <DialogActions>
-                        <Button onClick={() => { setOpenErro(false); }} >Ok</Button>
+                        <Button 
+                            onClick={() => { 
+                                setOpenErro({ ...openErro, open: false });
+                            }} 
+                        >
+                            Ok
+                        </Button>
                     </DialogActions>
                 </Dialog>
             </Box>
