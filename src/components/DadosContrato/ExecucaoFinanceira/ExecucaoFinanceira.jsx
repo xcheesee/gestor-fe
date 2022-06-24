@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { 
     Box, 
     Typography, 
@@ -21,7 +21,7 @@ const ExecucaoFinanceira = (props) => {
                             <Box
                                 elevation={3}
                                 component={Paper}
-                                sx={{ padding: '1rem', margin: '0 1rem', width: '180px' }}
+                                sx={{ padding: '1rem', margin: '0 1rem', minWidth: '180px' }}
                                 key={index}
                             >
                                 <Divider
