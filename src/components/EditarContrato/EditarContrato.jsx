@@ -129,13 +129,24 @@ const EditarContrato = ({ setSnackbar }) => {
                         handleCloseConfirm();
                         setCarregando(false);
                         setOpenErro({ status: res.status, open: true });
+                        setSnackbar({
+                            open: false,
+                            severity: 'error',
+                            text: 'Não foi possível editar o contrato',
+                            color: 'error'
+                        });
                         return res.json()
                             .then(data => setErrors(data.errors));
                     } else {
                         handleCloseConfirm();
                         setCarregando(false);
-                        setOpenErro(true);
-                        setOpenErro({ ...openErro, open: true });
+                        setOpenErro({ status: res.status, open: true });
+                        setSnackbar({
+                            open: false,
+                            severity: 'error',
+                            text: 'Não foi possível editar o contrato',
+                            color: 'error'
+                        });
                     }
                 })
         }
@@ -170,6 +181,8 @@ const EditarContrato = ({ setSnackbar }) => {
                     carregando={carregando}
                     tipoContratacoes={tipoContratacoes}
                     setTipoContratacoes={setTipoContratacoes}
+                    errors={errors}
+                    setErrors={setErrors}
                 />
             );
         } else {
@@ -184,6 +197,8 @@ const EditarContrato = ({ setSnackbar }) => {
                     carregando={carregando}
                     tipoContratacoes={tipoContratacoes}
                     setTipoContratacoes={setTipoContratacoes}
+                    errors={errors}
+                    setErrors={setErrors}
                 />
             );
         }
@@ -271,7 +286,7 @@ const EditarContrato = ({ setSnackbar }) => {
                 >
                     <DialogContent>
                         <DialogContentText sx={{ mt: '1rem' }}>
-                            <strong>Erro {openErro.status}:</strong> Não foi possível enviar o contrato. {openErro.status === 422 ? "Revise os dados informados e tente novamente" : ""}
+                            <strong>Erro {openErro.status}:</strong> Não foi possível editar o contrato. {openErro.status === 422 ? "Revise os dados informados e tente novamente" : ""}
                         </DialogContentText>
                     </DialogContent>
                     <DialogActions>
