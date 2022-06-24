@@ -41,8 +41,7 @@ const ListaLocais = (props) => {
         estaCarregado,
         retornaCampoValor,
         numContrato,
-        setSnackbar,
-        ...other
+        setSnackbar
     } = props;
 
     const [acao, setAcao] = useState('editar');

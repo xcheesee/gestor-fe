@@ -13,8 +13,7 @@ const TabGarantias = (props) => {
     const {
         formataData,
         formataValores,
-        retornaCampoValor,
-        ...other
+        retornaCampoValor
     } = props;
 
     const campos = [
@@ -41,10 +40,8 @@ const ListaGarantias = (props) => {
         formataData,
         formataValores,
         retornaCampoValor,
-        snackbar,
         setSnackbar,
-        numContrato,
-        ...other
+        numContrato
     } = props;
 
     const [acao, setAcao] = useState('editar');

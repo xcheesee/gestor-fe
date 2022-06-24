@@ -30,8 +30,7 @@ const ListaCertidoes = (props) => {
         formataData, 
         retornaCampoValor,
         numContrato, 
-        setSnackbar,
-        ...other 
+        setSnackbar
     } = props;
 
     const [acao, setAcao] = useState('editar');

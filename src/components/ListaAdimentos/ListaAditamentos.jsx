@@ -38,8 +38,7 @@ const ListaAditamentos = (props) => {
         formataPorcentagem,
         retornaCampoValor,
         numContrato,
-        setSnackbar,
-        ...other
+        setSnackbar
     } = props;
 
     const [acao, setAcao] = useState('editar');

@@ -32,8 +32,7 @@ const ListaRecOrcamentario = (props) => {
         formataValores,
         retornaCampoValor,
         numContrato,
-        setSnackbar,
-        ...other
+        setSnackbar
     } = props;
 
     const [acao, setAcao] = useState('editar');

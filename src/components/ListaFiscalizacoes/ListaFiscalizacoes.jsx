@@ -36,10 +36,8 @@ const ListaFiscalizacoes = (props) => {
         fiscalizacoes,
         estaCarregado,
         retornaCampoValor,
-        snackbar,
         setSnackbar,
-        numContrato,
-        ...other
+        numContrato
     } = props;
     
     const [acao, setAcao] = useState('editar');
