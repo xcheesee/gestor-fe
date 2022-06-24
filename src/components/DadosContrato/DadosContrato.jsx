@@ -131,6 +131,14 @@ const formataPorcentagem = (valor) => {
     }
 }
 
+const primeiraLetraMaiuscula = (string) => {
+    if (typeof string === "string") {
+        return string[0].toUpperCase() + string.substring(1);
+    } else {
+        return "---";
+    }
+}
+
 const TabContrato = (props) => {
     const campos = [
         "Processo SEI",
@@ -161,7 +169,7 @@ const TabContrato = (props) => {
         props.credor,
         formataCpfCnpj(props.cnpj_cpf),
         props.tipo_contratacao,
-        props.tipo_objeto,
+        primeiraLetraMaiuscula(props.tipo_objeto),
         props.objeto,
         props.numero_contrato ,
         formataData(props.data_assinatura),
