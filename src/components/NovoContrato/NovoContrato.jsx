@@ -2,22 +2,14 @@ import React, { useState } from 'react';
 import { 
     Paper, 
     Box, 
-    Typography, 
-    Button, 
-    Fade, 
-    Dialog, 
-    DialogContent, 
-    DialogActions,
-    DialogContentText,
-    CircularProgress,
-    IconButton,
-    Tooltip
+    Fade
 } from '@mui/material';
+import HeaderFormulario from '../HeaderFormulario';
 import FormNovoContrato from './FormNovoContrato';
-import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
-import CheckIcon from '@mui/icons-material/Check';
-import CloseIcon from '@mui/icons-material/Close';
-import { useNavigate, Link } from 'react-router-dom';
+import DialogConfirm from '../DialogConfirm';
+import DialogConfirmSair from '../DialogConfirmSair';
+import DialogErroEnvio from '../DialogErroEnvio';
+import { useNavigate } from 'react-router-dom';
 
 const NovoContrato = ({ setSnackbar }) => {
     const [error, setError] = useState(false);
@@ -89,6 +81,14 @@ const NovoContrato = ({ setSnackbar }) => {
         });
     }
 
+    const handleCloseConfirm = (event, reason) => {
+        if (reason === 'backdropClick') {
+            return;
+        } else {
+            setOpenConfirm(false);
+        }
+    }
+
     const handleClickEnviarFormulario = () => {
         setCarregando(true);
 
@@ -137,22 +137,6 @@ const NovoContrato = ({ setSnackbar }) => {
         }
     }
 
-    const handleCloseConfirm = (event, reason) => {
-        if (reason === 'backdropClick') {
-            return;
-        } else {
-            setOpenConfirm(false);
-        }
-    }
-
-    const handleCloseConfirmSair = (event, reason) => {
-        if (reason === 'backdropClick') {
-            return;
-        } else {
-            setOpenConfirmSair(false);
-        }
-    }
-
     return(
         <Box
             component={Fade}
@@ -167,29 +151,9 @@ const NovoContrato = ({ setSnackbar }) => {
             }}
         >
             <Box component={Paper} elevation={5}>
-                <Typography 
-                    variant="h5" 
-                    component="h1" 
-                    sx={{ 
-                        padding: '1rem', 
-                        background: (theme) => theme.palette.primary.main,
-                        color: (theme) => theme.palette.color.main,
-                        borderTopLeftRadius: '3px',
-                        borderTopRightRadius: '3px',
-                        fontWeight: 'light',
-                        display: 'flex',
-                        alignItems: 'center'
-                    }}
-                >
-                    <Link to="/principal">
-                        <Tooltip title="Voltar" arrow>
-                            <IconButton sx={{ mr: '0.5rem' }}>
-                                <ArrowBackIosNewIcon sx={{ color: (theme) => theme.palette.color.main }} />
-                            </IconButton>
-                        </Tooltip>
-                    </Link>
+                <HeaderFormulario>
                     Novo contrato
-                </Typography>
+                </HeaderFormulario>
                 
                 <FormNovoContrato 
                     formContrato={novoContrato} 
@@ -202,61 +166,25 @@ const NovoContrato = ({ setSnackbar }) => {
                     setErrors={setErrors}
                 />
 
-                <Dialog open={openConfirm} onClose={handleCloseConfirm} fullWidth>
-                    <DialogContent>
-                        <DialogContentText sx={{ mt: '1rem' }}>Confirma o envio do novo contrato?</DialogContentText>
-                    </DialogContent>
-                    <DialogActions>
-                        <Button sx={{ textTransform: 'none', color: (theme) => theme.palette.error.main }} onClick={handleCloseConfirm}>
-                            <CloseIcon fontSize="small" sx={{ mr: '0.2rem' }} /> Não
-                        </Button>
-                        <Button sx={{ textTransform: 'none', color: (theme) => theme.palette.success.main }} onClick={handleClickEnviarFormulario}>
-                            {carregando
-                                ? <CircularProgress size={16} sx={{ mr: '0.4rem' }} />
-                                : <CheckIcon fontSize="small" sx={{ mr: '0.2rem' }} />
-                            }
-                            Sim
-                        </Button>
-                    </DialogActions>
-                </Dialog>
+                <DialogConfirm 
+                    openConfirm={openConfirm}
+                    handleCloseConfirm={handleCloseConfirm}
+                    handleClickEnviarFormulario={handleClickEnviarFormulario}
+                    acao="enviar"
+                    carregando={carregando}
+                />
 
-                <Dialog open={openConfirmSair} onClose={handleCloseConfirmSair} fullWidth>
-                    <DialogContent>
-                        <DialogContentText sx={{ mt: '1rem' }}>Tem certeza que deseja cancelar o envio do novo contrato e voltar à página principal?</DialogContentText>
-                    </DialogContent>
-                    <DialogActions>
-                        <Button sx={{ textTransform: 'none', color: (theme) => theme.palette.error.main }} onClick={handleCloseConfirmSair}>
-                            <CloseIcon fontSize="small" sx={{ mr: '0.2rem' }} /> Não
-                        </Button>
-                        <Link to="../principal">
-                            <Button sx={{ textTransform: 'none', color: (theme) => theme.palette.success.main }}>
-                                <CheckIcon fontSize="small" sx={{ mr: '0.2rem' }} /> Sim
-                            </Button>
-                        </Link>
-                    </DialogActions>
-                </Dialog>
+                <DialogConfirmSair 
+                    openConfirmSair={openConfirmSair}
+                    setOpenConfirmSair={setOpenConfirmSair}
+                    acao="enviar"
+                />
 
-                <Dialog 
-                    open={openErro.open} 
-                    onClose={() => { 
-                        setOpenErro({ ...openErro, open: false });
-                    }}
-                >
-                    <DialogContent>
-                        <DialogContentText sx={{ mt: '1rem' }}>
-                            <strong>Erro {openErro.status}:</strong> Não foi possível enviar o contrato. {openErro.status === 422 ? "Revise os dados informados e tente novamente" : ""}
-                        </DialogContentText>
-                    </DialogContent>
-                    <DialogActions>
-                        <Button 
-                            onClick={() => { 
-                                setOpenErro({ ...openErro, open: false });
-                            }} 
-                        >
-                            Ok
-                        </Button>
-                    </DialogActions>
-                </Dialog>
+                <DialogErroEnvio 
+                    openErro={openErro}
+                    setOpenErro={setOpenErro}
+                    acao="enviar"
+                />
             </Box>
         </Box>
     );
