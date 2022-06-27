@@ -7,7 +7,7 @@ import { Link } from 'react-router-dom';
 const PaginaNaoEncontrada = () => {
     return (
         <Box sx={{ display: 'flex', justifyContent: 'center' }}>
-            <Box sx={{ margin: '2rem 1rem', padding: '1rem', width: '100%', maxWidth: '1280px' }} component={Paper} elevation={5}>
+            <Box sx={{ margin: '2rem 1rem', padding: '1rem', width: '100%', maxWidth: '80rem' }} component={Paper} elevation={5}>
                     <Link to="/principal">
                         <Button sx={{ textTransform: 'none' }} size="large">
                             <ArrowBackIosIcon /> Voltar

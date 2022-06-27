@@ -71,7 +71,7 @@ const Header = (props) => {
     }
 
     return (
-        <Box sx={{ minHeight: '72px', mb: '1rem' }}>
+        <Box sx={{ minHeight: '4.5rem', mb: '1rem' }}>
             <Box component={'header'} className="header" sx={{ background: (theme) => theme.palette.primary.main }}>
                 <DialogLogout />
                 <Link to="../principal">
@@ -88,7 +88,7 @@ const Header = (props) => {
                             <Tooltip title="Sair" arrow>
                                 <IconButton sx={{ margin: '0 0.5rem' }} onClick={() => { handleLogout(); }}>
                                     {carregando
-                                        ? <CircularProgress size={24} sx={{ color: (theme) => theme.palette.color.main }} />
+                                        ? <CircularProgress size="1.5rem" sx={{ color: (theme) => theme.palette.color.main }} />
                                         : <LogoutIcon sx={{ color: (theme) => theme.palette.color.main }} />
                                     }
                                 </IconButton>

@@ -21,7 +21,7 @@ const ExecucaoFinanceira = (props) => {
                             <Box
                                 elevation={3}
                                 component={Paper}
-                                sx={{ padding: '1rem', margin: '0 1rem', minWidth: '180px' }}
+                                sx={{ padding: '1rem', margin: '0 1rem', minWidth: '11.25rem' }}
                                 key={index}
                             >
                                 <Divider

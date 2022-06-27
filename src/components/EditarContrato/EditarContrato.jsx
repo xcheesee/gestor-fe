@@ -198,7 +198,7 @@ const EditarContrato = ({ setSnackbar }) => {
                 display: 'flex',
                 flexDirection: 'column',
                 margin: '2rem 1rem',
-                maxWidth: '1280px'
+                maxWidth: '80rem'
             }}
         >
             <Box component={Paper} elevation={5}>

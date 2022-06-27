@@ -89,7 +89,7 @@ const Principal = ({ snackbar, setSnackbar }) => {
             <TableContainer component={Paper} elevation={3} sx={{ width: '100%', margin: '1rem auto 0 auto'}}>
                 <Table size="small">
                     <TableHead sx={{ background: (theme) => theme.palette.primary.main  }}>
-                        <TableRow sx={{ height: '61px' }}>
+                        <TableRow sx={{ height: '3.75rem' }}>
                             <TableCell sx={{ color: (theme) => theme.palette.color.main }} align="center">ID</TableCell>
                             <TableCell sx={{ color: (theme) => theme.palette.color.main }} align="center">Processo SEI</TableCell>
                             <TableCell sx={{ color: (theme) => theme.palette.color.main }} align="center">Credor</TableCell>
@@ -133,7 +133,7 @@ const Principal = ({ snackbar, setSnackbar }) => {
         <Box sx={{ padding: '0 1rem' }}>
 
             <Fade in={true} timeout={500}>
-                <Box sx={{ padding: '1rem', maxWidth: '1280px', margin: '2rem auto' }} component={Paper} elevation={5}>
+                <Box sx={{ padding: '1rem', maxWidth: '80rem', margin: '2rem auto' }} component={Paper} elevation={5}>
                     <Typography variant="h2" component="h1" sx={{ fontSize: '2rem' }}>Contratos vigentes</Typography>
 
                     <Box sx={{ display: 'flex', flexDirection: 'column', margin: '1rem' }}>

@@ -308,7 +308,7 @@ const DadosContrato = ({ snackbar, setSnackbar }) => {
             <Fade in={true} timeout={750}>
 
                 <Box sx={{ padding: '0 1rem' }}>
-                    <Box sx={{ padding: '1rem', maxWidth: '1280px', margin: '2rem auto' }} component={Paper} elevation={5}>
+                    <Box sx={{ padding: '1rem', maxWidth: '80rem', margin: '2rem auto' }} component={Paper} elevation={5}>
                     <Link to="/principal">
                         <Button sx={{ textTransform: 'none' }} size="large">
                             <ArrowBackIosIcon /> Voltar
@@ -347,7 +347,7 @@ const DadosContrato = ({ snackbar, setSnackbar }) => {
                                                         alignItems: 'flex-start', 
                                                         textAlign: 'left', 
                                                         textTransform: 'none',
-                                                        width: '180px'    
+                                                        width: '11.25rem'    
                                                     }} 
                                                     label={label}
                                                     {...a11yProps(index)} 
@@ -363,7 +363,7 @@ const DadosContrato = ({ snackbar, setSnackbar }) => {
                                                         alignItems: 'flex-start', 
                                                         textAlign: 'left', 
                                                         textTransform: 'none',
-                                                        width: '180px'
+                                                        width: '11.25rem'
                                                     }} 
                                                     label={label}
                                                     {...a11yProps(index)}

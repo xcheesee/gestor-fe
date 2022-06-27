@@ -6,12 +6,6 @@
 .login {
     display: flex;
     flex-direction: column;
-    max-width: 720px;
+    max-width: 45rem;
     margin: 0 1rem;
-}
-
-@media screen and (max-height: 744px) {
-    .login {
-        max-width: 1280px;
-    }
 }
