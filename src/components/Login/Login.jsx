@@ -98,6 +98,7 @@ const Login = () => {
     }
 
     const handleClickMostraSenha = (e) => {
+        e.preventDefault();
         setMostraSenha(!mostraSenha);
     }
 
@@ -145,7 +146,7 @@ const Login = () => {
                             error={error.error}
                             helperText={error.helperText}
                             onKeyDown={(e) => {
-                                if (e.key === 'Enter') {
+                                if (e.key === 'Enter' && e.target.type !== 'button') {
                                     handleClickEntrar();
                                 }
                             }}
