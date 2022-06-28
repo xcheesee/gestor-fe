@@ -220,6 +220,7 @@ const DadosContrato = ({ snackbar, setSnackbar }) => {
         const options = {
             headers: {
                 'Content-Type': 'application/json',
+                'Accept': 'application/json',
                 'Authorization': `Bearer ${token}`
             },
             method: 'GET'
@@ -309,9 +310,8 @@ const DadosContrato = ({ snackbar, setSnackbar }) => {
             </Backdrop>
             
             <Fade in={true} timeout={750}>
-
                 <Box sx={{ padding: '0 1rem' }}>
-                    <Box sx={{ padding: '1rem', maxWidth: '80rem', margin: '2rem auto' }} component={Paper} elevation={5}>
+                    <Box sx={{ padding: '1rem', maxWidth: '80rem', margin: '2rem auto', boxSizing: 'border-box' }} component={Paper} elevation={5}>
                     <Link to="/principal">
                         <Button sx={{ textTransform: 'none' }} size="large">
                             <ArrowBackIosIcon /> Voltar

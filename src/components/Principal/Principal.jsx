@@ -47,6 +47,7 @@ const Principal = ({ snackbar, setSnackbar }) => {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
+                'Accept': 'application/json',
                 'Authorization': `Bearer ${token}`
             },
         }
@@ -55,6 +56,7 @@ const Principal = ({ snackbar, setSnackbar }) => {
             .then(res => {
                 if (res.status === 401) {
                     localStorage.removeItem('access_token');
+                    document.location.reload();
                 } else {
                     return res.json()
                         .then(data => {
@@ -135,7 +137,7 @@ const Principal = ({ snackbar, setSnackbar }) => {
     return (
         <Box sx={{ padding: '0 1rem' }}>
             <Fade in={true} timeout={500}>
-                <Box sx={{ padding: '1rem', maxWidth: '80rem', margin: '2rem auto' }} component={Paper} elevation={5}>
+                <Box sx={{ padding: '1rem', maxWidth: '80rem', margin: '2rem auto', boxSizing: 'border-box' }} component={Paper} elevation={5}>
                     <Typography variant="h2" component="h1" sx={{ fontSize: '2rem' }}>Contratos vigentes</Typography>
                     <Box sx={{ display: 'flex', flexDirection: 'column', margin: '1rem' }}>
                         <Box>

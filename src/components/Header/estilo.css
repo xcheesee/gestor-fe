@@ -4,9 +4,10 @@
     box-sizing: border-box;
     display: flex;
     justify-content: space-between;
-    min-height: 4.5rem;
-    padding: 1rem;
-    position: fixed;
+    margin-bottom: 1rem;
+    min-height: 2.5rem;
+    padding: 0.5rem;
+    position: sticky;
     top: 0;
     width: 100%;
     z-index: 99;

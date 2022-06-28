@@ -105,7 +105,7 @@ const Login = () => {
     return (
         <Box className="login__container">
             <Fade in={true}>
-                <Paper sx={{ padding: '1rem' }} className="login" elevation={3}>
+                <Paper sx={{ padding: '1rem' }} className="login" elevation={5}>
                     <Typography variant="h2" component="h1" sx={{ fontSize: '2rem' }}>Entrar</Typography>
 
                     <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-around', padding: '1rem 1rem 0 1rem' }}>
