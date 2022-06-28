@@ -77,7 +77,7 @@ const Header = (props) => {
     return (
         <Box component={'header'} className="header" sx={{ background: (theme) => theme.palette.primary.main }}>
             <DialogLogout />
-            <Link to="../principal">
+            <Link to={location.pathname === "/" ? "/" : "../principal"}>
                 <Typography 
                     variant="h1" 
                     className="header__titulo" 
