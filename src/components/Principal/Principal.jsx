@@ -19,7 +19,7 @@ import {
 import TuneIcon from '@mui/icons-material/Tune';
 import ManageSearchIcon from '@mui/icons-material/ManageSearch';
 import AddIcon from '@mui/icons-material/Add';
-import { useNavigate, Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 import CampoData from '../CampoData';
 
 const Principal = ({ snackbar, setSnackbar }) => {
@@ -27,11 +27,6 @@ const Principal = ({ snackbar, setSnackbar }) => {
     const [metaDados, setMetaDados] = useState({});
     const [estaCarregado, setEstaCarregado] = useState(false);
     const [page, setPage] = useState(1);
-    
-    const navigate = useNavigate();
-    const handleClickVerContrato = (event, numContrato) => {
-        navigate(`../contrato/${numContrato}`, { replace: true });
-    }
 
     const irParaTopo = () => {
         window.scrollTo(0, 0);
@@ -57,12 +52,18 @@ const Principal = ({ snackbar, setSnackbar }) => {
         }
         
         fetch(url, options)
-        .then(res => res.json())
-        .then(data => {
-            setEstaCarregado(true);
-            setDados(data.data);
-            setMetaDados(data.meta);
-        })
+            .then(res => {
+                if (res.status === 401) {
+                    localStorage.removeItem('access_token');
+                } else {
+                    return res.json()
+                        .then(data => {
+                            setEstaCarregado(true);
+                            setDados(data.data);
+                            setMetaDados(data.meta);
+                        });
+                }
+            });
 
         setSnackbar({...snackbar, open: false});
         
@@ -116,9 +117,11 @@ const Principal = ({ snackbar, setSnackbar }) => {
                                     <TableCell align="center" sx={background}>{row.data_inicio_vigencia}</TableCell>
                                     <TableCell align="center" sx={background}>{row.data_vencimento === null ? "- - -" : row.data_vencimento}</TableCell>
                                     <TableCell align="center" sx={background}>
-                                        <IconButton onClick={(e) => { handleClickVerContrato(e, row.id); irParaTopo(); }}>
-                                            <ManageSearchIcon />
-                                        </IconButton>
+                                        <Link to={`../contrato/${row.id}`}>
+                                            <IconButton onClick={irParaTopo}>
+                                                <ManageSearchIcon />
+                                            </IconButton>
+                                        </Link>
                                     </TableCell>
                                 </TableRow>
                             );
@@ -131,11 +134,9 @@ const Principal = ({ snackbar, setSnackbar }) => {
 
     return (
         <Box sx={{ padding: '0 1rem' }}>
-
             <Fade in={true} timeout={500}>
                 <Box sx={{ padding: '1rem', maxWidth: '80rem', margin: '2rem auto' }} component={Paper} elevation={5}>
                     <Typography variant="h2" component="h1" sx={{ fontSize: '2rem' }}>Contratos vigentes</Typography>
-
                     <Box sx={{ display: 'flex', flexDirection: 'column', margin: '1rem' }}>
                         <Box>
                             <TextField 

@@ -16,7 +16,7 @@ const PaginaNaoEncontrada = () => {
                 <Fade in={true} timeout={800}>
                     <Box>
                         <Box sx={{ display: 'flex', justifyContent: 'center', padding: '2rem' }}>
-                            <img src={Img404} alt="Erro 404" width="400" />
+                            <img src={Img404} alt="Erro 404" style={{ width: '22rem' }} />
                         </Box>
                         <Typography sx={{ textAlign: 'center', margin: '2rem' }} variant="h2">Erro 404</Typography>
                         <Typography sx={{ textAlign: 'center', margin: '2rem', fontSize: '2.5rem', fontWeight: 'light' }}>Página não encontrada</Typography>

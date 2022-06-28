@@ -139,7 +139,7 @@ const FormNovoContrato = (props) => {
                         <CircularProgress 
                             size={20} 
                             sx={{ 
-                                margin: '1rem',
+                                margin: '1rem auto',
                                 position: 'absolute',
                                 left: '50%',
                                 top: '3%'

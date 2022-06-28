@@ -229,13 +229,16 @@ const DadosContrato = ({ snackbar, setSnackbar }) => {
         .then(res => {
             if (res.status === 404) {
                 navigate("../404", { replace: true });
+            } else if (res.status === 401) {
+                localStorage.removeItem('access_token');
+                navigate("../principal", { replace: true });
             } else {
-                return res.json();
+                return res.json()
+                    .then(data => {
+                        setEstaCarregado(true);
+                        setDados(data.data);
+                    })
             }
-        })
-        .then(data => {
-            setEstaCarregado(true);
-            setDados(data.data);
         })
 
         fetch(`${url}/certidoes/${numContrato}`, options)

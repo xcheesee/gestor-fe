@@ -22,7 +22,7 @@ const Auth = (props) => {
         return (
             <Dialog open={true} fullWidth>
                 <DialogTitle>
-                    Não autorizado
+                    Sessão expirada
                 </DialogTitle>
                 <DialogContent>
                     <DialogContentText>
