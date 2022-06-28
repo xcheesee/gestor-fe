@@ -62,7 +62,7 @@ const ListaRecOrcamentario = (props) => {
 
     const excluiRecOrcamentario = (id) => {
         const url = `${process.env.REACT_APP_API_URL}/recursoorcamentario/${id}`;
-        const token = sessionStorage.getItem('access_token');
+        const token = localStorage.getItem('access_token');
         const options = {
             method: 'DELETE',
             headers: {
@@ -115,7 +115,7 @@ const ListaRecOrcamentario = (props) => {
 
     const editaRecOrcamentario = (id, formRecOrcamentarioEdit) => {
         const url = `${process.env.REACT_APP_API_URL}/recursoorcamentario/${id}`;
-        const token = sessionStorage.getItem('access_token');
+        const token = localStorage.getItem('access_token');
         const options = {
             method: 'PUT',
             headers: {
@@ -176,7 +176,7 @@ const ListaRecOrcamentario = (props) => {
 
     const enviaRecOrcamentario = () => {
         const url = `${process.env.REACT_APP_API_URL}/recursoorcamentario`;
-        const token = sessionStorage.getItem('access_token');
+        const token = localStorage.getItem('access_token');
         const options = {
             method: 'POST',
             headers: {

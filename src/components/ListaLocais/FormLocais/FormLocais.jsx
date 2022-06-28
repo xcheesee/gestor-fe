@@ -48,7 +48,7 @@ const FormLocais = (props) => {
     useEffect(() => {
         const urlSubpref = `${process.env.REACT_APP_API_URL}/subprefeituras/${formLocal.regiao}`;
         const urlDistrito = `${process.env.REACT_APP_API_URL}/distritos/${formLocal.subprefeitura_id}`;
-        const token = sessionStorage.getItem('access_token');
+        const token = localStorage.getItem('access_token');
         const options = {
             method: 'GET',
             headers: {
@@ -110,7 +110,7 @@ const FormLocais = (props) => {
         setRegiao(valor);
 
         const url = `${process.env.REACT_APP_API_URL}/subprefeituras/${valor}`;
-        const token = sessionStorage.getItem('access_token');
+        const token = localStorage.getItem('access_token');
         const options = {
             method: 'GET',
             headers: {
@@ -148,7 +148,7 @@ const FormLocais = (props) => {
         });
 
         const url = `${process.env.REACT_APP_API_URL}/distritos/${valor}`;
-        const token = sessionStorage.getItem('access_token');
+        const token = localStorage.getItem('access_token');
         const options = {
             method: 'GET',
             headers: {

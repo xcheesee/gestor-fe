@@ -73,7 +73,7 @@ const ListaLocais = (props) => {
 
     const excluiLocal = (id) => {
         const url = `${process.env.REACT_APP_API_URL}/servicolocal/${id}`;
-        const token = sessionStorage.getItem('access_token');
+        const token = localStorage.getItem('access_token');
         const options = {
             method: 'DELETE',
             headers: {
@@ -127,7 +127,7 @@ const ListaLocais = (props) => {
 
     const editaLocal = (id, formLocalEdit) => {
         const url = `${process.env.REACT_APP_API_URL}/servicolocal/${id}`;
-        const token = sessionStorage.getItem('access_token');
+        const token = localStorage.getItem('access_token');
         const options = {
             method: 'PUT',
             headers: {
@@ -184,7 +184,7 @@ const ListaLocais = (props) => {
 
     const enviaLocal = (form) => {
         const url = `${process.env.REACT_APP_API_URL}/servicolocal`;
-        const token = sessionStorage.getItem('access_token');
+        const token = localStorage.getItem('access_token');
         const options = {
             method: 'POST',
             headers: {

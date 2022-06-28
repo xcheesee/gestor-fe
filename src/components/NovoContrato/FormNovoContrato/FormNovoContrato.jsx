@@ -38,7 +38,7 @@ const FormNovoContrato = (props) => {
     
     useEffect(() => {
         const url = `${process.env.REACT_APP_API_URL}/tipocontratacoes`;
-        const token = sessionStorage.getItem('access_token');
+        const token = localStorage.getItem('access_token');
         const options = {
             method: 'GET',
             headers: {

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import './estilo.css';
 import { 
     Paper, 
@@ -38,6 +38,12 @@ const Login = () => {
 
     const navigate = useNavigate();
 
+    useEffect(() => {
+        if (localStorage.getItem('access_token')) {
+            navigate("../principal", { replace: true });
+        }
+    }, []);
+
     const handleChange = (e) => {
         setError({
             error: false,
@@ -71,8 +77,8 @@ const Login = () => {
             .then(res => res.json())
             .then((data) => {
                 if (data.access_token) {
-                    sessionStorage.setItem('access_token', data.access_token);
-                    sessionStorage.setItem('username', data.username);
+                    localStorage.setItem('access_token', data.access_token);
+                    localStorage.setItem('username', data.username);
                     navigate("../principal", { replace: true });
                 } else {
                     setError({

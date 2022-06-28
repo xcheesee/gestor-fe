@@ -24,14 +24,14 @@ const Header = (props) => {
     const navigate = useNavigate();
     const location = useLocation();
 
-    const username = sessionStorage.getItem('username');
+    const username = localStorage.getItem('username');
 
     const handleClickConfirma = () => {
         navigate("../", { replace: true }); 
         setOpen(false); 
         setCarregando(false); 
-        sessionStorage.removeItem('access_token');
-        sessionStorage.removeItem('username');
+        localStorage.removeItem('access_token');
+        localStorage.removeItem('username');
     }
 
     const DialogLogout = () => {
@@ -57,7 +57,7 @@ const Header = (props) => {
             headers: {
                 'Content-Type': 'application/json',
                 'Accept': 'application/json',
-                'Authorization': `Bearer ${sessionStorage.getItem('access_token')}`
+                'Authorization': `Bearer ${localStorage.getItem('access_token')}`
             }
         }
         
@@ -77,7 +77,7 @@ const Header = (props) => {
                 <Link to="../principal">
                     <Typography variant="h1" className="header__titulo" sx={{ fontSize: '1.5rem', margin: '0 0.5rem', padding: '0 0.5rem', color: (theme) => theme.palette.color.main }}>Sisgecon</Typography>
                 </Link>
-                {location.pathname !== "/" && sessionStorage.getItem('access_token')
+                {location.pathname !== "/" && localStorage.getItem('access_token')
                     ? 
                     <Fade in={true} timeout={500}>
                         <Box>

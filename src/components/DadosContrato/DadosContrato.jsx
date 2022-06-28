@@ -216,7 +216,7 @@ const DadosContrato = ({ snackbar, setSnackbar }) => {
 
     useEffect(() => {
         const url = `${process.env.REACT_APP_API_URL}`
-        const token = sessionStorage.getItem('access_token');
+        const token = localStorage.getItem('access_token');
         const options = {
             headers: {
                 'Content-Type': 'application/json',

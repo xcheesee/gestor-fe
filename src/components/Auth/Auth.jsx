@@ -16,8 +16,8 @@ const Auth = (props) => {
         navigate("../", { replace: true });
     }
 
-    if (sessionStorage.getItem('access_token')) {
-        return props.children
+    if (localStorage.getItem('access_token')) {
+        return props.children;
     } else {
         return (
             <Dialog open={true} fullWidth>

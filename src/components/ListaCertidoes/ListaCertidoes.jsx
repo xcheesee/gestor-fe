@@ -60,7 +60,7 @@ const ListaCertidoes = (props) => {
 
     const excluiCertidao = (id) => {
         const url = `${process.env.REACT_APP_API_URL}/certidao/${id}`;
-        const token = sessionStorage.getItem('access_token');
+        const token = localStorage.getItem('access_token');
         const options = {
             method: 'DELETE',
             headers: {
@@ -112,7 +112,7 @@ const ListaCertidoes = (props) => {
 
     const editaCertidao = (id, formCertidaoEdit) => {
         const url = `${process.env.REACT_APP_API_URL}/certidao/${id}`;
-        const token = sessionStorage.getItem('access_token');
+        const token = localStorage.getItem('access_token');
         const options = {
             method: 'PUT',
             headers: {
@@ -171,7 +171,7 @@ const ListaCertidoes = (props) => {
 
     const enviaCertidao = () => {
         const url = `${process.env.REACT_APP_API_URL}/certidao`;
-        const token = sessionStorage.getItem('access_token');
+        const token = localStorage.getItem('access_token');
         const options = {
             method: 'POST',
             headers: {

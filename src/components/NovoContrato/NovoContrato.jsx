@@ -94,7 +94,7 @@ const NovoContrato = ({ setSnackbar }) => {
 
         if (!error) {
             const url = `${process.env.REACT_APP_API_URL}/contrato`
-            const token = sessionStorage.getItem('access_token');
+            const token = localStorage.getItem('access_token');
             const options = {
                 method: 'post',
                 headers: {

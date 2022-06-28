@@ -73,7 +73,7 @@ const ListaGarantias = (props) => {
 
     const excluiGarantia = (id) => {
         const url = `${process.env.REACT_APP_API_URL}/garantia/${id}`;
-        const token = sessionStorage.getItem('access_token');
+        const token = localStorage.getItem('access_token');
         const options = {
             method: 'DELETE',
             headers: {
@@ -127,7 +127,7 @@ const ListaGarantias = (props) => {
 
     const editaGarantia = (id, formGarantiaEdit) => {
         const url = `${process.env.REACT_APP_API_URL}/garantia/${id}`
-        const token = sessionStorage.getItem('access_token');
+        const token = localStorage.getItem('access_token');
         const options = {
             method: 'PUT',
             headers: {
@@ -190,7 +190,7 @@ const ListaGarantias = (props) => {
 
     const enviaGarantia = () => {
         const url = `${process.env.REACT_APP_API_URL}/garantia/`
-        const token = sessionStorage.getItem('access_token');
+        const token = localStorage.getItem('access_token');
         const options = {
             method: 'POST',
             headers: {

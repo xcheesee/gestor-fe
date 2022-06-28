@@ -71,7 +71,7 @@ const ListaFiscalizacoes = (props) => {
 
     const excluiFiscalizacao = (id) => {
         const url = `${process.env.REACT_APP_API_URL}/gestaofiscalizacao/${id}`
-        const token = sessionStorage.getItem('access_token');
+        const token = localStorage.getItem('access_token');
         const option = {
             method: 'DELETE',
             headers: {
@@ -127,7 +127,7 @@ const ListaFiscalizacoes = (props) => {
 
     const editaFiscalizacao = (id, formFiscalizacaoEdit) => {
         const url = `${process.env.REACT_APP_API_URL}/gestaofiscalizacao/${id}`
-        const token = sessionStorage.getItem('access_token');
+        const token = localStorage.getItem('access_token');
         const options = {
             method: 'PUT',
             headers: {
@@ -194,7 +194,7 @@ const ListaFiscalizacoes = (props) => {
 
     const enviaFiscalizacao = () => {
         const url = `${process.env.REACT_APP_API_URL}/gestaofiscalizacao`
-        const token = sessionStorage.getItem('access_token');
+        const token = localStorage.getItem('access_token');
         const options = {
             method: 'POST',
             headers: {
