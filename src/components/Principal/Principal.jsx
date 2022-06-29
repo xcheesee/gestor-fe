@@ -210,7 +210,7 @@ const Principal = ({ snackbar, setSnackbar }) => {
                                         sx={{ color: (theme) => theme.palette.color.main, margin: '2rem 0', textTransform: 'none' }}
                                         onClick={irParaTopo}
                                     >
-                                        <AddIcon /> Novo contrato
+                                        <AddIcon sx={{ mr: '0.2rem' }} /> Novo contrato
                                     </Button>
                                 </Link>
                             </Box>

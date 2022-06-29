@@ -16,7 +16,7 @@ const HeaderFormulario = (props) => {
             variant="h5" 
             component="h1" 
             sx={{ 
-                padding: '1rem', 
+                padding: '0.5rem',
                 background: (theme) => theme.palette.primary.main,
                 color: (theme) => theme.palette.color.main,
                 borderTopLeftRadius: '3px',
