@@ -1,0 +1,217 @@
+import React, { useState } from 'react';
+import { 
+    Box,
+    Paper,
+    Fab,
+    Tabs,
+    Tab
+} from '@mui/material';
+import PropTypes from 'prop-types';
+import { Link } from 'react-router-dom';
+import EditIcon from '@mui/icons-material/Edit';
+
+const TabPanel = (props) => {
+    const { children, value, index, ...other } = props;
+
+    return (
+        <div
+            role="tabpanel"
+            hidden={value !== index}
+            id={`tab-${index}`}
+            aria-labelledby={`tab-${index}`}
+            {...other}
+        >
+            {value === index && (
+                <Box>
+                    {children}
+                </Box>
+            )}
+        </div>
+    );
+}
+
+TabPanel.propTypes = {
+    children: PropTypes.node,
+    index: PropTypes.number.isRequired,
+    value: PropTypes.number.isRequired,
+};
+
+const a11yProps = (index) => {
+    return {
+        id: `tab-${index}`,
+        'aria-controls': `tabpanel-${index}`,
+    };
+}
+
+const ListaDadosContrato = (props) => {
+    const {
+        formataCpfCnpj,
+        primeiraLetraMaiuscula,
+        formataData,
+        formataValores,
+        retornaCampoValor,
+        dados,
+        estaCarregado,
+        numContrato
+    } = props;
+
+    const [value, setValue] = useState(0);
+
+    const handleChange = (e, newValue) => {
+        setValue(newValue);
+    }
+
+    const TabContrato = (props) => {
+        const campos = [
+            "Processo SEI",
+            "Dotação Orçamentária",
+            "Credor",
+            "CPF/CNPJ",
+            "Tipo de contratação",
+            "Tipo de objeto",
+            "Objeto",
+            "Número do contrato",
+            "Data de assinatura",
+            "Valor do contrato",
+            "Data de início da vigência",
+            "Data de vencimento",
+            "Condição de pagamento",
+            "Prazo a partir de",
+            "Prazo máximo",
+            "Envio do Material Técnico",
+            "Minuta Edital",
+            "Abertura Certame",
+            "Data Homologação",
+            "Fonte do Recurso"
+        ];
+    
+        const valores = [
+            props.processo_sei,
+            props.dotacao_orcamentaria,
+            props.credor,
+            formataCpfCnpj(props.cnpj_cpf),
+            props.tipo_contratacao,
+            primeiraLetraMaiuscula(props.tipo_objeto),
+            props.objeto,
+            props.numero_contrato ,
+            formataData(props.data_assinatura),
+            formataValores(props.valor_contrato),
+            formataData(props.data_inicio_vigencia),
+            formataData(props.data_vencimento),
+            props.condicao_pagamento,
+            props.prazo_a_partir_de,
+            formataData(props.data_prazo_maximo),
+            formataData(props.envio_material_tecnico),
+            formataData(props.minuta_edital),
+            formataData(props.abertura_certame),
+            formataData(props.homologacao),
+            props.fonte_recurso
+        ];
+    
+        return retornaCampoValor(campos, valores, props.estaCarregado);
+    }
+
+    const TabProcessoContratacao = (props) => {
+        const campos = [
+            "Modelo de licitação",
+            "Envio de material técnico",
+            "Minuta edital",
+            "Abertura certame",
+            "Homologação"
+        ];
+
+        const valores = [
+            // props.licitacao_modelo,
+            "---",
+            formataData(props.envio_material_tecnico),
+            formataData(props.minuta_edital),
+            formataData(props.abertura_certame),
+            formataData(props.homologacao)
+        ];
+
+        return retornaCampoValor(campos, valores, props.estaCarregado);
+    }
+
+    return (
+        <Box component={Paper} elevation={3} sx={{ padding: '1rem', pt: 0 }}>
+            <Box sx={{ mb: '1rem' }}>
+                <Tabs value={value} onChange={handleChange}>
+                    <Tab label="Contrato" {...a11yProps(0)} sx={{ padding: '0 1rem', textTransform: 'none' }} />
+                    <Tab label="Processo de contratação" {...a11yProps(1)} sx={{ padding: '0 1rem', textTransform: 'none' }} />
+                </Tabs>
+            </Box>
+            
+            <TabPanel value={value} index={0}>
+                <TabContrato 
+                    processo_sei={dados.processo_sei}
+                    dotacao_orcamentaria={dados.dotacao_orcamentaria}
+                    credor={dados.credor}
+                    cnpj_cpf={dados.cnpj_cpf}
+                    tipo_contratacao={dados.tipo_contratacao}
+                    tipo_objeto={dados.tipo_objeto}
+                    objeto={dados.objeto}
+                    numero_contrato={dados.numero_contrato}
+                    data_assinatura={dados.data_assinatura}
+                    valor_contrato={dados.valor_contrato}
+                    data_inicio_vigencia={dados.data_inicio_vigencia}
+                    data_vencimento={dados.data_vencimento}
+                    condicao_pagamento={dados.condicao_pagamento}
+                    prazo_a_partir_de={dados.prazo_a_partir_de}
+                    data_prazo_maximo={dados.data_prazo_maximo}
+                    envio_material_tecnico={dados.envio_material_tecnico}
+                    minuta_edital={dados.minuta_edital}
+                    abertura_certame={dados.abertura_certame}
+                    homologacao={dados.homologacao}
+                    fonte_recurso={dados.fonte_recurso}
+                    estaCarregado={estaCarregado}
+                />
+
+                <Link to={`../contrato/${numContrato}/editar`}>
+                    <Fab 
+                        sx={{ 
+                            position: 'sticky', 
+                            bottom: '0px', 
+                            left: '100%',
+                            zIndex: '80',
+                            textTransform: 'none',
+                            borderRadius: '5px'
+                        }}
+                        color="primary"
+                        variant="extended"
+                    >
+                        <EditIcon sx={{ mr: '0.3rem' }} /> Editar contrato
+                    </Fab>
+                </Link>
+            </TabPanel>
+
+            <TabPanel value={value} index={1}>
+                <TabProcessoContratacao 
+                    licitacao_modelo={dados.licitacao_modelo}
+                    envio_material_tecnico={dados.envio_material_tecnico}
+                    minuta_edital={dados.minuta_edital}
+                    abertura_certame={dados.abertura_certame}
+                    homologacao={dados.homologacao}
+                    estaCarregado={estaCarregado}
+                />
+
+                    <Fab 
+                        sx={{ 
+                            position: 'sticky', 
+                            bottom: '0px', 
+                            left: '100%',
+                            zIndex: '80',
+                            textTransform: 'none',
+                            borderRadius: '5px'
+                        }}
+                        color="primary"
+                        variant="extended"
+                    >
+                        <EditIcon sx={{ mr: '0.3rem' }} /> Editar processo de contratação
+                    </Fab>
+            </TabPanel>
+
+        </Box>
+    );
+}
+
+export default ListaDadosContrato;

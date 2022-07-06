@@ -12,19 +12,16 @@ import {
     Fade,
     Snackbar,
     Alert,
-    Fab
 } from '@mui/material';
 import ExecucaoFinanceira from './ExecucaoFinanceira';
 import DadosEmpresa from './DadosEmpresa';
 import OutrasInformacoes from './OutrasInformacoes';
+import ListaDadosContrato from '../ListaDadosContrato';
 import ListaCertidoes from '../ListaCertidoes';
-import ListaGarantias from '../ListaGarantias/ListaGarantias';
+import ListaGarantias from '../ListaGarantias';
 import ListaFiscalizacao from '../ListaFiscalizacoes';
-import ListaRecOrcamentario from '../ListaRecOrcamentario';
 import ListaLocais from '../ListaLocais';
-import ListaAditamentos from '../ListaAdimentos';
 import PropTypes from 'prop-types';
-import EditIcon from '@mui/icons-material/Edit';
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { cpf, cnpj } from 'cpf-cnpj-validator';
@@ -119,18 +116,6 @@ const formataCpfCnpj = (cpfCnpj) => {
     }
 }
 
-const formataPorcentagem = (valor) => {
-    const porcentagem = new Intl.NumberFormat('pt-BR', {
-        style: "decimal"
-    });
-
-    if (valor === "") {
-        return "";
-    } else {
-        return `${porcentagem.format(valor)} %`;
-    }
-}
-
 const primeiraLetraMaiuscula = (string) => {
     if (typeof string === "string") {
         return string[0].toUpperCase() + string.substring(1);
@@ -139,65 +124,16 @@ const primeiraLetraMaiuscula = (string) => {
     }
 }
 
-const TabContrato = (props) => {
-    const campos = [
-        "Processo SEI",
-        "Dotação Orçamentária",
-        "Credor",
-        "CPF/CNPJ",
-        "Tipo de contratação",
-        "Tipo de objeto",
-        "Objeto",
-        "Número do contrato",
-        "Data de assinatura",
-        "Valor do contrato",
-        "Data de início da vigência",
-        "Data de vencimento",
-        "Condição de pagamento",
-        "Prazo a partir de",
-        "Prazo máximo",
-        "Envio do Material Técnico",
-        "Minuta Edital",
-        "Abertura Certame",
-        "Data Homologação",
-        "Fonte do Recurso"
-    ];
-
-    const valores = [
-        props.processo_sei,
-        props.dotacao_orcamentaria,
-        props.credor,
-        formataCpfCnpj(props.cnpj_cpf),
-        props.tipo_contratacao,
-        primeiraLetraMaiuscula(props.tipo_objeto),
-        props.objeto,
-        props.numero_contrato ,
-        formataData(props.data_assinatura),
-        formataValores(props.valor_contrato),
-        formataData(props.data_inicio_vigencia),
-        formataData(props.data_vencimento),
-        props.condicao_pagamento,
-        //`${props.prazo_contrato_meses} ${props.prazo_contrato_meses > 1 ? "meses" : "mês"}`,
-        props.prazo_a_partir_de,
-        formataData(props.data_prazo_maximo),
-        formataData(props.envio_material_tecnico),
-        formataData(props.minuta_edital),
-        formataData(props.abertura_certame),
-        formataData(props.homologacao),
-        props.fonte_recurso
-    ];
-
-    return retornaCampoValor(campos, valores, props.estaCarregado);
-}
-
 const ListaTabs = [
     'Contrato',
     'Certidões',
     'Garantias',
     'Fiscalização',
-    'Planejadas',
     'Locais de serviço',
-    'Aditamentos'
+    'Aditamentos de valor',
+    'Aditamentos de prazo',
+    'Notas de empenho',
+    'Dotações'
 ];
 
 const DadosContrato = ({ snackbar, setSnackbar }) => {
@@ -206,9 +142,7 @@ const DadosContrato = ({ snackbar, setSnackbar }) => {
     const [certidoes, setCertidoes] = useState([]);
     const [garantias, setGarantias] = useState([]);
     const [fiscalizacoes, setFiscalizacoes] = useState([]);
-    const [recOrcamentarios, setRecOrcamentarios] = useState([]);
     const [locais, setLocais] = useState([]);
-    const [aditamentos, setAditamentos] = useState([]);
     const [estaCarregado, setEstaCarregado] = useState(false);
     const { numContrato } = useParams();
     
@@ -260,25 +194,13 @@ const DadosContrato = ({ snackbar, setSnackbar }) => {
             setFiscalizacoes(data.data);
         })
 
-        /*fetch(`${url}/recursoorcamentarios/${numContrato}`, options)
-        .then(res => res.json())
-        .then(data => {
-            setRecOrcamentarios(data.data);
-        })*/
-
         fetch(`${url}/servicoslocais/${numContrato}`, options)
         .then(res => res.json())
         .then(data => {
             setLocais(data.data);
         })
 
-        fetch(`${url}/aditamentos/${numContrato}`, options)
-        .then(res => res.json())
-        .then(data => {
-            setAditamentos(data.data);
-        })
-
-    }, [numContrato, snackbar])
+    }, [numContrato, snackbar, navigate])
 
     const handleChange = (event, newValue) => {
         setValue(newValue);
@@ -381,48 +303,16 @@ const DadosContrato = ({ snackbar, setSnackbar }) => {
 
                                 <Box sx={{ width: '100%' }}>
                                     <TabPanel value={value} index={0}>
-                                        <Box component={Paper} elevation={3} sx={{ padding: '1rem' }}>
-                                            <TabContrato 
-                                                processo_sei={dados.processo_sei}
-                                                dotacao_orcamentaria={dados.dotacao_orcamentaria}
-                                                credor={dados.credor}
-                                                cnpj_cpf={dados.cnpj_cpf}
-                                                tipo_contratacao={dados.tipo_contratacao}
-                                                tipo_objeto={dados.tipo_objeto}
-                                                objeto={dados.objeto}
-                                                numero_contrato={dados.numero_contrato}
-                                                data_assinatura={dados.data_assinatura}
-                                                valor_contrato={dados.valor_contrato}
-                                                data_inicio_vigencia={dados.data_inicio_vigencia}
-                                                data_vencimento={dados.data_vencimento}
-                                                condicao_pagamento={dados.condicao_pagamento}
-                                                prazo_a_partir_de={dados.prazo_a_partir_de}
-                                                data_prazo_maximo={dados.data_prazo_maximo}
-                                                envio_material_tecnico={dados.envio_material_tecnico}
-                                                minuta_edital={dados.minuta_edital}
-                                                abertura_certame={dados.abertura_certame}
-                                                homologacao={dados.homologacao}
-                                                fonte_recurso={dados.fonte_recurso}
-                                                estaCarregado={estaCarregado}
-                                            />
-
-                                            <Link to={`../contrato/${numContrato}/editar`}>
-                                                <Fab 
-                                                    sx={{ 
-                                                        position: 'sticky', 
-                                                        bottom: '0px', 
-                                                        left: '100%',
-                                                        zIndex: '80',
-                                                        textTransform: 'none',
-                                                        borderRadius: '5px'
-                                                    }}
-                                                    color="primary"
-                                                    variant="extended"
-                                                >
-                                                    <EditIcon sx={{ mr: '0.3rem' }} /> Editar dados
-                                                </Fab>
-                                            </Link>
-                                        </Box>
+                                        <ListaDadosContrato 
+                                            formataCpfCnpj={formataCpfCnpj}
+                                            primeiraLetraMaiuscula={primeiraLetraMaiuscula}
+                                            formataData={formataData}
+                                            formataValores={formataValores}
+                                            retornaCampoValor={retornaCampoValor}
+                                            dados={dados}
+                                            estaCarregado={estaCarregado}
+                                            numContrato={numContrato}
+                                        />
                                     </TabPanel>
 
                                     <TabPanel value={value} index={1}>
@@ -462,17 +352,6 @@ const DadosContrato = ({ snackbar, setSnackbar }) => {
                                     </TabPanel>
 
                                     <TabPanel value={value} index={4}>
-                                        <ListaRecOrcamentario 
-                                            recOrcamentarios={recOrcamentarios}
-                                            estaCarregado={estaCarregado}
-                                            formataValores={formataValores}
-                                            retornaCampoValor={retornaCampoValor}
-                                            numContrato={numContrato}
-                                            setSnackbar={setSnackbar}
-                                        />
-                                    </TabPanel>
-
-                                    <TabPanel value={value} index={5}>
                                         <ListaLocais 
                                             locais={locais}
                                             estaCarregado={estaCarregado}
@@ -481,18 +360,29 @@ const DadosContrato = ({ snackbar, setSnackbar }) => {
                                             setSnackbar={setSnackbar}
                                         />
                                     </TabPanel>
-                                        
+                                    
+                                    <TabPanel value={value} index={5}>
+                                        {/*
+                                            Lista de Aditamentos de Valor
+                                        */}
+                                    </TabPanel>
+
                                     <TabPanel value={value} index={6}>
-                                        <ListaAditamentos 
-                                            aditamentos={aditamentos}
-                                            estaCarregado={estaCarregado}
-                                            formataValores={formataValores}
-                                            formataData={formataData}
-                                            formataPorcentagem={formataPorcentagem}
-                                            retornaCampoValor={retornaCampoValor}
-                                            numContrato={numContrato}
-                                            setSnackbar={setSnackbar}
-                                        />
+                                        {/*
+                                            Lista de Aditamentos de Prazo
+                                        */}
+                                    </TabPanel>
+
+                                    <TabPanel value={value} index={7}>
+                                        {/*
+                                            Lista de Notas de Empenho
+                                        */}
+                                    </TabPanel>
+
+                                    <TabPanel value={value} index={8}>
+                                        {/*
+                                            Lista de Dotações
+                                        */}
                                     </TabPanel>
                                 </Box>
                             </Box>
