@@ -1,21 +1,12 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { 
-    TextField, 
-    Typography, 
     Box, 
-    Divider, 
     Button,
-    FormControl,
-    InputLabel,
-    Select,
-    MenuItem,
-    FormHelperText,
-    CircularProgress
 } from '@mui/material';
-import CampoCpfCnpj from '../../CampoCpfCnpj';
-import CampoValores from '../../CampoValores';
-import CampoData from '../../CampoData';
-import CampoTelefone from '../../CampoTelefone';
+import BoxProcessoContratacao from './BoxProcessoContratacao';
+import BoxDadosContrato from './BoxDadosContrato';
+import BoxContatoEmpresa from './BoxContatoEmpresa';
+import BoxOutrasInformacoes from './BoxOutrasInformacoes';
 import CheckIcon from '@mui/icons-material/Check';
 import CloseIcon from '@mui/icons-material/Close';
 import * as EmailValidator from 'email-validator';
@@ -33,11 +24,31 @@ const FormNovoContrato = (props) => {
         setErrors
     } = props;
 
-    const [tipoContratacoes, setTipoContratacoes] = useState([]);
+    const [modelosLicitacao, setModelosLicitacao] = useState([]);
     const [carregando, setCarregando] = useState(true);
+    const [processoContratacao, setProcessoContratacao] = useState({
+        licitacao_modelo_id: formContrato.licitacao_modelo_id,
+        licitacao_modelo: formContrato.licitacao_modelo,
+        envio_material_tecnico: formContrato.envio_material_tecnico,
+        minuta_edital: formContrato.minuta_edital,
+        abertura_certame: formContrato.abertura_certame,
+        homologacao: formContrato.homologacao
+    });
+    const processo_sei = useRef(formContrato.processo_sei);
+    const dotacao_orcamentaria = useRef(formContrato.dotacao_orcamentaria);
+    const credor = useRef(formContrato.credor);
+    const [tipo_objeto, setTipo_objeto] = useState("");
+    const objeto = useRef(formContrato.objeto);
+    const numero_contrato = useRef(formContrato.numero_contrato);
+    const condicao_pagamento = useRef(formContrato.condicao_pagamento);
+    const prazo_a_partir_de = useRef(formContrato.prazo_a_partir_de);
+    const numero_nota_reserva = useRef(formContrato.numero_nota_reserva);
+    const nome_empresa = useRef(formContrato.nome_empresa);
+    const email_empresa = useRef(formContrato.email_empresa);
+    const outras_informacoes = useRef(formContrato.outras_informacoes);
     
     useEffect(() => {
-        const url = `${process.env.REACT_APP_API_URL}/tipocontratacoes`;
+        const url = `${process.env.REACT_APP_API_URL}/licitacaomodelos`;
         const token = localStorage.getItem('access_token');
         const options = {
             method: 'GET',
@@ -52,11 +63,11 @@ const FormNovoContrato = (props) => {
 
         fetch(url, options)
             .then(res => res.json())
-            .then(data => { 
+            .then(data => {
                 setCarregando(false);
-                setTipoContratacoes(data.data); 
+                setModelosLicitacao(data.data);
             });
-    }, [])
+    }, [setErrors])
 
     const handleClickOpenConfirm = () => {
         setOpenConfirm(true);
@@ -66,20 +77,20 @@ const FormNovoContrato = (props) => {
         setOpenConfirmSair(true);
     }
 
-    const handleInputChange = (event) => {
-        setFormContrato({
-            ...formContrato,
+    const handleChange = (event, form, setForm) => {
+        setForm({
+            ...form,
             [event.target.name]: event.target.value
         });
     }
 
-    const handleChangeTipoContrato = (event) => {
-        tipoContratacoes.map((tipoContratacao, index) => {
-            if (tipoContratacao.id === event.target.value) {
-                setFormContrato({
-                    ...formContrato,
-                    tipo_contratacao_id: event.target.value,
-                    tipo_contratacao: tipoContratacoes[index].nome
+    const handleChangeModeloLicitacao = (event, form, setForm) => {
+        modelosLicitacao.forEach((modeloLicitacao, index) => {
+            if (modeloLicitacao.id === event.target.value) {
+                setForm({
+                    ...form,
+                    licitacao_modelo_id: event.target.value,
+                    licitacao_modelo: modelosLicitacao[index].nome
                 });
             }
         });
@@ -100,393 +111,74 @@ const FormNovoContrato = (props) => {
         }
     }
 
+    const retornaValue = (ref) => {
+        return ref.current.childNodes[1].firstChild.value;
+    }
+    
+    const salvaFormulario = () => {
+        setFormContrato({
+            ...formContrato,
+            ...processoContratacao,
+            processo_sei: retornaValue(processo_sei),
+            dotacao_orcamentaria: retornaValue(dotacao_orcamentaria),
+            credor: retornaValue(credor),
+            tipo_objeto: tipo_objeto,
+            objeto: retornaValue(objeto),
+            numero_contrato: retornaValue(numero_contrato),
+            condicao_pagamento: retornaValue(condicao_pagamento),
+            prazo_a_partir_de: retornaValue(prazo_a_partir_de),
+            numero_nota_reserva: retornaValue(numero_nota_reserva),
+            nome_empresa: retornaValue(nome_empresa),
+            email_empresa: retornaValue(email_empresa),
+            outras_informacoes: retornaValue(outras_informacoes)
+        });
+    }
+
     return (
         <Box className="form">
             <Box className="form_formulario" component="form">
-                <Divider sx={{ mt: '1.5rem', mb: '1.25rem' }} textAlign="left"> 
-                    <Typography variant="h5" sx={{ fontWeight: 'light' }}>Dados do contrato</Typography> 
-                </Divider>
-
-                <FormControl 
-                    sx={{ margin: '1rem 0' }}
-                    error={errors.hasOwnProperty('tipo_contratacao')}    
-                    fullWidth 
-                >
-                    <InputLabel id="tipo_contratacao-label">Tipo de contratação</InputLabel>
-                    <Select
-                        labelId="tipo_contratacao-label"
-                        id="tipo_contratacao"
-                        label="Tipo de contratação"
-                        value={formContrato.tipo_contratacao_id === undefined ? "" : formContrato.tipo_contratacao_id}
-                        name="tipo_contratacao"
-                        onChange={handleChangeTipoContrato}
-                        disabled={tipoContratacoes.length === 0}
-                        fullWidth
-                    >
-                        <MenuItem value={""}>---</MenuItem>
-                        {tipoContratacoes.map((tipoContratacao, index) => {
-                            return (
-                                <MenuItem key={index} value={tipoContratacao.id}>{tipoContratacao.nome}</MenuItem>
-                            );
-                        })}
-                    </Select>
-                    <FormHelperText>
-                        {errors.hasOwnProperty('tipo_contratacao') ? errors.tipo_contratacao : " "}
-                    </FormHelperText>
-
-                    {carregando === true
-                        ? 
-                        <CircularProgress 
-                            size={20} 
-                            sx={{ 
-                                margin: '1rem auto',
-                                position: 'absolute',
-                                left: '50%',
-                                top: '3%'
-                            }} 
-                        />
-                        : ""
-                    }
-                </FormControl>
-
-                <TextField
-                    variant="outlined"
-                    value={formContrato.processo_sei}
-                    name="processo_sei"
-                    onChange={handleInputChange}
-                    className="form__campo"
-                    label="Processo SEI"
-                    sx={{ margin: '1rem 0' }}
-                    error={errors.hasOwnProperty('processo_sei')}
-                    helperText={errors.hasOwnProperty('processo_sei') ? errors.processo_sei : " "}
-                    required
-                    fullWidth
+                <BoxProcessoContratacao 
+                    errors={errors}
+                    processoContratacao={processoContratacao}
+                    setProcessoContratacao={setProcessoContratacao}
+                    handleChangeModeloLicitacao={handleChangeModeloLicitacao}
+                    modelosLicitacao={modelosLicitacao}
+                    carregando={carregando}
+                    handleChange={handleChange}
                 />
-
-                <TextField
-                    variant="outlined"
-                    value={formContrato.dotacao_orcamentaria}
-                    name="dotacao_orcamentaria"
-                    onChange={handleInputChange}
-                    className="form__campo"
-                    label="Dotação orçamentária"
-                    sx={{ margin: '1rem 0' }}
-                    error={errors.hasOwnProperty('dotacao_orcamentaria')}
-                    helperText={errors.hasOwnProperty('dotacao_orcamentaria') ? errors.dotacao_orcamentaria : " "}
-                    required
-                    fullWidth
-                />
-
-                <TextField
-                    variant="outlined"
-                    value={formContrato.credor}
-                    name="credor"
-                    onChange={handleInputChange}
-                    className="form__campo"
-                    label="Credor"
-                    sx={{ margin: '1rem 0' }}
-                    error={errors.hasOwnProperty('credor')}
-                    helperText={errors.hasOwnProperty('credor') ? errors.credor : " "}
-                    required
-                    fullWidth
-                />
-
-                <CampoCpfCnpj
-                    className="form__campo"
-                    formContrato={formContrato}
-                    setFormContrato={setFormContrato}
-                    setError={setError}
-                    error={errors.hasOwnProperty('cnpj_cpf')}
+                
+                <BoxDadosContrato 
                     errors={errors}
                     setErrors={setErrors}
-                    fullWidth
-                />
-
-                <FormControl 
-                    sx={{ margin: '1rem 0' }}
-                    error={errors.hasOwnProperty('tipo_contratacao')}
-                    fullWidth 
-                >
-                    <InputLabel id="tipo_objeto-label">Tipo de objeto</InputLabel>
-                    <Select
-                        labelId="tipo_objeto-label"
-                        id="tipo_objeto"
-                        label="Tipo de objeto"
-                        value={formContrato.tipo_objeto}
-                        name="tipo_objeto"
-                        onChange={handleInputChange}
-                        fullWidth
-                    >
-                        <MenuItem value={""}>---</MenuItem>
-                        <MenuItem value={"Obra"}>Obra</MenuItem>
-                        <MenuItem value={"Projeto"}>Projeto</MenuItem>
-                        <MenuItem value={"Serviço"}>Serviço</MenuItem>
-                        <MenuItem value={"Aquisição"}>Aquisição</MenuItem>
-                    </Select>
-                    <FormHelperText>
-                        {errors.hasOwnProperty('tipo_contratacao') ? errors.tipo_objeto : " "}
-                    </FormHelperText>
-                </FormControl>
-
-                <TextField
-                    variant="outlined"
-                    value={formContrato.objeto}
-                    name="objeto"
-                    onChange={handleInputChange}
-                    className="form__campo"
-                    label="Objeto"
-                    sx={{ margin: '1rem 0' }}
-                    error={errors.hasOwnProperty('objeto')}
-                    helperText={errors.hasOwnProperty('objeto') ? errors.objeto : " "}
-                    required
-                    fullWidth
-                />
-
-                <TextField
-                    variant="outlined"
-                    value={formContrato.numero_contrato}
-                    name="numero_contrato"
-                    onChange={handleInputChange}
-                    className="form__campo"
-                    label="Nº Contrato / Nota de Empenho Inicial"
-                    sx={{ margin: '1rem 0' }}
-                    error={error.hasOwnProperty('numero_contrato')}
-                    helperText={error.hasOwnProperty('numero_contrato') ? errors.numero_contrato : " "}
-                    required
-                    fullWidth
-                />
-
-                <CampoData
-                    className="form__campo"
-                    label="Data de assinatura"
-                    value={formContrato.data_assinatura}
-                    name="data_assinatura"
-                    onChange={handleInputChange}
-                    margin="1rem 0"
-                    error={errors.hasOwnProperty('data_assinatura')}
-                    helperText={errors.hasOwnProperty('data_assinatura') ? errors.data_assinatura : " "}
-                    fullWidth
-                />
-
-                <CampoValores
-                    index=""
-                    className="form__campo"
-                    label="Valor"
-                    value={formContrato.valor_contrato}
-                    state={formContrato}
-                    setState={setFormContrato}
-                    name="valor_contrato"
-                    onChange={(e) => { handleInputChange(e); }}
-                    checaErros={() => {}}
-                    error={errors.hasOwnProperty('valor_contrato.error')}
-                    helperText={errors.hasOwnProperty('valor_contrato.error') ? errors.valor_contrato : " "}
-                    required
-                    fullWidth
-                />
-
-                <CampoValores
-                    index=""
-                    className="form__campo"
-                    label="Valor mensal estimativo"
-                    value={formContrato.valor_mensal_estimativo}
-                    state={formContrato}
-                    setState={setFormContrato}
-                    name="valor_mensal_estimativo"
-                    onChange={(e) => { handleInputChange(e); }}
-                    checaErros={() => {}}
-                    error={errors.hasOwnProperty('valor_mensal_estimativo')}
-                    helperText={errors.hasOwnProperty('valor_mensal_estimativo') ? errors.valor_mensal_estimativo : " "}
-                    fullWidth
-                />
-
-                <CampoData
-                    className="form__campo"
-                    label="Início da Vigência"
-                    value={formContrato.data_inicio_vigencia}
-                    name="data_inicio_vigencia"
-                    onChange={handleInputChange}
-                    margin="1rem 0"
-                    error={errors.hasOwnProperty('data_inicio_vigencia')}
-                    helperText={errors.hasOwnProperty('data_inicio_vigencia') ? errors.data_inicio_vigencia : " "}
-                    required
-                    fullWidth
-                />
-
-                <CampoData
-                    className="form__campo"
-                    label="Data de vencimento"
-                    value={formContrato.data_vencimento}
-                    name="data_vencimento"
-                    onChange={handleInputChange}
-                    margin="1rem 0"
-                    error={errors.hasOwnProperty('data_vencimento')}
-                    helperText={errors.hasOwnProperty('data_vencimento') ? errors.data_vencimento : " "}
-                    fullWidth
-                />
-
-                <TextField
-                    variant="outlined"
-                    value={formContrato.condicao_pagamento}
-                    name="condicao_pagamento"
-                    onChange={handleInputChange}
-                    className="form__campo"
-                    label="Condição de Pagamento"
-                    sx={{ margin: '1rem 0' }}
-                    error={errors.hasOwnProperty('condicao_pagamento')}
-                    helperText={errors.hasOwnProperty('condicao_pagamento') ? errors.condicao_pagamento : "Ex: Em até 30 dias após o adimplemento."}
-                    required
-                    fullWidth
-                />
-
-                <TextField
-                    variant="outlined"
-                    value={formContrato.prazo_a_partir_de}
-                    name="prazo_a_partir_de"
-                    onChange={handleInputChange}
-                    className="form__campo"
-                    label="Prazo a partir de"
-                    sx={{ margin: '1rem 0' }}
-                    error={errors.hasOwnProperty('prazo_a_partir_de')}
-                    helperText={errors.hasOwnProperty('prazo_a_partir_de') ? errors.prazo_a_partir_de : "Ex: A contar da ordem de início; A partir da assinatura; A partir da ordem de fornecimento..."}
-                    fullWidth
-                />
-
-                <CampoData
-                    className="form__campo"
-                    label="Prazo Máximo Prorrogável"
-                    value={formContrato.data_prazo_maximo}
-                    name="data_prazo_maximo"
-                    onChange={handleInputChange}
-                    margin="1rem 0"
-                    error={errors.hasOwnProperty('data_prazo_maximo')}
-                    helperText={errors.hasOwnProperty('data_prazo_maximo') ? errors.data_prazo_maximo : " "}
-                    required
-                    fullWidth
-                />
-
-                <Divider sx={{ mb: '1.25rem' }} textAlign="left"> 
-                    <Typography variant="h5" sx={{ fontWeight: 'light' }}>Contato da empresa</Typography> 
-                </Divider>
-
-                <TextField
-                    variant="outlined"
-                    className="form__campo"
-                    label="Nome da empresa"
-                    value={formContrato.nome_empresa}
-                    name="nome_empresa"
-                    onChange={handleInputChange}
-                    sx={{ margin: '1rem 0' }}
-                    error={errors.hasOwnProperty('nome_empresa')}
-                    helperText={errors.hasOwnProperty('nome_empresa') ? errors.nome_empresa : " "}
-                    required
-                    fullWidth
-                />
-
-                <CampoTelefone 
-                    className="contrato-empresa__campo"
+                    error={error}
+                    setError={setError}
                     formContrato={formContrato}
                     setFormContrato={setFormContrato}
-                    error={errors.hasOwnProperty('telefone_empresa')}
-                    helperText={errors.hasOwnProperty('telefone_empresa') ? errors.telefone_empresa : " "}
-                    name="telefone_empresa"
+                    handleChange={handleChange}
+                    processo_sei={processo_sei}
+                    dotacao_orcamentaria={dotacao_orcamentaria}
+                    credor={credor}
+                    tipo_objeto={tipo_objeto}
+                    setTipo_objeto={setTipo_objeto}
+                    objeto={objeto}
+                    numero_contrato={numero_contrato}
+                    condicao_pagamento={condicao_pagamento}
+                    prazo_a_partir_de={prazo_a_partir_de}
+                    numero_nota_reserva={numero_nota_reserva}
                 />
-
-                <TextField
-                    variant="outlined"
-                    className="form__campo"
-                    label="E-mail da empresa"
-                    value={formContrato.email_empresa}
-                    name="email_empresa"
-                    onChange={handleInputChange}
-                    onBlur={checaErrosEmail}
-                    type="email"
-                    sx={{ margin: '1rem 0' }}
-                    error={errors.hasOwnProperty('email_empresa')}
-                    helperText={errors.hasOwnProperty('email_empresa') ? errors.email_empresa : " "}
-                    required
-                    fullWidth
+               
+                <BoxContatoEmpresa 
+                    errors={errors}
+                    formContrato={formContrato}
+                    setFormContrato={setFormContrato}
+                    nome_empresa={nome_empresa}
+                    email_empresa={email_empresa}
+                    checaErrosEmail={checaErrosEmail}
                 />
-
-                <Divider sx={{ mb: '1.25rem' }} textAlign="left"> 
-                    <Typography variant="h5" sx={{ fontWeight: 'light' }}>
-                        Outras informações
-                    </Typography> 
-                </Divider>
-
-                <TextField
-                    variant="outlined"
-                    multiline
-                    minRows={6}
-                    className="form__campo"
-                    label="Informações adicionais"
-                    value={formContrato.outras_informacoes}
-                    name="outras_informacoes"
-                    onChange={handleInputChange}
-                    sx={{ margin: '1rem 0' }}
-                    error={errors.hasOwnProperty('outras_informacoes')}
-                    helperText={errors.hasOwnProperty('outras_informacoes') ? errors.outras_informacoes : " "}
-                    fullWidth
-                />
-
-                <CampoData
-                    className="form__campo"
-                    label="Envio material técnico"
-                    value={formContrato.envio_material_tecnico}
-                    name="envio_material_tecnico"
-                    onChange={handleInputChange}
-                    margin="1rem 0"
-                    error={errors.hasOwnProperty('envio_material_tecnico')}
-                    helperText={errors.hasOwnProperty('envio_material_tecnico') ? errors.envio_material_tecnico : " "}
-                    fullWidth
-                />
-
-                <CampoData
-                    className="form__campo"
-                    label="Minuta edital"
-                    value={formContrato.minuta_edital}
-                    name="minuta_edital"
-                    onChange={handleInputChange}
-                    margin="1rem 0"
-                    error={errors.hasOwnProperty('minuta_edital')}
-                    helperText={errors.hasOwnProperty('minuta_edital') ? errors.minuta_edital : " "}
-                    fullWidth
-                />
-
-                <CampoData
-                    className="form__campo"
-                    label="Abertura certame"
-                    value={formContrato.abertura_certame}
-                    name="abertura_certame"
-                    onChange={handleInputChange}
-                    margin="1rem 0"
-                    error={errors.hasOwnProperty('abertura_certame')}
-                    helperText={errors.hasOwnProperty('abertura_certame') ? errors.abertura_certame : " "}
-                    fullWidth
-                />
-
-                <CampoData
-                    className="form__campo"
-                    label="Homolagação"
-                    value={formContrato.homologacao}
-                    name="homologacao"
-                    onChange={handleInputChange}
-                    margin="1rem 0"
-                    error={errors.hasOwnProperty('homologacao')}
-                    helperText={errors.hasOwnProperty('homologacao') ? errors.homologacao : " "}
-                    fullWidth
-                />
-
-                <TextField
-                    variant="outlined"
-                    className="form__campo"
-                    label="Fonte de recurso"
-                    value={formContrato.fonte_recurso}
-                    name="fonte_recurso"
-                    onChange={handleInputChange}
-                    sx={{ margin: '1rem 0' }}
-                    error={errors.hasOwnProperty('fonte_recurso')}
-                    helperText={errors.hasOwnProperty('fonte_recurso') ? errors.fonte_recurso : " "}
-                    fullWidth
+                
+                <BoxOutrasInformacoes 
+                    errors={errors}
+                    outras_informacoes={outras_informacoes}
                 />
             </Box>
 
@@ -501,7 +193,8 @@ const FormNovoContrato = (props) => {
                     variant="contained" 
                     sx={{ color: (theme) => theme.palette.color.main, textTransform: 'none' }} 
                     disabled={error}
-                    onClick={handleClickOpenConfirm}
+                    onMouseDown={salvaFormulario}
+                    onMouseUp={handleClickOpenConfirm}
                 >
                     <CheckIcon fontSize="small" sx={{ mr: '0.5rem' }} /> Salvar
                 </Button>

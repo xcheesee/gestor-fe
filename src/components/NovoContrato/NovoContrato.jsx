@@ -22,10 +22,15 @@ const NovoContrato = ({ setSnackbar }) => {
     });
     const [carregando, setCarregando] = useState(false);
     const [novoContrato, setNovoContrato] = useState({
-        tipo_contratacao: "",
+        licitacao_modelo_id: "",
+        licitacao_modelo: "",
+        envio_material_tecnico: "",
+        minuta_edital: "",
+        abertura_certame: "",
+        homologacao: "",
         processo_sei: "",
-        dotacao_orcamentaria: "",
         credor: "",
+        dotacao_orcamentaria: "",
         cnpj_cpf: "",
         tipo_objeto: "",
         objeto: "",
@@ -38,15 +43,12 @@ const NovoContrato = ({ setSnackbar }) => {
         condicao_pagamento: "",
         prazo_a_partir_de: "",
         data_prazo_maximo: "",
+        numero_nota_reserva: "",
+        valor_reserva: "",
         nome_empresa: "",
         telefone_empresa: "",
         email_empresa: "",
         outras_informacoes: "",
-        envio_material_tecnico: "",
-        minuta_edital: "",
-        abertura_certame: "",
-        homologacao: "",
-        fonte_recurso: "",
     });
 
     const navigate = useNavigate();
