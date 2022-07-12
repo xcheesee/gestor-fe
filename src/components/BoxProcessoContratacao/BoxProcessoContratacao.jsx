@@ -10,7 +10,7 @@ import {
     FormHelperText,
     CircularProgress,
 } from '@mui/material';
-import CampoData from '../../../CampoData';
+import CampoData from '../CampoData';
 
 const BoxProcessoContratacao = (props) => {
     const {
@@ -40,7 +40,7 @@ const BoxProcessoContratacao = (props) => {
                     id="licitacao_modelo"
                     label="Modelo de licitação"
                     value={processoContratacao.licitacao_modelo_id === undefined ? "" : processoContratacao.licitacao_modelo_id}
-                    name="licitacao_modelo"
+                    name="licitacao_modelo_id"
                     onChange={(e) => { handleChangeModeloLicitacao(e, processoContratacao, setProcessoContratacao) }}
                     disabled={modelosLicitacao.length === 0}
                     fullWidth

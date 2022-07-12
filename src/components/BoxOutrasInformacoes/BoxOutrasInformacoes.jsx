@@ -9,6 +9,7 @@ import {
 const BoxOutrasInformacoes = (props) => {
     const { 
         outras_informacoes,
+        formContrato,
         errors
      } = props;
 
@@ -26,7 +27,8 @@ const BoxOutrasInformacoes = (props) => {
                 minRows={6}
                 className="form__campo"
                 label="Informações adicionais"
-                ref={outras_informacoes}
+                inputRef={outras_informacoes}
+                defaultValue={formContrato.outras_informacoes}
                 name="outras_informacoes"
                 sx={{ margin: '1rem 0' }}
                 error={errors.hasOwnProperty('outras_informacoes')}

@@ -151,20 +151,6 @@ const ListaDadosContrato = (props) => {
                     data_prazo_maximo={dados.data_prazo_maximo}
                     numero_nota_reserva={dados.numero_nota_reserva}
                     valor_reserva={dados.valor_reserva}
-                    // "Processo SEI",
-                    // "Credor",
-                    // "CPF/CNPJ",
-                    // "Tipo de objeto",
-                    // "Objeto",
-                    // "Número do contrato",
-                    // "Data de assinatura",
-                    // "Valor do contrato",
-                    // "Valor mensal estimativo",
-                    // "Data de início da vigência",
-                    // "Data de vencimento",
-                    // "Condição de pagamento",
-                    // "Prazo a partir de",
-                    // "Prazo máximo"
                     envio_material_tecnico={dados.envio_material_tecnico}
                     minuta_edital={dados.minuta_edital}
                     abertura_certame={dados.abertura_certame}

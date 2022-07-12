@@ -5,7 +5,7 @@ import {
     Typography,
     TextField, 
 } from '@mui/material';
-import CampoTelefone from '../../../CampoTelefone';
+import CampoTelefone from '../CampoTelefone';
 
 const BoxContatoEmpresa = (props) => {
     const {
@@ -27,7 +27,8 @@ const BoxContatoEmpresa = (props) => {
                 variant="outlined"
                 className="form__campo"
                 label="Nome da empresa"
-                ref={nome_empresa}
+                inputRef={nome_empresa}
+                defaultValue={formContrato.nome_empresa}
                 name="nome_empresa"
                 sx={{ margin: '1rem 0' }}
                 error={errors.hasOwnProperty('nome_empresa')}
@@ -49,7 +50,8 @@ const BoxContatoEmpresa = (props) => {
                 variant="outlined"
                 className="form__campo"
                 label="E-mail da empresa"
-                ref={email_empresa}
+                inputRef={email_empresa}
+                defaultValue={formContrato.email_empresa}
                 name="email_empresa"
                 onBlur={checaErrosEmail}
                 type="email"

@@ -10,9 +10,9 @@ import {
     MenuItem,
     FormHelperText
 } from '@mui/material';
-import CampoCpfCnpj from '../../../CampoCpfCnpj';
-import CampoData from '../../../CampoData';
-import CampoValores from '../../../CampoValores';
+import CampoCpfCnpj from '../CampoCpfCnpj';
+import CampoData from '../CampoData';
+import CampoValores from '../CampoValores';
 
 const BoxDadosContrato = (props) => {
     const {
@@ -24,7 +24,6 @@ const BoxDadosContrato = (props) => {
         setFormContrato,
         handleChange,
         processo_sei,
-        dotacao_orcamentaria,
         credor,
         tipo_objeto,
         setTipo_objeto,
@@ -43,7 +42,8 @@ const BoxDadosContrato = (props) => {
 
             <TextField
                 variant="outlined"
-                ref={processo_sei}
+                inputRef={processo_sei}
+                defaultValue={formContrato.processo_sei}
                 name="processo_sei"
                 className="form__campo"
                 label="Processo SEI"
@@ -53,23 +53,11 @@ const BoxDadosContrato = (props) => {
                 required
                 fullWidth
             />
-
+            
             <TextField
                 variant="outlined"
-                ref={dotacao_orcamentaria}
-                name="dotacao_orcamentaria"
-                className="form__campo"
-                label="Dotação orçamentária"
-                sx={{ margin: '1rem 0' }}
-                error={errors.hasOwnProperty('dotacao_orcamentaria')}
-                helperText={errors.hasOwnProperty('dotacao_orcamentaria') ? errors.dotacao_orcamentaria : " "}
-                required
-                fullWidth
-            />
-
-            <TextField
-                variant="outlined"
-                ref={credor}
+                inputRef={credor}
+                defaultValue={formContrato.credor}
                 name="credor"
                 className="form__campo"
                 label="Credor"
@@ -107,10 +95,10 @@ const BoxDadosContrato = (props) => {
                     fullWidth
                 >
                     <MenuItem value={""}>---</MenuItem>
-                    <MenuItem value={"Obra"}>Obra</MenuItem>
-                    <MenuItem value={"Projeto"}>Projeto</MenuItem>
-                    <MenuItem value={"Serviço"}>Serviço</MenuItem>
-                    <MenuItem value={"Aquisição"}>Aquisição</MenuItem>
+                    <MenuItem value={"obra"}>Obra</MenuItem>
+                    <MenuItem value={"projeto"}>Projeto</MenuItem>
+                    <MenuItem value={"serviço"}>Serviço</MenuItem>
+                    <MenuItem value={"aquisição"}>Aquisição</MenuItem>
                 </Select>
                 <FormHelperText>
                     {errors.hasOwnProperty('tipo_contratacao') ? errors.tipo_objeto : " "}
@@ -119,7 +107,8 @@ const BoxDadosContrato = (props) => {
 
             <TextField
                 variant="outlined"
-                ref={objeto}
+                inputRef={objeto}
+                defaultValue={formContrato.objeto}
                 name="objeto"
                 className="form__campo"
                 label="Objeto"
@@ -132,7 +121,8 @@ const BoxDadosContrato = (props) => {
 
             <TextField
                 variant="outlined"
-                ref={numero_contrato}
+                inputRef={numero_contrato}
+                defaultValue={formContrato.numero_contrato}
                 name="numero_contrato"
                 className="form__campo"
                 label="Nº Contrato / Nota de Empenho Inicial"
@@ -213,7 +203,8 @@ const BoxDadosContrato = (props) => {
 
             <TextField
                 variant="outlined"
-                ref={condicao_pagamento}
+                inputRef={condicao_pagamento}
+                defaultValue={formContrato.condicao_pagamento}
                 name="condicao_pagamento"
                 className="form__campo"
                 label="Condição de Pagamento"
@@ -226,7 +217,8 @@ const BoxDadosContrato = (props) => {
 
             <TextField
                 variant="outlined"
-                ref={prazo_a_partir_de}
+                inputRef={prazo_a_partir_de}
+                defaultValue={formContrato.prazo_a_partir_de}
                 name="prazo_a_partir_de"
                 className="form__campo"
                 label="Prazo a partir de"
@@ -251,7 +243,8 @@ const BoxDadosContrato = (props) => {
 
             <TextField
                 variant="outlined"
-                ref={numero_nota_reserva}
+                inputRef={numero_nota_reserva}
+                defaultValue={formContrato.numero_nota_reserva}
                 name="numero_nota_reserva"
                 className="form__campo"
                 label="Número nota reserva"

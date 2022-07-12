@@ -3,10 +3,10 @@ import {
     Box, 
     Button,
 } from '@mui/material';
-import BoxProcessoContratacao from './BoxProcessoContratacao';
-import BoxDadosContrato from './BoxDadosContrato';
-import BoxContatoEmpresa from './BoxContatoEmpresa';
-import BoxOutrasInformacoes from './BoxOutrasInformacoes';
+import BoxProcessoContratacao from '../../BoxProcessoContratacao';
+import BoxDadosContrato from '../../BoxDadosContrato';
+import BoxContatoEmpresa from '../../BoxContatoEmpresa';
+import BoxOutrasInformacoes from '../../BoxOutrasInformacoes';
 import CheckIcon from '@mui/icons-material/Check';
 import CloseIcon from '@mui/icons-material/Close';
 import * as EmailValidator from 'email-validator';
@@ -35,7 +35,6 @@ const FormNovoContrato = (props) => {
         homologacao: formContrato.homologacao
     });
     const processo_sei = useRef(formContrato.processo_sei);
-    const dotacao_orcamentaria = useRef(formContrato.dotacao_orcamentaria);
     const credor = useRef(formContrato.credor);
     const [tipo_objeto, setTipo_objeto] = useState("");
     const objeto = useRef(formContrato.objeto);
@@ -110,27 +109,22 @@ const FormNovoContrato = (props) => {
             setError(true);
         }
     }
-
-    const retornaValue = (ref) => {
-        return ref.current.childNodes[1].firstChild.value;
-    }
     
     const salvaFormulario = () => {
         setFormContrato({
             ...formContrato,
             ...processoContratacao,
-            processo_sei: retornaValue(processo_sei),
-            dotacao_orcamentaria: retornaValue(dotacao_orcamentaria),
-            credor: retornaValue(credor),
+            processo_sei: processo_sei.current.value,
+            credor: credor.current.value,
             tipo_objeto: tipo_objeto,
-            objeto: retornaValue(objeto),
-            numero_contrato: retornaValue(numero_contrato),
-            condicao_pagamento: retornaValue(condicao_pagamento),
-            prazo_a_partir_de: retornaValue(prazo_a_partir_de),
-            numero_nota_reserva: retornaValue(numero_nota_reserva),
-            nome_empresa: retornaValue(nome_empresa),
-            email_empresa: retornaValue(email_empresa),
-            outras_informacoes: retornaValue(outras_informacoes)
+            objeto: objeto.current.value,
+            numero_contrato: numero_contrato.current.value,
+            condicao_pagamento: condicao_pagamento.current.value,
+            prazo_a_partir_de: prazo_a_partir_de.current.value,
+            numero_nota_reserva: numero_nota_reserva.current.value,
+            nome_empresa: nome_empresa.current.value,
+            email_empresa: email_empresa.current.value,
+            outras_informacoes: outras_informacoes.current.value
         });
     }
 
@@ -156,7 +150,6 @@ const FormNovoContrato = (props) => {
                     setFormContrato={setFormContrato}
                     handleChange={handleChange}
                     processo_sei={processo_sei}
-                    dotacao_orcamentaria={dotacao_orcamentaria}
                     credor={credor}
                     tipo_objeto={tipo_objeto}
                     setTipo_objeto={setTipo_objeto}
@@ -179,6 +172,7 @@ const FormNovoContrato = (props) => {
                 <BoxOutrasInformacoes 
                     errors={errors}
                     outras_informacoes={outras_informacoes}
+                    formContrato={formContrato}
                 />
             </Box>
 
