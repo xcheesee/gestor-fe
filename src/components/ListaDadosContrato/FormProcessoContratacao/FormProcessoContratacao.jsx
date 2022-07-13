@@ -53,6 +53,12 @@ const FormProcessoContratacao = (props) => {
                     licitacao_modelo_id: event.target.value,
                     licitacao_modelo: modelosLicitacao[index].nome
                 });
+            } else if (event.target.value === "") {
+                setForm({
+                    ...form,
+                    licitacao_modelo_id: "",
+                    licitacao_modelo: ""
+                })
             }
         });
     }
