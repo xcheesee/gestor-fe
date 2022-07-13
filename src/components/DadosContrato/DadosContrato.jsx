@@ -66,11 +66,9 @@ const retornaCampoValor = (campos, valores, estaCarregado) => {
                 return (
                     <Typography sx={{ margin: '1rem 0' }} key={index} component="span">
                         <strong>{campo}</strong>
-                        <Fade in={estaCarregado} timeout={250}>
-                            <Typography sx={{ margin: '0.5rem' }}>
-                                {valores[index] === "" || valores[index] === null || !estaCarregado ? "---" : valores[index]}
-                            </Typography>
-                        </Fade>
+                        <Typography sx={{ margin: '0.5rem' }}>
+                            {valores[index] === "" || valores[index] === null || !estaCarregado ? "---" : valores[index]}
+                        </Typography>
                     </Typography>
                 );
             })}
@@ -161,46 +159,49 @@ const DadosContrato = ({ snackbar, setSnackbar }) => {
         }
         
         fetch(`${url}/contrato/${numContrato}`, options)
-        .then(res => {
-            if (res.status === 404) {
-                navigate("../404", { replace: true });
-            } else if (res.status === 401) {
-                localStorage.removeItem('access_token');
-                navigate("../principal", { replace: true });
-            } else {
-                return res.json()
-                    .then(data => {
-                        setEstaCarregado(true);
-                        setDados(data.data);
-                    })
-            }
-        })
-
-        fetch(`${url}/certidoes/${numContrato}`, options)
-        .then(res => res.json())
-        .then(data => {
-            setCertidoes(data.data);
-        })
-
-        fetch(`${url}/garantias/${numContrato}`, options)
-        .then(res => res.json())
-        .then(data => {
-            setGarantias(data.data);
-        })
-
-        fetch(`${url}/gestaofiscalizacoes/${numContrato}`, options)
-        .then(res => res.json())
-        .then(data => {
-            setFiscalizacoes(data.data);
-        })
-
-        fetch(`${url}/servicoslocais/${numContrato}`, options)
-        .then(res => res.json())
-        .then(data => {
-            setLocais(data.data);
-        })
-
-    }, [numContrato, snackbar, navigate])
+            .then(res => {
+                if (res.status === 404) {
+                    navigate("../404", { replace: true });
+                } else if (res.status === 401) {
+                    localStorage.removeItem('access_token');
+                    navigate("../principal", { replace: true });
+                } else {
+                    return res.json()
+                        .then(data => {
+                            setDados(data.data);
+                        })
+                        .then(() => {
+                            fetch(`${url}/certidoes/${numContrato}`, options)
+                                .then(res => res.json())
+                                .then(data => {
+                                    setCertidoes(data.data);
+                            })
+                        })
+                        .then(() => {
+                            fetch(`${url}/garantias/${numContrato}`, options)
+                                .then(res => res.json())
+                                .then(data => {
+                                    setGarantias(data.data);
+                                })
+                        })
+                        .then(() => {
+                            fetch(`${url}/gestaofiscalizacoes/${numContrato}`, options)
+                                .then(res => res.json())
+                                .then(data => {
+                                    setFiscalizacoes(data.data);
+                                })
+                        })
+                        .then(() => {
+                            fetch(`${url}/servicoslocais/${numContrato}`, options)
+                                .then(res => res.json())
+                                .then(data => {
+                                    setLocais(data.data);
+                                    setEstaCarregado(true);
+                                })
+                        })
+                }
+            })
+    }, [numContrato, snackbar.open, navigate])
 
     const handleChange = (event, newValue) => {
         setValue(newValue);
@@ -312,6 +313,7 @@ const DadosContrato = ({ snackbar, setSnackbar }) => {
                                             dados={dados}
                                             estaCarregado={estaCarregado}
                                             numContrato={numContrato}
+                                            setSnackbar={setSnackbar}
                                         />
                                     </TabPanel>
 
