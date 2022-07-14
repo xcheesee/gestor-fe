@@ -4,6 +4,17 @@ import EditIcon from '@mui/icons-material/Edit';
 import FormDadosEmpresa from './FormDadosEmpresa/FormDadosEmpresa';
 
 const DadosEmpresa = (props) => {
+    const {
+        nome_empresa,
+        telefone_empresa,
+        email_empresa,
+        estaCarregado,
+        formContrato,
+        setFormContrato,
+        numContrato,
+        setSnackbar
+    } = props;
+
     const [openDadosEmpresa, setOpenDadosEmpresa] = useState(false);
 
     return (
@@ -38,27 +49,27 @@ const DadosEmpresa = (props) => {
                 >
                     <Typography sx={{ fontWeight: 'medium'}} component="span">
                         Nome
-                        <Fade in={props.estaCarregado} timeout={250}>
+                        <Fade in={estaCarregado} timeout={250}>
                             <Typography sx={{ padding: '0 1rem', mb: '0.5rem' }}>
-                                {props.nome_empresa}
+                                {nome_empresa}
                             </Typography>
                         </Fade>
                     </Typography>
 
                     <Typography sx={{ fontWeight: 'medium' }} component="span">
                         Telefone
-                        <Fade in={props.estaCarregado} timeout={250}>
+                        <Fade in={estaCarregado} timeout={250}>
                             <Typography sx={{ padding: '0 1rem', mb: '0.5rem' }}>
-                                {props.telefone_empresa}
+                                {telefone_empresa}
                             </Typography>
                         </Fade>
                     </Typography>
 
                     <Typography sx={{ fontWeight: 'medium' }} component="span">
                         E-mail
-                        <Fade in={props.estaCarregado} timeout={250}>
+                        <Fade in={estaCarregado} timeout={250}>
                             <Typography sx={{ padding: '0 1rem', mb: '0.5rem' }}>
-                                {props.email_empresa}
+                                {email_empresa}
                             </Typography>
                         </Fade>
                     </Typography>
@@ -74,12 +85,12 @@ const DadosEmpresa = (props) => {
             </Box>
 
             <FormDadosEmpresa 
-                formContrato={props.formContrato}
-                setFormContrato={props.setFormContrato}
-                numContrato={props.numContrato}
+                formContrato={formContrato}
+                setFormContrato={setFormContrato}
+                numContrato={numContrato}
                 openDadosEmpresa={openDadosEmpresa}
                 setOpenDadosEmpresa={setOpenDadosEmpresa}
-                setSnackbar={props.setSnackbar}
+                setSnackbar={setSnackbar}
             />
         </Box>
     );
