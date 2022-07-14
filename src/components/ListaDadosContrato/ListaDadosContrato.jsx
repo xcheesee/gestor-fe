@@ -6,9 +6,9 @@ import {
     Tabs,
     Tab,
 } from '@mui/material';
+import FormDadosContrato from './FormDadosContrato';
 import FormProcessoContratacao from './FormProcessoContratacao';
 import PropTypes from 'prop-types';
-import { Link } from 'react-router-dom';
 import EditIcon from '@mui/icons-material/Edit';
 
 const TabPanel = (props) => {
@@ -52,6 +52,7 @@ const ListaDadosContrato = (props) => {
         formataValores,
         retornaCampoValor,
         dados,
+        setDados,
         estaCarregado,
         numContrato,
         setSnackbar
@@ -60,6 +61,7 @@ const ListaDadosContrato = (props) => {
     const [value, setValue] = useState(0);
     const [modelosLicitacao, setModelosLicitacao] = useState([]);
     const [openProcCon, setOpenProcCon] = useState(false);
+    const [openDadosCon, setOpenDadosCon] = useState(false);
     const [carregando, setCarregando] = useState(false);
 
     useEffect(() => {
@@ -186,22 +188,31 @@ const ListaDadosContrato = (props) => {
                     estaCarregado={estaCarregado}
                 />
 
-                <Link to={`../contrato/${numContrato}/editar`}>
-                    <Fab 
-                        sx={{ 
-                            position: 'sticky', 
-                            bottom: '0px', 
-                            left: '100%',
-                            zIndex: '80',
-                            textTransform: 'none',
-                            borderRadius: '5px'
-                        }}
-                        color="primary"
-                        variant="extended"
-                    >
-                        <EditIcon sx={{ mr: '0.3rem' }} /> Editar contrato
-                    </Fab>
-                </Link>
+                <Fab 
+                    sx={{ 
+                        position: 'sticky', 
+                        bottom: '0px', 
+                        left: '100%',
+                        zIndex: '80',
+                        textTransform: 'none',
+                        borderRadius: '5px'
+                    }}
+                    color="primary"
+                    variant="extended"
+                    onClick={() => setOpenDadosCon(true)}
+                >
+                    <EditIcon sx={{ mr: '0.3rem' }} /> Editar contrato
+                </Fab>
+
+                <FormDadosContrato 
+                    formContrato={dados}
+                    setFormContrato={setDados}
+                    numContrato={numContrato}
+                    openDadosCon={openDadosCon}
+                    setOpenDadosCon={setOpenDadosCon}
+                    setSnackbar={setSnackbar}
+                    carregando={carregando}
+                />
             </TabPanel>
 
             <TabPanel value={value} index={1}>

@@ -10,16 +10,24 @@ const BoxOutrasInformacoes = (props) => {
     const { 
         outras_informacoes,
         formContrato,
-        errors
+        errors,
+        acao,
+        defaultValue
      } = props;
 
     return (
         <Box>
-            <Divider sx={{ mb: '1.25rem' }} textAlign="left"> 
-                <Typography variant="h5" sx={{ fontWeight: 'light' }}>
-                    Outras informações
-                </Typography> 
-            </Divider>
+            {
+            acao === 'editar'
+            ?
+                ""
+            :
+                <Divider sx={{ mb: '1.25rem' }} textAlign="left"> 
+                    <Typography variant="h5" sx={{ fontWeight: 'light' }}>
+                        Outras informações
+                    </Typography> 
+                </Divider>
+            }
 
             <TextField
                 variant="outlined"
@@ -28,7 +36,7 @@ const BoxOutrasInformacoes = (props) => {
                 className="form__campo"
                 label="Informações adicionais"
                 inputRef={outras_informacoes}
-                defaultValue={formContrato.outras_informacoes}
+                defaultValue={defaultValue ? defaultValue : formContrato.outras_informacoes}
                 name="outras_informacoes"
                 sx={{ margin: '1rem 0' }}
                 error={errors.hasOwnProperty('outras_informacoes')}

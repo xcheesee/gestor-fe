@@ -311,6 +311,7 @@ const DadosContrato = ({ snackbar, setSnackbar }) => {
                                             formataValores={formataValores}
                                             retornaCampoValor={retornaCampoValor}
                                             dados={dados}
+                                            setDados={setDados}
                                             estaCarregado={estaCarregado}
                                             numContrato={numContrato}
                                             setSnackbar={setSnackbar}
@@ -399,10 +400,18 @@ const DadosContrato = ({ snackbar, setSnackbar }) => {
                                 telefone_empresa={dados.telefone_empresa}
                                 email_empresa={dados.email_empresa}
                                 estaCarregado={estaCarregado}
+                                formContrato={dados}
+                                setFormContrato={setDados}
+                                numContrato={numContrato}
+                                setSnackbar={setSnackbar}
                             />
 
                             <OutrasInformacoes 
                                 outras_informacoes={dados.outras_informacoes}
+                                formContrato={dados}
+                                setFormContrato={setDados}
+                                numContrato={numContrato}
+                                setSnackbar={setSnackbar}
                             />
 
                         </Box>
