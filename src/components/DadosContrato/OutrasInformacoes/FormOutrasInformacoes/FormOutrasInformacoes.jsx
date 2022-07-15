@@ -25,7 +25,8 @@ const FormOutrasInformacoes = (props) => {
     const [errors, setErrors] = useState({});
     const [carregandoEnvio, setCarregandoEnvio] = useState(false);
     const [openConfirmacao, setOpenConfirmacao] = useState({
-        id: numContrato
+        id: numContrato,
+        open: false
     })
     const [infoAdicionaisEditado, setInfoAdicionaisEditado] = useState({});
     const outras_informacoes = useRef(null);
