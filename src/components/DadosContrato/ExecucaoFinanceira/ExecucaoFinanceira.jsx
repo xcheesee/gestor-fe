@@ -43,9 +43,30 @@ const ExecucaoFinanceira = (props) => {
                                 </Typography>
             
                                 <Typography sx={{ fontWeight: 'medium' }} component="span">
+                                    Contratado
+                                    <Typography sx={{ padding: '0 1rem', mb: '0.5rem' }}>
+                                        {props.formataValores(execucao_financeira[execucao].contratado)}
+                                    </Typography>
+                                </Typography>
+            
+                                <Typography sx={{ fontWeight: 'medium' }} component="span">
+                                    Empenhado
+                                    <Typography sx={{ padding: '0 1rem', mb: '0.5rem' }}>
+                                        {props.formataValores(execucao_financeira[execucao].empenhado)}
+                                    </Typography>
+                                </Typography>
+            
+                                <Typography sx={{ fontWeight: 'medium' }} component="span">
                                     Executado
                                     <Typography sx={{ padding: '0 1rem', mb: '0.5rem' }}>
                                         {props.formataValores(execucao_financeira[execucao].executado)}
+                                    </Typography>
+                                </Typography>
+            
+                                <Typography sx={{ fontWeight: 'medium' }} component="span">
+                                    Saldo
+                                    <Typography sx={{ padding: '0 1rem', mb: '0.5rem' }}>
+                                        {props.formataValores(execucao_financeira[execucao].saldo)}
                                     </Typography>
                                 </Typography>
                                 
