@@ -1,7 +1,18 @@
-import { Box, Typography, Paper } from '@mui/material';
-import React from 'react';
+import React, { useState } from 'react';
+import { Box, Typography, Paper, Tooltip, IconButton } from '@mui/material';
+import EditIcon from '@mui/icons-material/Edit';
+import FormOutrasInformacoes from './FormOutrasInformacoes';
 
 const OutrasInformacoes = (props) => {
+    const {
+        outras_informacoes,
+        formContrato,
+        numContrato,
+        setSnackbar
+    } = props;
+
+    const [openOutrasInformacoes, setOpenOutrasInformacoes] = useState(false);
+
     const formataInformacoes = (string) => {
         if (typeof string === "string") {
             return string.replaceAll("<br />", "\n");
@@ -16,13 +27,55 @@ const OutrasInformacoes = (props) => {
                 Outras informações
             </Typography>
 
-            <Box sx={{ width: '100%', margin: '2rem 0', padding: '0.1rem 0' }} component={Paper} elevation={5}>
-                <Box sx={{ border: '1px solid #cdcdcd', borderRadius: '3px', margin: '1rem' }}>
-                    <Typography sx={{ margin: '1rem', whiteSpace: 'pre-line' }} component="pre">
-                        {formataInformacoes(props.outras_informacoes)}
-                    </Typography>
+            <Box 
+                sx={{ 
+                    width: '100%', 
+                    margin: '2rem 0', 
+                    padding: '0.1rem 0',
+                    background: '#F8FAF8',
+                }} 
+                component={Paper} 
+                elevation={5}
+            >
+                <Box 
+                    sx={{ 
+                        margin: '1rem', 
+                        display: 'flex', 
+                        flexDirection: 'column', 
+                        alignItems: 'flex-start',
+                    }}
+                >
+                    <Box 
+                        sx={{ 
+                            border: '1px solid #cdcdcd', 
+                            borderRadius: '3px', 
+                            width: '100%', 
+                            boxSizing: 'border-box', 
+                            mb: '1rem',
+                            background: '#FFFFFF',
+                        }}
+                    >
+                        <Typography sx={{ margin: '1rem', whiteSpace: 'pre-line' }} component="pre">
+                            {formataInformacoes(outras_informacoes)}
+                        </Typography>
+                    </Box>
+
+                    <Tooltip title="Editar" sx={{ alignSelf: 'flex-end' }} arrow>
+                        <IconButton onClick={() => setOpenOutrasInformacoes(true)}>
+                            <EditIcon />
+                        </IconButton>
+                    </Tooltip>
                 </Box>
             </Box>
+
+            <FormOutrasInformacoes 
+                openOutrasInformacoes={openOutrasInformacoes}
+                setOpenOutrasInformacoes={setOpenOutrasInformacoes}
+                formContrato={formContrato}
+                numContrato={numContrato}
+                setSnackbar={setSnackbar}
+                formataInformacoes={formataInformacoes}
+            /> 
         </Box>
     );
 }

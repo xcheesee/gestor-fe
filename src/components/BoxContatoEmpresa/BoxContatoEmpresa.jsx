@@ -14,14 +14,21 @@ const BoxContatoEmpresa = (props) => {
         setFormContrato,
         nome_empresa,
         email_empresa,
-        checaErrosEmail
+        checaErrosEmail,
+        acao
     } = props;
 
     return (
         <Box>
-            <Divider sx={{ mb: '1.25rem' }} textAlign="left"> 
-                <Typography variant="h5" sx={{ fontWeight: 'light' }}>Contato da empresa</Typography> 
-            </Divider>
+            {
+            acao === "editar"
+            ?
+                ""
+            :
+                <Divider sx={{ mb: '1.25rem' }} textAlign="left"> 
+                    <Typography variant="h5" sx={{ fontWeight: 'light' }}>Contato da empresa</Typography> 
+                </Divider>
+            }
 
             <TextField
                 variant="outlined"

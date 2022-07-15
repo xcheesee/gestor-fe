@@ -20,14 +20,21 @@ const BoxProcessoContratacao = (props) => {
         handleChangeModeloLicitacao,
         modelosLicitacao,
         carregando,
-        handleChange
+        handleChange,
+        acao
     } = props;
 
     return (
         <Box>
-            <Divider sx={{ mt: '1.5rem', mb: '1.25rem' }} textAlign="left"> 
-                <Typography variant="h5" sx={{ fontWeight: 'light' }}>Processo de contratação</Typography> 
-            </Divider>
+            {
+            acao === "editar"
+                ?
+                    ""
+                :
+                    <Divider sx={{ mt: '1.5rem', mb: '1.25rem' }} textAlign="left"> 
+                        <Typography variant="h5" sx={{ fontWeight: 'light' }}>Processo de contratação</Typography> 
+                    </Divider>
+            }
 
             <FormControl 
                 sx={{ margin: '1rem 0' }}

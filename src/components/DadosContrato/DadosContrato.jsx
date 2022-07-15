@@ -21,6 +21,7 @@ import ListaCertidoes from '../ListaCertidoes';
 import ListaGarantias from '../ListaGarantias';
 import ListaFiscalizacao from '../ListaFiscalizacoes';
 import ListaLocais from '../ListaLocais';
+import ListaDotacoes from '../ListaDotacoes';
 import PropTypes from 'prop-types';
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import { useParams, useNavigate, Link } from 'react-router-dom';
@@ -38,7 +39,7 @@ const TabPanel = (props) => {
             {...other}
         >
             {value === index && (
-                <Box sx={{ p: 3, height: '480.1px', overflow: 'auto', background: '#F8FAF8'}}>
+                <Box sx={{ p: 3, height: '42rem', overflow: 'auto', background: '#F8FAF8'}}>
                     <Typography variant="h5">{children}</Typography>
                 </Box>
             )}
@@ -64,13 +65,11 @@ const retornaCampoValor = (campos, valores, estaCarregado) => {
         <Box sx={{ margin: '0 1rem' }}>
             {campos.map((campo, index) => {
                 return (
-                    <Typography sx={{ margin: '1rem 0' }} key={index} component="span">
+                    <Typography sx={{ margin: '1rem 0' }} key={index} component="pre">
                         <strong>{campo}</strong>
-                        <Fade in={estaCarregado} timeout={250}>
-                            <Typography sx={{ margin: '0.5rem' }}>
-                                {valores[index] === "" || valores[index] === null || !estaCarregado ? "---" : valores[index]}
-                            </Typography>
-                        </Fade>
+                        <Typography sx={{ margin: '0.5rem' }}>
+                            {valores[index] === "" || valores[index] === null || !estaCarregado ? "---" : valores[index]}
+                        </Typography>
                     </Typography>
                 );
             })}
@@ -143,6 +142,7 @@ const DadosContrato = ({ snackbar, setSnackbar }) => {
     const [garantias, setGarantias] = useState([]);
     const [fiscalizacoes, setFiscalizacoes] = useState([]);
     const [locais, setLocais] = useState([]);
+    const [dotacoes, setDotacoes] = useState([]);
     const [estaCarregado, setEstaCarregado] = useState(false);
     const { numContrato } = useParams();
     
@@ -161,46 +161,56 @@ const DadosContrato = ({ snackbar, setSnackbar }) => {
         }
         
         fetch(`${url}/contrato/${numContrato}`, options)
-        .then(res => {
-            if (res.status === 404) {
-                navigate("../404", { replace: true });
-            } else if (res.status === 401) {
-                localStorage.removeItem('access_token');
-                navigate("../principal", { replace: true });
-            } else {
-                return res.json()
-                    .then(data => {
-                        setEstaCarregado(true);
-                        setDados(data.data);
-                    })
-            }
-        })
-
-        fetch(`${url}/certidoes/${numContrato}`, options)
-        .then(res => res.json())
-        .then(data => {
-            setCertidoes(data.data);
-        })
-
-        fetch(`${url}/garantias/${numContrato}`, options)
-        .then(res => res.json())
-        .then(data => {
-            setGarantias(data.data);
-        })
-
-        fetch(`${url}/gestaofiscalizacoes/${numContrato}`, options)
-        .then(res => res.json())
-        .then(data => {
-            setFiscalizacoes(data.data);
-        })
-
-        fetch(`${url}/servicoslocais/${numContrato}`, options)
-        .then(res => res.json())
-        .then(data => {
-            setLocais(data.data);
-        })
-
-    }, [numContrato, snackbar, navigate])
+            .then(res => {
+                if (res.status === 404) {
+                    navigate("../404", { replace: true });
+                } else if (res.status === 401) {
+                    localStorage.removeItem('access_token');
+                    navigate("../principal", { replace: true });
+                } else {
+                    return res.json()
+                        .then(data => {
+                            setDados(data.data);
+                        })
+                        .then(() => {
+                            fetch(`${url}/certidoes/${numContrato}`, options)
+                                .then(res => res.json())
+                                .then(data => {
+                                    setCertidoes(data.data);
+                            })
+                        })
+                        .then(() => {
+                            fetch(`${url}/garantias/${numContrato}`, options)
+                                .then(res => res.json())
+                                .then(data => {
+                                    setGarantias(data.data);
+                                })
+                        })
+                        .then(() => {
+                            fetch(`${url}/gestaofiscalizacoes/${numContrato}`, options)
+                                .then(res => res.json())
+                                .then(data => {
+                                    setFiscalizacoes(data.data);
+                                })
+                        })
+                        .then(() => {
+                            fetch(`${url}/servicoslocais/${numContrato}`, options)
+                                .then(res => res.json())
+                                .then(data => {
+                                    setLocais(data.data);
+                                })
+                        })
+                        .then(() => {
+                            fetch(`${url}/dotacoes/${numContrato}`, options)
+                                .then(res => res.json())
+                                .then(data => {
+                                    setDotacoes(data.data);
+                                    setEstaCarregado(true);
+                                })
+                        })
+                }
+            })
+    }, [numContrato, snackbar.open, navigate])
 
     const handleChange = (event, newValue) => {
         setValue(newValue);
@@ -245,7 +255,7 @@ const DadosContrato = ({ snackbar, setSnackbar }) => {
                             </Typography>
 
                             <Box sx={{ display: 'flex', width: '100%', margin: '2rem 0' }} component={Paper} elevation={5}>
-                                <Box sx={{ display: 'flex'}}>
+                                <Box sx={{ display: 'flex' }}>
                                     <Tabs 
                                         orientation="vertical" 
                                         value={value} 
@@ -267,12 +277,12 @@ const DadosContrato = ({ snackbar, setSnackbar }) => {
                                                             background: (theme) => theme.palette.primary.main, 
                                                             color: (theme) => theme.palette.color.main, 
                                                             borderTopLeftRadius: '3px', 
-                                                            transition: '0.5s' 
+                                                            transition: '0.5s'
                                                         }, 
                                                         alignItems: 'flex-start', 
                                                         textAlign: 'left', 
                                                         textTransform: 'none',
-                                                        width: '11.25rem'    
+                                                        width: '11.25rem',
                                                     }} 
                                                     label={label}
                                                     {...a11yProps(index)} 
@@ -288,7 +298,7 @@ const DadosContrato = ({ snackbar, setSnackbar }) => {
                                                         alignItems: 'flex-start', 
                                                         textAlign: 'left', 
                                                         textTransform: 'none',
-                                                        width: '11.25rem'
+                                                        width: '11.25rem',
                                                     }} 
                                                     label={label}
                                                     {...a11yProps(index)}
@@ -310,8 +320,10 @@ const DadosContrato = ({ snackbar, setSnackbar }) => {
                                             formataValores={formataValores}
                                             retornaCampoValor={retornaCampoValor}
                                             dados={dados}
+                                            setDados={setDados}
                                             estaCarregado={estaCarregado}
                                             numContrato={numContrato}
+                                            setSnackbar={setSnackbar}
                                         />
                                     </TabPanel>
 
@@ -380,9 +392,12 @@ const DadosContrato = ({ snackbar, setSnackbar }) => {
                                     </TabPanel>
 
                                     <TabPanel value={value} index={8}>
-                                        {/*
-                                            Lista de Dotações
-                                        */}
+                                        <ListaDotacoes 
+                                            dotacoes={dotacoes}
+                                            estaCarregado={estaCarregado}
+                                            formataValores={formataValores}
+                                            retornaCampoValor={retornaCampoValor}
+                                        />
                                     </TabPanel>
                                 </Box>
                             </Box>
@@ -397,10 +412,18 @@ const DadosContrato = ({ snackbar, setSnackbar }) => {
                                 telefone_empresa={dados.telefone_empresa}
                                 email_empresa={dados.email_empresa}
                                 estaCarregado={estaCarregado}
+                                formContrato={dados}
+                                setFormContrato={setDados}
+                                numContrato={numContrato}
+                                setSnackbar={setSnackbar}
                             />
 
                             <OutrasInformacoes 
                                 outras_informacoes={dados.outras_informacoes}
+                                formContrato={dados}
+                                setFormContrato={setDados}
+                                numContrato={numContrato}
+                                setSnackbar={setSnackbar}
                             />
 
                         </Box>

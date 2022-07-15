@@ -110,7 +110,7 @@ const ListaCertidoes = (props) => {
         setAcao('editar');
     }
 
-    const editaCertidao = (id, formCertidaoEdit) => {
+    const editaCertidao = (e, formCertidaoEdit, id) => {
         const url = `${process.env.REACT_APP_API_URL}/certidao/${id}`;
         const token = localStorage.getItem('access_token');
         const options = {

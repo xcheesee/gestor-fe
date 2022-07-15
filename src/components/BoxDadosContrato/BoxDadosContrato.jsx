@@ -32,13 +32,20 @@ const BoxDadosContrato = (props) => {
         condicao_pagamento,
         prazo_a_partir_de,
         numero_nota_reserva,
+        acao
     } = props;
 
     return (
         <Box>
-            <Divider sx={{ mt: '1.5rem', mb: '1.25rem' }} textAlign="left"> 
-                <Typography variant="h5" sx={{ fontWeight: 'light' }}>Dados do contrato</Typography> 
-            </Divider>
+            {
+            acao === "editar"
+            ?
+                ""
+            :
+                <Divider sx={{ mt: '1.5rem', mb: '1.25rem' }} textAlign="left"> 
+                    <Typography variant="h5" sx={{ fontWeight: 'light' }}>Dados do contrato</Typography> 
+                </Divider>
+            }
 
             <TextField
                 variant="outlined"
