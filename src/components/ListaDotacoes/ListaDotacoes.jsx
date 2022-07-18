@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import {
     Box,
     Divider,
@@ -6,9 +6,11 @@ import {
     Typography,
     Button
 } from '@mui/material';
+import AddIcon from '@mui/icons-material/Add';
 import BotoesTab from '../BotoesTab';
 import BotaoAdicionar from '../BotaoAdicionar';
-import AddIcon from '@mui/icons-material/Add';
+import FormDotacoes from './FormDotacoes';
+import DialogConfirmacao from '../DialogConfirmacao';
 
 const retornaNumDotacao = (numero_dotacao, descricao) => {
     return [`${numero_dotacao}\n${descricao}`];
@@ -33,8 +35,110 @@ const ListaDotacoes = (props) => {
         dotacoes,
         estaCarregado,
         formataValores,
-        retornaCampoValor
+        retornaCampoValor,
+        numContrato,
+        tipoDotacoes,
+        origemRecursos,
+        setSnackbar
     } = props;
+
+    const [acao, setAcao] = useState('editar');
+    const [carregando, setCarregando] = useState(false);
+    const [errors, setErrors] = useState({});
+    const [openFormDotacao, setOpenFormDotacao] = useState({
+        open: false,
+        acao: 'adicionar'
+    });
+    const [openConfirmacao, setOpenConfirmacao] = useState({
+        open: false,
+        id: ''
+    });
+    const [formDotacao, setFormDotacao] = useState({
+        dotacao_tipo_id: '',
+        contrato_id: numContrato,
+        valor_dotacao: '',
+        origem_recurso_id: '',
+        outros_descricao: '',
+    });
+    let tipos_dotacao = [];
+
+    useEffect(() => {
+        tipoDotacoes.forEach(tipoDotacao => {
+            tipos_dotacao.push({
+                label: 
+                    `${tipoDotacao.numero_dotacao} | ${tipoDotacao.descricao} | ${tipoDotacao.tipo_despesa}`,
+                id: tipoDotacao.id
+            });
+        })
+    });
+
+    const handleClickAdicionarDotacao = () => {
+        setOpenFormDotacao({
+            open: true,
+            acao: 'adicionar'
+        });
+        setAcao('adicionar');
+    }
+
+    const enviaDotacao = (form) => {
+        const url = `${process.env.REACT_APP_API_URL}/dotacao`;
+        const token = localStorage.getItem('access_token');
+        const options = {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+                'Authorization': `Bearer ${token}`
+            },
+            body: JSON.stringify(form)
+        };
+
+        setCarregando(true);
+
+        fetch(url, options)
+        .then(res => {
+            if (res.ok) {
+                setCarregando(false);
+                setSnackbar({
+                    open: true,
+                    severity: 'success',
+                    text: 'Dotação enviada com sucesso!',
+                    color: 'success'
+                });
+                setOpenFormDotacao({
+                    open: false,
+                    acao: 'adicionar'
+                });
+                setFormDotacao({
+                    ...formDotacao,
+                    dotacao_tipo_id: '',
+                    contrato_id: numContrato,
+                    valor_dotacao: '',
+                    origem_recurso_id: '',
+                    outros_descricao: '',
+                });
+                return res.json();
+            } else if (res.status === 422) {
+                setCarregando(false);
+                setSnackbar({
+                    open: true,
+                    severity: 'error',
+                    text: `Erro ${res.status} - Não foi possível enviar a dotação`,
+                    color: 'error'
+                });
+                return res.json()
+                .then(data => setErrors(data.errors));
+            } else {
+                setCarregando(false);
+                setSnackbar({
+                    open: true,
+                    severity: 'error',
+                    text: `Erro ${res.status} - Não foi possível enviar o local`,
+                    color: 'error'
+                });
+            }
+        });
+    }
 
     return (
         <Box>
@@ -127,10 +231,37 @@ const ListaDotacoes = (props) => {
                     </Box>
                 );
             })}
+            
+            <FormDotacoes 
+                carregando={carregando}
+                openFormDotacao={openFormDotacao}
+                setOpenFormDotacao={setOpenFormDotacao}
+                errors={errors}
+                setErrors={setErrors}
+                formDotacao={formDotacao}
+                setFormDotacao={setFormDotacao}
+                numContrato={numContrato}
+                tipos_dotacao={tipos_dotacao}
+                origemRecursos={origemRecursos}
+                enviaDotacao={enviaDotacao}
+            />
 
             <BotaoAdicionar
+                fnAdicionar={handleClickAdicionarDotacao}
                 texto="Adicionar dotação"
             />
+
+            <DialogConfirmacao 
+                openConfirmacao={openConfirmacao}
+                setOpenConfirmacao={setOpenConfirmacao}
+                acao={acao}
+                fnExcluir={() => {}}
+                fnEditar={() => {}}
+                formInterno={formDotacao}
+                carregando={carregando}
+                texto="dotação"
+            />
+
         </Box>
     );
 }

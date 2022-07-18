@@ -143,6 +143,8 @@ const DadosContrato = ({ snackbar, setSnackbar }) => {
     const [fiscalizacoes, setFiscalizacoes] = useState([]);
     const [locais, setLocais] = useState([]);
     const [dotacoes, setDotacoes] = useState([]);
+    const [tipoDotacoes, setTipoDotacoes] = useState([]);
+    const [origemRecursos, setOrigemRecursos] = useState([]);
     const [estaCarregado, setEstaCarregado] = useState(false);
     const { numContrato } = useParams();
     
@@ -205,6 +207,20 @@ const DadosContrato = ({ snackbar, setSnackbar }) => {
                                 .then(res => res.json())
                                 .then(data => {
                                     setDotacoes(data.data);
+                                })
+                        })
+                        .then(() => {
+                            fetch(`${url}/dotacao_tipos`, options)
+                                .then(res => res.json())
+                                .then(data => {
+                                    setTipoDotacoes(data.data);
+                                })
+                        })
+                        .then(() => {
+                            fetch(`${url}/origem_recursos`, options)
+                                .then(res => res.json())
+                                .then(data => {
+                                    setOrigemRecursos(data.data);
                                     setEstaCarregado(true);
                                 })
                         })
@@ -397,6 +413,10 @@ const DadosContrato = ({ snackbar, setSnackbar }) => {
                                             estaCarregado={estaCarregado}
                                             formataValores={formataValores}
                                             retornaCampoValor={retornaCampoValor}
+                                            numContrato={numContrato}
+                                            tipoDotacoes={tipoDotacoes}
+                                            origemRecursos={origemRecursos}
+                                            setSnackbar={setSnackbar}
                                         />
                                     </TabPanel>
                                 </Box>
