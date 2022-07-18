@@ -66,7 +66,7 @@ const ListaNotasEmpenho = (props) => {
     }
 
     const excluiNotaEmpenho = (id) => {
-        const url = `${process.env.REACT_APP_API_URL}/empenho_notas/${id}`;
+        const url = `${process.env.REACT_APP_API_URL}/empenho_nota/${id}`;
         const token = localStorage.getItem('access_token');
         const options = {
             method: 'DELETE',
