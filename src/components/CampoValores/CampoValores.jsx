@@ -29,38 +29,51 @@ NumberFormatCustom.propTypes = {
     onChange: PropTypes.func.isRequired,
 };
 
-const CampoValores = ({ label, value, name, required, state, setState, checaErros, helperText, error, index, fullWidth }) => {
-    const [valor, setValor] = useState(value);
+const CampoValores = (props) => {
+  const { 
+    label, 
+    value, 
+    name, 
+    required, 
+    state, 
+    setState, 
+    checaErros, 
+    helperText, 
+    error, 
+    fullWidth 
+  } = props;  
+  
+  const [valor, setValor] = useState(value);
 
-    const handleChange = (event) => {
-      setValor(event.target.value);
-    }
+  const handleChange = (event) => {
+    setValor(event.target.value);
+  }
 
-    const handleBlur = (event) => {
-      setState({
-        ...state,
-        [event.target.name]: valor
-      });
-    }
+  const handleBlur = (event) => {
+    setState({
+      ...state,
+      [event.target.name]: valor
+    });
+  }
 
-    return (
-        <TextField
-            label={label}
-            value={valor}
-            name={name}
-            onChange={handleChange}
-            onBlur={(e) => { handleBlur(e); checaErros(e);}}
-            InputProps={{
-                startAdornment: <InputAdornment position="start">R$</InputAdornment>,
-                inputComponent: NumberFormatCustom,
-            }}
-            helperText={helperText}
-            error={error}
-            required={required}
-            sx={{ margin: '1rem 0' }}
-            fullWidth={fullWidth}
-        />
-    );
+  return (
+      <TextField
+          label={label}
+          value={valor}
+          name={name}
+          onChange={handleChange}
+          onBlur={(e) => { handleBlur(e); checaErros(e);}}
+          InputProps={{
+              startAdornment: <InputAdornment position="start">R$</InputAdornment>,
+              inputComponent: NumberFormatCustom,
+          }}
+          helperText={helperText}
+          error={error}
+          required={required}
+          sx={{ margin: '1rem 0' }}
+          fullWidth={fullWidth}
+      />
+  );
 };
 
 export default CampoValores;
