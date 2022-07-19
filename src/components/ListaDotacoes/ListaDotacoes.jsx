@@ -56,7 +56,8 @@ const ListaDotacoes = (props) => {
     });
     const [openConfirmacao, setOpenConfirmacao] = useState({
         open: false,
-        id: ''
+        id: '',
+        elemento: 'dotacao'
     });
     const [formDotacao, setFormDotacao] = useState({
         dotacao_tipo_id: '',
@@ -81,6 +82,54 @@ const ListaDotacoes = (props) => {
             });
         })
     });
+
+    const handleClickExcluirRecurso = (id) => {
+        setOpenConfirmacao({
+            open: true,
+            id: id
+        });
+        setAcao('excluir');
+    }
+
+    const excluiRecurso = (id) => {
+        const url = `${process.env.REACT_APP_API_URL}/dotacao_recurso/${id}`;
+        const token = localStorage.getItem('access_token');
+        const options = {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+                'Authorization': `Bearer ${token}`
+            }
+        };
+
+        setCarregando(true);
+
+        fetch(url, options)
+            .then(res => {
+                if (res.ok) {
+                    setOpenConfirmacao({ open: false, id: '' });
+                    setCarregando(false);
+                    setSnackbar({
+                        open: true,
+                        severity: 'success',
+                        text: 'Fonte de recurso excluída com sucesso',
+                        color: 'success'
+                    });
+                    return res.json();
+                } else {
+                    setCarregando(false);
+                    setSnackbar({
+                        open: true,
+                        severity: 'error',
+                        text: `Erro ${res.status} - Não foi possível excluir a fonte de recurso`,
+                        color: 'error'
+                    });
+                }
+            })
+    }
+
+    
 
     const handleClickAdicionarDotacao = () => {
         setOpenFormDotacao({
@@ -148,6 +197,18 @@ const ListaDotacoes = (props) => {
                 });
             }
         });
+    }
+
+    const handleClickAdicionarRecurso = (id) => {
+        setOpenFormRecurso({ 
+            open: true,
+            acao: 'adicionar'
+        });
+        setFormRecurso({
+            ...formRecurso,
+            dotacao_id: id
+        });
+        setAcao('adicionar');
     }
 
     const enviaRecurso = (form) => {
@@ -263,49 +324,49 @@ const ListaDotacoes = (props) => {
                                 background: '#f8faf8'
                             }} 
                         >    
-                            {dotacao.recursos.map((recurso, index) => {
-                                return (
-                                    <Box 
-                                        sx={{ 
-                                            display: 'flex', 
-                                            justifyContent: 'space-between',
-                                            border: '1px solid #cdcdcd', 
-                                            borderRadius: '3px',
-                                            margin: '1rem',
-                                            mb: '0',
-                                            padding: '0.5rem',
-                                            boxSizing: 'border-box',
-                                            background: '#fff'
-                                        }}
-                                        key={index}
-                                    >
-                                        <Typography sx={{ margin: '0.5rem' }}>
-                                            {
-                                                recurso.nome !== null && recurso.nome !== "Outros"
-                                                ? recurso.nome
-                                                : recurso.outros_descricao
-                                            }
-                                        </Typography>
+                            {dotacao.recursos.length > 0
+                            ? 
+                                dotacao.recursos.map((recurso, index) => {
+                                    return (
+                                        <Box 
+                                            sx={{ 
+                                                display: 'flex', 
+                                                justifyContent: 'space-between',
+                                                border: '1px solid #cdcdcd', 
+                                                borderRadius: '3px',
+                                                margin: '1rem',
+                                                mb: '0',
+                                                padding: '0.5rem',
+                                                boxSizing: 'border-box',
+                                                background: '#fff'
+                                            }}
+                                            key={index}
+                                        >
+                                            <Typography sx={{ margin: '0.5rem' }}>
+                                                {
+                                                    recurso.nome !== null && recurso.nome !== "Outros"
+                                                    ? recurso.nome
+                                                    : recurso.outros_descricao
+                                                }
+                                            </Typography>
 
-                                        <BotoesTab />
-                                        
-                                    </Box>
-                                );
-                            })}
+                                            <BotoesTab 
+                                                excluir={() => handleClickExcluirRecurso(recurso.id)}
+                                            />
+                                            
+                                        </Box>
+                                    );
+                                })
+                            : 
+                                <Typography sx={{ margin: '0.5rem' }}>
+                                    Não há fontes de recurso a serem exibidas.
+                                </Typography>
+                            }
                             
                             <Box sx={{ alignSelf: 'flex-end', mt: '1rem' }}>
                                 <Button 
                                     sx={{ textTransform: 'none' }}
-                                    onClick={() => {
-                                        setOpenFormRecurso({
-                                            ...openFormRecurso, 
-                                            open: true
-                                        });
-                                        setFormRecurso({
-                                            ...formRecurso,
-                                            dotacao_id: dotacao.id
-                                        });
-                                    }}
+                                    onClick={() => handleClickAdicionarRecurso(dotacao.id)}
                                 >
                                     <AddIcon
                                         sx={{ mr: '0.2rem' }}
@@ -354,11 +415,27 @@ const ListaDotacoes = (props) => {
                 openConfirmacao={openConfirmacao}
                 setOpenConfirmacao={setOpenConfirmacao}
                 acao={acao}
-                fnExcluir={() => {}}
-                fnEditar={() => {}}
-                formInterno={formDotacao}
+                fnExcluir={
+                    openConfirmacao.elemento === 'dotacao'
+                    ? () => {}
+                    : excluiRecurso
+                }
+                fnEditar={
+                    openConfirmacao.elemento === 'dotacao'
+                    ? () => {}
+                    : () => {}
+                }
+                formInterno={
+                    openConfirmacao.elemento === 'dotacao'
+                    ? formDotacao
+                    : formRecurso
+                }
                 carregando={carregando}
-                texto="dotação"
+                texto={
+                    openConfirmacao.elemento === 'dotacao'
+                    ? "dotação"
+                    : "fonte de recurso"
+                }
             />
 
         </Box>
