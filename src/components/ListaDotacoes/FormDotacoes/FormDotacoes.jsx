@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { 
     Dialog,
     DialogTitle,
@@ -60,6 +60,23 @@ const FormDotacoes = (props) => {
             enviaDotacao(formDotacao);
         }
     }
+
+    useEffect(() => {
+        if (openFormDotacao.acao === 'adicionar') {
+            setErrors({});
+            setFormDotacao({
+                ...formDotacao,
+                dotacao_tipo_id: '',
+                contrato_id: numContrato,
+                valor_dotacao: '',
+                origem_recurso_id: '',
+                outros_descricao: ''
+            });
+            setInputValue('');
+            setValue({label: '', id: null});
+            setOutrosDesc(false);
+        }
+    }, [openFormDotacao.open])
 
     return (
         <Dialog open={openFormDotacao.open} fullWidth>
@@ -196,7 +213,7 @@ const FormDotacoes = (props) => {
             <DialogActions sx={{ margin: '1rem' }}>
                 <Button
                     onClick={cancelar}
-                    sx={{ textTransform: 'none', mr: '1rem', color: (theme) => theme.palette.main }}
+                    sx={{ textTransform: 'none', mr: '1rem', color: (theme) => theme.palette.error.main }}
                 >
                     <CloseIcon sx={{ mr: '0.2rem' }} /> Cancelar
                 </Button>

@@ -10,6 +10,7 @@ import AddIcon from '@mui/icons-material/Add';
 import BotoesTab from '../BotoesTab';
 import BotaoAdicionar from '../BotaoAdicionar';
 import FormDotacoes from './FormDotacoes';
+import FormRecursos from './FormRecursos';
 import DialogConfirmacao from '../DialogConfirmacao';
 
 const retornaNumDotacao = (numero_dotacao, descricao) => {
@@ -49,6 +50,10 @@ const ListaDotacoes = (props) => {
         open: false,
         acao: 'adicionar'
     });
+    const [openFormRecurso, setOpenFormRecurso] = useState({
+        open: false,
+        acao: 'adicionar'
+    });
     const [openConfirmacao, setOpenConfirmacao] = useState({
         open: false,
         id: ''
@@ -59,6 +64,11 @@ const ListaDotacoes = (props) => {
         valor_dotacao: '',
         origem_recurso_id: '',
         outros_descricao: '',
+    });
+    const [formRecurso, setFormRecurso] = useState({
+        dotacao_id: '',
+        origem_recurso_id: '',
+        outros_descricao: ''
     });
     let tipos_dotacao = [];
 
@@ -133,7 +143,65 @@ const ListaDotacoes = (props) => {
                 setSnackbar({
                     open: true,
                     severity: 'error',
-                    text: `Erro ${res.status} - Não foi possível enviar o local`,
+                    text: `Erro ${res.status} - Não foi possível enviar a dotação`,
+                    color: 'error'
+                });
+            }
+        });
+    }
+
+    const enviaRecurso = (form) => {
+        const url = `${process.env.REACT_APP_API_URL}/dotacao_recurso`;
+        const token = localStorage.getItem('access_token');
+        const options = {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+                'Authorization': `Bearer ${token}`
+            },
+            body: JSON.stringify(form)
+        };
+
+        setCarregando(true);
+
+        fetch(url, options)
+        .then(res => {
+            if (res.ok) {
+                setCarregando(false);
+                setSnackbar({
+                    open: true,
+                    severity: 'success',
+                    text: 'Fonte de recurso enviada com sucesso!',
+                    color: 'success'
+                });
+                setOpenFormRecurso({
+                    open: false,
+                    acao: 'adicionar'
+                });
+                setFormRecurso({
+                    ...formRecurso,
+                    dotacao_id: '',
+                    origem_recurso_id: '',
+                    outros_descricao: ''
+                });
+                return res.json();
+            } else if (res.status === 422) {
+                setCarregando(false);
+                setSnackbar({
+                    open: true,
+                    severity: 'error',
+                    text: `Erro ${res.status} - Não foi possível enviar a fonte de recurso`,
+                    color: 'error'
+                });
+                return res.json()
+                .then(data => setErrors(data.errors));
+            } else {
+                setCarregando(false);
+                setSnackbar({
+                    open: true,
+                    severity: 'error',
+                    text: `Erro ${res.status} - Não foi possível enviar a fonte de recurso`,
                     color: 'error'
                 });
             }
@@ -208,25 +276,39 @@ const ListaDotacoes = (props) => {
                                     >
                                         <Typography sx={{ margin: '0.5rem' }}>
                                             {
-                                                recurso.nome !== null
+                                                recurso.nome !== null && recurso.nome !== "Outros"
                                                 ? recurso.nome
                                                 : recurso.outros_descricao
                                             }
                                         </Typography>
 
                                         <BotoesTab />
+                                        
                                     </Box>
                                 );
                             })}
                             
                             <Box sx={{ alignSelf: 'flex-end', mt: '1rem' }}>
-                                <Button sx={{ textTransform: 'none' }}>
+                                <Button 
+                                    sx={{ textTransform: 'none' }}
+                                    onClick={() => {
+                                        setOpenFormRecurso({
+                                            ...openFormRecurso, 
+                                            open: true
+                                        });
+                                        setFormRecurso({
+                                            ...formRecurso,
+                                            dotacao_id: dotacao.id
+                                        });
+                                    }}
+                                >
                                     <AddIcon
                                         sx={{ mr: '0.2rem' }}
                                     />
                                     Adicionar fonte
                                 </Button>
                             </Box>
+                            
                         </Box>
                     </Box>
                 );
@@ -244,6 +326,18 @@ const ListaDotacoes = (props) => {
                 tipos_dotacao={tipos_dotacao}
                 origemRecursos={origemRecursos}
                 enviaDotacao={enviaDotacao}
+            />
+
+            <FormRecursos 
+                openFormRecurso={openFormRecurso}
+                setOpenFormRecurso={setOpenFormRecurso}
+                carregando={carregando}
+                errors={errors}
+                setErrors={setErrors}
+                formRecurso={formRecurso}
+                setFormRecurso={setFormRecurso}
+                origemRecursos={origemRecursos}
+                enviaRecurso={enviaRecurso}
             />
 
             <BotaoAdicionar
