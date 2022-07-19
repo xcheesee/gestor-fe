@@ -243,7 +243,14 @@ const ListaDotacoes = (props) => {
 
                             <BotoesTab />
                         </Box>
-
+                        
+                        <Typography 
+                            sx={{ margin: '0 1rem' }} 
+                            component="pre"
+                        >
+                            <strong>Fonte(s) de recurso</strong>
+                        </Typography>
+                        
                         <Box 
                             sx={{ 
                                 margin: '1rem', 
@@ -253,12 +260,9 @@ const ListaDotacoes = (props) => {
                                 justifyContent: 'space-between',
                                 border: '1px solid #cdcdcd', 
                                 borderRadius: '3px',
+                                background: '#f8faf8'
                             }} 
-                        >
-                            <Typography sx={{ margin: '0.5rem' }} key={index} component="pre">
-                                <strong>Fonte(s) de recurso</strong>
-                            </Typography>
-                            
+                        >    
                             {dotacao.recursos.map((recurso, index) => {
                                 return (
                                     <Box 
@@ -270,7 +274,8 @@ const ListaDotacoes = (props) => {
                                             margin: '1rem',
                                             mb: '0',
                                             padding: '0.5rem',
-                                            boxSizing: 'border-box'
+                                            boxSizing: 'border-box',
+                                            background: '#fff'
                                         }}
                                         key={index}
                                     >
