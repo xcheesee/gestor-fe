@@ -22,6 +22,7 @@ import ListaGarantias from '../ListaGarantias';
 import ListaFiscalizacao from '../ListaFiscalizacoes';
 import ListaLocais from '../ListaLocais';
 import ListaDotacoes from '../ListaDotacoes';
+import ListaNotasEmpenho from '../ListaNotasEmpenho';
 import PropTypes from 'prop-types';
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import { useParams, useNavigate, Link } from 'react-router-dom';
@@ -143,6 +144,7 @@ const DadosContrato = ({ snackbar, setSnackbar }) => {
     const [fiscalizacoes, setFiscalizacoes] = useState([]);
     const [locais, setLocais] = useState([]);
     const [dotacoes, setDotacoes] = useState([]);
+    const [notasempenho, setNotasEmpenho] = useState([]);
     const [tipoDotacoes, setTipoDotacoes] = useState([]);
     const [origemRecursos, setOrigemRecursos] = useState([]);
     const [estaCarregado, setEstaCarregado] = useState(false);
@@ -221,6 +223,14 @@ const DadosContrato = ({ snackbar, setSnackbar }) => {
                                 .then(res => res.json())
                                 .then(data => {
                                     setOrigemRecursos(data.data);
+                                    setEstaCarregado(true);
+                                })
+                        })
+                        .then(() => {
+                            fetch(`${url}/empenho_notas/${numContrato}`, options)
+                                .then(res => res.json())
+                                .then(data => {
+                                    setNotasEmpenho(data.data);
                                     setEstaCarregado(true);
                                 })
                         })
@@ -402,9 +412,16 @@ const DadosContrato = ({ snackbar, setSnackbar }) => {
                                     </TabPanel>
 
                                     <TabPanel value={value} index={7}>
-                                        {/*
-                                            Lista de Notas de Empenho
-                                        */}
+                                        <ListaNotasEmpenho
+                                            notasempenho={notasempenho}
+                                            estaCarregado={estaCarregado}
+                                            formataData={formataData}
+                                            formataValores={formataValores}
+                                            retornaCampoValor={retornaCampoValor} 
+                                            snackbar={snackbar}
+                                            setSnackbar={setSnackbar}
+                                            numContrato={numContrato}
+                                        />
                                     </TabPanel>
 
                                     <TabPanel value={value} index={8}>
