@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import {
     Box,
     Divider,
@@ -71,22 +71,61 @@ const ListaDotacoes = (props) => {
         origem_recurso_id: '',
         outros_descricao: ''
     });
-    let tipos_dotacao = [];
+    
 
-    useEffect(() => {
-        tipoDotacoes.forEach(tipoDotacao => {
-            tipos_dotacao.push({
-                label: 
-                    `${tipoDotacao.numero_dotacao} | ${tipoDotacao.descricao} | ${tipoDotacao.tipo_despesa}`,
-                id: tipoDotacao.id
-            });
-        })
-    });
+    // exclusão
+    const handleClickExcluirDotacao = (id) => {
+        setOpenConfirmacao({
+            open: true,
+            id: id,
+            elemento: 'dotacao'
+        });
+        setAcao('excluir');
+    }
+
+    const excluiDotacao = (id) => {
+        const url = `${process.env.REACT_APP_API_URL}/dotacao/${id}`;
+        const token = sessionStorage.getItem('access_token');
+        const options = {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+                'Authorization': `Bearer ${token}`
+            }
+        }
+
+        setCarregando(true);
+
+        fetch(url, options)
+            .then(res => {
+                if (res.ok) {
+                    setOpenConfirmacao({ open: false, id: '', elemento: 'dotacao' });
+                    setCarregando(false);
+                    setSnackbar({
+                        open: true,
+                        severity: 'success',
+                        text: 'Dotação excluída com sucesso',
+                        color: 'success'
+                    });
+                    return res.json();
+                } else {
+                    setCarregando(false);
+                    setSnackbar({
+                        open: true,
+                        severity: 'error',
+                        text: `Erro ${res.status} - Não foi possível excluir a dotação`,
+                        color: 'error'
+                    });
+                }
+            })
+    }
 
     const handleClickExcluirRecurso = (id) => {
         setOpenConfirmacao({
             open: true,
-            id: id
+            id: id,
+            elemento: 'recurso'
         });
         setAcao('excluir');
     }
@@ -108,7 +147,7 @@ const ListaDotacoes = (props) => {
         fetch(url, options)
             .then(res => {
                 if (res.ok) {
-                    setOpenConfirmacao({ open: false, id: '' });
+                    setOpenConfirmacao({ open: false, id: '', elemento: 'dotacao' });
                     setCarregando(false);
                     setSnackbar({
                         open: true,
@@ -129,8 +168,73 @@ const ListaDotacoes = (props) => {
             })
     }
 
-    
+    // edição
+    const handleClickEditarDotacao = (dotacao) => {
+        setFormDotacao({
+            id: dotacao.id,
+            dotacao_tipo_id: dotacao.dotacao_tipo_id,
+            contrato_id: dotacao.contrato_id,
+            valor_dotacao: dotacao.valor_dotacao,
+        });
+        setOpenFormDotacao({
+            open: true,
+            acao: 'editar'
+        });
+        setAcao('editar');
+    }
 
+    const editaDotacao = (id, formDotacao) => {
+        const url = `${process.env.REACT_APP_API_URL}/dotacao/${id}`;
+        const token = localStorage.getItem('access_token');
+        const options = {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+                'Authorization': `Bearer ${token}`
+            },
+            body: JSON.stringify(formDotacao)
+        };
+
+        setCarregando(true);
+
+        fetch(url, options)
+            .then(res => {
+                if (res.ok) {
+                    setCarregando(false);
+                    setSnackbar({
+                        open: true,
+                        severity: 'success',
+                        text: 'Dotação editada com sucesso!',
+                        color: 'success'
+                    });
+                    setFormDotacao({
+                        ...formDotacao,
+                        dotacao_tipo_id: '',
+                        contrato_id: numContrato,
+                        valor_dotacao: '',
+                        origem_recurso_id: '',
+                        outros_descricao: '',
+                    });
+                    setOpenFormDotacao({
+                        open: false,
+                        acao: 'adicionar',
+                        elemento: 'dotacao'
+                    });
+                    return res.json();
+                } else {
+                    setCarregando(false);
+                    setSnackbar({
+                        open: true,
+                        severity: 'error',
+                        text: `Erro ${res.status} - Não foi possível editar a dotação`,
+                        color: 'error'
+                    });
+                }
+            });
+    }
+    
+    // adição
     const handleClickAdicionarDotacao = () => {
         setOpenFormDotacao({
             open: true,
@@ -302,7 +406,10 @@ const ListaDotacoes = (props) => {
                                 />
                             </Box>
 
-                            <BotoesTab />
+                            <BotoesTab 
+                                editar={() => handleClickEditarDotacao(dotacao)}
+                                excluir={() => handleClickExcluirDotacao(dotacao.id)}
+                            />
                         </Box>
                         
                         <Typography 
@@ -374,7 +481,6 @@ const ListaDotacoes = (props) => {
                                     Adicionar fonte
                                 </Button>
                             </Box>
-                            
                         </Box>
                     </Box>
                 );
@@ -389,9 +495,10 @@ const ListaDotacoes = (props) => {
                 formDotacao={formDotacao}
                 setFormDotacao={setFormDotacao}
                 numContrato={numContrato}
-                tipos_dotacao={tipos_dotacao}
+                tipoDotacoes={tipoDotacoes}
                 origemRecursos={origemRecursos}
                 enviaDotacao={enviaDotacao}
+                setOpenConfirmacao={setOpenConfirmacao}
             />
 
             <FormRecursos 
@@ -417,12 +524,12 @@ const ListaDotacoes = (props) => {
                 acao={acao}
                 fnExcluir={
                     openConfirmacao.elemento === 'dotacao'
-                    ? () => {}
+                    ? excluiDotacao
                     : excluiRecurso
                 }
                 fnEditar={
                     openConfirmacao.elemento === 'dotacao'
-                    ? () => {}
+                    ? () => editaDotacao(formDotacao.id, formDotacao)
                     : () => {}
                 }
                 formInterno={

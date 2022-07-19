@@ -28,14 +28,97 @@ const FormDotacoes = (props) => {
         formDotacao,
         setFormDotacao,
         numContrato,
-        tipos_dotacao,
         origemRecursos,
-        enviaDotacao
+        enviaDotacao,
+        tipoDotacoes,
+        setOpenConfirmacao
     } = props;
 
     const [inputValue, setInputValue] = useState('');
     const [value, setValue] = useState({label: '', id: null});
     const [outrosDesc, setOutrosDesc] = useState(false);
+    let tipos_dotacao = [];
+
+    const CamposRecurso = () => {
+        if (openFormDotacao.acao === 'adicionar') {
+            return (
+                <>
+                    <FormControl
+                        sx={{ margin: '1rem 0', position: 'relative' }}
+                        error={errors.hasOwnProperty('dotacao_recurso')}
+                        fullWidth
+                        required
+                    >
+                        <InputLabel id="dotacao_recurso-label">Fonte de recurso</InputLabel>
+
+                        <Select
+                            labelId="dotacao_recurso-label"
+                            id="dotacao_recurso"
+                            label="Fonte de recurso"
+                            value={formDotacao.origem_recurso_id}
+                            name="dotacao_recurso"
+                            onChange={(e) => {
+                                if (e.target.value !== 999) {
+                                    setFormDotacao({
+                                        ...formDotacao,
+                                        origem_recurso_id: e.target.value,
+                                        outros_descricao: ""
+                                    });
+                                    setOutrosDesc(false);
+                                } else {
+                                    setFormDotacao({
+                                        ...formDotacao,
+                                        origem_recurso_id: 999
+                                    });
+                                    setOutrosDesc(true);
+                                }
+                            }}
+                            fullWidth
+                        >
+                            {origemRecursos.map((origemRecurso, index) => {
+                                return (
+                                    <MenuItem key={index} value={origemRecurso.id}>{origemRecurso.nome}</MenuItem>
+                                );
+                            })}
+                        </Select>
+                        <FormHelperText> </FormHelperText>
+                    </FormControl>
+                    
+                    {
+                        outrosDesc === true
+                        ?
+                            <TextField 
+                                variant="outlined"
+                                value={formDotacao.outros_descricao}
+                                name="outros_descricao"
+                                onChange={(e) => {
+                                    setFormDotacao({
+                                        ...formDotacao,
+                                        outros_descricao: e.target.value
+                                    });
+                                }}
+                                label="Descrição"
+                                sx={{ margin: '1rem 0' }}
+                                helperText="Descreva brevemente a fonte de recurso"
+                                fullWidth
+                                required
+                            />
+                        :
+                            ""
+                    }
+                </>
+            );
+        } else if (openFormDotacao.acao === 'editar') {
+            return ("");
+        }
+    }
+
+    const retornaTipoDotacao = (id) => {
+        let index = tipos_dotacao.findIndex(x => x.id === id);
+        let tipoDotacao = tipos_dotacao[index];
+
+        return tipoDotacao;
+    }
 
     const cancelar = () => {
         setOpenFormDotacao({ ...openFormDotacao, open: false });
@@ -58,8 +141,24 @@ const FormDotacoes = (props) => {
 
         if (openFormDotacao.acao === 'adicionar') {
             enviaDotacao(formDotacao);
+        } else if (openFormDotacao.acao === 'editar') {
+            setOpenConfirmacao({
+                open: true,
+                id: formDotacao.id,
+                elemento: 'dotacao'
+            });
         }
     }
+
+    useEffect(() => {
+        tipoDotacoes.forEach(tipoDotacao => {
+            tipos_dotacao.push({
+                label: 
+                    `${tipoDotacao.numero_dotacao} | ${tipoDotacao.descricao} | ${tipoDotacao.tipo_despesa}`,
+                id: tipoDotacao.id
+            });
+        })
+    });
 
     useEffect(() => {
         if (openFormDotacao.acao === 'adicionar') {
@@ -74,6 +173,11 @@ const FormDotacoes = (props) => {
             });
             setInputValue('');
             setValue({label: '', id: null});
+            setOutrosDesc(false);
+        } else if (openFormDotacao.acao === 'editar') {
+            setErrors({});
+            setInputValue('');
+            setValue(retornaTipoDotacao(3));
             setOutrosDesc(false);
         }
     }, [openFormDotacao.open])
@@ -98,7 +202,6 @@ const FormDotacoes = (props) => {
                                 ...formDotacao,
                                 dotacao_tipo_id: newValue.id
                             });
-                            console.log(newValue.id);
                         } else {
                             setValue({label: '', id: null});
                             setFormDotacao({
@@ -144,70 +247,8 @@ const FormDotacoes = (props) => {
                     error={errors.hasOwnProperty('valor_dotacao')}
                     fullWidth 
                 />
-
-                <FormControl
-                    sx={{ margin: '1rem 0', position: 'relative' }}
-                    error={errors.hasOwnProperty('dotacao_recurso')}
-                    fullWidth
-                    required
-                >
-                    <InputLabel id="dotacao_recurso-label">Fonte de recurso</InputLabel>
-
-                    <Select
-                        labelId="dotacao_recurso-label"
-                        id="dotacao_recurso"
-                        label="Fonte de recurso"
-                        value={formDotacao.origem_recurso_id}
-                        name="dotacao_recurso"
-                        onChange={(e) => {
-                            if (e.target.value !== 999) {
-                                setFormDotacao({
-                                    ...formDotacao,
-                                    origem_recurso_id: e.target.value,
-                                    outros_descricao: ""
-                                });
-                                setOutrosDesc(false);
-                            } else {
-                                setFormDotacao({
-                                    ...formDotacao,
-                                    origem_recurso_id: 999
-                                });
-                                setOutrosDesc(true);
-                            }
-                        }}
-                        fullWidth
-                    >
-                        {origemRecursos.map((origemRecurso, index) => {
-                            return (
-                                <MenuItem key={index} value={origemRecurso.id}>{origemRecurso.nome}</MenuItem>
-                            );
-                        })}
-                    </Select>
-                    <FormHelperText> </FormHelperText>
-                </FormControl>
                 
-                {
-                outrosDesc
-                ?
-                    <TextField 
-                        variant="outlined"
-                        value={formDotacao.outros_descricao}
-                        name="outros_descricao"
-                        onChange={(e) => {
-                            setFormDotacao({
-                                ...formDotacao,
-                                outros_descricao: e.target.value
-                            });
-                        }}
-                        label="Descrição"
-                        sx={{ margin: '1rem 0' }}
-                        helperText="Descreva brevemente a fonte de recurso"
-                        fullWidth
-                        required
-                    />
-                :
-                    ""
-                }
+                <CamposRecurso />
             </DialogContent>
 
             <DialogActions sx={{ margin: '1rem' }}>

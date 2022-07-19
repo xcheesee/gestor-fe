@@ -36,7 +36,7 @@ const DialogConfirmacao = (props) => {
                 <DialogActions>
                     <Button 
                         sx={{ textTransform: 'none', color: '#821f1f' }} 
-                        onClick={() => { setOpenConfirmacao({ open: false, id: '' }); }}
+                        onClick={() => { setOpenConfirmacao({ ...openConfirmacao, open: false, id: '' }); }}
                     >
                         Cancelar
                     </Button>
@@ -68,7 +68,7 @@ const DialogConfirmacao = (props) => {
                 <DialogActions>
                     <Button 
                         sx={{ textTransform: 'none', color: '#821f1f' }} 
-                        onClick={() => { setOpenConfirmacao({ open: false, id: '' }); }}
+                        onClick={() => { setOpenConfirmacao({ ...openConfirmacao, open: false, id: '' }); }}
                     >
                         Cancelar
                     </Button>
