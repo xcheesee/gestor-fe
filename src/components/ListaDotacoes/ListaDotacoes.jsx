@@ -489,10 +489,9 @@ const ListaDotacoes = (props) => {
                                 display: 'flex',
                                 flexDirection: 'column',
                                 justifyContent: 'space-between',
-                                border: '1px solid #cdcdcd', 
-                                borderRadius: '3px',
                                 background: '#f8faf8'
                             }} 
+                            component={Paper}
                         >    
                             {dotacao.recursos.length > 0
                             ? 
@@ -502,15 +501,14 @@ const ListaDotacoes = (props) => {
                                             sx={{ 
                                                 display: 'flex', 
                                                 justifyContent: 'space-between',
-                                                border: '1px solid #cdcdcd', 
-                                                borderRadius: '3px',
-                                                margin: '1rem',
-                                                mb: '0',
+                                                margin: '0.5rem',
                                                 padding: '0.5rem',
                                                 boxSizing: 'border-box',
                                                 background: '#fff'
                                             }}
+                                            component={Paper}
                                             key={index}
+                                            elevation={3}
                                         >
                                             <Typography sx={{ margin: '0.5rem' }}>
                                                 {

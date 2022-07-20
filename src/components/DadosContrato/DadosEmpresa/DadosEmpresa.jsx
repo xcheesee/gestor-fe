@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Box, Typography, Fade, Paper, IconButton, Tooltip } from '@mui/material';
+import { Box, Typography, Fade, Paper, Button } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
 import FormDadosEmpresa from './FormDadosEmpresa/FormDadosEmpresa';
 
@@ -38,14 +38,14 @@ const DadosEmpresa = (props) => {
             >
                 <Box 
                     sx={{ 
-                        padding: '1rem', 
-                        border: '1px solid #cdcdcd', 
-                        borderRadius: '3px', 
+                        padding: '1rem',
                         width: '100%', 
                         boxSizing: 'border-box', 
                         mb: '1rem',
                         background: '#FFFFFF'
                     }}
+                    component={Paper}
+                    elevation={3}
                 >
                     <Typography sx={{ fontWeight: 'medium'}} component="span">
                         Nome
@@ -75,13 +75,20 @@ const DadosEmpresa = (props) => {
                     </Typography>
                 </Box>
 
-                <Tooltip title="Editar" arrow>
-                    <IconButton
+                <Box>
+                    <Button 
+                        sx={{ textTransform: 'none' }}
                         onClick={() => setOpenDadosEmpresa(true)}
                     >
-                        <EditIcon />
-                    </IconButton>
-                </Tooltip>
+                        <EditIcon
+                            sx={{ 
+                                mr: '0.5rem'
+                            }}
+                            fontSize="small"
+                        />
+                        Editar dados da empresa
+                    </Button>
+                </Box>
             </Box>
 
             <FormDadosEmpresa 

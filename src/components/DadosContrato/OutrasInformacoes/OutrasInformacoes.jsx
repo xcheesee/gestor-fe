@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Box, Typography, Paper, Tooltip, IconButton } from '@mui/material';
+import { Box, Typography, Paper, Button } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
 import FormOutrasInformacoes from './FormOutrasInformacoes';
 
@@ -47,24 +47,33 @@ const OutrasInformacoes = (props) => {
                 >
                     <Box 
                         sx={{ 
-                            border: '1px solid #cdcdcd', 
-                            borderRadius: '3px', 
                             width: '100%', 
                             boxSizing: 'border-box', 
                             mb: '1rem',
                             background: '#FFFFFF',
                         }}
+                        component={Paper}
+                        elevation={3}
                     >
                         <Typography sx={{ margin: '1rem', whiteSpace: 'pre-line' }} component="pre">
                             {formataInformacoes(outras_informacoes)}
                         </Typography>
                     </Box>
 
-                    <Tooltip title="Editar" sx={{ alignSelf: 'flex-end' }} arrow>
-                        <IconButton onClick={() => setOpenOutrasInformacoes(true)}>
-                            <EditIcon />
-                        </IconButton>
-                    </Tooltip>
+                    <Box sx={{ alignSelf: 'flex-end' }}>
+                        <Button 
+                            sx={{ textTransform: 'none' }}
+                            onClick={() => setOpenOutrasInformacoes(true)}
+                        >
+                            <EditIcon
+                                sx={{ 
+                                    mr: '0.5rem'
+                                }}
+                                fontSize="small"
+                            />
+                            Editar informações adicionais
+                        </Button>
+                    </Box>
                 </Box>
             </Box>
 
