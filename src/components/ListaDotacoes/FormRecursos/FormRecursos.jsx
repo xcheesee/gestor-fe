@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect } from 'react';
 import { 
     Dialog,
     DialogTitle,
@@ -26,10 +26,11 @@ const FormRecursos = (props) => {
         formRecurso,
         setFormRecurso,
         origemRecursos,
-        enviaRecurso
+        enviaRecurso,
+        setOpenConfirmacao
     } = props;
 
-    const [outrosDesc, setOutrosDesc] = useState(false);
+    const outrosDesc = formRecurso.origem_recurso_id === 999;
 
     const cancelar = () => {
         setOpenFormRecurso({ ...openFormRecurso, open: false });
@@ -40,7 +41,6 @@ const FormRecursos = (props) => {
             origem_recurso_id: '',
             outros_descricao: ''
         });
-        setOutrosDesc(false);
     }
 
     const confirmar = () => {
@@ -48,6 +48,12 @@ const FormRecursos = (props) => {
 
         if (openFormRecurso.acao === 'adicionar') {
             enviaRecurso(formRecurso);
+        } else if (openFormRecurso.acao === 'editar') {
+            setOpenConfirmacao({
+                open: true,
+                id: formRecurso.id,
+                elemento: 'recurso'
+            });
         }
     }
 
@@ -82,13 +88,11 @@ const FormRecursos = (props) => {
                                     origem_recurso_id: e.target.value,
                                     outros_descricao: ""
                                 });
-                                setOutrosDesc(false);
                             } else {
                                 setFormRecurso({
                                     ...formRecurso,
                                     origem_recurso_id: 999
                                 });
-                                setOutrosDesc(true);
                             }
                         }}
                         fullWidth

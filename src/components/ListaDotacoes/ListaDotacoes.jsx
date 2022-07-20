@@ -233,6 +233,69 @@ const ListaDotacoes = (props) => {
                 }
             });
     }
+
+    const handleClickEditarRecurso = (recurso) => {
+        setFormRecurso({
+            id: recurso.id,
+            dotacao_id: recurso.dotacao_id,
+            origem_recurso_id: recurso.origem_recurso_id,
+            outros_descricao: recurso.outros_descricao
+        });
+        setOpenFormRecurso({
+            open: true,
+            acao: 'editar'
+        });
+        setAcao('editar');
+    }
+
+    const editaRecurso = (id, formRecurso) => {
+        const url = `${process.env.REACT_APP_API_URL}/dotacao_recurso/${id}`;
+        const token = localStorage.getItem('access_token');
+        const options = {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+                'Authorization': `Bearer ${token}`
+            },
+            body: JSON.stringify(formRecurso)
+        };
+
+        setCarregando(true);
+
+        fetch(url, options)
+            .then(res => {
+                if (res.ok) {
+                    setCarregando(false);
+                    setSnackbar({
+                        open: true,
+                        severity: 'success',
+                        text: 'Fonte de recurso editada com sucesso!',
+                        color: 'success'
+                    });
+                    setFormRecurso({
+                        ...formRecurso,
+                        dotacao_id: '',
+                        origem_recurso_id: '',
+                        outros_descricao: ''
+                    });
+                    setOpenFormRecurso({
+                        open: false,
+                        acao: 'adicionar',
+                        elemento: 'recurso'
+                    });
+                    return res.json();
+                } else {
+                    setCarregando(false);
+                    setSnackbar({
+                        open: true,
+                        severity: 'error',
+                        text: `Erro ${res.status} - Não foi possível editar a fonte de recurso`,
+                        color: 'error'
+                    });
+                }
+            });
+    }
     
     // adição
     const handleClickAdicionarDotacao = () => {
@@ -458,6 +521,7 @@ const ListaDotacoes = (props) => {
                                             </Typography>
 
                                             <BotoesTab 
+                                                editar={() => handleClickEditarRecurso(recurso)}
                                                 excluir={() => handleClickExcluirRecurso(recurso.id)}
                                             />
                                             
@@ -511,6 +575,7 @@ const ListaDotacoes = (props) => {
                 setFormRecurso={setFormRecurso}
                 origemRecursos={origemRecursos}
                 enviaRecurso={enviaRecurso}
+                setOpenConfirmacao={setOpenConfirmacao}
             />
 
             <BotaoAdicionar
@@ -530,7 +595,7 @@ const ListaDotacoes = (props) => {
                 fnEditar={
                     openConfirmacao.elemento === 'dotacao'
                     ? () => editaDotacao(formDotacao.id, formDotacao)
-                    : () => {}
+                    : () => editaRecurso(formRecurso.id, formRecurso)
                 }
                 formInterno={
                     openConfirmacao.elemento === 'dotacao'

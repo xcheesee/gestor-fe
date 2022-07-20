@@ -36,7 +36,7 @@ const FormDotacoes = (props) => {
 
     const [inputValue, setInputValue] = useState('');
     const [value, setValue] = useState({label: '', id: null});
-    const [outrosDesc, setOutrosDesc] = useState(false);
+    const outrosDesc = formDotacao.origem_recurso_id === 999;
     let tipos_dotacao = [];
 
     const CamposRecurso = () => {
@@ -64,13 +64,11 @@ const FormDotacoes = (props) => {
                                         origem_recurso_id: e.target.value,
                                         outros_descricao: ""
                                     });
-                                    setOutrosDesc(false);
                                 } else {
                                     setFormDotacao({
                                         ...formDotacao,
                                         origem_recurso_id: 999
                                     });
-                                    setOutrosDesc(true);
                                 }
                             }}
                             fullWidth
@@ -133,7 +131,6 @@ const FormDotacoes = (props) => {
         });
         setInputValue('');
         setValue({label: '', id: null});
-        setOutrosDesc(false);
     }
 
     const confirmar = () => {
@@ -173,12 +170,10 @@ const FormDotacoes = (props) => {
             });
             setInputValue('');
             setValue({label: '', id: null});
-            setOutrosDesc(false);
         } else if (openFormDotacao.acao === 'editar') {
             setErrors({});
             setInputValue('');
             setValue(retornaTipoDotacao(3));
-            setOutrosDesc(false);
         }
     }, [openFormDotacao.open])
 
