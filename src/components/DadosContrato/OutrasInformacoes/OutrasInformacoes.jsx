@@ -45,21 +45,28 @@ const OutrasInformacoes = (props) => {
                         alignItems: 'flex-start',
                     }}
                 >
-                    <Box 
-                        sx={{ 
-                            width: '100%', 
-                            boxSizing: 'border-box', 
-                            mb: '1rem',
-                            background: '#FFFFFF',
-                        }}
-                        component={Paper}
-                        elevation={3}
-                    >
-                        <Typography sx={{ margin: '1rem', whiteSpace: 'pre-line' }} component="pre">
-                            {formataInformacoes(outras_informacoes)}
-                        </Typography>
-                    </Box>
-
+                    {outras_informacoes !== ''
+                        ?
+                            <Box 
+                                sx={{ 
+                                    width: '100%', 
+                                    boxSizing: 'border-box', 
+                                    mb: '1rem',
+                                    background: '#FFFFFF',
+                                }}
+                                component={Paper}
+                                elevation={3}
+                            >
+                                <Typography sx={{ margin: '1rem', whiteSpace: 'pre-line' }} component="pre">
+                                    {formataInformacoes(outras_informacoes)}
+                                </Typography>
+                            </Box>
+                        :   
+                            <Typography>
+                                Nenhuma informação adicional disponível para este contrato
+                            </Typography>
+                    }
+                            
                     <Box sx={{ alignSelf: 'flex-end' }}>
                         <Button 
                             sx={{ textTransform: 'none' }}

@@ -13,12 +13,51 @@ import EditIcon from '@mui/icons-material/Edit';
 import AddIcon from '@mui/icons-material/Add';
 import ManageSearchIcon from '@mui/icons-material/ManageSearch';
 import DialogDetalhes from './DialogDetalhes/DialogDetalhes';
+import FormExecFinanceira from './FormExecFinanceira';
+import DialogConfirmacao from '../../DialogConfirmacao';
 
 const ExecucaoFinanceira = (props) => {
     const execucao_financeira = typeof props.execucao_financeira != 'undefined' ? props.execucao_financeira : [];
     const [carregando, setCarregando] = useState(false);
     const [detalheExecFin, setDetalheExecFin] = useState({});
     const [openDetalhes, setOpenDetalhes] = useState(false);
+    const [openFormExecFinanceira, setOpenFormExecFinanceira] = useState({
+        open: false,
+        acao: 'adicionar'
+    });
+    const [openConfirmacao, setOpenConfirmacao] = useState({
+        open: false,
+        id: ''
+    });
+    const [acao, setAcao] = useState('adicionarExecFin');
+    const [formExecFinanceira, setFormExecFinanceira] = useState({
+        contrato_id: props.numContrato,
+        mes: '',
+        ano: '',
+        planejado_inicial: '',
+        contratado_inicial: '',
+        valor_reajuste: '',
+        valor_aditivo: '',
+        valor_cancelamento: '',
+        empenhado: '',
+        executado: ''
+    });
+    const [errors, setErrors] = useState({});
+
+    const meses = [
+        "Janeiro",
+        "Fevereiro",
+        "Março",
+        "Abril",
+        "Maio",
+        "Junho",
+        "Julho",
+        "Agosto",
+        "Setembro",
+        "Outubro",
+        "Novembro",
+        "Dezembro"
+    ];
 
     const detalhaExecucaoFinanceira = (id) => {
         const url = `${process.env.REACT_APP_API_URL}/execucao_financeira/${id}`;
@@ -47,6 +86,90 @@ const ExecucaoFinanceira = (props) => {
             })
     }
 
+    const handleClickAdicionarMes = () => {
+        setOpenFormExecFinanceira({
+            open: true,
+            acao: 'adicionar'
+        });
+        setFormExecFinanceira({
+            contrato_id: props.numContrato,
+            mes: '',
+            ano: '',
+            planejado_inicial: '',
+            contratado_inicial: '',
+            valor_reajuste: '',
+            valor_aditivo: '',
+            valor_cancelamento: '',
+            empenhado: '',
+            executado: ''
+        });
+    }
+
+    const enviaMes = () => {
+        const url = `${process.env.REACT_APP_API_URL}/execucao_financeira`;
+        const token = sessionStorage.getItem('access_token');
+        const options = {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+                'Authorization': `Bearer ${token}`
+            },
+            body: JSON.stringify(formExecFinanceira)
+        }
+
+        setCarregando(true);
+
+        fetch(url, options)
+            .then(res => {
+                if (res.ok) {
+                    setCarregando(false);
+                    props.setSnackbar({
+                        open: true,
+                        severity: 'success',
+                        text: 'Mês de execução financeira enviado com sucesso!',
+                        color: 'success'
+                    });
+                    setOpenFormExecFinanceira({
+                        open: false,
+                        acao: 'adicionar'
+                    });
+                    setFormExecFinanceira({
+                        ...formExecFinanceira,
+                        mes: '',
+                        ano: '',
+                        planejado_inicial: '',
+                        contratado_inicial: '',
+                        valor_reajuste: '',
+                        valor_aditivo: '',
+                        valor_cancelamento: '',
+                        empenhado: '',
+                        executado: ''
+                    });
+                    return res.json();
+                } else if (res.status === 422) {
+                    setCarregando(false);
+                    props.setSnackbar({
+                        open: true,
+                        severity: 'error',
+                        text: `Erro ${res.status} - Não foi possível enviar o mês de execução`,
+                        color: 'error'
+                    });
+                    return res.json()
+                        .then(data => setErrors(data.errors));
+                } else {
+                    setCarregando(false);
+                    props.setSnackbar({
+                        open: true,
+                        severity: 'error',
+                        text: `Erro ${res.status} - Não foi possível enviar o mês de execução`,
+                        color: 'error'
+                    });
+                }
+            })
+            .catch(err => console.log(err));
+    }
+
     const Conteudo = () => {
         if (Object.keys(execucao_financeira).length > 0) {
             return (
@@ -64,7 +187,8 @@ const ExecucaoFinanceira = (props) => {
                         sx={{ 
                             padding: '1rem',
                             display: 'flex',
-                            overflow: 'auto' 
+                            overflow: 'auto',
+                            mb: '1rem'
                         }} 
                     >
                         {Object.keys(execucao_financeira).map((execucao, index) => {
@@ -137,16 +261,14 @@ const ExecucaoFinanceira = (props) => {
                                             }}
                                         >
                                             <Tooltip title="Detalhes" arrow>
-                                                <IconButton
-                                                    onClick={() => detalhaExecucaoFinanceira(execucao_financeira[execucao].id)}
-                                                    disabled={carregando}
-                                                >
-                                                    {
-                                                        carregando
-                                                        ? <CircularProgress size="1.5rem" />
-                                                        : <ManageSearchIcon />
-                                                    }
-                                                </IconButton>
+                                                <Box>
+                                                    <IconButton
+                                                        onClick={() => detalhaExecucaoFinanceira(execucao_financeira[execucao].id)}
+                                                        disabled={carregando}
+                                                    >
+                                                        <ManageSearchIcon />
+                                                    </IconButton>
+                                                </Box>
                                             </Tooltip>
                                             
                                             <Tooltip title="Editar" arrow>
@@ -172,6 +294,7 @@ const ExecucaoFinanceira = (props) => {
                             sx={{
                                 textTransform: 'none'
                             }}
+                            onClick={handleClickAdicionarMes}
                         >
                             <AddIcon sx={{ mr: '0.2rem' }} />
                             Adicionar mês
@@ -195,17 +318,24 @@ const ExecucaoFinanceira = (props) => {
                         Nenhum dado de execução financeira disponível para este contrato
                     </Typography>
 
-                    <Button
+                    <Box
                         sx={{
                             alignSelf: 'flex-end',
-                            textTransform: 'none',
+                            padding: '1rem',
+                            pt: 0,
                         }}
                     >
-                        <AddIcon sx={{ mr: '0.2rem' }} />
-                        Adicionar mês
-                    </Button>
+                        <Button
+                            sx={{
+                                textTransform: 'none',
+                            }}
+                            onClick={handleClickAdicionarMes}
+                        >
+                            <AddIcon sx={{ mr: '0.2rem' }} />
+                            Adicionar mês
+                        </Button>
+                    </Box>
                 </Box>
-
             );
         }
     }
@@ -223,6 +353,31 @@ const ExecucaoFinanceira = (props) => {
                 openDetalhes={openDetalhes}
                 setOpenDetalhes={setOpenDetalhes}
                 formataValores={props.formataValores}
+            />
+
+            <FormExecFinanceira 
+                meses={meses}
+                openFormExecFinanceira={openFormExecFinanceira}
+                setOpenFormExecFinanceira={setOpenFormExecFinanceira}
+                formExecFinanceira={formExecFinanceira}
+                setFormExecFinanceira={setFormExecFinanceira}
+                errors={errors}
+                setErrors={setErrors}
+                carregando={carregando}
+                setOpenConfirmacao={setOpenConfirmacao}
+            />
+
+            <DialogConfirmacao 
+                openConfirmacao={openConfirmacao}
+                setOpenConfirmacao={setOpenConfirmacao}
+                acao={acao}
+                fnExcluir={() => {}}
+                fnEditar={() => {}}
+                fnAdicionar={enviaMes}
+                formInterno={formExecFinanceira}
+                carregando={carregando}
+                texto="mês de execução financeira"
+                meses={meses}
             />
         </Box>
     );

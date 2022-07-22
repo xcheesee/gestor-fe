@@ -18,7 +18,8 @@ const DialogConfirmacao = (props) => {
         fnEditar,
         formInterno,
         carregando,
-        texto
+        texto,
+        ...other
     } = props;
 
     if (acao === 'excluir') {
@@ -49,6 +50,46 @@ const DialogConfirmacao = (props) => {
                             : ""
                         }
                         Excluir
+                    </Button>
+                </DialogActions>
+            </Dialog>
+        );
+    } else if (acao === 'adicionarExecFin') {
+        return (
+            <Dialog open={openConfirmacao.open} fullWidth>
+                <DialogTitle>
+                    Adicionar {texto}
+                </DialogTitle>
+                <DialogContent>
+                    <DialogContentText>
+                        Confirma a adição do {texto}
+                            {
+                                formInterno.mes !== '' && formInterno.ano !== ''
+                                ? <strong> {other.meses[formInterno.mes - 1].toLowerCase()} de {formInterno.ano}</strong>
+                                : ''
+                            }
+                        ?
+                        <br/> 
+                        <br />
+                        Não será possível editar os dados dos campos <strong>planejado inicial </strong> 
+                        e <strong>contratado incial</strong> posteriormente.
+                    </DialogContentText>
+                </DialogContent>
+                <DialogActions>
+                    <Button 
+                        sx={{ textTransform: 'none', color: '#821f1f' }} 
+                        onClick={() => { setOpenConfirmacao({ ...openConfirmacao, open: false, id: '' }); }}
+                    >
+                        Cancelar
+                    </Button>
+                    <Button 
+                        sx={{ textTransform: 'none' }}  
+                        onClick={(e) => { 
+                            other.fnAdicionar();
+                            setOpenConfirmacao({ open: false, id: '' }); 
+                        }}
+                    >
+                        Enviar
                     </Button>
                 </DialogActions>
             </Dialog>

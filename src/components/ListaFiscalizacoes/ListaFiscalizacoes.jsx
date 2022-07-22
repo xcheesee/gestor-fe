@@ -236,7 +236,7 @@ const ListaFiscalizacoes = (props) => {
                     setSnackbar({
                         open: true,
                         severity: 'error',
-                        text: `Erro ${res.status} - Não foi possível enviar o local`,
+                        text: `Erro ${res.status} - Não foi possível enviar a gestão/fiscalização`,
                         color: 'error'
                     });
                     return res.json()

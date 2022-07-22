@@ -442,6 +442,8 @@ const DadosContrato = ({ snackbar, setSnackbar }) => {
                             <ExecucaoFinanceira 
                                 execucao_financeira={dados.execucao_financeira}
                                 formataValores={formataValores}
+                                numContrato={numContrato}
+                                setSnackbar={setSnackbar}
                             />
 
                             <DadosEmpresa
