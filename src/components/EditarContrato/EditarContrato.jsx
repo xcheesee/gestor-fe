@@ -2,7 +2,9 @@ import React, { useEffect, useState } from 'react';
 import { 
     Paper, 
     Box, 
-    Fade
+    Fade,
+    Backdrop,
+    CircularProgress
 } from '@mui/material';
 import HeaderFormulario from '../HeaderFormulario';
 import FormEditarContrato from './FormEditarContrato';
@@ -21,10 +23,8 @@ const EditarContrato = ({ setSnackbar }) => {
         open: false
     });
     const [carregando, setCarregando] = useState(false);
+    const [backdrop, setBackdrop] = useState(true);
     const [contrato, setContrato] = useState({
-        tipo_contratacao: "",
-        processo_sei: "",
-        dotacao_orcamentaria: "",
         credor: "",
         cnpj_cpf: "",
         tipo_objeto: "",
@@ -38,24 +38,19 @@ const EditarContrato = ({ setSnackbar }) => {
         condicao_pagamento: "",
         prazo_a_partir_de: "",
         data_prazo_maximo: "",
+        numero_nota_reserva: "",
+        valor_reserva: "",
         nome_empresa: "",
         telefone_empresa: "",
         email_empresa: "",
         outras_informacoes: "",
-        envio_material_tecnico: "",
-        minuta_edital: "",
-        abertura_certame: "",
-        homologacao: "",
-        fonte_recurso: "",
     });
-    const [tipoContratacoes, setTipoContratacoes] = useState([]);
     const { numContrato } = useParams();
     
     const navigate = useNavigate();
 
     useEffect(() => {
         const urlContrato = `${process.env.REACT_APP_API_URL}/contrato/${numContrato}`;
-        const urlTiposContratacoes = `${process.env.REACT_APP_API_URL}/tipocontratacoes`
         const token = localStorage.getItem('access_token');
         const options = {
             method: 'GET',
@@ -75,15 +70,10 @@ const EditarContrato = ({ setSnackbar }) => {
                 }
             })
             .then(data => {
+                setBackdrop(false);
                 setContrato(data.data);
             })
-
-        fetch(urlTiposContratacoes, options)
-            .then(res => res.json())
-            .then(data => {
-                setTipoContratacoes(data.data); 
-            });
-    }, [])
+    }, [navigate, numContrato])
 
     const handleCloseConfirm = (e, reason) => {
         if (reason === 'backdropClick') {
@@ -163,8 +153,6 @@ const EditarContrato = ({ setSnackbar }) => {
                     setOpenConfirm={setOpenConfirm}
                     setOpenConfirmSair={setOpenConfirmSair}
                     carregando={carregando}
-                    tipoContratacoes={tipoContratacoes}
-                    setTipoContratacoes={setTipoContratacoes}
                     errors={errors}
                     setErrors={setErrors}
                 />
@@ -179,8 +167,6 @@ const EditarContrato = ({ setSnackbar }) => {
                     setOpenConfirm={setOpenConfirm}
                     setOpenConfirmSair={setOpenConfirmSair}
                     carregando={carregando}
-                    tipoContratacoes={tipoContratacoes}
-                    setTipoContratacoes={setTipoContratacoes}
                     errors={errors}
                     setErrors={setErrors}
                 />
@@ -189,6 +175,16 @@ const EditarContrato = ({ setSnackbar }) => {
     }
     
     return (
+        <>
+        <Backdrop 
+            open={backdrop}
+            sx={{ zIndex: '200' }}
+            transitionDuration={850}
+        >
+            <CircularProgress
+                sx={{ color: (theme) => theme.palette.color.main }}
+            />
+        </Backdrop>
         <Box
             component={Fade}
             in={true}
@@ -202,7 +198,8 @@ const EditarContrato = ({ setSnackbar }) => {
             }}
         >
             <Box component={Paper} elevation={5}>
-                <HeaderFormulario>
+            
+                <HeaderFormulario acao="editar" numContrato={numContrato}>
                     {`Editar contrato # ${numContrato}`}
                 </HeaderFormulario>
                 
@@ -231,6 +228,7 @@ const EditarContrato = ({ setSnackbar }) => {
                 />
             </Box>
         </Box>
+        </>
     );
 }
 

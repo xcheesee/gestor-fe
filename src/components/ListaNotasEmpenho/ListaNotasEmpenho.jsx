@@ -4,30 +4,35 @@ import {
     Divider,
     Paper
 } from '@mui/material';
-import FormCertidao from './FormCertidao';
+import FormNotaEmpenho from './FormNotaEmpenho';
 import DialogConfirmacao from '../DialogConfirmacao';
 import BotoesTab from '../BotoesTab';
 import BotaoAdicionar from '../BotaoAdicionar';
 
-const TabCertidoes = (props) => {
+const TabNotasEmpenho = (props) => {
     const campos = [
-        "Certidão",
-        "Validade"
+        "Tipo de Empenho",
+        "Data Emissão",
+        "Número da Nota de Empenho",
+        "Valor de Empenho"
     ];
 
     const valores = [
-        props.certidoes,
-        props.formataData(props.validade_certidoes)
+        props.tipo_empenho,
+        props.formataData(props.data_emissao),
+        props.numero_nota,
+        props.formataValores(props.valor_empenho)
     ];
 
     return props.retornaCampoValor(campos, valores, props.estaCarregado);
 }
 
-const ListaCertidoes = (props) => {
+const ListaNotasEmpenho = (props) => {
     const { 
-        certidoes, 
+        notasempenho, 
         estaCarregado, 
         formataData, 
+        formataValores, 
         retornaCampoValor,
         numContrato, 
         setSnackbar
@@ -35,7 +40,7 @@ const ListaCertidoes = (props) => {
 
     const [acao, setAcao] = useState('editar');
     const [carregando, setCarregando] = useState(false);
-    const [openFormCertidao, setOpenFormCertidao] = useState({
+    const [openFormNotaEmpenho, setOpenFormNotaEmpenho] = useState({
         open: false,
         acao: 'adicionar'
     });
@@ -43,10 +48,12 @@ const ListaCertidoes = (props) => {
         open: false,
         id: ''
     });
-    const [formCertidao, setFormCertidao] = useState({
+    const [formNotaEmpenho, setFormNotaEmpenho] = useState({
         contrato_id: numContrato,
-        certidoes: '',
-        validade_certidoes: ''
+        tipo_empenho: '',
+        data_emissao: '',
+        numero_nota: '',
+        valor_empenho: ''
     });
     const [errors, setErrors] = useState({});
 
@@ -58,8 +65,8 @@ const ListaCertidoes = (props) => {
         setAcao('excluir');
     }
 
-    const excluiCertidao = (id) => {
-        const url = `${process.env.REACT_APP_API_URL}/certidao/${id}`;
+    const excluiNotaEmpenho = (id) => {
+        const url = `${process.env.REACT_APP_API_URL}/empenho_nota/${id}`;
         const token = localStorage.getItem('access_token');
         const options = {
             method: 'DELETE',
@@ -80,7 +87,7 @@ const ListaCertidoes = (props) => {
                 setSnackbar({
                     open: true,
                     severity: 'success',
-                    text: 'Certidão excluída com sucesso!',
+                    text: 'Nota de Empenho excluída com sucesso!',
                     color: 'success'
                 });
                 return res.json();
@@ -89,29 +96,31 @@ const ListaCertidoes = (props) => {
                 setSnackbar({
                     open: true,
                     severity: 'error',
-                    text: `Erro ${res.status} - Não foi possível excluir a certidão`,
+                    text: `Erro ${res.status} - Não foi possível excluir a nota de empenho`,
                     color: 'error'
                 });
             }
         })
     }
 
-    const handleClickEditar = (e, certidao) => {
-        setFormCertidao({
-            id: certidao.id,
-            contrato_id: certidao.contrato_id,
-            certidoes: certidao.certidoes,
-            validade_certidoes: certidao.validade_certidoes
+    const handleClickEditar = (e, notaempenho) => {
+        setFormNotaEmpenho({
+            id: notaempenho.id,
+            contrato_id: notaempenho.contrato_id,
+            tipo_empenho: notaempenho.tipo_empenho,
+            data_emissao: notaempenho.data_emissao,
+            numero_nota: notaempenho.numero_nota,
+            valor_empenho: notaempenho.valor_empenho
         }); 
-        setOpenFormCertidao({ 
+        setOpenFormNotaEmpenho({ 
             open: true, 
             acao: 'editar' 
         });
         setAcao('editar');
     }
 
-    const editaCertidao = (e, formCertidaoEdit, id) => {
-        const url = `${process.env.REACT_APP_API_URL}/certidao/${id}`;
+    const editaNotaEmpenho = (e, formNotaEmpenhoEdit, id) => {
+        const url = `${process.env.REACT_APP_API_URL}/empenho_nota/${id}`;
         const token = localStorage.getItem('access_token');
         const options = {
             method: 'PUT',
@@ -120,7 +129,7 @@ const ListaCertidoes = (props) => {
                 'Accept': 'application/json',
                 'Authorization': `Bearer ${token}`
             },
-            body: JSON.stringify(formCertidaoEdit)
+            body: JSON.stringify(formNotaEmpenhoEdit)
         }
 
         setCarregando(true);
@@ -132,17 +141,19 @@ const ListaCertidoes = (props) => {
                     setSnackbar({
                         open: true,
                         severity: 'success',
-                        text: 'Certidão editada com sucesso!',
+                        text: 'Nota de Empenho editada com sucesso!',
                         color: 'success'
                     });
-                    setOpenFormCertidao({ 
+                    setOpenFormNotaEmpenho({ 
                         open: false, 
                         acao: 'adicionar' 
                     });
-                    setFormCertidao({
-                        ...formCertidao,
-                        certidoes: '',
-                        validade_certidoes: '',
+                    setFormNotaEmpenho({
+                        ...formNotaEmpenho,
+                        tipo_empenho: '',
+                        data_emissao: '',
+                        numero_nota: '',
+                        valor_empenho: ''
                     });
                     return res.json();
                 } else {
@@ -150,7 +161,7 @@ const ListaCertidoes = (props) => {
                     setSnackbar({
                         open: true,
                         severity: 'error',
-                        text: `Erro ${res.status} - Não foi possível editar a certidão`,
+                        text: `Erro ${res.status} - Não foi possível editar a nota de empenho`,
                         color: 'error'
                     });
                 }
@@ -158,19 +169,21 @@ const ListaCertidoes = (props) => {
     }
 
     const handleClickAdicionar = () => {
-        setOpenFormCertidao({ 
+        setOpenFormNotaEmpenho({ 
             open: true, 
             acao: 'adicionar' 
         });
-        setFormCertidao({
+        setFormNotaEmpenho({
             contrato_id: numContrato,
-            certidoes: '',
-            validade_certidoes: ''
+            tipo_empenho: '',
+            data_emissao: '',
+            numero_nota: '',
+            valor_empenho: ''
         });
     }
 
-    const enviaCertidao = () => {
-        const url = `${process.env.REACT_APP_API_URL}/certidao`;
+    const enviaNotaEmpenho = () => {
+        const url = `${process.env.REACT_APP_API_URL}/empenho_nota`;
         const token = localStorage.getItem('access_token');
         const options = {
             method: 'POST',
@@ -179,7 +192,7 @@ const ListaCertidoes = (props) => {
                 'Accept': 'application/json',
                 'Authorization': `Bearer ${token}`
             },
-            body: JSON.stringify(formCertidao)
+            body: JSON.stringify(formNotaEmpenho)
         };
 
         setCarregando(true);
@@ -191,17 +204,19 @@ const ListaCertidoes = (props) => {
                     setSnackbar({
                         open: true,
                         severity: 'success',
-                        text: 'Certidão enviada com sucesso!',
+                        text: 'Nota de Empenho enviada com sucesso!',
                         color: 'success'
                     });
-                    setOpenFormCertidao({ 
+                    setOpenFormNotaEmpenho({ 
                         open: false, 
                         acao: 'adicionar' 
                     });
-                    setFormCertidao({
-                        ...formCertidao,
-                        certidoes: '',
-                        validade_certidoes: '',
+                    setFormNotaEmpenho({
+                        ...formNotaEmpenho,
+                        tipo_empenho: '',
+                        data_emissao: '',
+                        numero_nota: '',
+                        valor_empenho: ''
                     });
                     return res.json();
                 } else {
@@ -209,7 +224,7 @@ const ListaCertidoes = (props) => {
                     setSnackbar({
                         open: true,
                         severity: 'error',
-                        text: `Erro ${res.status} - Não foi possível enviar a certidão`,
+                        text: `Erro ${res.status} - Não foi possível enviar a nota de empenho`,
                         color: 'error'
                     });
                 }
@@ -221,7 +236,7 @@ const ListaCertidoes = (props) => {
     
     return (
         <Box>
-            {certidoes.map((certidao, index) => {
+            {notasempenho.map((notaempenho, index) => {
                 return (
                     <Box 
                         key={index} 
@@ -236,33 +251,36 @@ const ListaCertidoes = (props) => {
                                 fontSize: '1.25rem' 
                             }}
                         >
-                            Certidão # {certidao.id}
+                            Nota de Empenho # {notaempenho.id}
                         </Divider>
                         
                         <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-                            <TabCertidoes 
-                                certidoes={certidao.certidoes}
-                                validade_certidoes={certidao.validade_certidoes}
+                            <TabNotasEmpenho 
+                                tipo_empenho={notaempenho.tipo_empenho}
+                                data_emissao={notaempenho.data_emissao}
+                                numero_nota={notaempenho.numero_nota}
+                                valor_empenho={notaempenho.valor_empenho}
                                 estaCarregado={estaCarregado}
                                 formataData={formataData}
+                                formataValores={formataValores}
                                 retornaCampoValor={retornaCampoValor}
                             />
 
                             <BotoesTab 
-                                editar={(e) => { handleClickEditar(e, certidao, certidao.id); }}
-                                excluir={() => { handleClickExcluir(certidao.id); }}
+                                editar={(e) => { handleClickEditar(e, notaempenho, notaempenho.id); }}
+                                excluir={() => { handleClickExcluir(notaempenho.id); }}
                             />
                         </Box>
                     </Box>
                 );
             })}
 
-            <FormCertidao 
-                formCertidao={formCertidao} 
-                setFormCertidao={setFormCertidao} 
-                openFormCertidao={openFormCertidao}
-                setOpenFormCertidao={setOpenFormCertidao}
-                enviaCertidao={enviaCertidao}
+            <FormNotaEmpenho 
+                formNotaEmpenho={formNotaEmpenho} 
+                setFormNotaEmpenho={setFormNotaEmpenho} 
+                openFormNotaEmpenho={openFormNotaEmpenho}
+                setOpenFormNotaEmpenho={setOpenFormNotaEmpenho}
+                enviaNotaEmpenho={enviaNotaEmpenho}
                 carregando={carregando}
                 setOpenConfirmacao={setOpenConfirmacao}
                 errors={errors}
@@ -271,21 +289,21 @@ const ListaCertidoes = (props) => {
 
             <BotaoAdicionar 
                 fnAdicionar={handleClickAdicionar}
-                texto="Adicionar certidão"
+                texto="Adicionar nota de empenho"
             />
         
             <DialogConfirmacao
                 openConfirmacao={openConfirmacao} 
                 setOpenConfirmacao={setOpenConfirmacao}
                 acao={acao} 
-                fnExcluir={excluiCertidao}
-                fnEditar={editaCertidao}
-                formInterno={formCertidao}
+                fnExcluir={excluiNotaEmpenho}
+                fnEditar={editaNotaEmpenho}
+                formInterno={formNotaEmpenho}
                 carregando={carregando}
-                texto="certidão"
+                texto="nota de empenho"
             />
         </Box>
     );
 }
 
-export default ListaCertidoes;
+export default ListaNotasEmpenho;

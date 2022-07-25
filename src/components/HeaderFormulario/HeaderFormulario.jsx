@@ -9,7 +9,7 @@ import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import { Link } from 'react-router-dom';
 
 const HeaderFormulario = (props) => {
-    const caminho = props.acao === 'editar' ? '' : '/principal' 
+    const caminho = props.acao === 'editar' ? `/contrato/${props.numContrato}` : '/principal' 
 
     return (
         <Typography 
