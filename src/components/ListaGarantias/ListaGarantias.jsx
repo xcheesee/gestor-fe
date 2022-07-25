@@ -1,8 +1,10 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { 
     Box,
     Divider,
-    Paper
+    Paper,
+    CircularProgress,
+    Fade
 } from '@mui/material';
 import DialogConfirmacao from '../DialogConfirmacao';
 import BotoesTab from '../BotoesTab';
@@ -36,6 +38,11 @@ const TabGarantias = (props) => {
 const ListaGarantias = (props) => {
     const {
         garantias,
+        setGarantias,
+        mudancaGarantias,
+        setMudancaGarantias,
+        carregandoGarantias,
+        setCarregandoGarantias,
         estaCarregado,
         formataData,
         formataValores,
@@ -62,6 +69,26 @@ const ListaGarantias = (props) => {
         data_validade_garantia: '',
     });
     const [errors, setErrors] = useState({});
+
+    useEffect(() => {
+        const url = `${process.env.REACT_APP_API_URL}/garantias/${numContrato}`;
+        const token = localStorage.getItem('access_token');
+        const options = {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+                'Authorization': `Bearer ${token}`
+            },
+        }
+
+        fetch(url, options)
+            .then(res => res.json())
+            .then(data => {
+                setGarantias(data.data);
+                setCarregandoGarantias(false);
+            })
+    }, [mudancaGarantias, numContrato, setGarantias, setCarregandoGarantias])
     
     const handleClickExcluir = (id) => {
         setOpenConfirmacao({
@@ -107,6 +134,8 @@ const ListaGarantias = (props) => {
                     });
                 }
             });
+
+        setMudancaGarantias(!mudancaGarantias);
     }
 
     const handleClickEditar = (e, garantia) => {
@@ -172,6 +201,8 @@ const ListaGarantias = (props) => {
                     });
                 }
             });
+
+        setMudancaGarantias(!mudancaGarantias);
     }
 
     const handleClickAdicionar = () => {
@@ -238,46 +269,49 @@ const ListaGarantias = (props) => {
             .catch(err => {
                 console.log(err);
             });
+
+        setMudancaGarantias(!mudancaGarantias);
     }
 
     return (
         <Box>
             {garantias.map((garantia, index) => {
                 return (
-                    <Box 
-                        key={index} 
-                        elevation={3} 
-                        component={Paper} 
-                        sx={{ padding: '1rem', mb: '2rem' }}
-                    >
-                        <Divider
-                            textAlign='right'
-                            sx={{
-                                fontWeight: 'light',
-                                fontSize: '1.25rem'
-                            }}
+                    <Fade in={true} timeout={400} key={index}>
+                        <Box
+                            elevation={3} 
+                            component={Paper} 
+                            sx={{ padding: '1rem', mb: '2rem' }}
                         >
-                            Garantia # {garantia.id}
-                        </Divider>
+                            <Divider
+                                textAlign='right'
+                                sx={{
+                                    fontWeight: 'light',
+                                    fontSize: '1.25rem'
+                                }}
+                            >
+                                Garantia # {garantia.id}
+                            </Divider>
 
-                        <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-                            <TabGarantias 
-                                instituicao_financeira={garantia.instituicao_financeira}
-                                numero_documento={garantia.numero_documento}
-                                valor_garantia={garantia.valor_garantia}
-                                data_validade_garantia={garantia.data_validade_garantia}
-                                estaCarregado={estaCarregado}
-                                retornaCampoValor={retornaCampoValor}
-                                formataData={formataData}
-                                formataValores={formataValores}
-                            />
+                            <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+                                <TabGarantias 
+                                    instituicao_financeira={garantia.instituicao_financeira}
+                                    numero_documento={garantia.numero_documento}
+                                    valor_garantia={garantia.valor_garantia}
+                                    data_validade_garantia={garantia.data_validade_garantia}
+                                    estaCarregado={estaCarregado}
+                                    retornaCampoValor={retornaCampoValor}
+                                    formataData={formataData}
+                                    formataValores={formataValores}
+                                />
 
-                            <BotoesTab 
-                                excluir={(e) => { handleClickExcluir(garantia.id); }}
-                                editar={(e) => { handleClickEditar(e, garantia, garantia.id); }}
-                            />
+                                <BotoesTab 
+                                    excluir={(e) => { handleClickExcluir(garantia.id); }}
+                                    editar={(e) => { handleClickEditar(e, garantia, garantia.id); }}
+                                />
+                            </Box>
                         </Box>
-                    </Box>
+                    </Fade>
                 );
             })}
 
@@ -292,6 +326,22 @@ const ListaGarantias = (props) => {
                 errors={errors}
                 setErrors={setErrors}
             />
+
+            {
+                carregandoGarantias
+                ? 
+                    <Box 
+                        sx={{ 
+                            display: 'flex', 
+                            alignItems: 'center', 
+                            justifyContent: 'center', 
+                            height: '38rem' 
+                        }}>
+                        <CircularProgress size={30} />
+                    </Box>
+                : 
+                    ""
+            }
 
             <BotaoAdicionar 
                 fnAdicionar={handleClickAdicionar}

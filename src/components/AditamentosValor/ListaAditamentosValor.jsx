@@ -1,5 +1,11 @@
-import React, { useState } from "react";
-import { Box, Divider, Paper } from "@mui/material";
+import React, { useEffect, useState } from "react";
+import { 
+    Box, 
+    Divider, 
+    Paper,
+    CircularProgress,
+    Fade
+} from "@mui/material";
 import DialogConfirmacao from "../DialogConfirmacao";
 import BotoesTab from "../BotoesTab";
 import BotaoAdicionar from "../BotaoAdicionar";
@@ -24,6 +30,11 @@ const TabAditamentos = (props) => {
   const ListaAditamentosValor = (props) => {
     const {
         aditamentos_valor,
+        setaditamentos_valor,
+        mudancaAditamentos_valor,
+        setMudancaAditamentos_valor,
+        carregandoAditamentos_valor,
+        setCarregandoAditamentos_valor,
         estaCarregado,
         formataValores,
         retornaCampoValor,
@@ -49,6 +60,26 @@ const TabAditamentos = (props) => {
         pct_reajuste: ''
     });
     const [errors, setErrors] = useState({});
+
+    useEffect(() => {
+        const url = `${process.env.REACT_APP_API_URL}/aditamentos_valor/${numContrato}`;
+        const token = localStorage.getItem('access_token');
+        const options = {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+                'Authorization': `Bearer ${token}`
+            }
+        };
+
+        fetch(url, options)
+            .then(res => res.json())
+            .then(data => {
+                setaditamentos_valor(data.data);
+                setCarregandoAditamentos_valor(false);
+            })
+    }, [mudancaAditamentos_valor, numContrato, setaditamentos_valor, setCarregandoAditamentos_valor])
 
     const handleClickExcluir = (id) => {
         setOpenConfirmacao({
@@ -94,6 +125,8 @@ const TabAditamentos = (props) => {
               });
           }
       })
+
+      setMudancaAditamentos_valor(!mudancaAditamentos_valor);
 }
 
 const handleClickEditar = (e, aditamento) => {
@@ -159,6 +192,8 @@ const editaAditamento = (id, formAditamentoEdit) => {
           });
       }
   });
+
+  setMudancaAditamentos_valor(!mudancaAditamentos_valor);
 }
 
 const handleClickAdicionar = () => {
@@ -235,49 +270,52 @@ const enviaAditamento = () => {
   .catch(err => {
       console.log(err);
   });
+
+  setMudancaAditamentos_valor(!mudancaAditamentos_valor);
 }
 
   return (
     <Box>
       {aditamentos_valor.map((aditamento, index) => {
                 return (
-                    <Box
-                        key={index}
-                        elevation={3}
-                        component={Paper}
-                        sx={{ padding: '1rem', mb: '2rem' }}
-                    >
-                        <Divider
-                            textAlign='right'
-                            sx={{
-                                fontWeight: 'light',
-                                fontSize: '1.25rem'
-                            }}
+                    <Fade in={true} timeout={400} key={index}>
+                        <Box
+                            elevation={3}
+                            component={Paper}
+                            sx={{ padding: '1rem', mb: '2rem' }}
                         >
-                            Aditamento # {aditamento.id}
-                        </Divider>
+                            <Divider
+                                textAlign='right'
+                                sx={{
+                                    fontWeight: 'light',
+                                    fontSize: '1.25rem'
+                                }}
+                            >
+                                Aditamento # {aditamento.id}
+                            </Divider>
 
-                        <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-                            <TabAditamentos 
-                                tipo_aditamento={aditamento.tipo_aditamento}
-                                valor_aditamento={aditamento.valor_aditamento}
-                                indice_reajuste={aditamento.indice_reajuste}
-                                pct_reajuste={aditamento.pct_reajuste}
-                                estaCarregado={estaCarregado}
-                                formataValores={formataValores}
-                                retornaCampoValor={retornaCampoValor}
-                            />
+                            <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+                                <TabAditamentos 
+                                    tipo_aditamento={aditamento.tipo_aditamento}
+                                    valor_aditamento={aditamento.valor_aditamento}
+                                    indice_reajuste={aditamento.indice_reajuste}
+                                    pct_reajuste={aditamento.pct_reajuste}
+                                    estaCarregado={estaCarregado}
+                                    formataValores={formataValores}
+                                    retornaCampoValor={retornaCampoValor}
+                                />
 
-                            <BotoesTab 
-                                editar={(e) => { handleClickEditar(e, aditamento, aditamento.id); }}
-                                excluir={() => { handleClickExcluir(aditamento.id); }}
-                            />
+                                <BotoesTab 
+                                    editar={(e) => { handleClickEditar(e, aditamento, aditamento.id); }}
+                                    excluir={() => { handleClickExcluir(aditamento.id); }}
+                                />
+                            </Box>
                         </Box>
-                    </Box>
+                    </Fade>
                 );
             })}
 
-<FormAditamentoValor
+            <FormAditamentoValor
                 formAditamento={formAditamentos}
                 setFormAditamento={setFormAditamentos}
                 openFormAditamento={openFormAditamentos} 
@@ -288,6 +326,16 @@ const enviaAditamento = () => {
                 errors={errors}
                 setErrors={setErrors}
             />
+
+            {
+                carregandoAditamentos_valor
+                ? 
+                    <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '38rem' }}>
+                        <CircularProgress size={30} />
+                    </Box>
+                : 
+                    ""
+            }   
 
             <BotaoAdicionar 
                 fnAdicionar={handleClickAdicionar}

@@ -1,8 +1,10 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { 
     Box,
     Divider,
-    Paper
+    Paper,
+    CircularProgress,
+    Fade
 } from '@mui/material';
 import FormGestaoFiscalizacao from './FormGestaoFiscalizacao';
 import DialogConfirmacao from '../DialogConfirmacao';
@@ -34,6 +36,11 @@ const TabFiscalizacao = (props) => {
 const ListaFiscalizacoes = (props) => {
     const {
         fiscalizacoes,
+        setFiscalizacoes,
+        mudancaFiscalizacoes,
+        setMudancaFiscalizacoes,
+        carregandoFiscalizacoes,
+        setCarregandoFiscalizacoes,
         estaCarregado,
         retornaCampoValor,
         setSnackbar,
@@ -60,6 +67,26 @@ const ListaFiscalizacoes = (props) => {
         email_suplente: ''
     });
     const [errors, setErrors] = useState({});
+
+    useEffect(() => {
+        const url = `${process.env.REACT_APP_API_URL}/gestaofiscalizacoes/${numContrato}`;
+        const token = localStorage.getItem('access_token');
+        const options = {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+                'Authorization': `Bearer ${token}`
+            }
+        };
+
+        fetch(url, options)
+            .then(res => res.json())
+            .then(data => {
+                setFiscalizacoes(data.data);
+                setCarregandoFiscalizacoes(false);
+            })
+    }, [mudancaFiscalizacoes, numContrato, setFiscalizacoes, setCarregandoFiscalizacoes])
 
     const handleClickExcluir = (id) => {
         setOpenConfirmacao({
@@ -105,6 +132,8 @@ const ListaFiscalizacoes = (props) => {
                     });
                 }
             });
+
+        setMudancaFiscalizacoes(!mudancaFiscalizacoes);
     }
 
     const handleClickEditar = (e, fiscalizacao) => {
@@ -174,6 +203,8 @@ const ListaFiscalizacoes = (props) => {
                     });
                 }
             });
+        
+        setMudancaFiscalizacoes(!mudancaFiscalizacoes);
     }
 
     const handleClickAdicionar = () => {
@@ -256,46 +287,49 @@ const ListaFiscalizacoes = (props) => {
             .catch(err => {
                 console.log(err);
             });
+
+        setMudancaFiscalizacoes(!mudancaFiscalizacoes);
     }
 
     return (
         <Box>
             {fiscalizacoes.map((fiscalizacao, index) => {
                 return (
-                    <Box 
-                        key={index} 
-                        elevation={3} 
-                        component={Paper} 
-                        sx={{ padding: '1rem', mb: '2rem' }}
-                    >
-                        <Divider
-                            textAlign='right'
-                            sx={{
-                                fontWeight: 'light',
-                                fontSize: '1.25rem'
-                            }}
+                    <Fade in={true} timeout={400} key={index}>
+                        <Box  
+                            elevation={3} 
+                            component={Paper} 
+                            sx={{ padding: '1rem', mb: '2rem' }}
                         >
-                            Gestão/fiscalização # {fiscalizacao.id}
-                        </Divider>
+                            <Divider
+                                textAlign='right'
+                                sx={{
+                                    fontWeight: 'light',
+                                    fontSize: '1.25rem'
+                                }}
+                            >
+                                Gestão/fiscalização # {fiscalizacao.id}
+                            </Divider>
 
-                        <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-                            <TabFiscalizacao 
-                                nome_gestor={fiscalizacao.nome_gestor}
-                                email_gestor={fiscalizacao.email_gestor}
-                                nome_fiscal={fiscalizacao.nome_fiscal}
-                                email_fiscal={fiscalizacao.email_fiscal}
-                                nome_suplente={fiscalizacao.nome_suplente}
-                                email_suplente={fiscalizacao.email_suplente}
-                                retornaCampoValor={retornaCampoValor}
-                                estaCarregado={estaCarregado}
-                            />
+                            <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+                                <TabFiscalizacao 
+                                    nome_gestor={fiscalizacao.nome_gestor}
+                                    email_gestor={fiscalizacao.email_gestor}
+                                    nome_fiscal={fiscalizacao.nome_fiscal}
+                                    email_fiscal={fiscalizacao.email_fiscal}
+                                    nome_suplente={fiscalizacao.nome_suplente}
+                                    email_suplente={fiscalizacao.email_suplente}
+                                    retornaCampoValor={retornaCampoValor}
+                                    estaCarregado={estaCarregado}
+                                />
 
-                            <BotoesTab 
-                                excluir={(e) => { handleClickExcluir(fiscalizacao.id); }}
-                                editar={(e) => { handleClickEditar(e, fiscalizacao, fiscalizacao.id); }}
-                            />
+                                <BotoesTab 
+                                    excluir={(e) => { handleClickExcluir(fiscalizacao.id); }}
+                                    editar={(e) => { handleClickEditar(e, fiscalizacao, fiscalizacao.id); }}
+                                />
+                            </Box>
                         </Box>
-                    </Box>
+                    </Fade>
                 );
             })}
 
@@ -310,6 +344,16 @@ const ListaFiscalizacoes = (props) => {
                 errors={errors}
                 setErrors={setErrors}
             />
+
+            {
+                carregandoFiscalizacoes
+                ? 
+                    <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '38rem' }}>
+                        <CircularProgress size={30} />
+                    </Box>
+                : 
+                    ""
+            }  
 
             <BotaoAdicionar 
                 fnAdicionar={handleClickAdicionar}

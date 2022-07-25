@@ -141,14 +141,35 @@ const ListaTabs = [
 const DadosContrato = ({ snackbar, setSnackbar }) => {
     const [value, setValue] = useState(0);
     const [dados, setDados] = useState({});
+    
     const [certidoes, setCertidoes] = useState([]);
+    const [mudancaCertidoes, setMudancaCertidoes] = useState(false);
+    const [carregandoCertidoes, setCarregandoCertidoes] = useState(true);
+    
     const [garantias, setGarantias] = useState([]);
+    const [mudancaGarantias, setMudancaGarantias] = useState(false);
+    const [carregandoGarantias, setCarregandoGarantias] = useState(true);
+    
     const [fiscalizacoes, setFiscalizacoes] = useState([]);
+    const [mudancaFiscalizacoes, setMudancaFiscalizacoes] = useState(false);
+    const [carregandoFicalizacoes, setCarregandoFiscalizacoes] = useState(true);
+
     const [locais, setLocais] = useState([]);
+    const [mudancaLocais, setMudancaLocais] = useState(false);
+    const [carregandoLocais, setCarregandoLocais] = useState(true);
+
     const [aditamentos_valor, setaditamentos_valor] = useState([]);
+    const [mudancaAditamentos_valor, setMudancaAditamentos_valor] = useState(false);
+    const [carregandoAditamentos_valor, setCarregandoAditamentos_valor] = useState(true);
+
     const [aditamentos_prazo, setaditamentos_prazo] = useState([]);
+    const [mudancaAditamentos_prazo, setMudancaAditamentos_prazo] = useState(false);
+    const [carregandoAditamentos_prazo, setCarregandoAditamentos_prazo] = useState(true);
+
     const [dotacoes, setDotacoes] = useState([]);
+
     const [notasempenho, setNotasEmpenho] = useState([]);
+    
     const [tipoDotacoes, setTipoDotacoes] = useState([]);
     const [origemRecursos, setOrigemRecursos] = useState([]);
     const [estaCarregado, setEstaCarregado] = useState(false);
@@ -179,41 +200,7 @@ const DadosContrato = ({ snackbar, setSnackbar }) => {
                     return res.json()
                         .then(data => {
                             setDados(data.data);
-                        })
-                        .then(() => {
-                            fetch(`${url}/certidoes/${numContrato}`, options)
-                                .then(res => res.json())
-                                .then(data => {
-                                    setCertidoes(data.data);
-                            })
-                        })
-                        .then(() => {
-                            fetch(`${url}/garantias/${numContrato}`, options)
-                                .then(res => res.json())
-                                .then(data => {
-                                    setGarantias(data.data);
-                                })
-                        })
-                        .then(() => {
-                            fetch(`${url}/gestaofiscalizacoes/${numContrato}`, options)
-                                .then(res => res.json())
-                                .then(data => {
-                                    setFiscalizacoes(data.data);
-                                })
-                        })
-                        .then(() => {
-                            fetch(`${url}/servicoslocais/${numContrato}`, options)
-                                .then(res => res.json())
-                                .then(data => {
-                                    setLocais(data.data);
-                                })
-                        })
-                        .then(() => {
-                            fetch(`${url}/dotacoes/${numContrato}`, options)
-                                .then(res => res.json())
-                                .then(data => {
-                                    setDotacoes(data.data);
-                                })
+                            setEstaCarregado(true);
                         })
                         .then(() => {
                             fetch(`${url}/dotacao_tipos`, options)
@@ -227,21 +214,14 @@ const DadosContrato = ({ snackbar, setSnackbar }) => {
                                 .then(res => res.json())
                                 .then(data => {
                                     setOrigemRecursos(data.data);
-                                    setEstaCarregado(true);
+                                    // setEstaCarregado(true);
                                 })
                         })
                         .then(() => {
-                            fetch(`${url}/aditamentos_valor/${numContrato}`, options)
+                            fetch(`${url}/dotacoes/${numContrato}`, options)
                                 .then(res => res.json())
                                 .then(data => {
-                                    setaditamentos_valor(data.data);
-                                })
-                        })                
-                        .then(() => {
-                            fetch(`${url}/aditamentos_prazo/${numContrato}`, options)
-                                .then(res => res.json())
-                                .then(data => {
-                                    setaditamentos_prazo(data.data);
+                                    setDotacoes(data.data);
                                 })
                         })
                         .then(() => {
@@ -374,6 +354,11 @@ const DadosContrato = ({ snackbar, setSnackbar }) => {
                                     <TabPanel value={value} index={1}>
                                         <ListaCertidoes 
                                             certidoes={certidoes}
+                                            setCertidoes={setCertidoes}
+                                            mudancaCertidoes={mudancaCertidoes}
+                                            setMudancaCertidoes={setMudancaCertidoes}
+                                            carregandoCertidoes={carregandoCertidoes}
+                                            setCarregandoCertidoes={setCarregandoCertidoes}
                                             estaCarregado={estaCarregado}
                                             formataData={formataData}
                                             retornaCampoValor={retornaCampoValor} 
@@ -386,6 +371,11 @@ const DadosContrato = ({ snackbar, setSnackbar }) => {
                                     <TabPanel value={value} index={2}>
                                         <ListaGarantias 
                                             garantias={garantias}
+                                            setGarantias={setGarantias}
+                                            mudancaGarantias={mudancaGarantias}
+                                            setMudancaGarantias={setMudancaGarantias}
+                                            carregandoGarantias={carregandoGarantias}
+                                            setCarregandoGarantias={setCarregandoGarantias}
                                             estaCarregado={estaCarregado}
                                             formataData={formataData}
                                             formataValores={formataValores}
@@ -399,6 +389,11 @@ const DadosContrato = ({ snackbar, setSnackbar }) => {
                                     <TabPanel value={value} index={3}>
                                         <ListaFiscalizacao 
                                             fiscalizacoes={fiscalizacoes}
+                                            setFiscalizacoes={setFiscalizacoes}
+                                            mudancaFiscalizacoes={mudancaFiscalizacoes}
+                                            setMudancaFiscalizacoes={setMudancaFiscalizacoes}
+                                            carregandoFiscalizacoes={carregandoFicalizacoes}
+                                            setCarregandoFiscalizacoes={setCarregandoFiscalizacoes}
                                             estaCarregado={estaCarregado}
                                             retornaCampoValor={retornaCampoValor}
                                             snackbar={snackbar}
@@ -410,6 +405,11 @@ const DadosContrato = ({ snackbar, setSnackbar }) => {
                                     <TabPanel value={value} index={4}>
                                         <ListaLocais 
                                             locais={locais}
+                                            setLocais={setLocais}
+                                            mudancaLocais={mudancaLocais}
+                                            setMudancaLocais={setMudancaLocais}
+                                            carregandoLocais={carregandoLocais}
+                                            setCarregandoLocais={setCarregandoLocais}
                                             estaCarregado={estaCarregado}
                                             retornaCampoValor={retornaCampoValor}
                                             numContrato={numContrato}
@@ -419,18 +419,28 @@ const DadosContrato = ({ snackbar, setSnackbar }) => {
                                     
                                     <TabPanel value={value} index={5}>
                                         <ListaAditamentosValor
-                                        aditamentos_valor={aditamentos_valor}
-                                        estaCarregado={estaCarregado}
-                                        formataValores={formataValores}
-                                        retornaCampoValor={retornaCampoValor}
-                                        numContrato={numContrato}
-                                        setSnackbar={setSnackbar}
+                                            aditamentos_valor={aditamentos_valor}
+                                            setaditamentos_valor={setaditamentos_valor}
+                                            mudancaAditamentos_valor={mudancaAditamentos_valor}
+                                            setMudancaAditamentos_valor={setMudancaAditamentos_valor}
+                                            carregandoAditamentos_valor={carregandoAditamentos_valor}
+                                            setCarregandoAditamentos_valor={setCarregandoAditamentos_valor}
+                                            estaCarregado={estaCarregado}
+                                            formataValores={formataValores}
+                                            retornaCampoValor={retornaCampoValor}
+                                            numContrato={numContrato}
+                                            setSnackbar={setSnackbar}
                                         />                                                                                                               
                                     </TabPanel>
 
                                     <TabPanel value={value} index={6}>
                                         <ListaAditamentosPrazo
                                             aditamentos_prazo={aditamentos_prazo}
+                                            setaditamentos_prazo={setaditamentos_prazo}
+                                            mudancaAditamentos_prazo={mudancaAditamentos_prazo}
+                                            setMudancaAditamentos_prazo={setMudancaAditamentos_prazo}
+                                            carregandoAditamentos_prazo={carregandoAditamentos_prazo}
+                                            setCarregandoAditamentos_prazo={setCarregandoAditamentos_prazo}
                                             estaCarregado={estaCarregado}
                                             formataData={formataData}
                                             retornaCampoValor={retornaCampoValor}

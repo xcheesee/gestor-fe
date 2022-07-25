@@ -1,5 +1,11 @@
-import React, { useState } from "react";
-import { Box, Divider, Paper } from "@mui/material";
+import React, { useEffect, useState } from "react";
+import { 
+  Box, 
+  Divider, 
+  Paper,
+  CircularProgress,
+  Fade
+} from "@mui/material";
 import DialogConfirmacao from "../DialogConfirmacao";
 import BotoesTab from "../BotoesTab";
 import BotaoAdicionar from "../BotaoAdicionar";
@@ -17,6 +23,11 @@ const TabAditamentos = (props) => {
 const ListaAditamentosPrazo = (props) => {
   const {
     aditamentos_prazo,
+    setaditamentos_prazo,
+    mudancaAditamentos_prazo,
+    setMudancaAditamentos_prazo,
+    carregandoAditamentos_prazo,
+    setCarregandoAditamentos_prazo,
     estaCarregado,
     retornaCampoValor,
     formataData,
@@ -40,6 +51,25 @@ const ListaAditamentosPrazo = (props) => {
     dias_reajuste: ""
   });
   const [errors, setErrors] = useState({});
+
+  useEffect(() => {
+    const url = `${process.env.REACT_APP_API_URL}/aditamentos_prazo/${numContrato}`;
+    const token = localStorage.getItem('access_token');
+    const options = {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+            'Authorization': `Bearer ${token}`
+        }
+    };
+
+    fetch(url, options)
+      .then(res => res.json())
+      .then(data => {
+          setaditamentos_prazo(data.data);
+      })
+  }, [mudancaAditamentos_prazo, numContrato, setaditamentos_prazo, setCarregandoAditamentos_prazo])
 
   const handleClickExcluir = (id) => {
     setOpenConfirmacao({
@@ -84,6 +114,8 @@ const ListaAditamentosPrazo = (props) => {
         });
       }
     });
+
+    setMudancaAditamentos_prazo(!mudancaAditamentos_prazo);
   };
 
   const handleClickEditar = (e, aditamentos) => {
@@ -144,6 +176,8 @@ const ListaAditamentosPrazo = (props) => {
         });
       }
     });
+
+    setMudancaAditamentos_prazo(!mudancaAditamentos_prazo);
   };
 
   const handleClickAdicionar = () => {
@@ -218,47 +252,50 @@ const ListaAditamentosPrazo = (props) => {
       .catch((err) => {
         console.log(err);
       });
+
+      setMudancaAditamentos_prazo(!mudancaAditamentos_prazo);
   };
 
   return (
     <Box>
       {aditamentos_prazo.map((aditamento, index) => {
         return (
-          <Box
-            key={index}
-            elevation={3}
-            component={Paper}
-            sx={{ padding: "1rem", mb: "2rem" }}
-          >
-            <Divider
-              textAlign="right"
-              sx={{
-                fontWeight: "light",
-                fontSize: "1.25rem"
-              }}
+          <Fade in={true} timeout={400} key={index}>
+            <Box
+              elevation={3}
+              component={Paper}
+              sx={{ padding: "1rem", mb: "2rem" }}
             >
-              Aditamento # {aditamento.id}
-            </Divider>
-
-            <Box sx={{ display: "flex", justifyContent: "space-between" }}>
-              <TabAditamentos
-                tipo_aditamento={aditamento.tipo_aditamento}
-                dias_reajuste={aditamento.dias_reajuste}
-                formataData={formataData}
-                retornaCampoValor={retornaCampoValor}
-                estaCarregado={estaCarregado}
-              />
-
-              <BotoesTab
-                editar={(e) => {
-                  handleClickEditar(e, aditamento, aditamento.id);
+              <Divider
+                textAlign="right"
+                sx={{
+                  fontWeight: "light",
+                  fontSize: "1.25rem"
                 }}
-                excluir={() => {
-                  handleClickExcluir(aditamento.id);
-                }}
-              />
+              >
+                Aditamento # {aditamento.id}
+              </Divider>
+
+              <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+                <TabAditamentos
+                  tipo_aditamento={aditamento.tipo_aditamento}
+                  dias_reajuste={aditamento.dias_reajuste}
+                  formataData={formataData}
+                  retornaCampoValor={retornaCampoValor}
+                  estaCarregado={estaCarregado}
+                />
+
+                <BotoesTab
+                  editar={(e) => {
+                    handleClickEditar(e, aditamento, aditamento.id);
+                  }}
+                  excluir={() => {
+                    handleClickExcluir(aditamento.id);
+                  }}
+                />
+              </Box>
             </Box>
-          </Box>
+          </Fade>
         );
       })}
 
@@ -273,6 +310,16 @@ const ListaAditamentosPrazo = (props) => {
         errors={errors}
         setErrors={setErrors}
       />
+
+      {
+        carregandoAditamentos_prazo
+        ? 
+            <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '38rem' }}>
+                <CircularProgress size={30} />
+            </Box>
+        : 
+            ""
+      }   
 
       <BotaoAdicionar
         fnAdicionar={handleClickAdicionar}

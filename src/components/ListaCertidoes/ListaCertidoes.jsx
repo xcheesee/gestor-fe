@@ -1,8 +1,10 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { 
     Box,
     Divider,
-    Paper
+    Paper,
+    CircularProgress,
+    Fade
 } from '@mui/material';
 import FormCertidao from './FormCertidao';
 import DialogConfirmacao from '../DialogConfirmacao';
@@ -25,7 +27,12 @@ const TabCertidoes = (props) => {
 
 const ListaCertidoes = (props) => {
     const { 
-        certidoes, 
+        certidoes,
+        setCertidoes,
+        mudancaCertidoes,
+        setMudancaCertidoes,
+        carregandoCertidoes,
+        setCarregandoCertidoes,
         estaCarregado, 
         formataData, 
         retornaCampoValor,
@@ -49,6 +56,26 @@ const ListaCertidoes = (props) => {
         validade_certidoes: ''
     });
     const [errors, setErrors] = useState({});
+
+    useEffect(() => {
+        const url = `${process.env.REACT_APP_API_URL}/certidoes/${numContrato}`;
+        const token = localStorage.getItem('access_token');
+        const options = {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+                'Authorization': `Bearer ${token}`
+            }
+        };
+
+        fetch(url, options)
+            .then(res => res.json())
+            .then(data => {
+                setCertidoes(data.data);
+                setCarregandoCertidoes(false);
+            })
+    }, [mudancaCertidoes, numContrato, setCertidoes, setCarregandoCertidoes]);
 
     const handleClickExcluir = (id) => {
         setOpenConfirmacao({ 
@@ -94,6 +121,8 @@ const ListaCertidoes = (props) => {
                 });
             }
         })
+
+        setMudancaCertidoes(!mudancaCertidoes);
     }
 
     const handleClickEditar = (e, certidao) => {
@@ -155,6 +184,8 @@ const ListaCertidoes = (props) => {
                     });
                 }
             });
+
+        setMudancaCertidoes(!mudancaCertidoes);
     }
 
     const handleClickAdicionar = () => {
@@ -181,8 +212,6 @@ const ListaCertidoes = (props) => {
             },
             body: JSON.stringify(formCertidao)
         };
-
-        setCarregando(true);
 
         fetch(url, options)
             .then(res => {
@@ -217,43 +246,46 @@ const ListaCertidoes = (props) => {
             .catch(err => {
                 console.log(err);
             });
+
+        setMudancaCertidoes(!mudancaCertidoes);
     }
     
     return (
         <Box>
             {certidoes.map((certidao, index) => {
                 return (
-                    <Box 
-                        key={index} 
-                        elevation={3} 
-                        component={Paper} 
-                        sx={{ padding: '1rem', mb: '2rem' }}
-                    >
-                        <Divider 
-                            textAlign='right' 
-                            sx={{ 
-                                fontWeight: 'light', 
-                                fontSize: '1.25rem' 
-                            }}
+                    <Fade in={true} timeout={400} key={index}>
+                        <Box 
+                            elevation={3} 
+                            component={Paper} 
+                            sx={{ padding: '1rem', mb: '2rem' }}
                         >
-                            Certidão # {certidao.id}
-                        </Divider>
-                        
-                        <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-                            <TabCertidoes 
-                                certidoes={certidao.certidoes}
-                                validade_certidoes={certidao.validade_certidoes}
-                                estaCarregado={estaCarregado}
-                                formataData={formataData}
-                                retornaCampoValor={retornaCampoValor}
-                            />
+                            <Divider 
+                                textAlign='right' 
+                                sx={{ 
+                                    fontWeight: 'light', 
+                                    fontSize: '1.25rem' 
+                                }}
+                            >
+                                Certidão # {certidao.id}
+                            </Divider>
+                            
+                            <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+                                <TabCertidoes 
+                                    certidoes={certidao.certidoes}
+                                    validade_certidoes={certidao.validade_certidoes}
+                                    estaCarregado={estaCarregado}
+                                    formataData={formataData}
+                                    retornaCampoValor={retornaCampoValor}
+                                />
 
-                            <BotoesTab 
-                                editar={(e) => { handleClickEditar(e, certidao, certidao.id); }}
-                                excluir={() => { handleClickExcluir(certidao.id); }}
-                            />
+                                <BotoesTab 
+                                    editar={(e) => { handleClickEditar(e, certidao, certidao.id); }}
+                                    excluir={() => { handleClickExcluir(certidao.id); }}
+                                />
+                            </Box>
                         </Box>
-                    </Box>
+                    </Fade>
                 );
             })}
 
@@ -269,6 +301,16 @@ const ListaCertidoes = (props) => {
                 setErrors={setErrors}
             />
 
+            {
+                carregandoCertidoes
+                ? 
+                    <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '38rem' }}>
+                        <CircularProgress size={30} />
+                    </Box>
+                : 
+                    ""
+            }   
+            
             <BotaoAdicionar 
                 fnAdicionar={handleClickAdicionar}
                 texto="Adicionar certidão"

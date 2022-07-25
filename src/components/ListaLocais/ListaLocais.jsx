@@ -1,8 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { 
     Box,
     Divider,
-    Paper
+    Paper,
+    CircularProgress,
+    Fade
 } from '@mui/material';
 import DialogConfirmacao from '../DialogConfirmacao';
 import BotoesTab from '../BotoesTab';
@@ -34,10 +36,14 @@ const TabLocaisServico = (props) => {
     return props.retornaCampoValor(campos, valores, props.estaCarregado);
 }
 
-
 const ListaLocais = (props) => {
     const {
         locais,
+        setLocais,
+        mudancaLocais,
+        setMudancaLocais,
+        carregandoLocais,
+        setCarregandoLocais,
         estaCarregado,
         retornaCampoValor,
         numContrato,
@@ -62,6 +68,26 @@ const ListaLocais = (props) => {
         unidade: ''
     });
     const [errors, setErrors] = useState({});
+    
+    useEffect(() => {
+        const url = `${process.env.REACT_APP_API_URL}/servicoslocais/${numContrato}`
+        const token = localStorage.getItem('access_token');
+        const options = {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+                'Authorization': `Bearer ${token}`
+            }
+        };
+
+        fetch(url, options)
+            .then(res => res.json())
+            .then(data => {
+                setLocais(data.data);
+                setCarregandoLocais(false);
+            })
+    }, [mudancaLocais, numContrato, setLocais, setCarregandoLocais]);
 
     const handleClickExcluir = (id) => {
         setOpenConfirmacao({
@@ -107,6 +133,8 @@ const ListaLocais = (props) => {
                     });
                 }
             })
+
+        setMudancaLocais(!mudancaLocais);
     }
 
     const handleClickEditar = (e, local) => {
@@ -172,6 +200,8 @@ const ListaLocais = (props) => {
                     });
                 }
             });
+
+        setMudancaLocais(!mudancaLocais);
     }
 
     const handleClickAdicionar = () => {
@@ -242,44 +272,46 @@ const ListaLocais = (props) => {
                 }
             })
             
+        setMudancaLocais(!mudancaLocais);
     }
 
     return (
         <Box>
             {locais.map((local, index) => {
                 return (
-                    <Box
-                        key={index}
-                        elevation={3}
-                        component={Paper}
-                        sx={{ padding: '1rem', mb: '2rem' }}
-                    >
-                        <Divider
-                            textAlign='right'
-                            sx={{
-                                fontWeight: 'light',
-                                fontSize: '1.25rem'
-                            }}
+                    <Fade in={true} timeout={400} key={index}>
+                        <Box
+                            elevation={3}
+                            component={Paper}
+                            sx={{ padding: '1rem', mb: '2rem' }}
                         >
-                            Local de serviço # {local.id}
-                        </Divider>
+                            <Divider
+                                textAlign='right'
+                                sx={{
+                                    fontWeight: 'light',
+                                    fontSize: '1.25rem'
+                                }}
+                            >
+                                Local de serviço # {local.id}
+                            </Divider>
 
-                        <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-                            <TabLocaisServico 
-                                regiao={local.regiao}
-                                subprefeitura={local.subprefeitura}
-                                distrito={local.distrito}
-                                unidade={local.unidade}
-                                estaCarregado={estaCarregado}
-                                retornaCampoValor={retornaCampoValor}
-                            />
+                            <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+                                <TabLocaisServico 
+                                    regiao={local.regiao}
+                                    subprefeitura={local.subprefeitura}
+                                    distrito={local.distrito}
+                                    unidade={local.unidade}
+                                    estaCarregado={estaCarregado}
+                                    retornaCampoValor={retornaCampoValor}
+                                />
 
-                            <BotoesTab 
-                                editar={(e) => { handleClickEditar(e, local); }}
-                                excluir={() => { handleClickExcluir(local.id); }}
-                            />
+                                <BotoesTab 
+                                    editar={(e) => { handleClickEditar(e, local); }}
+                                    excluir={() => { handleClickExcluir(local.id); }}
+                                />
+                            </Box>
                         </Box>
-                    </Box>
+                    </Fade>
                 )
             })}
 
@@ -295,6 +327,16 @@ const ListaLocais = (props) => {
                 errors={errors}
                 setErrors={setErrors}
             />
+
+            {
+                carregandoLocais
+                ? 
+                    <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '38rem' }}>
+                        <CircularProgress size={30} />
+                    </Box>
+                : 
+                    ""
+            }   
 
             <BotaoAdicionar 
                 fnAdicionar={handleClickAdicionar}
