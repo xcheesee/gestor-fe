@@ -27,6 +27,8 @@ import PropTypes from 'prop-types';
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { cpf, cnpj } from 'cpf-cnpj-validator';
+import ListaAditamentosValor from '../AditamentosValor/ListaAditamentosValor';
+import ListaAditamentosPrazo from '../AditamentosPrazo/ListaAditamentosPrazo';
 
 const TabPanel = (props) => {
     const { children, value, index, ...other } = props;
@@ -143,6 +145,8 @@ const DadosContrato = ({ snackbar, setSnackbar }) => {
     const [garantias, setGarantias] = useState([]);
     const [fiscalizacoes, setFiscalizacoes] = useState([]);
     const [locais, setLocais] = useState([]);
+    const [aditamentos_valor, setaditamentos_valor] = useState([]);
+    const [aditamentos_prazo, setaditamentos_prazo] = useState([]);
     const [dotacoes, setDotacoes] = useState([]);
     const [notasempenho, setNotasEmpenho] = useState([]);
     const [tipoDotacoes, setTipoDotacoes] = useState([]);
@@ -224,6 +228,20 @@ const DadosContrato = ({ snackbar, setSnackbar }) => {
                                 .then(data => {
                                     setOrigemRecursos(data.data);
                                     setEstaCarregado(true);
+                                })
+                        })
+                        .then(() => {
+                            fetch(`${url}/aditamentos_valor/${numContrato}`, options)
+                                .then(res => res.json())
+                                .then(data => {
+                                    setaditamentos_valor(data.data);
+                                })
+                        })                
+                        .then(() => {
+                            fetch(`${url}/aditamentos_prazo/${numContrato}`, options)
+                                .then(res => res.json())
+                                .then(data => {
+                                    setaditamentos_prazo(data.data);
                                 })
                         })
                         .then(() => {
@@ -400,15 +418,25 @@ const DadosContrato = ({ snackbar, setSnackbar }) => {
                                     </TabPanel>
                                     
                                     <TabPanel value={value} index={5}>
-                                        {/*
-                                            Lista de Aditamentos de Valor
-                                        */}
+                                        <ListaAditamentosValor
+                                        aditamentos_valor={aditamentos_valor}
+                                        estaCarregado={estaCarregado}
+                                        formataValores={formataValores}
+                                        retornaCampoValor={retornaCampoValor}
+                                        numContrato={numContrato}
+                                        setSnackbar={setSnackbar}
+                                        />                                                                                                               
                                     </TabPanel>
 
                                     <TabPanel value={value} index={6}>
-                                        {/*
-                                            Lista de Aditamentos de Prazo
-                                        */}
+                                        <ListaAditamentosPrazo
+                                            aditamentos_prazo={aditamentos_prazo}
+                                            estaCarregado={estaCarregado}
+                                            formataData={formataData}
+                                            retornaCampoValor={retornaCampoValor}
+                                            numContrato={numContrato}
+                                            setSnackbar={setSnackbar}
+                                        />
                                     </TabPanel>
 
                                     <TabPanel value={value} index={7}>
