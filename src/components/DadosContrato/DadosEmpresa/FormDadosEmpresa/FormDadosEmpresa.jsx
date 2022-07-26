@@ -32,7 +32,7 @@ const FormDadosEmpresa = (props) => {
         open: false,
         id: numContrato
     });
-    const [contatoEditado, setContatoEditado] = useState({});
+    const [contatoEditado, setContatoEditado] = useState({...formContrato});
     const nome_empresa = useRef(null);
     const email_empresa = useRef(null);
 
@@ -111,6 +111,9 @@ const FormDadosEmpresa = (props) => {
                     email_empresa={email_empresa}
                     checaErrosEmail={checaErrosEmail}
                     acao="editar"
+                    edicao={true}
+                    formInterno={contatoEditado}
+                    setFormInterno={setContatoEditado}
                 />
             </DialogContent>
 
@@ -128,6 +131,7 @@ const FormDadosEmpresa = (props) => {
                     onMouseDown={() => setContatoEditado({
                         ...formContrato,
                         nome_empresa: nome_empresa.current.value,
+                        telefone_empresa: contatoEditado.telefone_empresa,
                         email_empresa: email_empresa.current.value
                     })}
                     onMouseUp={() => setOpenConfirmacao({ open: true, id: numContrato })}

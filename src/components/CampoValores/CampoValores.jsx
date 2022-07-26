@@ -40,7 +40,7 @@ const CampoValores = (props) => {
     checaErros, 
     helperText, 
     error, 
-    fullWidth 
+    fullWidth
   } = props;  
   
   const [valor, setValor] = useState(value);

@@ -15,7 +15,8 @@ const BoxContatoEmpresa = (props) => {
         nome_empresa,
         email_empresa,
         checaErrosEmail,
-        acao
+        acao,
+        ...other
     } = props;
 
     return (
@@ -51,6 +52,7 @@ const BoxContatoEmpresa = (props) => {
                 error={errors.hasOwnProperty('telefone_empresa')}
                 helperText={errors.hasOwnProperty('telefone_empresa') ? errors.telefone_empresa : " "}
                 name="telefone_empresa"
+                {...other}
             />
 
             <TextField

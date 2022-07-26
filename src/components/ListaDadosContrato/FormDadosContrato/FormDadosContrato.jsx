@@ -98,7 +98,7 @@ const FormDadosContrato = (props) => {
 
     return (
         <>
-        <Dialog open={openDadosCon}>
+        <Dialog open={openDadosCon} fullWidth maxWidth="md">
             <DialogTitle>
                 Editar dados de contrato
             </DialogTitle>
@@ -134,7 +134,7 @@ const FormDadosContrato = (props) => {
             <DialogActions sx={{ margin: '1rem' }}>
                 <Button 
                     sx={{ textTransform: 'none', mr: '1rem', color: '#821f1f' }}
-                    onClick={() => setOpenDadosCon(false)}
+                    onClick={() => { setOpenDadosCon(false); setMudancaContrato(!mudancaContrato); }}
                 >
                     <CloseIcon sx={{ mr: '0.2rem' }} /> Cancelar
                 </Button>

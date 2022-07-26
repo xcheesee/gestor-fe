@@ -26,14 +26,21 @@ NumberFormatCustom.propTypes = {
     onChange: PropTypes.func.isRequired,
 };
 
-const CampoTelefone = ({ formContrato, setFormContrato, error, helperText, name }) => {
+const CampoTelefone = ({ formContrato, setFormContrato, error, helperText, name, ...other }) => {
     const [telefone_empresa, setTelefone_empresa] = useState(formContrato.telefone_empresa);
 
     const handleBlur = (event) => {
-        setFormContrato({
-            ...formContrato,
-            telefone_empresa: telefone_empresa
-        });
+        if (other.edicao) {
+            other.setFormInterno({
+                ...other.formInterno,
+                telefone_empresa: telefone_empresa
+            });
+        } else {
+            setFormContrato({
+                ...formContrato,
+                telefone_empresa: telefone_empresa
+            });
+        }
     }
 
     return (
