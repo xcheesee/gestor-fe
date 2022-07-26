@@ -93,7 +93,7 @@ const FormAditamentoPrazo = (props) => {
           onChange={handleInputChange}
           label="Dias Reajuste"
           sx={{ margin: "1rem 0" }}
-          errors={errors.hasOwnProperty("dias_reajuste")}
+          error={errors.hasOwnProperty("dias_reajuste")}
           helperText={errors.dias_reajuste}
           fullWidth
           required
