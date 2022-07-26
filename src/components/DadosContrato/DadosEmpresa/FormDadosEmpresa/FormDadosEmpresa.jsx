@@ -20,7 +20,9 @@ const FormDadosEmpresa = (props) => {
         numContrato,
         openDadosEmpresa,
         setOpenDadosEmpresa,
-        setSnackbar
+        setSnackbar,
+        mudancaContrato,
+        setMudancaContrato
     } = props;
 
     const [errors, setErrors] = useState({});
@@ -89,6 +91,8 @@ const FormDadosEmpresa = (props) => {
                     });
                 }
             });
+
+        setMudancaContrato(!mudancaContrato);
     }
 
     return (

@@ -19,7 +19,9 @@ const FormOutrasInformacoes = (props) => {
         formContrato,
         numContrato,
         setSnackbar,
-        formataInformacoes
+        formataInformacoes,
+        mudancaContrato,
+        setMudancaContrato
     } = props;
 
     const [errors, setErrors] = useState({});
@@ -71,6 +73,8 @@ const FormOutrasInformacoes = (props) => {
                     });
                 }
             });
+
+        setMudancaContrato(!mudancaContrato);
     }
 
     return (

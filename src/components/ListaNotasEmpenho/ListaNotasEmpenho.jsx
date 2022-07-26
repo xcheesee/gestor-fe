@@ -1,8 +1,10 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { 
     Box,
     Divider,
-    Paper
+    Paper,
+    CircularProgress,
+    Fade
 } from '@mui/material';
 import FormNotaEmpenho from './FormNotaEmpenho';
 import DialogConfirmacao from '../DialogConfirmacao';
@@ -29,7 +31,12 @@ const TabNotasEmpenho = (props) => {
 
 const ListaNotasEmpenho = (props) => {
     const { 
-        notasempenho, 
+        notasempenho,
+        setNotasEmpenho,
+        mudancaNotasEmpenho,
+        setMudancaNotasEmpenho,
+        carregandoNotasEmpenho,
+        setCarregandoNotasEmpenho,
         estaCarregado, 
         formataData, 
         formataValores, 
@@ -56,6 +63,26 @@ const ListaNotasEmpenho = (props) => {
         valor_empenho: ''
     });
     const [errors, setErrors] = useState({});
+
+    useEffect(() => {
+        const url = `${process.env.REACT_APP_API_URL}/empenho_notas/${numContrato}`;
+        const token = localStorage.getItem('access_token');
+        const options = {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+                'Authorization': `Bearer ${token}`
+            }
+        };
+
+        fetch(url, options)
+            .then(res => res.json())
+            .then(data => {
+                setNotasEmpenho(data.data);
+                setCarregandoNotasEmpenho(false);
+            })
+    }, [mudancaNotasEmpenho, numContrato, setNotasEmpenho, setCarregandoNotasEmpenho])
 
     const handleClickExcluir = (id) => {
         setOpenConfirmacao({ 
@@ -101,6 +128,8 @@ const ListaNotasEmpenho = (props) => {
                 });
             }
         })
+
+        setMudancaNotasEmpenho(!mudancaNotasEmpenho);
     }
 
     const handleClickEditar = (e, notaempenho) => {
@@ -166,6 +195,8 @@ const ListaNotasEmpenho = (props) => {
                     });
                 }
             });
+        
+        setMudancaNotasEmpenho(!mudancaNotasEmpenho);
     }
 
     const handleClickAdicionar = () => {
@@ -232,46 +263,50 @@ const ListaNotasEmpenho = (props) => {
             .catch(err => {
                 console.log(err);
             });
+
+        setMudancaNotasEmpenho(!mudancaNotasEmpenho);
     }
     
     return (
         <Box>
             {notasempenho.map((notaempenho, index) => {
                 return (
-                    <Box 
-                        key={index} 
-                        elevation={3} 
-                        component={Paper} 
-                        sx={{ padding: '1rem', mb: '2rem' }}
-                    >
-                        <Divider 
-                            textAlign='right' 
-                            sx={{ 
-                                fontWeight: 'light', 
-                                fontSize: '1.25rem' 
-                            }}
+                    <Fade in={true} timeout={400} key={index}>
+                        <Box 
+                            key={index} 
+                            elevation={3} 
+                            component={Paper} 
+                            sx={{ padding: '1rem', mb: '2rem' }}
                         >
-                            Nota de Empenho # {notaempenho.id}
-                        </Divider>
-                        
-                        <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-                            <TabNotasEmpenho 
-                                tipo_empenho={notaempenho.tipo_empenho}
-                                data_emissao={notaempenho.data_emissao}
-                                numero_nota={notaempenho.numero_nota}
-                                valor_empenho={notaempenho.valor_empenho}
-                                estaCarregado={estaCarregado}
-                                formataData={formataData}
-                                formataValores={formataValores}
-                                retornaCampoValor={retornaCampoValor}
-                            />
+                            <Divider 
+                                textAlign='right' 
+                                sx={{ 
+                                    fontWeight: 'light', 
+                                    fontSize: '1.25rem' 
+                                }}
+                            >
+                                Nota de Empenho # {notaempenho.id}
+                            </Divider>
+                            
+                            <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+                                <TabNotasEmpenho 
+                                    tipo_empenho={notaempenho.tipo_empenho}
+                                    data_emissao={notaempenho.data_emissao}
+                                    numero_nota={notaempenho.numero_nota}
+                                    valor_empenho={notaempenho.valor_empenho}
+                                    estaCarregado={estaCarregado}
+                                    formataData={formataData}
+                                    formataValores={formataValores}
+                                    retornaCampoValor={retornaCampoValor}
+                                />
 
-                            <BotoesTab 
-                                editar={(e) => { handleClickEditar(e, notaempenho, notaempenho.id); }}
-                                excluir={() => { handleClickExcluir(notaempenho.id); }}
-                            />
+                                <BotoesTab 
+                                    editar={(e) => { handleClickEditar(e, notaempenho, notaempenho.id); }}
+                                    excluir={() => { handleClickExcluir(notaempenho.id); }}
+                                />
+                            </Box>
                         </Box>
-                    </Box>
+                    </Fade>
                 );
             })}
 
@@ -286,6 +321,16 @@ const ListaNotasEmpenho = (props) => {
                 errors={errors}
                 setErrors={setErrors}
             />
+
+            {
+                carregandoNotasEmpenho
+                ? 
+                    <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '38rem' }}>
+                        <CircularProgress size={30} />
+                    </Box>
+                : 
+                    ""
+            } 
 
             <BotaoAdicionar 
                 fnAdicionar={handleClickAdicionar}

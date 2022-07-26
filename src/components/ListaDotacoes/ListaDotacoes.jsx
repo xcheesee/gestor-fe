@@ -1,10 +1,12 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
     Box,
     Divider,
     Paper,
     Typography,
-    Button
+    Button,
+    CircularProgress,
+    Fade
 } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import BotoesTab from '../BotoesTab';
@@ -34,6 +36,11 @@ const TabDotacoes = (props) => {
 const ListaDotacoes = (props) => {
     const {
         dotacoes,
+        setDotacoes,
+        mudancaDotacoes,
+        setMudancaDotacoes,
+        carregandoDotacoes,
+        setCarregandoDotacoes,
         estaCarregado,
         formataValores,
         retornaCampoValor,
@@ -72,6 +79,25 @@ const ListaDotacoes = (props) => {
         outros_descricao: ''
     });
     
+    useEffect(() => {
+        const url = `${process.env.REACT_APP_API_URL}/dotacoes/${numContrato}`;
+        const token = localStorage.getItem('access_token');
+        const options = {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+                'Authorization': `Bearer ${token}`
+            }
+        };
+
+        fetch(url, options)
+            .then(res => res.json())
+            .then(data => {
+                setDotacoes(data.data);
+                setCarregandoDotacoes(false);
+            })
+    }, [mudancaDotacoes, numContrato, setDotacoes, setCarregandoDotacoes])
 
     // exclusão
     const handleClickExcluirDotacao = (id) => {
@@ -119,6 +145,8 @@ const ListaDotacoes = (props) => {
                     });
                 }
             })
+
+        setMudancaDotacoes(!mudancaDotacoes);
     }
 
     const handleClickExcluirRecurso = (id) => {
@@ -166,6 +194,8 @@ const ListaDotacoes = (props) => {
                     });
                 }
             })
+
+        setMudancaDotacoes(!mudancaDotacoes);
     }
 
     // edição
@@ -232,6 +262,8 @@ const ListaDotacoes = (props) => {
                     });
                 }
             });
+
+        setMudancaDotacoes(!mudancaDotacoes);
     }
 
     const handleClickEditarRecurso = (recurso) => {
@@ -295,6 +327,8 @@ const ListaDotacoes = (props) => {
                     });
                 }
             });
+
+        setMudancaDotacoes(!mudancaDotacoes);
     }
     
     // adição
@@ -364,6 +398,8 @@ const ListaDotacoes = (props) => {
                 });
             }
         });
+
+        setMudancaDotacoes(!mudancaDotacoes);
     }
 
     const handleClickAdicionarRecurso = (id) => {
@@ -434,117 +470,120 @@ const ListaDotacoes = (props) => {
                 });
             }
         });
+
+        setMudancaDotacoes(!mudancaDotacoes);
     }
 
     return (
         <Box>
             {dotacoes.map((dotacao, index) => {
                 return (
-                    <Box
-                        key={index}
-                        elevation={3}
-                        component={Paper}
-                        sx={{ padding: '1rem', mb: '2rem' }}
-                    >
-                        <Divider
-                            textAlign='right'
-                            sx={{
-                                fontWeight: 'light',
-                                fontSize: '1.25rem'
-                            }}
+                    <Fade in={true} timeout={400} key={index}>
+                        <Box
+                            elevation={3}
+                            component={Paper}
+                            sx={{ padding: '1rem', mb: '2rem' }}
                         >
-                            Dotação # {dotacao.id}
-                        </Divider>
+                            <Divider
+                                textAlign='right'
+                                sx={{
+                                    fontWeight: 'light',
+                                    fontSize: '1.25rem'
+                                }}
+                            >
+                                Dotação # {dotacao.id}
+                            </Divider>
 
-                        <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-                            <Box sx={{ width: '50%' }}>
-                                <TabDotacoes 
-                                    retornaCampoValor={retornaCampoValor}
-                                    estaCarregado={estaCarregado}
-                                    formataValores={formataValores}
-                                    numero_dotacao={dotacao.numero_dotacao}
-                                    descricao={dotacao.descricao}
-                                    valor_dotacao={dotacao.valor_dotacao}
-                                    recursos={dotacao.recursos}
+                            <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+                                <Box sx={{ width: '50%' }}>
+                                    <TabDotacoes 
+                                        retornaCampoValor={retornaCampoValor}
+                                        estaCarregado={estaCarregado}
+                                        formataValores={formataValores}
+                                        numero_dotacao={dotacao.numero_dotacao}
+                                        descricao={dotacao.descricao}
+                                        valor_dotacao={dotacao.valor_dotacao}
+                                        recursos={dotacao.recursos}
+                                    />
+                                </Box>
+
+                                <BotoesTab 
+                                    editar={() => handleClickEditarDotacao(dotacao)}
+                                    excluir={() => handleClickExcluirDotacao(dotacao.id)}
                                 />
                             </Box>
-
-                            <BotoesTab 
-                                editar={() => handleClickEditarDotacao(dotacao)}
-                                excluir={() => handleClickExcluirDotacao(dotacao.id)}
-                            />
-                        </Box>
-                        
-                        <Typography 
-                            sx={{ margin: '0 1rem' }} 
-                            component="pre"
-                        >
-                            <strong>Fonte(s) de recurso</strong>
-                        </Typography>
-                        
-                        <Box 
-                            sx={{ 
-                                margin: '1rem', 
-                                padding: '0.5rem',
-                                display: 'flex',
-                                flexDirection: 'column',
-                                justifyContent: 'space-between',
-                                background: '#f8faf8'
-                            }} 
-                            component={Paper}
-                        >    
-                            {dotacao.recursos.length > 0
-                            ? 
-                                dotacao.recursos.map((recurso, index) => {
-                                    return (
-                                        <Box 
-                                            sx={{ 
-                                                display: 'flex', 
-                                                justifyContent: 'space-between',
-                                                margin: '0.5rem',
-                                                padding: '0.5rem',
-                                                boxSizing: 'border-box',
-                                                background: '#fff'
-                                            }}
-                                            component={Paper}
-                                            key={index}
-                                            elevation={3}
-                                        >
-                                            <Typography sx={{ margin: '0.5rem' }}>
-                                                {
-                                                    recurso.nome !== null && recurso.nome !== "Outros"
-                                                    ? recurso.nome
-                                                    : recurso.outros_descricao
-                                                }
-                                            </Typography>
-
-                                            <BotoesTab 
-                                                editar={() => handleClickEditarRecurso(recurso)}
-                                                excluir={() => handleClickExcluirRecurso(recurso.id)}
-                                            />
-                                            
-                                        </Box>
-                                    );
-                                })
-                            : 
-                                <Typography sx={{ margin: '0.5rem' }}>
-                                    Não há fontes de recurso a serem exibidas.
-                                </Typography>
-                            }
                             
-                            <Box sx={{ alignSelf: 'flex-end', mt: '1rem' }}>
-                                <Button 
-                                    sx={{ textTransform: 'none' }}
-                                    onClick={() => handleClickAdicionarRecurso(dotacao.id)}
-                                >
-                                    <AddIcon
-                                        sx={{ mr: '0.2rem' }}
-                                    />
-                                    Adicionar fonte
-                                </Button>
+                            <Typography 
+                                sx={{ margin: '0 1rem' }} 
+                                component="pre"
+                            >
+                                <strong>Fonte(s) de recurso</strong>
+                            </Typography>
+                            
+                            <Box 
+                                sx={{ 
+                                    margin: '1rem', 
+                                    padding: '0.5rem',
+                                    display: 'flex',
+                                    flexDirection: 'column',
+                                    justifyContent: 'space-between',
+                                    background: '#f8faf8'
+                                }} 
+                                component={Paper}
+                            >    
+                                {dotacao.recursos.length > 0
+                                ? 
+                                    dotacao.recursos.map((recurso, index) => {
+                                        return (
+                                            <Box 
+                                                sx={{ 
+                                                    display: 'flex', 
+                                                    justifyContent: 'space-between',
+                                                    margin: '0.5rem',
+                                                    padding: '0.5rem',
+                                                    boxSizing: 'border-box',
+                                                    background: '#fff'
+                                                }}
+                                                component={Paper}
+                                                key={index}
+                                                elevation={3}
+                                            >
+                                                <Typography sx={{ margin: '0.5rem' }}>
+                                                    {
+                                                        recurso.nome !== null && recurso.nome !== "Outros"
+                                                        ? recurso.nome
+                                                        : recurso.outros_descricao
+                                                    }
+                                                </Typography>
+
+                                                <BotoesTab 
+                                                    editar={() => handleClickEditarRecurso(recurso)}
+                                                    excluir={() => handleClickExcluirRecurso(recurso.id)}
+                                                />
+                                                
+                                            </Box>
+                                        );
+                                    })
+                                : 
+                                    <Typography sx={{ margin: '0.5rem' }}>
+                                        Não há fontes de recurso a serem exibidas.
+                                    </Typography>
+                                }
+                                
+                                <Box sx={{ alignSelf: 'flex-end', mt: '1rem' }}>
+                                    <Button 
+                                        sx={{ textTransform: 'none' }}
+                                        onClick={() => handleClickAdicionarRecurso(dotacao.id)}
+                                    >
+                                        <AddIcon
+                                            sx={{ mr: '0.2rem' }}
+                                        />
+                                        Adicionar fonte
+                                    </Button>
+                                </Box>
                             </Box>
                         </Box>
-                    </Box>
+                    </Fade>
                 );
             })}
             
@@ -575,6 +614,16 @@ const ListaDotacoes = (props) => {
                 enviaRecurso={enviaRecurso}
                 setOpenConfirmacao={setOpenConfirmacao}
             />
+
+            {
+                carregandoDotacoes
+                ? 
+                    <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '38rem' }}>
+                        <CircularProgress size={30} />
+                    </Box>
+                : 
+                    ""
+            }
 
             <BotaoAdicionar
                 fnAdicionar={handleClickAdicionarDotacao}

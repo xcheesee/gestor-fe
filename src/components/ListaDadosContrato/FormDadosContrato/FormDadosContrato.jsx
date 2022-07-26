@@ -19,7 +19,9 @@ const FormDadosContrato = (props) => {
         numContrato,
         openDadosCon,
         setOpenDadosCon,
-        setSnackbar
+        setSnackbar,
+        mudancaContrato,
+        setMudancaContrato
     } = props;
 
     const [errors, setErrors] = useState({});
@@ -90,6 +92,8 @@ const FormDadosContrato = (props) => {
                     });
                 }
             });
+
+        setMudancaContrato(!mudancaContrato);
     }
 
     return (

@@ -6,7 +6,6 @@ import {
     Paper,
     IconButton,
     Tooltip,
-    CircularProgress,
     Button
 } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
@@ -103,6 +102,7 @@ const ExecucaoFinanceira = (props) => {
             empenhado: '',
             executado: ''
         });
+        setAcao('adicionarExecFin');
     }
 
     const enviaMes = () => {
@@ -168,6 +168,8 @@ const ExecucaoFinanceira = (props) => {
                 }
             })
             .catch(err => console.log(err));
+
+        props.setMudancaContrato(!props.mudancaContrato);
     }
 
     const Conteudo = () => {

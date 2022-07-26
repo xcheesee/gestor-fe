@@ -20,7 +20,9 @@ const FormProcessoContratacao = (props) => {
         setOpenProcCon,
         numContrato,
         setSnackbar,
-        carregando
+        carregando,
+        mudancaContrato,
+        setMudancaContrato
     } = props;
 
     const [errors, setErrors] = useState({});
@@ -103,6 +105,8 @@ const FormProcessoContratacao = (props) => {
                     });
                 }
             });
+
+        setMudancaContrato(!mudancaContrato);
     }
 
     return (

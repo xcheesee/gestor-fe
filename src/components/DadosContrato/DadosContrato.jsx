@@ -141,35 +141,31 @@ const ListaTabs = [
 const DadosContrato = ({ snackbar, setSnackbar }) => {
     const [value, setValue] = useState(0);
     const [dados, setDados] = useState({});
-    
+    const [mudancaContrato, setMudancaContrato] = useState(false);
     const [certidoes, setCertidoes] = useState([]);
     const [mudancaCertidoes, setMudancaCertidoes] = useState(false);
     const [carregandoCertidoes, setCarregandoCertidoes] = useState(true);
-    
     const [garantias, setGarantias] = useState([]);
     const [mudancaGarantias, setMudancaGarantias] = useState(false);
     const [carregandoGarantias, setCarregandoGarantias] = useState(true);
-    
     const [fiscalizacoes, setFiscalizacoes] = useState([]);
     const [mudancaFiscalizacoes, setMudancaFiscalizacoes] = useState(false);
     const [carregandoFicalizacoes, setCarregandoFiscalizacoes] = useState(true);
-
     const [locais, setLocais] = useState([]);
     const [mudancaLocais, setMudancaLocais] = useState(false);
     const [carregandoLocais, setCarregandoLocais] = useState(true);
-
     const [aditamentos_valor, setaditamentos_valor] = useState([]);
     const [mudancaAditamentos_valor, setMudancaAditamentos_valor] = useState(false);
     const [carregandoAditamentos_valor, setCarregandoAditamentos_valor] = useState(true);
-
     const [aditamentos_prazo, setaditamentos_prazo] = useState([]);
     const [mudancaAditamentos_prazo, setMudancaAditamentos_prazo] = useState(false);
     const [carregandoAditamentos_prazo, setCarregandoAditamentos_prazo] = useState(true);
-
-    const [dotacoes, setDotacoes] = useState([]);
-
     const [notasempenho, setNotasEmpenho] = useState([]);
-    
+    const [mudancaNotasEmpenho, setMudancaNotasEmpenho] = useState(false);
+    const [carregandoNotasEmpenho, setCarregandoNotasEmpenho] = useState(true);
+    const [dotacoes, setDotacoes] = useState([]);
+    const [mudancaDotacoes, setMudancaDotacoes] = useState(false);
+    const [carregandoDotacoes, setCarregandoDotacoes] = useState(true);
     const [tipoDotacoes, setTipoDotacoes] = useState([]);
     const [origemRecursos, setOrigemRecursos] = useState([]);
     const [estaCarregado, setEstaCarregado] = useState(false);
@@ -214,27 +210,12 @@ const DadosContrato = ({ snackbar, setSnackbar }) => {
                                 .then(res => res.json())
                                 .then(data => {
                                     setOrigemRecursos(data.data);
-                                    // setEstaCarregado(true);
-                                })
-                        })
-                        .then(() => {
-                            fetch(`${url}/dotacoes/${numContrato}`, options)
-                                .then(res => res.json())
-                                .then(data => {
-                                    setDotacoes(data.data);
-                                })
-                        })
-                        .then(() => {
-                            fetch(`${url}/empenho_notas/${numContrato}`, options)
-                                .then(res => res.json())
-                                .then(data => {
-                                    setNotasEmpenho(data.data);
                                     setEstaCarregado(true);
                                 })
-                        })
+                        });
                 }
             })
-    }, [numContrato, snackbar.open, navigate])
+    }, [numContrato, navigate, mudancaContrato])
 
     const handleChange = (event, newValue) => {
         setValue(newValue);
@@ -348,6 +329,8 @@ const DadosContrato = ({ snackbar, setSnackbar }) => {
                                             estaCarregado={estaCarregado}
                                             numContrato={numContrato}
                                             setSnackbar={setSnackbar}
+                                            mudancaContrato={mudancaContrato}
+                                            setMudancaContrato={setMudancaContrato}
                                         />
                                     </TabPanel>
 
@@ -452,6 +435,11 @@ const DadosContrato = ({ snackbar, setSnackbar }) => {
                                     <TabPanel value={value} index={7}>
                                         <ListaNotasEmpenho
                                             notasempenho={notasempenho}
+                                            setNotasEmpenho={setNotasEmpenho}
+                                            mudancaNotasEmpenho={mudancaNotasEmpenho}
+                                            setMudancaNotasEmpenho={setMudancaNotasEmpenho}
+                                            carregandoNotasEmpenho={carregandoNotasEmpenho}
+                                            setCarregandoNotasEmpenho={setCarregandoNotasEmpenho}
                                             estaCarregado={estaCarregado}
                                             formataData={formataData}
                                             formataValores={formataValores}
@@ -465,6 +453,11 @@ const DadosContrato = ({ snackbar, setSnackbar }) => {
                                     <TabPanel value={value} index={8}>
                                         <ListaDotacoes 
                                             dotacoes={dotacoes}
+                                            setDotacoes={setDotacoes}
+                                            mudancaDotacoes={mudancaDotacoes}
+                                            setMudancaDotacoes={setMudancaDotacoes}
+                                            carregandoDotacoes={carregandoDotacoes}
+                                            setCarregandoDotacoes={setCarregandoDotacoes}
                                             estaCarregado={estaCarregado}
                                             formataValores={formataValores}
                                             retornaCampoValor={retornaCampoValor}
@@ -482,6 +475,8 @@ const DadosContrato = ({ snackbar, setSnackbar }) => {
                                 formataValores={formataValores}
                                 numContrato={numContrato}
                                 setSnackbar={setSnackbar}
+                                mudancaContrato={mudancaContrato}
+                                setMudancaContrato={setMudancaContrato}
                             />
 
                             <DadosEmpresa
@@ -493,6 +488,8 @@ const DadosContrato = ({ snackbar, setSnackbar }) => {
                                 setFormContrato={setDados}
                                 numContrato={numContrato}
                                 setSnackbar={setSnackbar}
+                                mudancaContrato={mudancaContrato}
+                                setMudancaContrato={setMudancaContrato}
                             />
 
                             <OutrasInformacoes 
@@ -501,6 +498,8 @@ const DadosContrato = ({ snackbar, setSnackbar }) => {
                                 setFormContrato={setDados}
                                 numContrato={numContrato}
                                 setSnackbar={setSnackbar}
+                                mudancaContrato={mudancaContrato}
+                                setMudancaContrato={setMudancaContrato}
                             />
 
                         </Box>

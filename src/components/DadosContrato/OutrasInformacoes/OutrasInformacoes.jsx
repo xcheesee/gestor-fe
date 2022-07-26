@@ -8,7 +8,9 @@ const OutrasInformacoes = (props) => {
         outras_informacoes,
         formContrato,
         numContrato,
-        setSnackbar
+        setSnackbar,
+        mudancaContrato,
+        setMudancaContrato
     } = props;
 
     const [openOutrasInformacoes, setOpenOutrasInformacoes] = useState(false);
@@ -91,6 +93,8 @@ const OutrasInformacoes = (props) => {
                 numContrato={numContrato}
                 setSnackbar={setSnackbar}
                 formataInformacoes={formataInformacoes}
+                mudancaContrato={mudancaContrato}
+                setMudancaContrato={setMudancaContrato}
             /> 
         </Box>
     );

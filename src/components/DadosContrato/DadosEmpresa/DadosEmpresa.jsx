@@ -12,7 +12,9 @@ const DadosEmpresa = (props) => {
         formContrato,
         setFormContrato,
         numContrato,
-        setSnackbar
+        setSnackbar,
+        mudancaContrato,
+        setMudancaContrato
     } = props;
 
     const [openDadosEmpresa, setOpenDadosEmpresa] = useState(false);
@@ -98,6 +100,8 @@ const DadosEmpresa = (props) => {
                 openDadosEmpresa={openDadosEmpresa}
                 setOpenDadosEmpresa={setOpenDadosEmpresa}
                 setSnackbar={setSnackbar}
+                mudancaContrato={mudancaContrato}
+                setMudancaContrato={setMudancaContrato}
             />
         </Box>
     );

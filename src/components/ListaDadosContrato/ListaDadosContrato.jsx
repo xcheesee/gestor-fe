@@ -5,6 +5,7 @@ import {
     Fab,
     Tabs,
     Tab,
+    Fade
 } from '@mui/material';
 import FormDadosContrato from './FormDadosContrato';
 import FormProcessoContratacao from './FormProcessoContratacao';
@@ -55,7 +56,9 @@ const ListaDadosContrato = (props) => {
         setDados,
         estaCarregado,
         numContrato,
-        setSnackbar
+        setSnackbar,
+        mudancaContrato,
+        setMudancaContrato
     } = props;
 
     const [value, setValue] = useState(0);
@@ -153,106 +156,112 @@ const ListaDadosContrato = (props) => {
     }
 
     return (
-        <Box component={Paper} elevation={3} sx={{ padding: '1rem', pt: 0 }}>
-            <Box sx={{ mb: '1rem' }}>
-                <Tabs value={value} onChange={handleChange}>
-                    <Tab label="Contrato" {...a11yProps(0)} sx={{ padding: '0 1rem', textTransform: 'none' }} />
-                    <Tab label="Processo de contratação" {...a11yProps(1)} sx={{ padding: '0 1rem', textTransform: 'none' }} />
-                </Tabs>
+        <Fade in={true} timeout={400}>
+            <Box component={Paper} elevation={3} sx={{ padding: '1rem', pt: 0 }}>
+                <Box sx={{ mb: '1rem' }}>
+                    <Tabs value={value} onChange={handleChange}>
+                        <Tab label="Contrato" {...a11yProps(0)} sx={{ padding: '0 1rem', textTransform: 'none' }} />
+                        <Tab label="Processo de contratação" {...a11yProps(1)} sx={{ padding: '0 1rem', textTransform: 'none' }} />
+                    </Tabs>
+                </Box>
+                
+                <TabPanel value={value} index={0}>
+                    <TabContrato 
+                        processo_sei={dados.processo_sei}
+                        credor={dados.credor}
+                        cnpj_cpf={dados.cnpj_cpf}
+                        tipo_contratacao={dados.tipo_contratacao}
+                        tipo_objeto={dados.tipo_objeto}
+                        objeto={dados.objeto}
+                        numero_contrato={dados.numero_contrato}
+                        data_assinatura={dados.data_assinatura}
+                        valor_contrato={dados.valor_contrato}
+                        valor_mensal_estimativo={dados.valor_mensal_estimativo}
+                        data_inicio_vigencia={dados.data_inicio_vigencia}
+                        data_vencimento={dados.data_vencimento}
+                        condicao_pagamento={dados.condicao_pagamento}
+                        prazo_a_partir_de={dados.prazo_a_partir_de}
+                        data_prazo_maximo={dados.data_prazo_maximo}
+                        numero_nota_reserva={dados.numero_nota_reserva}
+                        valor_reserva={dados.valor_reserva}
+                        envio_material_tecnico={dados.envio_material_tecnico}
+                        minuta_edital={dados.minuta_edital}
+                        abertura_certame={dados.abertura_certame}
+                        homologacao={dados.homologacao}
+                        fonte_recurso={dados.fonte_recurso}
+                        estaCarregado={estaCarregado}
+                    />
+
+                    <Fab 
+                        sx={{ 
+                            position: 'sticky', 
+                            bottom: '0px', 
+                            left: '100%',
+                            zIndex: '80',
+                            textTransform: 'none',
+                            borderRadius: '5px'
+                        }}
+                        color="primary"
+                        variant="extended"
+                        onClick={() => setOpenDadosCon(true)}
+                    >
+                        <EditIcon sx={{ mr: '0.3rem' }} /> Editar contrato
+                    </Fab>
+
+                    <FormDadosContrato 
+                        formContrato={dados}
+                        setFormContrato={setDados}
+                        numContrato={numContrato}
+                        openDadosCon={openDadosCon}
+                        setOpenDadosCon={setOpenDadosCon}
+                        setSnackbar={setSnackbar}
+                        carregando={carregando}
+                        mudancaContrato={mudancaContrato}
+                        setMudancaContrato={setMudancaContrato}
+                    />
+                </TabPanel>
+
+                <TabPanel value={value} index={1}>
+                    <TabProcessoContratacao 
+                        licitacao_modelo={dados.licitacao_modelo}
+                        envio_material_tecnico={dados.envio_material_tecnico}
+                        minuta_edital={dados.minuta_edital}
+                        abertura_certame={dados.abertura_certame}
+                        homologacao={dados.homologacao}
+                        estaCarregado={estaCarregado}
+                    />
+
+                    <Fab 
+                        sx={{ 
+                            position: 'sticky', 
+                            bottom: '0px', 
+                            left: '100%',
+                            zIndex: '80',
+                            textTransform: 'none',
+                            borderRadius: '5px'
+                        }}
+                        color="primary"
+                        variant="extended"
+                        onClick={() => setOpenProcCon(true)}
+                    >
+                        <EditIcon sx={{ mr: '0.3rem' }} /> Editar processo de contratação
+                    </Fab>
+
+                    <FormProcessoContratacao 
+                        formContrato={dados}
+                        modelosLicitacao={modelosLicitacao}
+                        openProcCon={openProcCon}
+                        setOpenProcCon={setOpenProcCon}
+                        numContrato={numContrato}
+                        setSnackbar={setSnackbar}
+                        carregando={carregando}
+                        mudancaContrato={mudancaContrato}
+                        setMudancaContrato={setMudancaContrato}
+                    />
+                </TabPanel>
+
             </Box>
-            
-            <TabPanel value={value} index={0}>
-                <TabContrato 
-                    processo_sei={dados.processo_sei}
-                    credor={dados.credor}
-                    cnpj_cpf={dados.cnpj_cpf}
-                    tipo_contratacao={dados.tipo_contratacao}
-                    tipo_objeto={dados.tipo_objeto}
-                    objeto={dados.objeto}
-                    numero_contrato={dados.numero_contrato}
-                    data_assinatura={dados.data_assinatura}
-                    valor_contrato={dados.valor_contrato}
-                    valor_mensal_estimativo={dados.valor_mensal_estimativo}
-                    data_inicio_vigencia={dados.data_inicio_vigencia}
-                    data_vencimento={dados.data_vencimento}
-                    condicao_pagamento={dados.condicao_pagamento}
-                    prazo_a_partir_de={dados.prazo_a_partir_de}
-                    data_prazo_maximo={dados.data_prazo_maximo}
-                    numero_nota_reserva={dados.numero_nota_reserva}
-                    valor_reserva={dados.valor_reserva}
-                    envio_material_tecnico={dados.envio_material_tecnico}
-                    minuta_edital={dados.minuta_edital}
-                    abertura_certame={dados.abertura_certame}
-                    homologacao={dados.homologacao}
-                    fonte_recurso={dados.fonte_recurso}
-                    estaCarregado={estaCarregado}
-                />
-
-                <Fab 
-                    sx={{ 
-                        position: 'sticky', 
-                        bottom: '0px', 
-                        left: '100%',
-                        zIndex: '80',
-                        textTransform: 'none',
-                        borderRadius: '5px'
-                    }}
-                    color="primary"
-                    variant="extended"
-                    onClick={() => setOpenDadosCon(true)}
-                >
-                    <EditIcon sx={{ mr: '0.3rem' }} /> Editar contrato
-                </Fab>
-
-                <FormDadosContrato 
-                    formContrato={dados}
-                    setFormContrato={setDados}
-                    numContrato={numContrato}
-                    openDadosCon={openDadosCon}
-                    setOpenDadosCon={setOpenDadosCon}
-                    setSnackbar={setSnackbar}
-                    carregando={carregando}
-                />
-            </TabPanel>
-
-            <TabPanel value={value} index={1}>
-                <TabProcessoContratacao 
-                    licitacao_modelo={dados.licitacao_modelo}
-                    envio_material_tecnico={dados.envio_material_tecnico}
-                    minuta_edital={dados.minuta_edital}
-                    abertura_certame={dados.abertura_certame}
-                    homologacao={dados.homologacao}
-                    estaCarregado={estaCarregado}
-                />
-
-                <Fab 
-                    sx={{ 
-                        position: 'sticky', 
-                        bottom: '0px', 
-                        left: '100%',
-                        zIndex: '80',
-                        textTransform: 'none',
-                        borderRadius: '5px'
-                    }}
-                    color="primary"
-                    variant="extended"
-                    onClick={() => setOpenProcCon(true)}
-                >
-                    <EditIcon sx={{ mr: '0.3rem' }} /> Editar processo de contratação
-                </Fab>
-
-                <FormProcessoContratacao 
-                    formContrato={dados}
-                    modelosLicitacao={modelosLicitacao}
-                    openProcCon={openProcCon}
-                    setOpenProcCon={setOpenProcCon}
-                    numContrato={numContrato}
-                    setSnackbar={setSnackbar}
-                    carregando={carregando}
-                />
-            </TabPanel>
-
-        </Box>
+        </Fade>
     );
 }
 
