@@ -196,7 +196,6 @@ const DadosContrato = ({ snackbar, setSnackbar }) => {
                     return res.json()
                         .then(data => {
                             setDados(data.data);
-                            setEstaCarregado(true);
                         })
                         .then(() => {
                             fetch(`${url}/dotacao_tipos`, options)
