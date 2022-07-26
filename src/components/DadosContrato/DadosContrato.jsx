@@ -23,12 +23,12 @@ import ListaFiscalizacao from '../ListaFiscalizacoes';
 import ListaLocais from '../ListaLocais';
 import ListaDotacoes from '../ListaDotacoes';
 import ListaNotasEmpenho from '../ListaNotasEmpenho';
+import ListaAditamentosValor from '../ListaAditamentosValor';
+import ListaAditamentosPrazo from '../ListaAditamentosPrazo';
 import PropTypes from 'prop-types';
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { cpf, cnpj } from 'cpf-cnpj-validator';
-import ListaAditamentosValor from '../AditamentosValor/ListaAditamentosValor';
-import ListaAditamentosPrazo from '../AditamentosPrazo/ListaAditamentosPrazo';
 
 const TabPanel = (props) => {
     const { children, value, index, ...other } = props;
