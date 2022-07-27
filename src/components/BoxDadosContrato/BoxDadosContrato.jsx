@@ -13,6 +13,8 @@ import {
 import CampoCpfCnpj from '../CampoCpfCnpj';
 import CampoData from '../CampoData';
 import CampoValores from '../CampoValores';
+import CampoProcessoSei from '../CampoProcessoSei';
+import CampoNumContrato from '../CampoNumContrato';
 
 const BoxDadosContrato = (props) => {
     const {
@@ -23,12 +25,10 @@ const BoxDadosContrato = (props) => {
         formContrato,
         setFormContrato,
         handleChange,
-        processo_sei,
         credor,
         tipo_objeto,
         setTipo_objeto,
         objeto,
-        numero_contrato,
         condicao_pagamento,
         prazo_a_partir_de,
         numero_nota_reserva,
@@ -47,18 +47,12 @@ const BoxDadosContrato = (props) => {
                 </Divider>
             }
 
-            <TextField
-                variant="outlined"
-                inputRef={processo_sei}
-                defaultValue={formContrato.processo_sei}
-                name="processo_sei"
-                className="form__campo"
-                label="Processo SEI"
-                sx={{ margin: '1rem 0' }}
+            <CampoProcessoSei 
+                formContrato={formContrato}
+                setFormContrato={setFormContrato}
                 error={errors.hasOwnProperty('processo_sei')}
                 helperText={errors.hasOwnProperty('processo_sei') ? errors.processo_sei : " "}
-                required
-                fullWidth
+                name="processo_sei"
             />
             
             <TextField
@@ -126,14 +120,10 @@ const BoxDadosContrato = (props) => {
                 fullWidth
             />
 
-            <TextField
-                variant="outlined"
-                inputRef={numero_contrato}
+            <CampoNumContrato 
+                formContrato={formContrato}
+                setFormContrato={setFormContrato}
                 defaultValue={formContrato.numero_contrato}
-                name="numero_contrato"
-                className="form__campo"
-                label="Nº Contrato / Nota de Empenho Inicial"
-                sx={{ margin: '1rem 0' }}
                 error={error.hasOwnProperty('numero_contrato')}
                 helperText={error.hasOwnProperty('numero_contrato') ? errors.numero_contrato : " "}
                 required

@@ -56,7 +56,12 @@ function App() {
 
         <Route path="/contrato/:numContrato" element={ 
           <Auth> 
-            <DadosContrato snackbar={snackbar} setSnackbar={setSnackbar} /> 
+            <DadosContrato 
+              snackbar={snackbar} 
+              setSnackbar={setSnackbar} 
+              mascaraProcessoSei={mascaraProcessoSei} 
+              mascaraContrato={mascaraContrato} 
+            /> 
           </Auth>
         } />
 

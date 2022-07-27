@@ -34,11 +34,9 @@ const FormNovoContrato = (props) => {
         abertura_certame: formContrato.abertura_certame,
         homologacao: formContrato.homologacao
     });
-    const processo_sei = useRef(formContrato.processo_sei);
     const credor = useRef(formContrato.credor);
     const [tipo_objeto, setTipo_objeto] = useState("");
     const objeto = useRef(formContrato.objeto);
-    const numero_contrato = useRef(formContrato.numero_contrato);
     const condicao_pagamento = useRef(formContrato.condicao_pagamento);
     const prazo_a_partir_de = useRef(formContrato.prazo_a_partir_de);
     const numero_nota_reserva = useRef(formContrato.numero_nota_reserva);
@@ -120,11 +118,9 @@ const FormNovoContrato = (props) => {
         setFormContrato({
             ...formContrato,
             ...processoContratacao,
-            processo_sei: processo_sei.current.value,
             credor: credor.current.value,
             tipo_objeto: tipo_objeto,
             objeto: objeto.current.value,
-            numero_contrato: numero_contrato.current.value,
             condicao_pagamento: condicao_pagamento.current.value,
             prazo_a_partir_de: prazo_a_partir_de.current.value,
             numero_nota_reserva: numero_nota_reserva.current.value,
@@ -155,12 +151,10 @@ const FormNovoContrato = (props) => {
                     formContrato={formContrato}
                     setFormContrato={setFormContrato}
                     handleChange={handleChange}
-                    processo_sei={processo_sei}
                     credor={credor}
                     tipo_objeto={tipo_objeto}
                     setTipo_objeto={setTipo_objeto}
                     objeto={objeto}
-                    numero_contrato={numero_contrato}
                     condicao_pagamento={condicao_pagamento}
                     prazo_a_partir_de={prazo_a_partir_de}
                     numero_nota_reserva={numero_nota_reserva}

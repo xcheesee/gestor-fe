@@ -28,11 +28,9 @@ const FormDadosContrato = (props) => {
     const [errors, setErrors] = useState({});
     const [error, setError] = useState(false);
     const [carregandoEnvio, setCarregandoEnvio] = useState(false);
-    const processo_sei = useRef(null);
     const credor = useRef(null);
     const [tipo_objeto, setTipo_objeto] = useState(formContrato.tipo_objeto);
     const objeto = useRef(null);
-    const numero_contrato = useRef(null);
     const condicao_pagamento = useRef(null);
     const prazo_a_partir_de = useRef(null);
     const numero_nota_reserva = useRef(null);
@@ -81,6 +79,7 @@ const FormDadosContrato = (props) => {
                     setOpenDadosCon(false);
                     return res.json();
                 } else if (res.status === 422) { 
+                    setCarregandoEnvio(false);
                     return res.json()
                         .then(data => setErrors(data.errors));
                 } else {
@@ -116,12 +115,10 @@ const FormDadosContrato = (props) => {
                         formContrato={contratoEditado}
                         setFormContrato={setContratoEditado}
                         handleChange={handleChange}
-                        processo_sei={processo_sei}
                         credor={credor}
                         tipo_objeto={tipo_objeto}
                         setTipo_objeto={setTipo_objeto}
                         objeto={objeto}
-                        numero_contrato={numero_contrato}
                         condicao_pagamento={condicao_pagamento}
                         prazo_a_partir_de={prazo_a_partir_de}
                         numero_nota_reserva={numero_nota_reserva}
@@ -138,7 +135,6 @@ const FormDadosContrato = (props) => {
                     onClick={() => { 
                         setOpenDadosCon(false); 
                         setMudancaContrato(!mudancaContrato); 
-                        // setContratoEditado({...formContrato});
                     }}
                 >
                     <CloseIcon sx={{ mr: '0.2rem' }} /> Cancelar
@@ -149,11 +145,9 @@ const FormDadosContrato = (props) => {
                     variant="contained"
                     onMouseDown={() => setContratoEditado({
                         ...contratoEditado,
-                        processo_sei: processo_sei.current.value,
                         credor: credor.current.value,
                         tipo_objeto: tipo_objeto,
                         objeto: objeto.current.value,
-                        numero_contrato: numero_contrato.current.value,
                         condicao_pagamento: condicao_pagamento.current.value,
                         prazo_a_partir_de: prazo_a_partir_de.current.value,
                         numero_nota_reserva: numero_nota_reserva.current.value

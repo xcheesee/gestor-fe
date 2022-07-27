@@ -57,7 +57,9 @@ const ListaDadosContrato = (props) => {
         numContrato,
         setSnackbar,
         mudancaContrato,
-        setMudancaContrato
+        setMudancaContrato,
+        mascaraProcessoSei,
+        mascaraContrato
     } = props;
 
     const [value, setValue] = useState(0);
@@ -114,12 +116,12 @@ const ListaDadosContrato = (props) => {
         ];
     
         const valores = [
-            props.processo_sei,
+            mascaraProcessoSei(props.processo_sei),
             props.credor,
             formataCpfCnpj(props.cnpj_cpf),
             primeiraLetraMaiuscula(props.tipo_objeto),
             props.objeto,
-            props.numero_contrato ,
+            mascaraContrato(props.numero_contrato),
             formataData(props.data_assinatura),
             formataValores(props.valor_contrato),
             formataValores(props.valor_mensal_estimativo),
