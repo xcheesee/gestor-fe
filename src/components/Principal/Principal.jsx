@@ -22,7 +22,7 @@ import AddIcon from '@mui/icons-material/Add';
 import { Link } from "react-router-dom";
 import CampoData from '../CampoData';
 
-const Principal = ({ snackbar, setSnackbar }) => {
+const Principal = ({ snackbar, setSnackbar, mascaraProcessoSei, mascaraContrato }) => {
     const [dados, setDados] = useState({});
     const [metaDados, setMetaDados] = useState({});
     const [estaCarregado, setEstaCarregado] = useState(false);
@@ -78,10 +78,10 @@ const Principal = ({ snackbar, setSnackbar }) => {
             return rows.push(
                 {
                     id: contrato.id, 
-                    processo_sei: contrato.processo_sei,
+                    processo_sei: mascaraProcessoSei(contrato.processo_sei),
                     credor: contrato.credor,
                     nome_empresa: contrato.nome_empresa,
-                    numero_contrato: contrato.numero_contrato,
+                    numero_contrato: mascaraContrato(contrato.numero_contrato),
                     data_inicio_vigencia: contrato.data_inicio_vigencia,
                     data_vencimento: contrato.data_vencimento
                 }
