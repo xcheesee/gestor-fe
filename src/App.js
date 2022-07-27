@@ -19,6 +19,22 @@ function App() {
     color: 'success'
   });
 
+  const mascaraProcessoSei = (processoSei) => {
+    if (processoSei !== null && processoSei !== "" && processoSei !== undefined) {
+      return processoSei.replace(/([\d]{4})([\d]{4})([\d]{7})([\d]{1})/gm, '$1.$2/$3-$4');
+    } else {
+      return "";
+    }
+  }
+
+  const mascaraContrato = (contrato) => {
+    if (contrato !== null && contrato !== "" && contrato !== undefined) {
+      return contrato.replace(/([\d]{3})([\w]{4})(\d{4})/gm, '$1/$2/$3');
+    } else {
+      return "";
+    }
+  }
+
   return (
     <>
       <Header />
@@ -29,7 +45,12 @@ function App() {
 
         <Route path="/principal" element={
           <Auth>
-            <Principal snackbar={snackbar} setSnackbar={setSnackbar} />
+            <Principal 
+              snackbar={snackbar} 
+              setSnackbar={setSnackbar} 
+              mascaraProcessoSei={mascaraProcessoSei} 
+              mascaraContrato={mascaraContrato} 
+            />
           </Auth>
         } />
 

@@ -20,7 +20,9 @@ const FormDadosContrato = (props) => {
         setOpenDadosCon,
         setSnackbar,
         mudancaContrato,
-        setMudancaContrato
+        setMudancaContrato,
+        contratoEditado,
+        setContratoEditado
     } = props;
 
     const [errors, setErrors] = useState({});
@@ -38,7 +40,7 @@ const FormDadosContrato = (props) => {
         open: false,
         id: numContrato
     });
-    const [contratoEditado, setContratoEditado] = useState({...formContrato});
+    // const [contratoEditado, setContratoEditado] = useState({...formContrato});
 
     useEffect(() => {
         setTipo_objeto(formContrato.tipo_objeto);
@@ -104,7 +106,7 @@ const FormDadosContrato = (props) => {
 
             <DialogContent>
                 {
-                    formContrato
+                    contratoEditado
                     ?
                     <BoxDadosContrato 
                         errors={errors}
@@ -136,7 +138,7 @@ const FormDadosContrato = (props) => {
                     onClick={() => { 
                         setOpenDadosCon(false); 
                         setMudancaContrato(!mudancaContrato); 
-                        setContratoEditado({...formContrato});
+                        // setContratoEditado({...formContrato});
                     }}
                 >
                     <CloseIcon sx={{ mr: '0.2rem' }} /> Cancelar

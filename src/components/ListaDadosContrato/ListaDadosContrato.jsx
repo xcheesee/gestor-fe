@@ -65,6 +65,7 @@ const ListaDadosContrato = (props) => {
     const [openProcCon, setOpenProcCon] = useState(false);
     const [openDadosCon, setOpenDadosCon] = useState(false);
     const [carregando, setCarregando] = useState(false);
+    const [contratoEditado, setContratoEditado] = useState({...dados});
 
     useEffect(() => {
         const url = `${process.env.REACT_APP_API_URL}/licitacaomodelos`;
@@ -202,7 +203,8 @@ const ListaDadosContrato = (props) => {
                         }}
                         color="primary"
                         variant="extended"
-                        onClick={() => setOpenDadosCon(true)}
+                        onMouseDown={() => setContratoEditado({...dados})}
+                        onMouseUp={() => setOpenDadosCon(true)}
                     >
                         <EditIcon sx={{ mr: '0.3rem' }} /> Editar contrato
                     </Fab>
@@ -216,6 +218,8 @@ const ListaDadosContrato = (props) => {
                         carregando={carregando}
                         mudancaContrato={mudancaContrato}
                         setMudancaContrato={setMudancaContrato}
+                        contratoEditado={contratoEditado}
+                        setContratoEditado={setContratoEditado}
                     />
                 </TabPanel>
 
