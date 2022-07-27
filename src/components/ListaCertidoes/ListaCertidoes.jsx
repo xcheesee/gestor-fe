@@ -101,6 +101,7 @@ const ListaCertidoes = (props) => {
 
         fetch(url, options)
         .then(res => {
+            setMudancaCertidoes(!mudancaCertidoes);
             if (res.ok) {
                 setOpenConfirmacao({ open: false, id: ''});
                 setCarregando(false);
@@ -121,8 +122,6 @@ const ListaCertidoes = (props) => {
                 });
             }
         })
-
-        setMudancaCertidoes(!mudancaCertidoes);
     }
 
     const handleClickEditar = (e, certidao) => {
@@ -156,6 +155,7 @@ const ListaCertidoes = (props) => {
         
         fetch(url, options)
             .then(res => {
+                setMudancaCertidoes(!mudancaCertidoes);
                 if (res.ok) {
                     setCarregando(false);
                     setSnackbar({
@@ -184,8 +184,6 @@ const ListaCertidoes = (props) => {
                     });
                 }
             });
-
-        setMudancaCertidoes(!mudancaCertidoes);
     }
 
     const handleClickAdicionar = () => {
@@ -215,6 +213,7 @@ const ListaCertidoes = (props) => {
 
         fetch(url, options)
             .then(res => {
+                setMudancaCertidoes(!mudancaCertidoes);
                 if (res.ok) {
                     setCarregando(false);
                     setSnackbar({
@@ -246,8 +245,6 @@ const ListaCertidoes = (props) => {
             .catch(err => {
                 console.log(err);
             });
-
-        setMudancaCertidoes(!mudancaCertidoes);
     }
     
     return (

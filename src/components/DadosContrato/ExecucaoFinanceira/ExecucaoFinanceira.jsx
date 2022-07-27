@@ -122,6 +122,7 @@ const ExecucaoFinanceira = (props) => {
 
         fetch(url, options)
             .then(res => {
+                props.setMudancaContrato(!props.mudancaContrato);
                 if (res.ok) {
                     setCarregando(false);
                     props.setSnackbar({
@@ -168,8 +169,6 @@ const ExecucaoFinanceira = (props) => {
                 }
             })
             .catch(err => console.log(err));
-
-        props.setMudancaContrato(!props.mudancaContrato);
     }
 
     const Conteudo = () => {

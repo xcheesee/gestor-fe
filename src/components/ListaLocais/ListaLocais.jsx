@@ -113,6 +113,7 @@ const ListaLocais = (props) => {
 
         fetch(url, options)
             .then(res => {
+                setMudancaLocais(!mudancaLocais);
                 if (res.ok) {
                     setOpenConfirmacao({ open: false, id: '' });
                     setCarregando(false);
@@ -133,8 +134,6 @@ const ListaLocais = (props) => {
                     });
                 }
             })
-
-        setMudancaLocais(!mudancaLocais);
     }
 
     const handleClickEditar = (e, local) => {
@@ -170,6 +169,7 @@ const ListaLocais = (props) => {
 
         fetch(url, options)
             .then(res => {
+                setMudancaLocais(!mudancaLocais);
                 if (res.ok) {
                     setCarregando(false);
                     setSnackbar({
@@ -200,8 +200,6 @@ const ListaLocais = (props) => {
                     });
                 }
             });
-
-        setMudancaLocais(!mudancaLocais);
     }
 
     const handleClickAdicionar = () => {
@@ -229,6 +227,7 @@ const ListaLocais = (props) => {
 
         fetch(url, options)
             .then(res => {
+                setMudancaLocais(!mudancaLocais);
                 if (res.ok) {
                     setCarregando(false);
                     setSnackbar({
@@ -271,8 +270,6 @@ const ListaLocais = (props) => {
                     });
                 }
             })
-            
-        setMudancaLocais(!mudancaLocais);
     }
 
     return (
