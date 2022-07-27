@@ -53,7 +53,6 @@ const ListaDadosContrato = (props) => {
         formataValores,
         retornaCampoValor,
         dados,
-        setDados,
         estaCarregado,
         numContrato,
         setSnackbar,
@@ -210,7 +209,6 @@ const ListaDadosContrato = (props) => {
 
                     <FormDadosContrato 
                         formContrato={dados}
-                        setFormContrato={setDados}
                         numContrato={numContrato}
                         openDadosCon={openDadosCon}
                         setOpenDadosCon={setOpenDadosCon}

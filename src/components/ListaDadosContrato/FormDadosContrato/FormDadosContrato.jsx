@@ -15,7 +15,6 @@ import DialogConfirmacao from '../../DialogConfirmacao';
 const FormDadosContrato = (props) => {
     const {
         formContrato,
-        setFormContrato,
         numContrato,
         openDadosCon,
         setOpenDadosCon,
@@ -39,7 +38,7 @@ const FormDadosContrato = (props) => {
         open: false,
         id: numContrato
     });
-    const [contratoEditado, setContratoEditado] = useState({});
+    const [contratoEditado, setContratoEditado] = useState({...formContrato});
 
     useEffect(() => {
         setTipo_objeto(formContrato.tipo_objeto);
@@ -112,8 +111,8 @@ const FormDadosContrato = (props) => {
                         setErrors={setErrors}
                         error={error}
                         setError={setError}
-                        formContrato={formContrato}
-                        setFormContrato={setFormContrato}
+                        formContrato={contratoEditado}
+                        setFormContrato={setContratoEditado}
                         handleChange={handleChange}
                         processo_sei={processo_sei}
                         credor={credor}
@@ -134,7 +133,11 @@ const FormDadosContrato = (props) => {
             <DialogActions sx={{ margin: '1rem' }}>
                 <Button 
                     sx={{ textTransform: 'none', mr: '1rem', color: '#821f1f' }}
-                    onClick={() => { setOpenDadosCon(false); setMudancaContrato(!mudancaContrato); }}
+                    onClick={() => { 
+                        setOpenDadosCon(false); 
+                        setMudancaContrato(!mudancaContrato); 
+                        setContratoEditado({...formContrato});
+                    }}
                 >
                     <CloseIcon sx={{ mr: '0.2rem' }} /> Cancelar
                 </Button>
@@ -143,7 +146,7 @@ const FormDadosContrato = (props) => {
                     sx={{ textTransform: 'none' }} 
                     variant="contained"
                     onMouseDown={() => setContratoEditado({
-                        ...formContrato,
+                        ...contratoEditado,
                         processo_sei: processo_sei.current.value,
                         credor: credor.current.value,
                         tipo_objeto: tipo_objeto,
