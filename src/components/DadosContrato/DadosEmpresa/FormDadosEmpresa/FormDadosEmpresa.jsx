@@ -68,6 +68,7 @@ const FormDadosEmpresa = (props) => {
 
         fetch(url, options)
             .then(res => {
+                setMudancaContrato(!mudancaContrato);
                 if(res.ok) {
                     setCarregandoEnvio(false);
                     setSnackbar({
@@ -91,8 +92,6 @@ const FormDadosEmpresa = (props) => {
                     });
                 }
             });
-
-        setMudancaContrato(!mudancaContrato);
     }
 
     return (

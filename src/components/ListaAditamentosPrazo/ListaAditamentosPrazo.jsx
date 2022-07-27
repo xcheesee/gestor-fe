@@ -11,7 +11,7 @@ import BotoesTab from "../BotoesTab";
 import BotaoAdicionar from "../BotaoAdicionar";
 import FormAditamentoPrazo from "./FormAditamentos/FormAditamentoPrazo";
 
-const TabAditamentos = (props) => {
+const TabAditamentosPrazo = (props) => {
 
   const campos = ["Tipo", "Dias Reajuste"];
 
@@ -68,6 +68,7 @@ const ListaAditamentosPrazo = (props) => {
       .then(res => res.json())
       .then(data => {
           setaditamentos_prazo(data.data);
+          setCarregandoAditamentos_prazo(false);
       })
   }, [mudancaAditamentos_prazo, numContrato, setaditamentos_prazo, setCarregandoAditamentos_prazo])
 
@@ -94,6 +95,7 @@ const ListaAditamentosPrazo = (props) => {
     setCarregando(true);
 
     fetch(url, options).then((res) => {
+      setMudancaAditamentos_prazo(!mudancaAditamentos_prazo);
       if (res.ok) {
         setOpenConfirmacao({ open: false, id: "" });
         setCarregando(false);
@@ -114,8 +116,6 @@ const ListaAditamentosPrazo = (props) => {
         });
       }
     });
-
-    setMudancaAditamentos_prazo(!mudancaAditamentos_prazo);
   };
 
   const handleClickEditar = (e, aditamentos) => {
@@ -148,6 +148,7 @@ const ListaAditamentosPrazo = (props) => {
     setCarregando(true);
 
     fetch(url, options).then((res) => {
+      setMudancaAditamentos_prazo(!mudancaAditamentos_prazo);
       if (res.ok) {
         setCarregando(false);
         setSnackbar({
@@ -176,8 +177,6 @@ const ListaAditamentosPrazo = (props) => {
         });
       }
     });
-
-    setMudancaAditamentos_prazo(!mudancaAditamentos_prazo);
   };
 
   const handleClickAdicionar = () => {
@@ -209,6 +208,7 @@ const ListaAditamentosPrazo = (props) => {
 
     fetch(url, options)
       .then((res) => {
+        setMudancaAditamentos_prazo(!mudancaAditamentos_prazo);
         if (res.ok) {
           setCarregando(false);
           setSnackbar({
@@ -252,8 +252,6 @@ const ListaAditamentosPrazo = (props) => {
       .catch((err) => {
         console.log(err);
       });
-
-      setMudancaAditamentos_prazo(!mudancaAditamentos_prazo);
   };
 
   return (
@@ -277,7 +275,7 @@ const ListaAditamentosPrazo = (props) => {
               </Divider>
 
               <Box sx={{ display: "flex", justifyContent: "space-between" }}>
-                <TabAditamentos
+                <TabAditamentosPrazo
                   tipo_aditamento={aditamento.tipo_aditamento}
                   dias_reajuste={aditamento.dias_reajuste}
                   formataData={formataData}

@@ -112,6 +112,7 @@ const ListaFiscalizacoes = (props) => {
 
         fetch(url, option)
             .then(res => {
+                setMudancaFiscalizacoes(!mudancaFiscalizacoes);
                 if (res.ok) {
                     setOpenConfirmacao({ open: false, id: ''});
                     setCarregando(false);
@@ -132,8 +133,6 @@ const ListaFiscalizacoes = (props) => {
                     });
                 }
             });
-
-        setMudancaFiscalizacoes(!mudancaFiscalizacoes);
     }
 
     const handleClickEditar = (e, fiscalizacao) => {
@@ -171,6 +170,7 @@ const ListaFiscalizacoes = (props) => {
 
         fetch(url, options)
             .then(res => {
+                setMudancaFiscalizacoes(!mudancaFiscalizacoes);
                 if(res.ok) {
                     setCarregando(false);
                     setSnackbar({
@@ -203,8 +203,6 @@ const ListaFiscalizacoes = (props) => {
                     });
                 }
             });
-        
-        setMudancaFiscalizacoes(!mudancaFiscalizacoes);
     }
 
     const handleClickAdicionar = () => {
@@ -240,6 +238,7 @@ const ListaFiscalizacoes = (props) => {
 
         fetch(url, options)
             .then(res => {
+                setMudancaFiscalizacoes(!mudancaFiscalizacoes);
                 if (res.ok) {
                     setCarregando(false);
                     setSnackbar({
@@ -287,8 +286,6 @@ const ListaFiscalizacoes = (props) => {
             .catch(err => {
                 console.log(err);
             });
-
-        setMudancaFiscalizacoes(!mudancaFiscalizacoes);
     }
 
     return (

@@ -125,6 +125,7 @@ const ListaDotacoes = (props) => {
 
         fetch(url, options)
             .then(res => {
+                setMudancaDotacoes(!mudancaDotacoes);
                 if (res.ok) {
                     setOpenConfirmacao({ open: false, id: '', elemento: 'dotacao' });
                     setCarregando(false);
@@ -145,8 +146,6 @@ const ListaDotacoes = (props) => {
                     });
                 }
             })
-
-        setMudancaDotacoes(!mudancaDotacoes);
     }
 
     const handleClickExcluirRecurso = (id) => {
@@ -174,6 +173,7 @@ const ListaDotacoes = (props) => {
 
         fetch(url, options)
             .then(res => {
+                setMudancaDotacoes(!mudancaDotacoes);
                 if (res.ok) {
                     setOpenConfirmacao({ open: false, id: '', elemento: 'dotacao' });
                     setCarregando(false);
@@ -194,8 +194,6 @@ const ListaDotacoes = (props) => {
                     });
                 }
             })
-
-        setMudancaDotacoes(!mudancaDotacoes);
     }
 
     // edição
@@ -230,6 +228,7 @@ const ListaDotacoes = (props) => {
 
         fetch(url, options)
             .then(res => {
+                setMudancaDotacoes(!mudancaDotacoes);
                 if (res.ok) {
                     setCarregando(false);
                     setSnackbar({
@@ -262,8 +261,6 @@ const ListaDotacoes = (props) => {
                     });
                 }
             });
-
-        setMudancaDotacoes(!mudancaDotacoes);
     }
 
     const handleClickEditarRecurso = (recurso) => {
@@ -297,6 +294,7 @@ const ListaDotacoes = (props) => {
 
         fetch(url, options)
             .then(res => {
+                setMudancaDotacoes(!mudancaDotacoes);
                 if (res.ok) {
                     setCarregando(false);
                     setSnackbar({
@@ -327,8 +325,6 @@ const ListaDotacoes = (props) => {
                     });
                 }
             });
-
-        setMudancaDotacoes(!mudancaDotacoes);
     }
     
     // adição
@@ -357,6 +353,7 @@ const ListaDotacoes = (props) => {
 
         fetch(url, options)
         .then(res => {
+            setMudancaDotacoes(!mudancaDotacoes);
             if (res.ok) {
                 setCarregando(false);
                 setSnackbar({
@@ -398,8 +395,6 @@ const ListaDotacoes = (props) => {
                 });
             }
         });
-
-        setMudancaDotacoes(!mudancaDotacoes);
     }
 
     const handleClickAdicionarRecurso = (id) => {
@@ -431,6 +426,7 @@ const ListaDotacoes = (props) => {
 
         fetch(url, options)
         .then(res => {
+            setMudancaDotacoes(!mudancaDotacoes);
             if (res.ok) {
                 setCarregando(false);
                 setSnackbar({
@@ -470,8 +466,6 @@ const ListaDotacoes = (props) => {
                 });
             }
         });
-
-        setMudancaDotacoes(!mudancaDotacoes);
     }
 
     return (

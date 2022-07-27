@@ -114,6 +114,7 @@ const ListaGarantias = (props) => {
 
         fetch(url, options)
             .then(res => {
+                setMudancaGarantias(!mudancaGarantias);
                 if (res.ok) {
                     setOpenConfirmacao({ open: false, id: ''});
                     setCarregando(false);
@@ -134,8 +135,6 @@ const ListaGarantias = (props) => {
                     });
                 }
             });
-
-        setMudancaGarantias(!mudancaGarantias);
     }
 
     const handleClickEditar = (e, garantia) => {
@@ -171,6 +170,7 @@ const ListaGarantias = (props) => {
 
         fetch(url, options)
             .then(res => {
+                setMudancaGarantias(!mudancaGarantias);
                 if(res.ok) {
                     setCarregando(false);
                     setSnackbar({
@@ -201,8 +201,6 @@ const ListaGarantias = (props) => {
                     });
                 }
             });
-
-        setMudancaGarantias(!mudancaGarantias);
     }
 
     const handleClickAdicionar = () => {
@@ -236,6 +234,7 @@ const ListaGarantias = (props) => {
 
         fetch(url, options)
             .then(res => {
+                setMudancaGarantias(!mudancaGarantias);
                 if (res.ok) {
                     setCarregando(false);
                     setSnackbar({
@@ -269,8 +268,6 @@ const ListaGarantias = (props) => {
             .catch(err => {
                 console.log(err);
             });
-
-        setMudancaGarantias(!mudancaGarantias);
     }
 
     return (

@@ -11,7 +11,7 @@ import BotoesTab from "../BotoesTab";
 import BotaoAdicionar from "../BotaoAdicionar";
 import FormAditamentoValor from "./FomAditamentoValor/FormAditamentoValor";
 
-const TabAditamentos = (props) => {
+const TabAditamentosValor = (props) => {
   const campos = [
       "Tipo",
       "Valor",
@@ -105,28 +105,27 @@ const TabAditamentos = (props) => {
 
       fetch(url, options)
       .then(res => {
-          if (res.ok) {
-              setOpenConfirmacao({ open: false, id: '' })
-              setCarregando(false);
-              setSnackbar({
-                  open: true,
-                  severity: 'success',
-                  text: 'Aditamento excluído com sucesso!',
-                  color: 'success'
-              });
-              return res.json();
-          } else {
-              setCarregando(false);
-              setSnackbar({
-                  open: true,
-                  severity: 'error',
-                  text: `Erro ${res.status} - Não foi possível excluir o aditamento`,
-                  color: 'error'
-              });
-          }
+        setMudancaAditamentos_valor(!mudancaAditamentos_valor);
+        if (res.ok) {
+            setOpenConfirmacao({ open: false, id: '' })
+            setCarregando(false);
+            setSnackbar({
+                open: true,
+                severity: 'success',
+                text: 'Aditamento excluído com sucesso!',
+                color: 'success'
+            });
+            return res.json();
+        } else {
+            setCarregando(false);
+            setSnackbar({
+                open: true,
+                severity: 'error',
+                text: `Erro ${res.status} - Não foi possível excluir o aditamento`,
+                color: 'error'
+            });
+        }
       })
-
-      setMudancaAditamentos_valor(!mudancaAditamentos_valor);
 }
 
 const handleClickEditar = (e, aditamento) => {
@@ -162,6 +161,7 @@ const editaAditamento = (id, formAditamentoEdit) => {
 
   fetch(url, options)
   .then(res => {
+      setMudancaAditamentos_valor(!mudancaAditamentos_valor);
       if (res.ok) {
           setCarregando(false);
           setSnackbar({
@@ -192,8 +192,6 @@ const editaAditamento = (id, formAditamentoEdit) => {
           });
       }
   });
-
-  setMudancaAditamentos_valor(!mudancaAditamentos_valor);
 }
 
 const handleClickAdicionar = () => {
@@ -227,6 +225,7 @@ const enviaAditamento = () => {
 
   fetch(url, options)
   .then(res => {
+      setMudancaAditamentos_valor(!mudancaAditamentos_valor);
       if (res.ok) {
           setCarregando(false);
           setSnackbar({
@@ -270,8 +269,6 @@ const enviaAditamento = () => {
   .catch(err => {
       console.log(err);
   });
-
-  setMudancaAditamentos_valor(!mudancaAditamentos_valor);
 }
 
   return (
@@ -295,7 +292,7 @@ const enviaAditamento = () => {
                             </Divider>
 
                             <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-                                <TabAditamentos 
+                                <TabAditamentosValor 
                                     tipo_aditamento={aditamento.tipo_aditamento}
                                     valor_aditamento={aditamento.valor_aditamento}
                                     indice_reajuste={aditamento.indice_reajuste}

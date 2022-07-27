@@ -80,8 +80,6 @@ const FormAditamentoValor = (props) => {
           >
             <MenuItem value="Acréscimo de valor">Acréscimo de valor</MenuItem>
             <MenuItem value="Redução de valor">Redução de valor</MenuItem>
-            <MenuItem value="Suspensão">Suspensão</MenuItem>
-            <MenuItem value="Rescisão">Rescisão</MenuItem>
           </Select>
           <FormHelperText>{errors.tipo_aditamento}</FormHelperText>
         </FormControl>
@@ -106,6 +104,7 @@ const FormAditamentoValor = (props) => {
           variant="outlined"
           value={formAditamento.indice_reajuste}
           name="indice_reajuste"
+          inputProps={{ maxLength: 10 }}
           onChange={handleInputChange}
           label="Índice Reajuste"
           sx={{ margin: "1rem 0" }}

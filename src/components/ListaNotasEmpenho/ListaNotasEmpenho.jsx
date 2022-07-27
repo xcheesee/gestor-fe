@@ -108,6 +108,7 @@ const ListaNotasEmpenho = (props) => {
 
         fetch(url, options)
         .then(res => {
+            setMudancaNotasEmpenho(!mudancaNotasEmpenho);
             if (res.ok) {
                 setOpenConfirmacao({ open: false, id: ''});
                 setCarregando(false);
@@ -128,8 +129,6 @@ const ListaNotasEmpenho = (props) => {
                 });
             }
         })
-
-        setMudancaNotasEmpenho(!mudancaNotasEmpenho);
     }
 
     const handleClickEditar = (e, notaempenho) => {
@@ -165,6 +164,7 @@ const ListaNotasEmpenho = (props) => {
         
         fetch(url, options)
             .then(res => {
+                setMudancaNotasEmpenho(!mudancaNotasEmpenho);
                 if (res.ok) {
                     setCarregando(false);
                     setSnackbar({
@@ -195,8 +195,6 @@ const ListaNotasEmpenho = (props) => {
                     });
                 }
             });
-        
-        setMudancaNotasEmpenho(!mudancaNotasEmpenho);
     }
 
     const handleClickAdicionar = () => {
@@ -230,6 +228,7 @@ const ListaNotasEmpenho = (props) => {
 
         fetch(url, options)
             .then(res => {
+                setMudancaNotasEmpenho(!mudancaNotasEmpenho);
                 if (res.ok) {
                     setCarregando(false);
                     setSnackbar({
@@ -263,8 +262,6 @@ const ListaNotasEmpenho = (props) => {
             .catch(err => {
                 console.log(err);
             });
-
-        setMudancaNotasEmpenho(!mudancaNotasEmpenho);
     }
     
     return (

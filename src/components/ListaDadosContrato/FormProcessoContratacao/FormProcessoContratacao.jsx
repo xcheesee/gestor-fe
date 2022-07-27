@@ -82,6 +82,7 @@ const FormProcessoContratacao = (props) => {
 
         fetch(url, options)
             .then(res => {
+                setMudancaContrato(!mudancaContrato);
                 if(res.ok) {
                     setCarregandoEnvio(false);
                     setSnackbar({
@@ -105,8 +106,6 @@ const FormProcessoContratacao = (props) => {
                     });
                 }
             });
-
-        setMudancaContrato(!mudancaContrato);
     }
 
     return (
