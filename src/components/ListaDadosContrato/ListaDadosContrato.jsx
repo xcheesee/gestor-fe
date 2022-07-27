@@ -91,6 +91,10 @@ const ListaDadosContrato = (props) => {
             });
     }, [])
 
+    useEffect(() => {
+        setContratoEditado({...dados})
+    }, [setContratoEditado, dados])
+
     const handleChange = (e, newValue) => {
         setValue(newValue);
     }
@@ -205,8 +209,7 @@ const ListaDadosContrato = (props) => {
                         }}
                         color="primary"
                         variant="extended"
-                        onMouseDown={() => setContratoEditado({...dados})}
-                        onMouseUp={() => setOpenDadosCon(true)}
+                        onClick={() => setOpenDadosCon(true)}
                     >
                         <EditIcon sx={{ mr: '0.3rem' }} /> Editar contrato
                     </Fab>
