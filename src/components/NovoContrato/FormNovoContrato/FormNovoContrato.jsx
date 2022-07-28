@@ -26,6 +26,7 @@ const FormNovoContrato = (props) => {
 
     const [modelosLicitacao, setModelosLicitacao] = useState([]);
     const [carregando, setCarregando] = useState(true);
+    const departamentos = JSON.parse(localStorage.getItem('departamentos'));
     const [processoContratacao, setProcessoContratacao] = useState({
         licitacao_modelo_id: formContrato.licitacao_modelo_id,
         licitacao_modelo: formContrato.licitacao_modelo,
@@ -34,6 +35,7 @@ const FormNovoContrato = (props) => {
         abertura_certame: formContrato.abertura_certame,
         homologacao: formContrato.homologacao
     });
+    const [departamento_id, setDepartamento_id] = useState('');
     const credor = useRef(formContrato.credor);
     const [tipo_objeto, setTipo_objeto] = useState("");
     const objeto = useRef(formContrato.objeto);
@@ -118,6 +120,7 @@ const FormNovoContrato = (props) => {
         setFormContrato({
             ...formContrato,
             ...processoContratacao,
+            departamento_id: departamento_id,
             credor: credor.current.value,
             tipo_objeto: tipo_objeto,
             objeto: objeto.current.value,
@@ -151,6 +154,9 @@ const FormNovoContrato = (props) => {
                     formContrato={formContrato}
                     setFormContrato={setFormContrato}
                     handleChange={handleChange}
+                    departamentos={departamentos}
+                    departamento_id={departamento_id}
+                    setDepartamento_id={setDepartamento_id}
                     credor={credor}
                     tipo_objeto={tipo_objeto}
                     setTipo_objeto={setTipo_objeto}

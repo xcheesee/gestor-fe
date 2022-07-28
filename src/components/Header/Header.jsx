@@ -32,6 +32,7 @@ const Header = (props) => {
         setCarregando(false); 
         localStorage.removeItem('access_token');
         localStorage.removeItem('username');
+        localStorage.removeItem('departamentos');
     }
 
     const DialogLogout = () => {

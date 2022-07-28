@@ -25,6 +25,9 @@ const BoxDadosContrato = (props) => {
         formContrato,
         setFormContrato,
         handleChange,
+        departamentos,
+        departamento_id,
+        setDepartamento_id,
         credor,
         tipo_objeto,
         setTipo_objeto,
@@ -46,6 +49,32 @@ const BoxDadosContrato = (props) => {
                     <Typography variant="h5" sx={{ fontWeight: 'light' }}>Dados do contrato</Typography> 
                 </Divider>
             }
+
+            <FormControl 
+                sx={{ margin: '1rem 0' }}
+                error={errors.hasOwnProperty('departamento_id')}
+                fullWidth 
+            >
+                <InputLabel id="departamento_id-label">Departamento</InputLabel>
+                <Select
+                    labelId="departamento_id-label"
+                    id="departamento_id"
+                    label="Departamento"
+                    value={departamento_id}
+                    name="departamento_id"
+                    onChange={(e) => { setDepartamento_id(e.target.value); }}
+                    fullWidth
+                >
+                    {Object.entries(departamentos).map((departamento, index) => {
+                        return (
+                            <MenuItem value={departamento[0]} key={index}>{departamento[1]}</MenuItem>
+                        );
+                    })}
+                </Select>
+                <FormHelperText>
+                    {errors.hasOwnProperty('departamento_id') ? errors.departamento_id : " "}
+                </FormHelperText>
+            </FormControl>
 
             <CampoProcessoSei 
                 formContrato={formContrato}
@@ -123,7 +152,6 @@ const BoxDadosContrato = (props) => {
             <CampoNumContrato 
                 formContrato={formContrato}
                 setFormContrato={setFormContrato}
-                defaultValue={formContrato.numero_contrato}
                 error={error.hasOwnProperty('numero_contrato')}
                 helperText={error.hasOwnProperty('numero_contrato') ? errors.numero_contrato : " "}
                 required

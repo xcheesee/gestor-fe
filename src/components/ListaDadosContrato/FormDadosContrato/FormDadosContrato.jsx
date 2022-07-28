@@ -28,6 +28,8 @@ const FormDadosContrato = (props) => {
     const [errors, setErrors] = useState({});
     const [error, setError] = useState(false);
     const [carregandoEnvio, setCarregandoEnvio] = useState(false);
+    const departamentos = JSON.parse(localStorage.getItem('departamentos'));
+    const [departamento_id, setDepartamento_id] = useState(formContrato.departamento_id);
     const credor = useRef(null);
     const [tipo_objeto, setTipo_objeto] = useState(formContrato.tipo_objeto);
     const objeto = useRef(null);
@@ -38,10 +40,10 @@ const FormDadosContrato = (props) => {
         open: false,
         id: numContrato
     });
-    // const [contratoEditado, setContratoEditado] = useState({...formContrato});
 
     useEffect(() => {
         setTipo_objeto(formContrato.tipo_objeto);
+        setDepartamento_id(formContrato.departamento_id);
     }, [formContrato])
 
     const handleChange = (event, form, setForm) => {
@@ -114,6 +116,9 @@ const FormDadosContrato = (props) => {
                         formContrato={contratoEditado}
                         setFormContrato={setContratoEditado}
                         handleChange={handleChange}
+                        departamentos={departamentos}
+                        departamento_id={departamento_id}
+                        setDepartamento_id={setDepartamento_id}
                         credor={credor}
                         tipo_objeto={tipo_objeto}
                         setTipo_objeto={setTipo_objeto}
@@ -144,6 +149,7 @@ const FormDadosContrato = (props) => {
                     variant="contained"
                     onMouseDown={() => setContratoEditado({
                         ...contratoEditado,
+                        departamento_id: departamento_id,
                         credor: credor.current.value,
                         tipo_objeto: tipo_objeto,
                         objeto: objeto.current.value,

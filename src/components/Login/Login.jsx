@@ -42,7 +42,7 @@ const Login = () => {
         if (localStorage.getItem('access_token')) {
             navigate("../principal", { replace: true });
         }
-    }, []);
+    }, [navigate]);
 
     const handleChange = (e) => {
         setError({
@@ -79,6 +79,7 @@ const Login = () => {
                 if (data.access_token) {
                     localStorage.setItem('access_token', data.access_token);
                     localStorage.setItem('username', data.username);
+                    localStorage.setItem('departamentos', JSON.stringify(data.departamentos));
                     navigate("../principal", { replace: true });
                 } else {
                     setError({
