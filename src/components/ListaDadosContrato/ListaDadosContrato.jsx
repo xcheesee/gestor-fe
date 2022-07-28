@@ -101,6 +101,7 @@ const ListaDadosContrato = (props) => {
 
     const TabContrato = (props) => {
         const campos = [
+            "Departamento",
             "Processo SEI",
             "Credor",
             "CPF/CNPJ",
@@ -120,6 +121,7 @@ const ListaDadosContrato = (props) => {
         ];
     
         const valores = [
+            props.departamento,
             mascaraProcessoSei(props.processo_sei),
             props.credor,
             formataCpfCnpj(props.cnpj_cpf),
@@ -173,6 +175,7 @@ const ListaDadosContrato = (props) => {
                 
                 <TabPanel value={value} index={0}>
                     <TabContrato 
+                        departamento={dados.departamento}
                         processo_sei={dados.processo_sei}
                         credor={dados.credor}
                         cnpj_cpf={dados.cnpj_cpf}
