@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { 
     Paper,
     Typography, 
-    TextField, 
     Box, 
     Button,
     IconButton,
@@ -16,32 +15,37 @@ import {
     CircularProgress,
     Fade
 } from '@mui/material';
-import TuneIcon from '@mui/icons-material/Tune';
 import ManageSearchIcon from '@mui/icons-material/ManageSearch';
 import AddIcon from '@mui/icons-material/Add';
 import { Link } from "react-router-dom";
-import CampoData from '../CampoData';
+import Filtros from '../Filtros';
 
 const Principal = ({ snackbar, setSnackbar, mascaraProcessoSei, mascaraContrato }) => {
     const [dados, setDados] = useState({});
     const [metaDados, setMetaDados] = useState({});
     const [estaCarregado, setEstaCarregado] = useState(false);
-    const [page, setPage] = useState(1);
+    const [url, setUrl] = useState({
+        url: `${process.env.REACT_APP_API_URL}/contratos?`,
+        page: 1,
+        filtros: ''
+    });
 
     const irParaTopo = () => {
         window.scrollTo(0, 0);
     }
     
     const mudaPagina = (event, value) => {
-        if (page !== value) {
+        if (url.page !== value) {
             setEstaCarregado(false);
             irParaTopo();
-            setPage(value);
+            setUrl({
+                ...url,
+                page: value
+            });
         }
     }
 
     useEffect(() => {
-        const url = `${process.env.REACT_APP_API_URL}/contratos?page=${page}`
         const token = localStorage.getItem('access_token');
         const options = {
             method: 'GET',
@@ -50,9 +54,12 @@ const Principal = ({ snackbar, setSnackbar, mascaraProcessoSei, mascaraContrato 
                 'Accept': 'application/json',
                 'Authorization': `Bearer ${token}`
             },
-        }
+        };
+        const urlMontado = `${url.url}page=${url.page}${url.filtros}`;
+
+        setEstaCarregado(false);
         
-        fetch(url, options)
+        fetch(urlMontado, options)
             .then(res => {
                 if (res.status === 401) {
                     localStorage.removeItem('access_token');
@@ -69,7 +76,7 @@ const Principal = ({ snackbar, setSnackbar, mascaraProcessoSei, mascaraContrato 
 
         setSnackbar({...snackbar, open: false});
         
-    }, [page])
+    }, [url])
 
     const ConteudoPrincipal = () => {
         const rows = [];
@@ -92,15 +99,15 @@ const Principal = ({ snackbar, setSnackbar, mascaraProcessoSei, mascaraContrato 
             <TableContainer component={Paper} elevation={3} sx={{ width: '100%', margin: '1rem auto 0 auto'}}>
                 <Table size="small">
                     <TableHead sx={{ background: (theme) => theme.palette.primary.main  }}>
-                        <TableRow sx={{ height: '3.75rem' }}>
+                        <TableRow>
                             <TableCell sx={{ color: (theme) => theme.palette.color.main }} align="center">ID</TableCell>
                             <TableCell sx={{ color: (theme) => theme.palette.color.main }} align="center">Processo SEI</TableCell>
                             <TableCell sx={{ color: (theme) => theme.palette.color.main }} align="center">Credor</TableCell>
-                            <TableCell sx={{ color: (theme) => theme.palette.color.main }} align="center">Nome da empresa</TableCell>
-                            <TableCell sx={{ color: (theme) => theme.palette.color.main }} align="center">Número do contrato</TableCell>
-                            <TableCell sx={{ color: (theme) => theme.palette.color.main }} align="center">Data de início da vigência</TableCell>
-                            <TableCell sx={{ color: (theme) => theme.palette.color.main }} align="center">Data de vencimento</TableCell>
-                            <TableCell sx={{ color: (theme) => theme.palette.color.main }} align="center">Visualizar contrato</TableCell>
+                            <TableCell sx={{ color: (theme) => theme.palette.color.main }} align="center">Empresa</TableCell>
+                            <TableCell sx={{ color: (theme) => theme.palette.color.main }} align="center">Contrato</TableCell>
+                            <TableCell sx={{ color: (theme) => theme.palette.color.main }} align="center">Início da vigência</TableCell>
+                            <TableCell sx={{ color: (theme) => theme.palette.color.main }} align="center">Vencimento</TableCell>
+                            <TableCell sx={{ color: (theme) => theme.palette.color.main }} align="center">Visualizar</TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
@@ -140,41 +147,7 @@ const Principal = ({ snackbar, setSnackbar, mascaraProcessoSei, mascaraContrato 
                 <Box sx={{ padding: '1rem', maxWidth: '80rem', margin: '2rem auto', boxSizing: 'border-box' }} component={Paper} elevation={5}>
                     <Typography variant="h2" component="h1" sx={{ fontSize: '2rem' }}>Contratos vigentes</Typography>
                     <Box sx={{ display: 'flex', flexDirection: 'column', margin: '1rem' }}>
-                        <Box>
-                            <TextField 
-                                label="Processo SEI"
-                                sx={{ margin: '1rem' }}
-                                size="small"
-                            />
-                            <TextField 
-                                label="Empresa"
-                                sx={{ margin: '1rem' }}
-                                size="small"
-                            />
-                            <CampoData 
-                                label="Data de início"
-                                name="data_inicio_vigencia"
-                                helperText=""
-                                size="small"
-                                margin="1rem"
-                            />
-                            <CampoData 
-                                label="Data final"
-                                name="data_vencimento"
-                                helperText=""
-                                size="small"
-                                margin="1rem"
-                            />
-                        </Box>
-
-                        <Box sx={{ alignSelf: 'flex-start' }}>
-                            <Button
-                                sx={{ margin: '1rem', color: (theme) => theme.palette.color.main, textTransform: 'none' }}
-                                variant="contained"
-                            >
-                                <TuneIcon sx={{ mr: '0.5rem' }} /> Filtrar
-                            </Button>
-                        </Box>
+                        <Filtros url={url} setUrl={setUrl} />
 
                         {
                             !estaCarregado
@@ -221,7 +194,7 @@ const Principal = ({ snackbar, setSnackbar, mascaraProcessoSei, mascaraContrato 
                                 count={metaDados.last_page} 
                                 size="large" 
                                 color="primary" 
-                                page={page}
+                                page={url.page}
                                 onChange={mudaPagina}
                             />
                         </Box>

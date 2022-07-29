@@ -20,6 +20,7 @@ const CampoData = (props) => {
             required={props.required}
             sx={ props.margin === "" ? { margin: '1rem 0' } : {margin: props.margin} }
             fullWidth={props.fullWidth}
+            {...props}
         />
     );
 }
