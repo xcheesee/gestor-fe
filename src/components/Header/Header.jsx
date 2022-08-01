@@ -35,6 +35,7 @@ const Header = (props) => {
     const location = useLocation();
 
     const username = localStorage.getItem('username');
+    const accessToken = localStorage.getItem('access_token');
 
     const [contratoVencido, setContratoVencido] = useState();
     const [qtdVencido, setQtdVencido] = useState(0);
@@ -103,15 +104,17 @@ const Header = (props) => {
             }
         };
 
-        fetch(url, options)
-            .then(res => res.json())
-            .then(data => {
-                console.log(data.data);
-                setContratoVencido(data.data);
-                setQtdVencido(data.data.length);
-                setEstaCarregado(true);
-            });
-    }, [])
+        if (token) {
+            fetch(url, options)
+                .then(res => res.json())
+                .then(data => {
+                    console.log(data.data);
+                    setContratoVencido(data.data);
+                    setQtdVencido(data.data.length);
+                    setEstaCarregado(true);
+                });
+        }
+    }, [accessToken])
 
     const handleClick = (event) => {
         document.getElementById("btnHeader").setAttribute('style', 'background: #398E87 !important;')
