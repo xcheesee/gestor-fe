@@ -25,3 +25,20 @@ a, a:visited, a:hover, a:active {
 .header__titulo:hover {
     cursor: pointer;
 }
+
+.css-oeyo0e-MuiBadge-badge {
+    height: 10px !important;
+    width: 10px !important;
+    border-radius: 50% !important;
+    background-color: #ff385c !important;
+    box-shadow: 0 0 0 1.5px #3b948c !important;
+    margin: 0px 4px !important;
+}
+
+.css-6hp17o-MuiList-root-MuiMenu-list {
+    min-width: 205px;
+}
+
+.notificacao {
+    position: absolute;
+}
