@@ -120,11 +120,9 @@ const Principal = ({ snackbar, setSnackbar, mascaraProcessoSei, mascaraContrato 
                         <TableRow>
                             <TableCell 
                                 sx={{ 
-                                    color: (theme) => theme.palette.color.main,
-                                    '&:hover': { cursor: 'pointer' }
+                                    color: (theme) => theme.palette.color.main
                                 }} 
                                 align="center"
-                                onClick={() => ordena('id')}
                             >
                                 <Box 
                                     sx={{ 
@@ -132,9 +130,11 @@ const Principal = ({ snackbar, setSnackbar, mascaraProcessoSei, mascaraContrato 
                                         justifyContent: 'center', 
                                         borderRadius: '3px',
                                         '&:hover': { 
-                                            background: 'rgba(20, 20, 20, 0.2)'
+                                            background: 'rgba(20, 20, 20, 0.2)',
+                                            cursor: 'pointer'
                                         } 
                                     }}
+                                    onClick={() => ordena('id')}
                                 >
                                     ID
                                     {
@@ -146,11 +146,9 @@ const Principal = ({ snackbar, setSnackbar, mascaraProcessoSei, mascaraContrato 
                             </TableCell>
                             <TableCell 
                                 sx={{ 
-                                    color: (theme) => theme.palette.color.main,
-                                    '&:hover': { cursor: 'pointer' }
+                                    color: (theme) => theme.palette.color.main
                                 }} 
                                 align="center"
-                                onClick={() => ordena('processo_sei')}
                             >
                                 <Box 
                                     sx={{ 
@@ -158,9 +156,11 @@ const Principal = ({ snackbar, setSnackbar, mascaraProcessoSei, mascaraContrato 
                                         justifyContent: 'center', 
                                         borderRadius: '3px',
                                         '&:hover': { 
-                                            background: 'rgba(20, 20, 20, 0.2)'
+                                            background: 'rgba(20, 20, 20, 0.2)',
+                                            cursor: 'pointer'
                                         } 
                                     }}
+                                    onClick={() => ordena('processo_sei')}
                                 >
                                     Processo SEI
                                     {
@@ -172,11 +172,9 @@ const Principal = ({ snackbar, setSnackbar, mascaraProcessoSei, mascaraContrato 
                             </TableCell>
                             <TableCell 
                                 sx={{ 
-                                    color: (theme) => theme.palette.color.main,
-                                    '&:hover': { cursor: 'pointer' }
+                                    color: (theme) => theme.palette.color.main
                                 }} 
                                 align="center"
-                                onClick={() => ordena('credor')}
                             >
                                 <Box 
                                     sx={{ 
@@ -184,9 +182,11 @@ const Principal = ({ snackbar, setSnackbar, mascaraProcessoSei, mascaraContrato 
                                         justifyContent: 'center', 
                                         borderRadius: '3px',
                                         '&:hover': { 
-                                            background: 'rgba(20, 20, 20, 0.2)'
+                                            background: 'rgba(20, 20, 20, 0.2)',
+                                            cursor: 'pointer'
                                         } 
                                     }}
+                                    onClick={() => ordena('credor')}
                                 >
                                     Credor
                                     {
@@ -198,11 +198,9 @@ const Principal = ({ snackbar, setSnackbar, mascaraProcessoSei, mascaraContrato 
                             </TableCell>
                             <TableCell 
                                 sx={{ 
-                                    color: (theme) => theme.palette.color.main,
-                                    '&:hover': { cursor: 'pointer' }
+                                    color: (theme) => theme.palette.color.main
                                 }} 
                                 align="center"
-                                onClick={() => ordena('nome_empresa')}
                             >
                                 <Box 
                                     sx={{ 
@@ -210,9 +208,11 @@ const Principal = ({ snackbar, setSnackbar, mascaraProcessoSei, mascaraContrato 
                                         justifyContent: 'center', 
                                         borderRadius: '3px',
                                         '&:hover': { 
-                                            background: 'rgba(20, 20, 20, 0.2)'
+                                            background: 'rgba(20, 20, 20, 0.2)',
+                                            cursor: 'pointer'
                                         } 
                                     }}
+                                    onClick={() => ordena('nome_empresa')}
                                 >
                                     Empresa
                                     {
@@ -224,11 +224,9 @@ const Principal = ({ snackbar, setSnackbar, mascaraProcessoSei, mascaraContrato 
                             </TableCell>
                             <TableCell 
                                 sx={{ 
-                                    color: (theme) => theme.palette.color.main,
-                                    '&:hover': { cursor: 'pointer' }
+                                    color: (theme) => theme.palette.color.main
                                 }} 
                                 align="center"
-                                onClick={() => ordena('numero_contrato')}
                             >
                                 <Box 
                                     sx={{ 
@@ -236,9 +234,11 @@ const Principal = ({ snackbar, setSnackbar, mascaraProcessoSei, mascaraContrato 
                                         justifyContent: 'center', 
                                         borderRadius: '3px',
                                         '&:hover': { 
-                                            background: 'rgba(20, 20, 20, 0.2)'
+                                            background: 'rgba(20, 20, 20, 0.2)',
+                                            cursor: 'pointer'
                                         } 
                                     }}
+                                    onClick={() => ordena('numero_contrato')}
                                 >
                                     Contrato
                                     {
@@ -250,11 +250,9 @@ const Principal = ({ snackbar, setSnackbar, mascaraProcessoSei, mascaraContrato 
                             </TableCell>
                             <TableCell 
                                 sx={{ 
-                                    color: (theme) => theme.palette.color.main,
-                                    '&:hover': { cursor: 'pointer' }
+                                    color: (theme) => theme.palette.color.main
                                 }} 
                                 align="center"
-                                onClick={() => ordena('data_inicio_vigencia')}
                             >
                                 <Box 
                                     sx={{ 
@@ -262,9 +260,11 @@ const Principal = ({ snackbar, setSnackbar, mascaraProcessoSei, mascaraContrato 
                                         justifyContent: 'center', 
                                         borderRadius: '3px',
                                         '&:hover': { 
-                                            background: 'rgba(20, 20, 20, 0.2)'
+                                            background: 'rgba(20, 20, 20, 0.2)',
+                                            cursor: 'pointer'
                                         } 
                                     }}
+                                    onClick={() => ordena('data_inicio_vigencia')}
                                 >
                                     Início da vigência
                                     {
@@ -276,11 +276,9 @@ const Principal = ({ snackbar, setSnackbar, mascaraProcessoSei, mascaraContrato 
                             </TableCell>
                             <TableCell 
                                 sx={{ 
-                                    color: (theme) => theme.palette.color.main,
-                                    '&:hover': { cursor: 'pointer' }
+                                    color: (theme) => theme.palette.color.main
                                 }} 
                                 align="center"
-                                onClick={() => ordena('data_vencimento')}
                             >
                                 <Box 
                                     sx={{ 
@@ -288,9 +286,11 @@ const Principal = ({ snackbar, setSnackbar, mascaraProcessoSei, mascaraContrato 
                                         justifyContent: 'center', 
                                         borderRadius: '3px',
                                         '&:hover': { 
-                                            background: 'rgba(20, 20, 20, 0.2)'
+                                            background: 'rgba(20, 20, 20, 0.2)',
+                                            cursor: 'pointer'
                                         } 
                                     }}
+                                    onClick={() => ordena('data_vencimento')}
                                 >
                                     Vencimento
                                     {
