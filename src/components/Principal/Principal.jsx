@@ -17,6 +17,8 @@ import {
 } from '@mui/material';
 import ManageSearchIcon from '@mui/icons-material/ManageSearch';
 import AddIcon from '@mui/icons-material/Add';
+import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
+import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import { Link } from "react-router-dom";
 import Filtros from '../Filtros';
 
@@ -27,7 +29,8 @@ const Principal = ({ snackbar, setSnackbar, mascaraProcessoSei, mascaraContrato 
     const [url, setUrl] = useState({
         url: `${process.env.REACT_APP_API_URL}/contratos?`,
         page: 1,
-        filtros: ''
+        filtros: '',
+        sort: ''
     });
 
     const irParaTopo = () => {
@@ -45,6 +48,13 @@ const Principal = ({ snackbar, setSnackbar, mascaraProcessoSei, mascaraContrato 
         }
     }
 
+    const ordena = (value) => {
+        if (url.sort === value)
+            setUrl({ ...url, sort: `-${value}` });
+        else
+            setUrl({ ...url, sort: value })
+    }
+
     useEffect(() => {
         const token = localStorage.getItem('access_token');
         const options = {
@@ -55,7 +65,7 @@ const Principal = ({ snackbar, setSnackbar, mascaraProcessoSei, mascaraContrato 
                 'Authorization': `Bearer ${token}`
             },
         };
-        const urlMontado = `${url.url}page=${url.page}${url.filtros}`;
+        const urlMontado = `${url.url}page=${url.page}${url.filtros}&sort=${url.sort}`;
 
         setEstaCarregado(false);
         
@@ -77,6 +87,14 @@ const Principal = ({ snackbar, setSnackbar, mascaraProcessoSei, mascaraContrato 
         setSnackbar({...snackbar, open: false});
         
     }, [url])
+
+    const Arrow = () => {
+        if (url.sort[0] === '-') {
+            return (<KeyboardArrowUpIcon />);
+        } else {
+            return (<KeyboardArrowDownIcon />);
+        }
+    }
 
     const ConteudoPrincipal = () => {
         const rows = [];
@@ -100,14 +118,196 @@ const Principal = ({ snackbar, setSnackbar, mascaraProcessoSei, mascaraContrato 
                 <Table size="small">
                     <TableHead sx={{ background: (theme) => theme.palette.primary.main  }}>
                         <TableRow>
-                            <TableCell sx={{ color: (theme) => theme.palette.color.main }} align="center">ID</TableCell>
-                            <TableCell sx={{ color: (theme) => theme.palette.color.main }} align="center">Processo SEI</TableCell>
-                            <TableCell sx={{ color: (theme) => theme.palette.color.main }} align="center">Credor</TableCell>
-                            <TableCell sx={{ color: (theme) => theme.palette.color.main }} align="center">Empresa</TableCell>
-                            <TableCell sx={{ color: (theme) => theme.palette.color.main }} align="center">Contrato</TableCell>
-                            <TableCell sx={{ color: (theme) => theme.palette.color.main }} align="center">Início da vigência</TableCell>
-                            <TableCell sx={{ color: (theme) => theme.palette.color.main }} align="center">Vencimento</TableCell>
-                            <TableCell sx={{ color: (theme) => theme.palette.color.main }} align="center">Visualizar</TableCell>
+                            <TableCell 
+                                sx={{ 
+                                    color: (theme) => theme.palette.color.main,
+                                    '&:hover': { cursor: 'pointer' }
+                                }} 
+                                align="center"
+                                onClick={() => ordena('id')}
+                            >
+                                <Box 
+                                    sx={{ 
+                                        display: 'flex', 
+                                        justifyContent: 'center', 
+                                        borderRadius: '3px',
+                                        '&:hover': { 
+                                            background: 'rgba(20, 20, 20, 0.2)'
+                                        } 
+                                    }}
+                                >
+                                    ID
+                                    {
+                                        url.sort === 'id' || url.sort === '-id'
+                                        ? <Arrow />
+                                        : ''
+                                    }
+                                </Box>
+                            </TableCell>
+                            <TableCell 
+                                sx={{ 
+                                    color: (theme) => theme.palette.color.main,
+                                    '&:hover': { cursor: 'pointer' }
+                                }} 
+                                align="center"
+                                onClick={() => ordena('processo_sei')}
+                            >
+                                <Box 
+                                    sx={{ 
+                                        display: 'flex', 
+                                        justifyContent: 'center', 
+                                        borderRadius: '3px',
+                                        '&:hover': { 
+                                            background: 'rgba(20, 20, 20, 0.2)'
+                                        } 
+                                    }}
+                                >
+                                    Processo SEI
+                                    {
+                                        url.sort === 'processo_sei' || url.sort === '-processo_sei'
+                                        ? <Arrow />
+                                        : ''
+                                    }
+                                </Box>
+                            </TableCell>
+                            <TableCell 
+                                sx={{ 
+                                    color: (theme) => theme.palette.color.main,
+                                    '&:hover': { cursor: 'pointer' }
+                                }} 
+                                align="center"
+                                onClick={() => ordena('credor')}
+                            >
+                                <Box 
+                                    sx={{ 
+                                        display: 'flex', 
+                                        justifyContent: 'center', 
+                                        borderRadius: '3px',
+                                        '&:hover': { 
+                                            background: 'rgba(20, 20, 20, 0.2)'
+                                        } 
+                                    }}
+                                >
+                                    Credor
+                                    {
+                                        url.sort === 'credor' || url.sort === '-credor'
+                                        ? <Arrow />
+                                        : ''
+                                    }
+                                </Box>
+                            </TableCell>
+                            <TableCell 
+                                sx={{ 
+                                    color: (theme) => theme.palette.color.main,
+                                    '&:hover': { cursor: 'pointer' }
+                                }} 
+                                align="center"
+                                onClick={() => ordena('nome_empresa')}
+                            >
+                                <Box 
+                                    sx={{ 
+                                        display: 'flex', 
+                                        justifyContent: 'center', 
+                                        borderRadius: '3px',
+                                        '&:hover': { 
+                                            background: 'rgba(20, 20, 20, 0.2)'
+                                        } 
+                                    }}
+                                >
+                                    Empresa
+                                    {
+                                        url.sort === 'nome_empresa' || url.sort === '-nome_empresa'
+                                        ? <Arrow />
+                                        : ''
+                                    }
+                                </Box>
+                            </TableCell>
+                            <TableCell 
+                                sx={{ 
+                                    color: (theme) => theme.palette.color.main,
+                                    '&:hover': { cursor: 'pointer' }
+                                }} 
+                                align="center"
+                                onClick={() => ordena('numero_contrato')}
+                            >
+                                <Box 
+                                    sx={{ 
+                                        display: 'flex', 
+                                        justifyContent: 'center', 
+                                        borderRadius: '3px',
+                                        '&:hover': { 
+                                            background: 'rgba(20, 20, 20, 0.2)'
+                                        } 
+                                    }}
+                                >
+                                    Contrato
+                                    {
+                                        url.sort === 'numero_contrato' || url.sort === '-numero_contrato'
+                                        ? <Arrow />
+                                        : ''
+                                    }
+                                </Box>
+                            </TableCell>
+                            <TableCell 
+                                sx={{ 
+                                    color: (theme) => theme.palette.color.main,
+                                    '&:hover': { cursor: 'pointer' }
+                                }} 
+                                align="center"
+                                onClick={() => ordena('data_inicio_vigencia')}
+                            >
+                                <Box 
+                                    sx={{ 
+                                        display: 'flex', 
+                                        justifyContent: 'center', 
+                                        borderRadius: '3px',
+                                        '&:hover': { 
+                                            background: 'rgba(20, 20, 20, 0.2)'
+                                        } 
+                                    }}
+                                >
+                                    Início da vigência
+                                    {
+                                        url.sort === 'data_inicio_vigencia' || url.sort === '-data_inicio_vigencia'
+                                        ? <Arrow />
+                                        : ''
+                                    }
+                                </Box>
+                            </TableCell>
+                            <TableCell 
+                                sx={{ 
+                                    color: (theme) => theme.palette.color.main,
+                                    '&:hover': { cursor: 'pointer' }
+                                }} 
+                                align="center"
+                                onClick={() => ordena('data_vencimento')}
+                            >
+                                <Box 
+                                    sx={{ 
+                                        display: 'flex', 
+                                        justifyContent: 'center', 
+                                        borderRadius: '3px',
+                                        '&:hover': { 
+                                            background: 'rgba(20, 20, 20, 0.2)'
+                                        } 
+                                    }}
+                                >
+                                    Vencimento
+                                    {
+                                        url.sort === 'data_vencimento' || url.sort === '-data_vencimento'
+                                        ? <Arrow />
+                                        : ''
+                                    }
+                                </Box>
+                            </TableCell>
+                            <TableCell 
+                                sx={{ 
+                                    color: (theme) => theme.palette.color.main,
+                                }} 
+                                align="center"
+                            >
+                                Visualizar
+                            </TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
