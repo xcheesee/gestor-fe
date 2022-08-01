@@ -90,16 +90,24 @@ const Principal = ({ snackbar, setSnackbar, mascaraProcessoSei, mascaraContrato 
 
     const Arrow = () => {
         if (url.sort[0] === '-') {
-            return (<KeyboardArrowUpIcon />);
+            return (
+                <Fade in={true}>
+                    <KeyboardArrowUpIcon />
+                </Fade>
+            );
         } else {
-            return (<KeyboardArrowDownIcon />);
+            return (
+                <Fade in={true}>
+                    <KeyboardArrowDownIcon />
+                </Fade>
+            );
         }
     }
 
     const ConteudoPrincipal = () => {
         const rows = [];
     
-        Object.values(dados).map((contrato, index) => {
+        Object.values(dados).map((contrato) => {
             return rows.push(
                 {
                     id: contrato.id, 
@@ -131,6 +139,7 @@ const Principal = ({ snackbar, setSnackbar, mascaraProcessoSei, mascaraContrato 
                                         borderRadius: '3px',
                                         '&:hover': { 
                                             background: 'rgba(20, 20, 20, 0.2)',
+                                            transition: '0.2s',
                                             cursor: 'pointer'
                                         } 
                                     }}
@@ -157,6 +166,7 @@ const Principal = ({ snackbar, setSnackbar, mascaraProcessoSei, mascaraContrato 
                                         borderRadius: '3px',
                                         '&:hover': { 
                                             background: 'rgba(20, 20, 20, 0.2)',
+                                            transition: '0.2s',
                                             cursor: 'pointer'
                                         } 
                                     }}
@@ -183,6 +193,7 @@ const Principal = ({ snackbar, setSnackbar, mascaraProcessoSei, mascaraContrato 
                                         borderRadius: '3px',
                                         '&:hover': { 
                                             background: 'rgba(20, 20, 20, 0.2)',
+                                            transition: '0.2s',
                                             cursor: 'pointer'
                                         } 
                                     }}
@@ -209,6 +220,7 @@ const Principal = ({ snackbar, setSnackbar, mascaraProcessoSei, mascaraContrato 
                                         borderRadius: '3px',
                                         '&:hover': { 
                                             background: 'rgba(20, 20, 20, 0.2)',
+                                            transition: '0.2s',
                                             cursor: 'pointer'
                                         } 
                                     }}
@@ -235,6 +247,7 @@ const Principal = ({ snackbar, setSnackbar, mascaraProcessoSei, mascaraContrato 
                                         borderRadius: '3px',
                                         '&:hover': { 
                                             background: 'rgba(20, 20, 20, 0.2)',
+                                            transition: '0.2s',
                                             cursor: 'pointer'
                                         } 
                                     }}
@@ -261,6 +274,7 @@ const Principal = ({ snackbar, setSnackbar, mascaraProcessoSei, mascaraContrato 
                                         borderRadius: '3px',
                                         '&:hover': { 
                                             background: 'rgba(20, 20, 20, 0.2)',
+                                            transition: '0.2s',
                                             cursor: 'pointer'
                                         } 
                                     }}
@@ -287,6 +301,7 @@ const Principal = ({ snackbar, setSnackbar, mascaraProcessoSei, mascaraContrato 
                                         borderRadius: '3px',
                                         '&:hover': { 
                                             background: 'rgba(20, 20, 20, 0.2)',
+                                            transition: '0.2s',
                                             cursor: 'pointer'
                                         } 
                                     }}
