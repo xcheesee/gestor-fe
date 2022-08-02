@@ -184,6 +184,8 @@ const DadosContrato = ({ snackbar, setSnackbar, mascaraProcessoSei, mascaraContr
             },
             method: 'GET'
         }
+
+        setEstaCarregado(false);
         
         fetch(`${url}/contrato/${numContrato}`, options)
             .then(res => {
@@ -255,7 +257,7 @@ const DadosContrato = ({ snackbar, setSnackbar, mascaraProcessoSei, mascaraContr
                     </Link>
                         <Box sx={{ display: 'flex', flexDirection: 'column', margin: '1rem' }}>
                             <Typography variant="h2" component="h1" sx={{ fontSize: '2rem' }}>
-                                Contrato # <strong>{dados.id}</strong>
+                                Contrato # <strong>{estaCarregado ? dados.id : " "}</strong>
                             </Typography>
 
                             <Box sx={{ display: 'flex', width: '100%', margin: '2rem 0' }} component={Paper} elevation={5}>

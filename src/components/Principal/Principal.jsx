@@ -26,6 +26,8 @@ const Principal = ({ snackbar, setSnackbar, mascaraProcessoSei, mascaraContrato 
     const [dados, setDados] = useState({});
     const [metaDados, setMetaDados] = useState({});
     const [estaCarregado, setEstaCarregado] = useState(false);
+    const [sort, setSort] = useState(false);
+    const [carregandoSort, setCarregandoSort] = useState(true);
     const [url, setUrl] = useState({
         url: `${process.env.REACT_APP_API_URL}/contratos?`,
         page: 1,
@@ -49,10 +51,12 @@ const Principal = ({ snackbar, setSnackbar, mascaraProcessoSei, mascaraContrato 
     }
 
     const ordena = (value) => {
+        setSort(true);
+        setCarregandoSort(true);
         if (url.sort === value)
             setUrl({ ...url, sort: `-${value}` });
         else
-            setUrl({ ...url, sort: value })
+            setUrl({ ...url, sort: value });
     }
 
     useEffect(() => {
@@ -67,7 +71,8 @@ const Principal = ({ snackbar, setSnackbar, mascaraProcessoSei, mascaraContrato 
         };
         const urlMontado = `${url.url}page=${url.page}${url.filtros}&sort=${url.sort}`;
 
-        setEstaCarregado(false);
+        if (!sort)
+            setEstaCarregado(false);
         
         fetch(urlMontado, options)
             .then(res => {
@@ -80,6 +85,8 @@ const Principal = ({ snackbar, setSnackbar, mascaraProcessoSei, mascaraContrato 
                             setEstaCarregado(true);
                             setDados(data.data);
                             setMetaDados(data.meta);
+                            setSort(false);
+                            setCarregandoSort(false);
                         });
                 }
             });
@@ -89,18 +96,30 @@ const Principal = ({ snackbar, setSnackbar, mascaraProcessoSei, mascaraContrato 
     }, [url])
 
     const Arrow = () => {
-        if (url.sort[0] === '-') {
+        if (carregandoSort) {
             return (
-                <Fade in={true}>
-                    <KeyboardArrowUpIcon />
-                </Fade>
+                <CircularProgress 
+                    sx={{ 
+                        color: (theme) => theme.palette.color.main, 
+                        margin: '0 0.38rem'
+                    }}
+                    size="0.75rem"
+                />
             );
         } else {
-            return (
-                <Fade in={true}>
-                    <KeyboardArrowDownIcon />
-                </Fade>
-            );
+            if (url.sort[0] === '-') {
+                return (
+                    <Fade in={true}>
+                        <KeyboardArrowUpIcon />
+                    </Fade>
+                );
+            } else {
+                return (
+                    <Fade in={true}>
+                        <KeyboardArrowDownIcon />
+                    </Fade>
+                );
+            }
         }
     }
 
@@ -136,6 +155,7 @@ const Principal = ({ snackbar, setSnackbar, mascaraProcessoSei, mascaraContrato 
                                     sx={{ 
                                         display: 'flex', 
                                         justifyContent: 'center', 
+                                        alignItems: 'center',
                                         borderRadius: '3px',
                                         '&:hover': { 
                                             background: 'rgba(20, 20, 20, 0.2)',
@@ -163,6 +183,7 @@ const Principal = ({ snackbar, setSnackbar, mascaraProcessoSei, mascaraContrato 
                                     sx={{ 
                                         display: 'flex', 
                                         justifyContent: 'center', 
+                                        alignItems: 'center',
                                         borderRadius: '3px',
                                         '&:hover': { 
                                             background: 'rgba(20, 20, 20, 0.2)',
@@ -190,6 +211,7 @@ const Principal = ({ snackbar, setSnackbar, mascaraProcessoSei, mascaraContrato 
                                     sx={{ 
                                         display: 'flex', 
                                         justifyContent: 'center', 
+                                        alignItems: 'center',
                                         borderRadius: '3px',
                                         '&:hover': { 
                                             background: 'rgba(20, 20, 20, 0.2)',
@@ -217,6 +239,7 @@ const Principal = ({ snackbar, setSnackbar, mascaraProcessoSei, mascaraContrato 
                                     sx={{ 
                                         display: 'flex', 
                                         justifyContent: 'center', 
+                                        alignItems: 'center',
                                         borderRadius: '3px',
                                         '&:hover': { 
                                             background: 'rgba(20, 20, 20, 0.2)',
@@ -244,6 +267,7 @@ const Principal = ({ snackbar, setSnackbar, mascaraProcessoSei, mascaraContrato 
                                     sx={{ 
                                         display: 'flex', 
                                         justifyContent: 'center', 
+                                        alignItems: 'center',
                                         borderRadius: '3px',
                                         '&:hover': { 
                                             background: 'rgba(20, 20, 20, 0.2)',
@@ -271,6 +295,7 @@ const Principal = ({ snackbar, setSnackbar, mascaraProcessoSei, mascaraContrato 
                                     sx={{ 
                                         display: 'flex', 
                                         justifyContent: 'center', 
+                                        alignItems: 'center',
                                         borderRadius: '3px',
                                         '&:hover': { 
                                             background: 'rgba(20, 20, 20, 0.2)',
@@ -298,6 +323,7 @@ const Principal = ({ snackbar, setSnackbar, mascaraProcessoSei, mascaraContrato 
                                     sx={{ 
                                         display: 'flex', 
                                         justifyContent: 'center', 
+                                        alignItems: 'center',
                                         borderRadius: '3px',
                                         '&:hover': { 
                                             background: 'rgba(20, 20, 20, 0.2)',
