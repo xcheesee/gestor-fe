@@ -168,6 +168,7 @@ const DadosContrato = ({ snackbar, setSnackbar, mascaraProcessoSei, mascaraContr
     const [carregandoDotacoes, setCarregandoDotacoes] = useState(true);
     const [tipoDotacoes, setTipoDotacoes] = useState([]);
     const [origemRecursos, setOrigemRecursos] = useState([]);
+    const [totais, setTotais] = useState([]);
     const [estaCarregado, setEstaCarregado] = useState(false);
     const { numContrato } = useParams();
     
@@ -211,9 +212,16 @@ const DadosContrato = ({ snackbar, setSnackbar, mascaraProcessoSei, mascaraContr
                                 .then(res => res.json())
                                 .then(data => {
                                     setOrigemRecursos(data.data);
+                                })
+                        })
+                        .then(() => {
+                            fetch(`${url}/contrato_totais/${numContrato}`, options)
+                                .then(res => res.json())
+                                .then(data => {
+                                    setTotais(data.data);
                                     setEstaCarregado(true);
                                 })
-                        });
+                        })
                 }
             })
     }, [numContrato, navigate, mudancaContrato])
@@ -480,6 +488,7 @@ const DadosContrato = ({ snackbar, setSnackbar, mascaraProcessoSei, mascaraContr
                                 setSnackbar={setSnackbar}
                                 mudancaContrato={mudancaContrato}
                                 setMudancaContrato={setMudancaContrato}
+                                totais={totais}
                             />
 
                             <DadosEmpresa

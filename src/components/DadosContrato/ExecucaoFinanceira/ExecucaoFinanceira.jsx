@@ -366,6 +366,8 @@ const ExecucaoFinanceira = (props) => {
                 setErrors={setErrors}
                 carregando={carregando}
                 setOpenConfirmacao={setOpenConfirmacao}
+                formataValores={props.formataValores}
+                totais={props.totais}
             />
 
             <DialogConfirmacao 

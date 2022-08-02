@@ -11,13 +11,13 @@ import {
     Select,
     MenuItem,
     Box,
-    CircularProgress,
-    Typography
+    CircularProgress
 } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import CheckIcon from '@mui/icons-material/Check';
 import CampoAno from '../../../CampoAno';
 import CampoValores from '../../../CampoValores';
+import RefExecucaoFinanceira from '../RefExecucaoFinanceira';
 
 const FormExecFinanceira = (props) => {
     const {
@@ -29,12 +29,14 @@ const FormExecFinanceira = (props) => {
         errors,
         setErrors,
         carregando,
-        setOpenConfirmacao
+        setOpenConfirmacao,
+        formataValores,
+        totais
     } = props;
 
     useEffect(() => {
         setErrors({});
-    }, [openFormExecFinanceira.open]);
+    }, [openFormExecFinanceira.open, setErrors]);
 
     const handleChange = (e) => {
         setFormExecFinanceira({
@@ -110,61 +112,10 @@ const FormExecFinanceira = (props) => {
                     />
                 </Box>
 
-                <Box 
-                    sx={{
-                        border: '1px solid #cdcdcd', 
-                        borderRadius: '3px',
-                        padding: '1rem',
-                        display: 'grid',
-                        gridTemplateColumns: '1fr 1fr 1fr',
-                        gridTemplateRows: '1fr 1fr',
-                        columnGap: '2rem',
-                        rowGap: '2rem',
-                        mb: '2rem'
-                    }}
-                >
-                    <Typography sx={{ fontWeight: 'medium' }} component="span">
-                        Valor do contrato
-                        <Typography sx={{ padding: '0 1rem', mb: '0.5rem' }}>
-                            ---
-                        </Typography>
-                    </Typography>
-                    
-                    <Typography sx={{ fontWeight: 'medium' }} component="span">
-                        Valor de reserva
-                        <Typography sx={{ padding: '0 1rem', mb: '0.5rem' }}>
-                            ---
-                        </Typography>
-                    </Typography>
-                    
-                    <Typography sx={{ fontWeight: 'medium' }} component="span">
-                        Valor das dotações
-                        <Typography sx={{ padding: '0 1rem', mb: '0.5rem' }}>
-                            ---
-                        </Typography>
-                    </Typography>
-
-                    <Typography sx={{ fontWeight: 'medium' }} component="span">
-                        Valor total de empenho
-                        <Typography sx={{ padding: '0 1rem', mb: '0.5rem' }}>
-                            ---
-                        </Typography>
-                    </Typography>
-
-                    <Typography sx={{ fontWeight: 'medium' }} component="span">
-                        Total planejado
-                        <Typography sx={{ padding: '0 1rem', mb: '0.5rem' }}>
-                            ---
-                        </Typography>
-                    </Typography>
-
-                    <Typography sx={{ fontWeight: 'medium' }} component="span">
-                        Valor dos aditamentos
-                        <Typography sx={{ padding: '0 1rem', mb: '0.5rem' }}>
-                            ---
-                        </Typography>
-                    </Typography>
-                </Box>
+                <RefExecucaoFinanceira 
+                    totais={totais}
+                    formataValores={formataValores}
+                />
 
                 <CampoValores 
                     label="Planejado inicial" 
