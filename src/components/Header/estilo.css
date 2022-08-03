@@ -37,6 +37,7 @@ a, a:visited, a:hover, a:active {
 
 .css-6hp17o-MuiList-root-MuiMenu-list {
     min-width: 205px;
+    max-height: 306px;
 }
 
 .notificacao {
