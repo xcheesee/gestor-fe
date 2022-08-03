@@ -251,7 +251,7 @@ const FormDotacoes = (props) => {
                     onClick={cancelar}
                     sx={{ textTransform: 'none', mr: '1rem', color: (theme) => theme.palette.error.main }}
                 >
-                    <CloseIcon sx={{ mr: '0.2rem' }} /> Cancelar
+                    <CloseIcon sx={{ mr: '0.2rem' }} fontSize="small" /> Cancelar
                 </Button>
 
                 <Button
@@ -261,7 +261,7 @@ const FormDotacoes = (props) => {
                 >
                     {carregando
                         ? <CircularProgress size={16} sx={{ color: (theme) => theme.palette.color.main, mr: '0.7rem' }} />
-                        : <CheckIcon sx={{ mr: '0.2rem' }} /> 
+                        : <CheckIcon sx={{ mr: '0.2rem' }} fontSize="small" /> 
                     }
 
                     {openFormDotacao.acao === 'adicionar'

@@ -13,6 +13,7 @@ import AddIcon from '@mui/icons-material/Add';
 import ManageSearchIcon from '@mui/icons-material/ManageSearch';
 import DialogDetalhes from './DialogDetalhes/DialogDetalhes';
 import FormExecFinanceira from './FormExecFinanceira';
+import FormEditExecFinanceira from './FormEditExecFinanceira';
 import DialogConfirmacao from '../../DialogConfirmacao';
 
 const ExecucaoFinanceira = (props) => {
@@ -24,6 +25,7 @@ const ExecucaoFinanceira = (props) => {
         open: false,
         acao: 'adicionar'
     });
+    const [openEditExecFinanceira, setOpenEditExecFinanceira] = useState(false);
     const [openConfirmacao, setOpenConfirmacao] = useState({
         open: false,
         id: ''
@@ -171,6 +173,33 @@ const ExecucaoFinanceira = (props) => {
             .catch(err => console.log(err));
     }
 
+    const handleClickEditarMes = (id) => {
+        const url = `${process.env.REACT_APP_API_URL}/execucao_financeira/${id}`;
+        const token = localStorage.getItem('access_token');
+        const options = {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+                'Authorization': `Bearer ${token}`
+            }
+        };
+
+        setCarregando(true);
+
+        fetch(url, options)
+            .then(res => {
+                if (res.ok) {
+                    setCarregando(false);
+                    return res.json()
+                    .then(data => { 
+                        setFormExecFinanceira(data.data);
+                        setOpenEditExecFinanceira(true);
+                    });
+                }
+            })
+    }
+
     const Conteudo = () => {
         if (Object.keys(execucao_financeira).length > 0) {
             return (
@@ -273,9 +302,14 @@ const ExecucaoFinanceira = (props) => {
                                             </Tooltip>
                                             
                                             <Tooltip title="Editar" arrow>
-                                                <IconButton>
-                                                    <EditIcon fontSize="small" />
-                                                </IconButton>
+                                                <Box>
+                                                    <IconButton
+                                                        onClick={() => handleClickEditarMes(execucao_financeira[execucao].id)}
+                                                        disabled={carregando}
+                                                    >
+                                                        <EditIcon fontSize="small" />
+                                                    </IconButton>
+                                                </Box>
                                             </Tooltip>
                                         </Box>
                                     </Box>
@@ -368,6 +402,22 @@ const ExecucaoFinanceira = (props) => {
                 setOpenConfirmacao={setOpenConfirmacao}
                 formataValores={props.formataValores}
                 totais={props.totais}
+            />
+
+            <FormEditExecFinanceira 
+                meses={meses}
+                openEditExecFinanceira={openEditExecFinanceira}
+                setOpenEditExecFinanceira={setOpenEditExecFinanceira}
+                formExecFinanceira={formExecFinanceira}
+                setFormExecFinanceira={setFormExecFinanceira}
+                errors={errors}
+                setErrors={setErrors}
+                carregando={carregando}
+                setCarregando={setCarregando}
+                formataValores={props.formataValores}
+                setSnackbar={props.setSnackbar}
+                mudancaContrato={props.mudancaContrato}
+                setMudancaContrato={props.setMudancaContrato}
             />
 
             <DialogConfirmacao 

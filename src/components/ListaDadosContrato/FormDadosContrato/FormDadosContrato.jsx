@@ -141,7 +141,7 @@ const FormDadosContrato = (props) => {
                         setMudancaContrato(!mudancaContrato); 
                     }}
                 >
-                    <CloseIcon sx={{ mr: '0.2rem' }} /> Cancelar
+                    <CloseIcon sx={{ mr: '0.2rem' }} fontSize="small" /> Cancelar
                 </Button>
 
                 <Button 
@@ -162,7 +162,7 @@ const FormDadosContrato = (props) => {
                 >
                     {carregandoEnvio
                         ? <CircularProgress size={16} sx={{ color: '#FFFFFF', mr: '0.7rem' }} />
-                        : <CheckIcon sx={{ mr: '0.2rem' }} /> 
+                        : <CheckIcon sx={{ mr: '0.2rem' }} fontSize="small" /> 
                     }
                     Editar
                 </Button>

@@ -103,8 +103,8 @@ const formataValores = (valor) => {
         currency: "BRL"
     });
 
-    if (valor === "" || valor === undefined) {
-        return "";
+    if (valor === "" || valor === undefined || valor === null || isNaN(valor)) {
+        return valores.format("");;
     } else {
         return valores.format(valor);
     }
@@ -185,8 +185,6 @@ const DadosContrato = ({ snackbar, setSnackbar, mascaraProcessoSei, mascaraContr
             },
             method: 'GET'
         }
-
-        setEstaCarregado(false);
         
         fetch(`${url}/contrato/${numContrato}`, options)
             .then(res => {

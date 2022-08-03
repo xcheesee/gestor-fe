@@ -140,7 +140,7 @@ const FormGestaoFiscalizacao = (props) => {
                     onClick={() => { setOpenFormFiscalizacao({ ...openFormFiscalizacao, open: false }); }}
                     sx={{ textTransform: 'none', mr: '1rem', color: '#821f1f' }}
                 >
-                    <CloseIcon sx={{ mr: '0.2rem' }} /> Cancelar
+                    <CloseIcon sx={{ mr: '0.2rem' }} fontSize="small" /> Cancelar
                 </Button>
 
                 <Button 
@@ -150,7 +150,7 @@ const FormGestaoFiscalizacao = (props) => {
                 >
                     {carregando
                         ? <CircularProgress size={16} sx={{ color: '#FFFFFF', mr: '0.7rem' }} />
-                        : <CheckIcon sx={{ mr: '0.2rem' }} /> 
+                        : <CheckIcon sx={{ mr: '0.2rem' }} fontSize="small" /> 
                     }
                     
                     {openFormFiscalizacao.acao === 'adicionar'

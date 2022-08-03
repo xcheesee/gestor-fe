@@ -27,7 +27,7 @@ const FormCertidao = (props) => {
 
     useEffect(() => {
         setErrors({});
-    }, [openFormCertidao.open]);
+    }, [openFormCertidao.open, setErrors]);
 
     const handleInputChange = (e) => {
         setFormCertidao({
@@ -88,7 +88,7 @@ const FormCertidao = (props) => {
                     onClick={() => { setOpenFormCertidao({ ...openFormCertidao, open: false }); }}
                     sx={{ textTransform: 'none', mr: '1rem', color: '#821f1f' }}
                 >
-                    <CloseIcon sx={{ mr: '0.2rem' }} /> Cancelar
+                    <CloseIcon sx={{ mr: '0.2rem' }} fontSize="small" /> Cancelar
                 </Button>
 
                 <Button 
@@ -98,7 +98,7 @@ const FormCertidao = (props) => {
                 >
                     {carregando
                         ? <CircularProgress size={16} sx={{ color: '#FFFFFF', mr: '0.7rem' }} />
-                        : <CheckIcon sx={{ mr: '0.2rem' }} /> 
+                        : <CheckIcon sx={{ mr: '0.2rem' }} fontSize="small" /> 
                     }
                     
                     {openFormCertidao.acao === 'adicionar'

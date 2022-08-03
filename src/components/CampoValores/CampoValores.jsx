@@ -40,7 +40,8 @@ const CampoValores = (props) => {
     checaErros, 
     helperText, 
     error, 
-    fullWidth
+    fullWidth,
+    ...other
   } = props;  
   
   const [valor, setValor] = useState(value);
@@ -72,6 +73,7 @@ const CampoValores = (props) => {
           required={required}
           sx={{ margin: '1rem 0' }}
           fullWidth={fullWidth}
+          {...other}
       />
   );
 };

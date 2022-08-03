@@ -353,7 +353,7 @@ const FormLocais = (props) => {
                     onClick={cancelar}
                     sx={{ textTransform: 'none', mr: '1rem', color: (theme) => theme.palette.error.main }}
                 >
-                    <CloseIcon sx={{ mr: '0.2rem' }} /> Cancelar
+                    <CloseIcon sx={{ mr: '0.2rem' }} fontSize="small" /> Cancelar
                 </Button>
 
                 <Button
@@ -363,7 +363,7 @@ const FormLocais = (props) => {
                 >
                     {carregando
                         ? <CircularProgress size={16} sx={{ color: (theme) => theme.palette.color.main, mr: '0.7rem' }} />
-                        : <CheckIcon sx={{ mr: '0.2rem' }} /> 
+                        : <CheckIcon sx={{ mr: '0.2rem' }} fontSize="small" /> 
                     }
 
                     {openFormLocal.acao === 'adicionar'
