@@ -108,7 +108,6 @@ const Header = (props) => {
             fetch(url, options)
                 .then(res => res.json())
                 .then(data => {
-                    console.log(data.data);
                     setContratoVencido(data.data);
                     setQtdVencido(data.data.length);
                     setEstaCarregado(true);
@@ -119,7 +118,6 @@ const Header = (props) => {
     const handleClick = (event) => {
         document.getElementById("btnHeader").setAttribute('style', 'background: #398E87 !important;')
         setAnchorEl(event.currentTarget);
-        console.log(event.currentTarget);
     }
 
     const handleClose = () => {
@@ -133,16 +131,30 @@ const Header = (props) => {
         }
     }
 
+    const mascaraContrato = (contrato) => {
+        if (contrato !== null && contrato !== "" && contrato !== undefined) {
+          return contrato.replace(/([\d]{3})([\w]{4})(\d{4})/gm, '$1/$2/$3');
+        } else {
+          return "";
+        }
+    }
+    const mascaraProcessoSei = (processoSei) => {
+        if (processoSei !== null && processoSei !== "" && processoSei !== undefined) {
+          return processoSei.replace(/([\d]{4})([\d]{4})([\d]{7})([\d]{1})/gm, '$1.$2/$3-$4');
+        } else {
+          return "";
+        }
+    }
+
     
     const MenuContratoVencido = () => {
         const rows = [];
-        console.log(contratoVencido);
         Object.values(contratoVencido).map((contrato, index) => {
             return rows.push(
                 {   
                     id: contrato.id, 
-                    numero_contrato: contrato.numero_contrato, 
-                    processo_sei: contrato.processo_sei,
+                    numero_contrato: mascaraContrato(contrato.numero_contrato),
+                    processo_sei: mascaraProcessoSei(contrato.processo_sei),
                     meses_ate_vencimento: contrato.meses_ate_vencimento
                 }
             );
@@ -179,33 +191,50 @@ const Header = (props) => {
                         >
                             Contratos a vencer
                         </Typography>
+
+                        { qtdVencido > 0 ?
+                            <TableContainer component={Paper} elevation={3} sx={{ width: '100%', margin: '1rem auto 0 auto'}}>
+                                <Table size="small">
+                                    <TableBody>
+                                        {rows.map((row, index) => {
+                                            const background = { background: index % 2 === 0 ? '#FFFFFF' : '#f3f6f3', borderBottom: 0 };
+                                            return (
+                                                <TableRow
+                                                    key={row.id}
+                                                    sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                                                >
+                                                    <TableCell align="center" sx={background}>{row.numero_contrato}</TableCell>
+                                                    <TableCell align="center" sx={background}>{row.processo_sei}</TableCell>
+                                                    <TableCell align="center" sx={background}>{row.meses_ate_vencimento}</TableCell>
+                                                    <TableCell align="center" sx={background}>
+                                                        <Link to={`../contrato/${row.id}`} onClick={handleClose}>
+                                                            <IconButton>
+                                                                <ManageSearchIcon />
+                                                            </IconButton>
+                                                        </Link>
+                                                    </TableCell>
+                                                </TableRow>
+                                            );
+                                        })}
+                                    </TableBody>
+                                </Table>
+                            </TableContainer>
+                         :
+                            <Typography 
+                                variant="h2" 
+                                className="header__titulo" 
+                                sx={{ 
+                                    fontSize: '1.1rem', 
+                                    margin: '0 auto', 
+                                    padding: '0',
+                                    marginTop: '5px',
+                                    cursor: 'defaut'
+                                }}
+                            >
+                                Nenhum contrato está perto de vencer
+                            </Typography>
+                        }
                                     
-                        <TableContainer component={Paper} elevation={3} sx={{ width: '100%', margin: '1rem auto 0 auto'}}>
-                            <Table size="small">
-                                <TableBody>
-                                    {rows.map((row, index) => {
-                                        const background = { background: index % 2 === 0 ? '#FFFFFF' : '#f3f6f3', borderBottom: 0 };
-                                        return (
-                                            <TableRow
-                                                key={row.id}
-                                                sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-                                            >
-                                                <TableCell align="center" sx={background}>{row.numero_contrato}</TableCell>
-                                                <TableCell align="center" sx={background}>{row.processo_sei}</TableCell>
-                                                <TableCell align="center" sx={background}>{row.meses_ate_vencimento}</TableCell>
-                                                <TableCell align="center" sx={background}>
-                                                    <Link to={`../contrato/${row.id}`} onClick={handleClose}>
-                                                        <IconButton>
-                                                            <ManageSearchIcon />
-                                                        </IconButton>
-                                                    </Link>
-                                                </TableCell>
-                                            </TableRow>
-                                        );
-                                    })}
-                                </TableBody>
-                            </Table>
-                        </TableContainer>
                     </FormGroup>       
                 </Menu>
             </div>
