@@ -104,7 +104,7 @@ const formataValores = (valor) => {
     });
 
     if (valor === "" || valor === undefined || valor === null || isNaN(valor)) {
-        return valores.format("");;
+        return valores.format(0);
     } else {
         return valores.format(valor);
     }

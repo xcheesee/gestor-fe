@@ -107,11 +107,11 @@ const FormEditExecFinanceira = (props) => {
             ano: '',
             planejado_inicial: '',
             contratado_inicial: '',
-            valor_reajuste: '',
-            valor_aditivo: '',
-            valor_cancelamento: '',
-            empenhado: '',
-            executado: ''
+            valor_reajuste: 0,
+            valor_aditivo: 0,
+            valor_cancelamento: 0,
+            empenhado: 0,
+            executado: 0
         });
     }
 
@@ -391,7 +391,7 @@ const FormEditExecFinanceira = (props) => {
                 <Box sx={{ display: 'flex', justifyContent: 'space-between', gap: '1rem', margin: '1rem 0', mb: 0 }}>
                     <CampoValores 
                         label="Valor reajuste" 
-                        value={execucaoEditado.valor_reajuste}
+                        value={execucaoEditado.valor_reajuste ? execucaoEditado.valor_reajuste : 0}
                         name="valor_reajuste"
                         state={execucaoEditado}
                         setState={setExecucaoEditado}
@@ -403,7 +403,7 @@ const FormEditExecFinanceira = (props) => {
 
                     <CampoValores 
                         label="Valor aditivo" 
-                        value={execucaoEditado.valor_aditivo}
+                        value={execucaoEditado.valor_aditivo ? execucaoEditado.valor_aditivo : 0}
                         name="valor_aditivo"
                         state={execucaoEditado}
                         setState={setExecucaoEditado}
@@ -439,7 +439,7 @@ const FormEditExecFinanceira = (props) => {
                 <Box sx={{ display: 'flex', justifyContent: 'space-between', gap: '1rem', margin: '1rem 0', mt: 0 }}>
                     <CampoValores 
                         label="Empenhado" 
-                        value={execucaoEditado.empenhado}
+                        value={execucaoEditado.empenhado ? execucaoEditado.empenhado : 0}
                         name="empenhado"
                         state={execucaoEditado}
                         setState={setExecucaoEditado}
@@ -451,7 +451,7 @@ const FormEditExecFinanceira = (props) => {
 
                     <CampoValores 
                         label="Executado" 
-                        value={execucaoEditado.executado}
+                        value={execucaoEditado.executado ? execucaoEditado.executado : '0'}
                         name="executado"
                         state={execucaoEditado}
                         setState={setExecucaoEditado}
@@ -490,20 +490,22 @@ const FormEditExecFinanceira = (props) => {
                                 padding: '0 1rem', 
                                 mb: '0.5rem'    
                             }}>
-                            {formataValores(
-                                parseFloat(totais.total_empenhado 
-                                + parseFloat(execucaoEditado.empenhado))
-                            )}
+                            {
+                                execucaoEditado.empenhado 
+                                ? formataValores(parseFloat(totais.total_empenhado) + parseFloat(execucaoEditado.empenhado))
+                                : formataValores(parseFloat(totais.total_empenhado))
+                            }
                         </Typography>
                     </Typography>
                     
                     <Typography sx={{ fontWeight: 'medium' }} component="span">
                         Total executado
                         <Typography sx={{ padding: '0 1rem', mb: '0.5rem' }}>
-                            {formataValores(
-                                parseFloat(totais.total_executado 
-                                + parseFloat(execucaoEditado.executado)
-                            ))}
+                            {
+                                execucaoEditado.executado 
+                                ? formataValores(parseFloat(totais.total_executado) + parseFloat(execucaoEditado.executado))
+                                : formataValores(parseFloat(totais.total_executado))
+                            }
                         </Typography>
                     </Typography>
                     
@@ -512,11 +514,13 @@ const FormEditExecFinanceira = (props) => {
                         <Typography sx={{ padding: '0 1rem', mb: '0.5rem' }}>
                             {formataValores(
                                 parseFloat(execucaoEditado.contratado_inicial) 
-                                + parseFloat(execucaoEditado.valor_aditivo)
-                                + parseFloat(execucaoEditado.valor_reajuste)
-                                - (parseFloat(execucaoEditado.empenhado) - parseFloat(execucaoEditado.executado) < 0 
+                                + parseFloat(execucaoEditado.valor_aditivo ? execucaoEditado.valor_aditivo : 0)
+                                + parseFloat(execucaoEditado.valor_reajuste ? execucaoEditado.valor_reajuste : 0)
+                                - (parseFloat(execucaoEditado.empenhado ? execucaoEditado.empenhado : 0) 
+                                - parseFloat(execucaoEditado.executado ? execucaoEditado.executado : 0) < 0 
                                     ? 0 
-                                    : parseFloat(execucaoEditado.empenhado) - parseFloat(execucaoEditado.executado)
+                                    : parseFloat(execucaoEditado.empenhado ? execucaoEditado.empenhado : 0) 
+                                      - parseFloat(execucaoEditado.executado ? execucaoEditado.executado : 0)
                                 )
                             )}
                         </Typography>
@@ -539,8 +543,8 @@ const FormEditExecFinanceira = (props) => {
                                 mb: '0.5rem'
                             }}>
                             {formataValores(
-                                parseFloat(execucaoEditado.empenhado) 
-                                - parseFloat(execucaoEditado.executado)
+                                parseFloat(execucaoEditado.empenhado ? execucaoEditado.empenhado : 0) 
+                                - parseFloat(execucaoEditado.executado ? execucaoEditado.executado : 0)
                             )}
                         </Typography>
                     </Typography>

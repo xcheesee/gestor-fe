@@ -123,15 +123,14 @@ const FormNotaEmpenho = (props) => {
                 />
 
                 <CampoValores
-                    index=""
                     label="Valor de empenho"
                     value={formNotaEmpenho.valor_empenho}
                     state={formNotaEmpenho}
                     setState={setFormNotaEmpenho}
                     name="valor_empenho"
-                    onChange={(e) => { handleInputChange(e); }}
                     checaErros={() => {}}
-                    helperText=""
+                    error={errors.hasOwnProperty('valor_garantia')}
+                    helperText={errors.valor_empenho}
                     required
                     fullWidth
                 />
