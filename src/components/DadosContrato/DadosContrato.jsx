@@ -175,6 +175,10 @@ const DadosContrato = ({ snackbar, setSnackbar, mascaraProcessoSei, mascaraContr
     const navigate = useNavigate();
 
     useEffect(() => {
+        setEstaCarregado(false);
+    }, [setEstaCarregado, numContrato])
+
+    useEffect(() => {
         const url = `${process.env.REACT_APP_API_URL}`
         const token = localStorage.getItem('access_token');
         const options = {
