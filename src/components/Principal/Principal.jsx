@@ -29,7 +29,7 @@ const Principal = ({ snackbar, setSnackbar, mascaraProcessoSei, mascaraContrato 
     const [sort, setSort] = useState(false);
     const [carregandoSort, setCarregandoSort] = useState(true);
     const [url, setUrl] = useState({
-        url: `${process.env.REACT_APP_API_URL}/contratos?`,
+        url: `${process.env.REACT_APP_API_URL}contratos?`,
         page: 1,
         filtros: '',
         sort: ''

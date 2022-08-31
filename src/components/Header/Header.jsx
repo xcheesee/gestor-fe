@@ -93,7 +93,7 @@ const Header = (props) => {
     }
 
     useEffect(() => {
-        const url = `${process.env.REACT_APP_API_URL}/contratos_vencimento`;
+        const url = `${process.env.REACT_APP_API_URL}contratos_vencimento`;
         const token = localStorage.getItem('access_token');
         const options = {
             method: 'GET',
