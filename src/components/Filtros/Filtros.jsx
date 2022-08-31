@@ -15,6 +15,7 @@ import TuneIcon from '@mui/icons-material/Tune';
 import CampoData from '../CampoData';
 import NumberFormat from 'react-number-format';
 import PropTypes from 'prop-types';
+import CalendarioRange from '../../helpers/CalendarioRange';
 
 const NumberFormatCustom = forwardRef(function NumberFormatCustom(props, ref) {
     const { onChange, ...other } = props;
@@ -94,6 +95,9 @@ const Filtros = (props) => {
             filtros: arrFiltros.join('&')
         });
         setVisibilidade(false);
+        console.log(filtros)
+        console.log(url)
+        console.log(arrFiltros)
     }
 
     return (
@@ -198,7 +202,7 @@ const Filtros = (props) => {
                             onChange={handleChange}
                         />
 
-                        <CampoData 
+                        {/* <CampoData 
                             label="Vencimento depois de"
                             name="vencimento_depois_de"
                             helperText=" "
@@ -214,6 +218,11 @@ const Filtros = (props) => {
                             size="small"
                             value={filtros.vencimento_antes_de}
                             onChange={handleChange}
+                        /> */}
+
+                        <CalendarioRange
+                            intervalo={[filtros.vencimento_antes_de, filtros.vencimento_depois_de]}
+                            onChange={(e) => { setFiltros({ ...filtros, vencimento_antes_de: e[0].toLocaleDateString('fr-CA'), vencimento_depois_de:  e[1].toLocaleDateString('fr-CA') })}}
                         />
                         
                         <Box sx={{ gridColumnStart: 2, justifySelf: 'end' }}>
