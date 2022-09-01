@@ -229,6 +229,7 @@ const Filtros = (props) => {
                             label={'Vencimento depois de - Vencimento antes de'}
                             intervalo={[filtros.vencimento_antes_de, filtros.vencimento_depois_de]}
                             onChange={handleCalendarioChange}
+                            placeholder={'dd/mm/aaaa - dd/mm/aaaa'}
                             separador={' / '}
                             size={'lg'}
                             rangeStart={'vencimento_depois_de'}
