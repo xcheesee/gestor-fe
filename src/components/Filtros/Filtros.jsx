@@ -15,7 +15,7 @@ import TuneIcon from '@mui/icons-material/Tune';
 import CampoData from '../CampoData';
 import NumberFormat from 'react-number-format';
 import PropTypes from 'prop-types';
-import CalendarioRange from '../../helpers/CalendarioRange';
+import CampoDataRange from '../../helpers/CampoDataRange';
 
 const NumberFormatCustom = forwardRef(function NumberFormatCustom(props, ref) {
     const { onChange, ...other } = props;
@@ -170,7 +170,7 @@ const Filtros = (props) => {
                             variant="outlined"
                             label="Processo SEI"
                             value={filtros.processo_sei}
-                            onChange={(e) => { setFiltros({ ...filtros, processo_sei: e.target.value })}}
+                            onChange={handleChange}
                             sx={{ mb: '0' }}
                             InputProps={{
                                 inputComponent: NumberFormatCustom
@@ -225,7 +225,7 @@ const Filtros = (props) => {
                             onChange={handleChange}
                         /> */}
 
-                        <CalendarioRange
+                        <CampoDataRange
                             label={'Vencimento depois de - Vencimento antes de'}
                             intervalo={[filtros.vencimento_antes_de, filtros.vencimento_depois_de]}
                             onChange={handleCalendarioChange}

@@ -4,7 +4,7 @@ import 'rsuite/dist/rsuite.min.css';
 import './calendarioRange.css'
 import pt_BR from 'rsuite/locales/pt_BR'
 
-const CalendarioRange = ({intervalo, onChange, label, separador, size, rangeStart, rangeEnd, placeholder}) => {
+const CampoDataRange = ({intervalo, onChange, label, separador, size, rangeStart, rangeEnd, placeholder}) => {
     //input recebido e convertido ao formato permitido de DateRangePicker. 
     //'T00:00:00' previne que datas sejam alteradas devido ao conflito de timezones e a implementacao de new Date()
     const datas = intervalo[0] === '' ? [null , null] : [new Date(intervalo[0]+'T00:00:00'), new Date(intervalo[1]+'T00:00:00')];
@@ -32,4 +32,4 @@ const CalendarioRange = ({intervalo, onChange, label, separador, size, rangeStar
     )
 }
 
-export default CalendarioRange
+export default CampoDataRange
