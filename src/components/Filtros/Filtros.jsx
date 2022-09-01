@@ -189,7 +189,7 @@ const Filtros = (props) => {
                             fullWidth
                         />
                     
-                        <CampoData 
+                        {/* <CampoData 
                             label="Início depois de"
                             name="inicio_depois_de"
                             helperText=" "
@@ -205,7 +205,7 @@ const Filtros = (props) => {
                             size="small"
                             value={filtros.inicio_antes_de}
                             onChange={handleChange}
-                        />
+                        /> */}
 
                         {/* <CampoData 
                             label="Vencimento depois de"
@@ -224,10 +224,20 @@ const Filtros = (props) => {
                             value={filtros.vencimento_antes_de}
                             onChange={handleChange}
                         /> */}
+                        <CampoDataRange
+                            label={'Inicio - faixa de pesquisa'}
+                            intervalo={[filtros.inicio_depois_de, filtros.inicio_antes_de]}
+                            onChange={handleCalendarioChange}
+                            placeholder={'dd/mm/aaaa - dd/mm/aaaa'}
+                            separador={' / '}
+                            size={'lg'}
+                            rangeStart={'inicio_depois_de'}
+                            rangeEnd={'inicio_antes_de'}
+                        />
 
                         <CampoDataRange
-                            label={'Vencimento depois de - Vencimento antes de'}
-                            intervalo={[filtros.vencimento_antes_de, filtros.vencimento_depois_de]}
+                            label={'Vencimento - faixa de pesquisa'}
+                            intervalo={[filtros.vencimento_depois_de, filtros.vencimento_antes_de]}
                             onChange={handleCalendarioChange}
                             placeholder={'dd/mm/aaaa - dd/mm/aaaa'}
                             separador={' / '}
