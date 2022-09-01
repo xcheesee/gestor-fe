@@ -5,19 +5,20 @@ import './calendarioRange.css'
 import pt_BR from 'rsuite/locales/pt_BR'
 
 const CalendarioRange = (props) => {
-    const {intervalo, onChange} = props;
-    let datas = intervalo[0] === '' ? [new Date() , new Date()] : intervalo;
+    const {intervalo, onChange, label, separador, size} = props;
+    let datas = intervalo[0] === '' ? [null , null] : [new Date(intervalo[0]), new Date(intervalo[1])];
+    
     return (
     <div className='inputContainer'>
-        <span className='input'>Vencimento depois de - Vencimento antes de</span>
+        <span className='input'>{label}</span>
         <CustomProvider locale={pt_BR}>
             <DateRangePicker
                 className='darkBorder'
-                character={' / '}
-                value={[new Date(datas[0]), new Date(datas[1])]}
-                placeholder={'Vencimento depois de - Vencimento antes de'}
+                character={separador}
+                value={datas}
+                placeholder={label}
                 onChange={(e) => onChange('vencimento_depois_de', 'vencimento_antes_de', e)}
-                size={'lg'}
+                size={size}
             />
     </CustomProvider>
     </div>

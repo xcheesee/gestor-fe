@@ -229,8 +229,11 @@ const Filtros = (props) => {
                         /> */}
 
                         <CalendarioRange
+                            label={'Vencimento depois de - Vencimento antes de'}
                             intervalo={[filtros.vencimento_antes_de, filtros.vencimento_depois_de]}
                             onChange={handleCalendarioChange}
+                            separador={' / '}
+                            size={'lg'}
                         />
                         
                         <Box sx={{ gridColumnStart: 2, justifySelf: 'end' }}>
