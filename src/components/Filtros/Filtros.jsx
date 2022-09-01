@@ -61,6 +61,14 @@ const Filtros = (props) => {
         })
     }
 
+    const handleCalendarioChange = (keyAntes, keyDepois, valArray) => {
+        setFiltros({
+            ...filtros,
+            [keyAntes]: valArray[0]?.toLocaleDateString('fr-CA'),
+            [keyDepois]: valArray[1]?.toLocaleDateString('fr-CA')
+        })
+    }
+
     const limpaFiltros = () => {
         setFiltros({
             processo_sei: '',
@@ -222,7 +230,7 @@ const Filtros = (props) => {
 
                         <CalendarioRange
                             intervalo={[filtros.vencimento_antes_de, filtros.vencimento_depois_de]}
-                            onChange={(e) => { setFiltros({ ...filtros, vencimento_antes_de: e[0].toLocaleDateString('fr-CA'), vencimento_depois_de:  e[1].toLocaleDateString('fr-CA') })}}
+                            onChange={handleCalendarioChange}
                         />
                         
                         <Box sx={{ gridColumnStart: 2, justifySelf: 'end' }}>
