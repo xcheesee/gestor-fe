@@ -18,13 +18,12 @@ const CampoDataRange = ({intervalo, onChange, label, separador, size, rangeStart
                     value={datas}
                     format={"dd/MM/yyyy"}
                     placeholder={placeholder}
-                    onChange={e => {
-                        /* funcao clean retorna null, que entao é transformado em array para integracao com onChange */
-                        e === null ? onChange(rangeStart, rangeEnd, ['', ''])
-                        /* conversao de datas para aaaa-mm-dd */
-                        : onChange(rangeStart, rangeEnd, [e[0]?.toLocaleDateString('fr-CA') , e[1]?.toLocaleDateString('fr-CA')])
-                        
-                    }}
+                    onClean={
+                        e => onChange(rangeStart, rangeEnd, ['', ''])
+                    }
+                    onOk={
+                        e => onChange(rangeStart, rangeEnd, [e[0]?.toLocaleDateString('fr-CA') , e[1]?.toLocaleDateString('fr-CA')])
+                    }
                     size={size}
                 />
             </CustomProvider>
