@@ -5,8 +5,8 @@ import './calendarioRange.css'
 import pt_BR from 'rsuite/locales/pt_BR'
 
 const CalendarioRange = (props) => {
-    const {intervalo, onChange, label, separador, size} = props;
-    let datas = intervalo[0] === '' ? [null , null] : [new Date(intervalo[0]), new Date(intervalo[1])];
+    const {intervalo, onChange, label, separador, size, rangeStart, rangeEnd} = props;
+    const datas = intervalo[0] === '' ? [null , null] : [new Date(intervalo[0]), new Date(intervalo[1])];
     
     return (
     <div className='inputContainer'>
@@ -17,7 +17,11 @@ const CalendarioRange = (props) => {
                 character={separador}
                 value={datas}
                 placeholder={label}
-                onChange={(e) => onChange('vencimento_depois_de', 'vencimento_antes_de', e)}
+                onChange={e => {
+                    e === null ? onChange(rangeStart, rangeEnd, ['', ''])
+                    : onChange(rangeStart, rangeEnd, [e[0]?.toLocaleDateString('fr-CA'), e[1]?.toLocaleDateString('fr-CA')])
+                    
+                }}
                 size={size}
             />
     </CustomProvider>

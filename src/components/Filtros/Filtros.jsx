@@ -64,8 +64,8 @@ const Filtros = (props) => {
     const handleCalendarioChange = (keyAntes, keyDepois, valArray) => {
         setFiltros({
             ...filtros,
-            [keyAntes]: valArray[0]?.toLocaleDateString('fr-CA'),
-            [keyDepois]: valArray[1]?.toLocaleDateString('fr-CA')
+            [keyAntes]: valArray[0],
+            [keyDepois]: valArray[1]
         })
     }
 
@@ -231,6 +231,8 @@ const Filtros = (props) => {
                             onChange={handleCalendarioChange}
                             separador={' / '}
                             size={'lg'}
+                            rangeStart={'vencimento_depois_de'}
+                            rangeEnd={'vencimento_antes_de'}
                         />
                         
                         <Box sx={{ gridColumnStart: 2, justifySelf: 'end' }}>
