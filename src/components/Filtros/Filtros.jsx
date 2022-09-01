@@ -103,9 +103,6 @@ const Filtros = (props) => {
             filtros: arrFiltros.join('&')
         });
         setVisibilidade(false);
-        console.log(filtros)
-        console.log(url)
-        console.log(arrFiltros)
     }
 
     return (
