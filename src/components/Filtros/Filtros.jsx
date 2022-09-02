@@ -226,24 +226,22 @@ const Filtros = (props) => {
                         /> */}
                         <CampoDataRange
                             label={'Inicio - faixa de pesquisa'}
-                            intervalo={[filtros.inicio_depois_de, filtros.inicio_antes_de]}
+                            intervalo={{inicio: 'inicio_depois_de', fim: 'inicio_antes_de'}}
+                            filtro={filtros}
                             onChange={handleCalendarioChange}
                             placeholder={'dd/mm/aaaa - dd/mm/aaaa'}
                             separador={' / '}
                             size={'lg'}
-                            rangeStart={'inicio_depois_de'}
-                            rangeEnd={'inicio_antes_de'}
                         />
 
                         <CampoDataRange
                             label={'Vencimento - faixa de pesquisa'}
-                            intervalo={[filtros.vencimento_depois_de, filtros.vencimento_antes_de]}
+                            intervalo={{inicio: 'vencimento_depois_de', fim: 'vencimento_antes_de'}}
+                            filtro={filtros}
                             onChange={handleCalendarioChange}
                             placeholder={'dd/mm/aaaa - dd/mm/aaaa'}
                             separador={' / '}
                             size={'lg'}
-                            rangeStart={'vencimento_depois_de'}
-                            rangeEnd={'vencimento_antes_de'}
                         />
                         
                         <Box sx={{ gridColumnStart: 2, justifySelf: 'end' }}>
