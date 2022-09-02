@@ -15,7 +15,7 @@ import TuneIcon from '@mui/icons-material/Tune';
 import CampoData from '../CampoData';
 import NumberFormat from 'react-number-format';
 import PropTypes from 'prop-types';
-import CampoDataRange from '../../helpers/CampoDataRange';
+import CampoDataRange from '../CampoDataRange';
 
 const NumberFormatCustom = forwardRef(function NumberFormatCustom(props, ref) {
     const { onChange, ...other } = props;
