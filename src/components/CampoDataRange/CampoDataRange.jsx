@@ -20,12 +20,17 @@ const CampoDataRange = ({intervalo, filtro, onChange, label, separador, size, pl
                     value={datas}
                     format={"dd/MM/yyyy"}
                     placeholder={placeholder}
-                    onClean={
-                        e => onChange(intervalo.inicio, intervalo.fim, ['', ''])
-                    }
-                    onOk={
+                    // onClean={
+                    //     e => onChange(intervalo.inicio, intervalo.fim, ['', ''])
+                    // }
+                    onChange={
                         //tranforma o output em string aaaa-mm-dd e envia-o para setFiltros
-                        e => onChange(intervalo.inicio, intervalo.fim, [e[0]?.toLocaleDateString('fr-CA') , e[1]?.toLocaleDateString('fr-CA')])
+                        // e => onChange(intervalo.inicio, intervalo.fim, [e[0]?.toLocaleDateString('fr-CA') , e[1]?.toLocaleDateString('fr-CA')])
+                        e => {
+                            e !== null 
+                            ? onChange(intervalo.inicio, intervalo.fim, [e[0]?.toLocaleDateString('fr-CA') , e[1]?.toLocaleDateString('fr-CA')])
+                            : onChange(intervalo.inicio, intervalo.fim, ['', ''])
+                        }
                     }
                     size={size}
                 />
