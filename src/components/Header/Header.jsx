@@ -26,23 +26,27 @@ import LogoutIcon from '@mui/icons-material/Logout';
 import ManageSearchIcon from '@mui/icons-material/ManageSearch';
 import AccountBoxIcon from '@mui/icons-material/AccountBox';
 import { useNavigate, useLocation, Link } from 'react-router-dom';
+import LockIcon from '@mui/icons-material/Lock'
+import DialogAltSenh from '../DialogAltSenh';
 
 const Header = (props) => {
     const [open, setOpen] = useState(false);
     const [carregando, setCarregando] = useState(false);
-
+    
     const navigate = useNavigate();
     const location = useLocation();
-
+    
     const username = localStorage.getItem('username');
     const accessToken = localStorage.getItem('access_token');
-
+    
     const [contratoVencido, setContratoVencido] = useState();
     const [qtdVencido, setQtdVencido] = useState(0);
     const [anchorEl, setAnchorEl] = useState(null);
     const menuOpen = Boolean(anchorEl);
     const [estaCarregado, setEstaCarregado] = useState(false);
-
+    const [openAltSenha, setOpenAltSenha] = useState(false)
+    const [altCarregando, setAltCarregando] = useState(false)
+    
     const handleClickConfirma = () => {
         navigate("../", { replace: true }); 
         setOpen(false); 
@@ -65,6 +69,10 @@ const Header = (props) => {
                 </DialogActions>
             </Dialog>
         );
+    }
+
+    const showSenhaForm = () => {
+        setOpenAltSenha(true)
     }
 
     const handleLogout = () => {
@@ -271,6 +279,13 @@ const Header = (props) => {
                         { estaCarregado &&
                             <MenuContratoVencido />
                         }
+
+                        <Tooltip title="Alterar Senha">
+                            <IconButton onClick={showSenhaForm}>
+                                <LockIcon sx={{ color: (theme) => theme.palette.color.main }} fontSize="small" />
+                            </IconButton>
+                        </Tooltip>
+
                         <Tooltip title="Sair" arrow>
                             <IconButton sx={{ margin: '0 0.5rem', boxSizing: 'border-box', padding: '0.5rem' }} onClick={() => { handleLogout(); }}>
                                 {carregando
@@ -279,12 +294,20 @@ const Header = (props) => {
                                 }
                             </IconButton>
                         </Tooltip>
+
                     </Box>
                 </Fade>
                 :
                 ""
             }
+            <DialogAltSenh
+                openAltSenha={openAltSenha}
+                setOpenAltSenha={setOpenAltSenha}
+                altCarregando={altCarregando}
+                setAltCarregando={setAltCarregando}
+            />
         </Box>
+        
     );
 }
 
