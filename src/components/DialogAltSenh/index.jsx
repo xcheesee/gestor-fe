@@ -39,7 +39,6 @@ const DialogAltSenh = ({openAltSenha, setOpenAltSenha, altCarregando, setAltCarr
                                     const formData = Object.fromEntries(new FormData(e.target))
                                     setAltCarregando(true)
                                     const res = await pwRequest(formData)
-                                    console.log(res)
                                     setReqResponse(res)
                                     setAltCarregando(false)         
                                 }}
