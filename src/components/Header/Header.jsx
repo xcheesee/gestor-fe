@@ -77,7 +77,7 @@ const Header = (props) => {
 
     const newPwRequest = async (formData) => {
         const url = new URL(
-            `${process.env.REACT_APP_API_URL}/alterar_senha`
+            `${process.env.REACT_APP_API_URL}alterar_senha`
         );
         
         const headers = {
