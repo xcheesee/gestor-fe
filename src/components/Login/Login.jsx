@@ -80,6 +80,7 @@ const Login = () => {
                     localStorage.setItem('access_token', data.access_token);
                     localStorage.setItem('username', data.username);
                     localStorage.setItem('departamentos', JSON.stringify(data.departamentos));
+                    localStorage.setItem('usermail', email)
                     navigate("../principal", { replace: true });
                 } else {
                     setError({

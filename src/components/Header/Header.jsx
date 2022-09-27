@@ -75,6 +75,25 @@ const Header = (props) => {
         setOpenAltSenha(true)
     }
 
+    const newPwRequest = async (formData) => {
+        const url = new URL(
+            `${process.env.REACT_APP_API_URL}/alterar_senha`
+        );
+        
+        const headers = {
+            "Content-Type": "application/json",
+            "Accept": "application/json",
+            "Authorization": `Bearer ${accessToken}`,
+        };
+
+        const res = await fetch(url, {
+            method: "POST",
+            headers: headers,
+            body: JSON.stringify(formData),
+        })
+        return await res.json()
+    }
+
     const handleLogout = () => {
         setCarregando(true);
         const url = `${process.env.REACT_APP_API_URL}/logout`
@@ -305,6 +324,7 @@ const Header = (props) => {
                 setOpenAltSenha={setOpenAltSenha}
                 altCarregando={altCarregando}
                 setAltCarregando={setAltCarregando}
+                pwRequest={newPwRequest}
             />
         </Box>
         
