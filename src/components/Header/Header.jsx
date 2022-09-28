@@ -324,8 +324,8 @@ const Header = (props) => {
             <DialogAltSenh
                 openAltSenha={openAltSenha}
                 setOpenAltSenha={setOpenAltSenha}
-                altCarregando={altCarregando}
-                setAltCarregando={setAltCarregando}
+                carregando={altCarregando}
+                setCarregando={setAltCarregando}
                 pwRequest={newPwRequest}
             />
         </Box>
