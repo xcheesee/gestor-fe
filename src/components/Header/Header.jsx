@@ -71,9 +71,7 @@ const Header = (props) => {
         );
     }
 
-    const showSenhaForm = () => {
-        setOpenAltSenha(true)
-    }
+    const showSenhaForm = () => setOpenAltSenha(true)
 
     const newPwRequest = async (formData) => {
         const url = new URL(
@@ -93,6 +91,7 @@ const Header = (props) => {
             headers: headers,
             body: JSON.stringify(data),
         })
+
         return await res.json()
     }
 
@@ -273,6 +272,14 @@ const Header = (props) => {
     return (
         <Box component={'header'} className="header" sx={{ background: (theme) => theme.palette.primary.main }}>
             <DialogLogout />
+            <DialogAltSenh
+                openAltSenha={openAltSenha}
+                setOpenAltSenha={setOpenAltSenha}
+                carregando={altCarregando}
+                setCarregando={setAltCarregando}
+                pwRequest={newPwRequest}
+            />
+            
             <Link to={location.pathname === "/" ? "/" : "../principal"}>
                 <Typography 
                     variant="h1" 
@@ -321,13 +328,6 @@ const Header = (props) => {
                 :
                 ""
             }
-            <DialogAltSenh
-                openAltSenha={openAltSenha}
-                setOpenAltSenha={setOpenAltSenha}
-                carregando={altCarregando}
-                setCarregando={setAltCarregando}
-                pwRequest={newPwRequest}
-            />
         </Box>
         
     );
