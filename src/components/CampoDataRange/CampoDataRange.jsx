@@ -3,6 +3,7 @@ import { DateRangePicker, CustomProvider } from 'rsuite';
 import 'rsuite/dist/rsuite.min.css';
 import './calendarioRange.css'
 import pt_BR from 'rsuite/locales/pt_BR'
+import { Box } from '@mui/material'
 
 const CampoDataRange = ({intervalo, filtro, onChange, label, separador, size, placeholder}) => {
     //input recebido e convertido ao formato permitido de DateRangePicker. 
@@ -12,7 +13,18 @@ const CampoDataRange = ({intervalo, filtro, onChange, label, separador, size, pl
         : [new Date(filtro[intervalo.inicio]+'T00:00:00'), new Date(filtro[intervalo.fim]+'T00:00:00')];
     
     return (
-        <div className='inputContainer'>
+        /* col-span-2 border-b border-material-border p-1 pt-0 */
+        <Box 
+            className={`inputContainer`} 
+            sx={{
+                borderBottom: 1,
+                borderBottomColor: "#c4c4c4",
+                padding: "0.25rem",
+                paddingTop: 0,
+                // gridColumnStart: 1, 
+                // gridColumnEnd: 3
+                }}
+        >
             <span className='input'>{label}</span>
             <CustomProvider locale={pt_BR}>
                 <DateRangePicker
@@ -20,6 +32,7 @@ const CampoDataRange = ({intervalo, filtro, onChange, label, separador, size, pl
                     value={datas}
                     format={"dd/MM/yyyy"}
                     placeholder={placeholder}
+                    appearance="subtle"
                     // onClean={
                     //     e => onChange(intervalo.inicio, intervalo.fim, ['', ''])
                     // }
@@ -35,7 +48,7 @@ const CampoDataRange = ({intervalo, filtro, onChange, label, separador, size, pl
                     size={size}
                 />
             </CustomProvider>
-        </div>
+        </Box>
     )
 }
 
