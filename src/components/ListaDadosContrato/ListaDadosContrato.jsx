@@ -145,7 +145,7 @@ const ListaDadosContrato = (props) => {
 
     const TabProcessoContratacao = (props) => {
         const campos = [
-            "Modelo de licitação",
+            "Modalidade de licitação",
             "Envio de material técnico",
             "Minuta edital",
             "Abertura certame",

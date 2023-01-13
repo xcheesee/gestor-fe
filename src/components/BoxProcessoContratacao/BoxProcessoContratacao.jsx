@@ -41,11 +41,11 @@ const BoxProcessoContratacao = (props) => {
                 error={errors.hasOwnProperty('licitacao_modelo_id')}    
                 fullWidth 
             >
-                <InputLabel id="licitacao_modelo-label">Modelo de licitação</InputLabel>
+                <InputLabel id="licitacao_modelo-label">Modalidade de licitação</InputLabel>
                 <Select
                     labelId="licitacao_modelo-label"
                     id="licitacao_modelo"
-                    label="Modelo de licitação"
+                    label="Modalidade de licitação"
                     value={processoContratacao.licitacao_modelo_id === undefined ? "" : processoContratacao.licitacao_modelo_id}
                     name="licitacao_modelo_id"
                     onChange={(e) => { handleChangeModeloLicitacao(e, processoContratacao, setProcessoContratacao) }}
