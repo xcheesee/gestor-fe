@@ -19,7 +19,7 @@ const theme = createTheme(
 );
 
 ReactDOM.render(
-  <BrowserRouter>
+  <BrowserRouter basename="/contratos">
     <ThemeProvider theme={theme}>
       <App />
     </ThemeProvider>
