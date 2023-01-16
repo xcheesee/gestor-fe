@@ -23,6 +23,7 @@ import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import { Link } from "react-router-dom";
 import Filtros from '../Filtros';
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
+import { getDateDiff } from '../utils/utils';
 
 const Principal = ({ snackbar, setSnackbar, mascaraProcessoSei, mascaraContrato }) => {
     const [dados, setDados] = useState({});
@@ -356,6 +357,7 @@ const Principal = ({ snackbar, setSnackbar, mascaraProcessoSei, mascaraContrato 
                     <TableBody>
                         {rows.map((row, index) => {
                             const background = { background: index % 2 === 0 ? '#FFFFFF' : '#f3f6f3', borderBottom: 0 };
+                            const dateDiff = getDateDiff(row.data_inicio_vigencia, row.data_vencimento)
                             return (
                                 <TableRow
                                     key={row.id}
@@ -367,7 +369,15 @@ const Principal = ({ snackbar, setSnackbar, mascaraProcessoSei, mascaraContrato 
                                     <TableCell align="center" sx={background}>{row.nome_empresa}</TableCell>
                                     <TableCell align="center" sx={background}>{row.numero_contrato}</TableCell>
                                     <TableCell align="center" sx={background}>{row.data_inicio_vigencia}</TableCell>
-                                    <TableCell align="center" sx={background}>{row.data_vencimento === null ? "- - -" : row.data_vencimento}</TableCell>
+                                    <TableCell align="center" sx={background}>
+                                        <Box>
+                                            {row.data_vencimento === null ? "- - -" : row.data_vencimento}
+                                        </Box>
+                                        { dateDiff !== 0 
+                                        ? <Typography className='text-sm text-yellow-600'><b>Vigencia:</b>{dateDiff} Dia(s)</Typography>
+                                        : ""}
+                                        
+                                    </TableCell>
                                     <TableCell align="center" sx={background}>
                                         <Link to={`../contrato/${row.id}`}>
                                             <IconButton onClick={irParaTopo}>

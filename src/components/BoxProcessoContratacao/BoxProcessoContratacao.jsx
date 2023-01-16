@@ -49,11 +49,11 @@ const BoxProcessoContratacao = (props) => {
                     value={processoContratacao.licitacao_modelo_id === undefined ? "" : processoContratacao.licitacao_modelo_id}
                     name="licitacao_modelo_id"
                     onChange={(e) => { handleChangeModeloLicitacao(e, processoContratacao, setProcessoContratacao) }}
-                    disabled={modelosLicitacao.length === 0}
+                    disabled={modelosLicitacao?.length === 0}
                     fullWidth
                 >
                     <MenuItem value={""}>---</MenuItem>
-                    {modelosLicitacao.map((modeloLicitacao, index) => {
+                    {modelosLicitacao?.map((modeloLicitacao, index) => {
                         return (
                             <MenuItem key={index} value={modeloLicitacao.id}>{modeloLicitacao.nome}</MenuItem>
                         );
