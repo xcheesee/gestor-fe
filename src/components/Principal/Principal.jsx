@@ -13,7 +13,8 @@ import {
     TableRow,
     Pagination,
     CircularProgress,
-    Fade
+    Fade,
+    Tooltip
 } from '@mui/material';
 import ManageSearchIcon from '@mui/icons-material/ManageSearch';
 import AddIcon from '@mui/icons-material/Add';
@@ -21,6 +22,7 @@ import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import { Link } from "react-router-dom";
 import Filtros from '../Filtros';
+import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 
 const Principal = ({ snackbar, setSnackbar, mascaraProcessoSei, mascaraContrato }) => {
     const [dados, setDados] = useState({});
@@ -386,7 +388,16 @@ const Principal = ({ snackbar, setSnackbar, mascaraProcessoSei, mascaraContrato 
         <Box sx={{ padding: '0 1rem' }}>
             <Fade in={true} timeout={500}>
                 <Box sx={{ padding: '1rem', maxWidth: '80rem', margin: '2rem auto', boxSizing: 'border-box' }} component={Paper} elevation={5}>
-                    <Typography variant="h2" component="h1" sx={{ fontSize: '2rem' }}>Contratos vigentes</Typography>
+                    <Typography variant="h2" component="h1" sx={{ fontSize: '2rem' }}>
+                        <Link to='/principal'>
+                            <Tooltip title="Voltar" arrow>
+                                <IconButton sx={{ mr: '0.5rem' }}>
+                                    <ArrowBackIosIcon />
+                                </IconButton>
+                            </Tooltip>
+                        </Link>
+                        Contratos vigentes
+                    </Typography>
                     <Box sx={{ display: 'flex', flexDirection: 'column', margin: '1rem' }}>
                         <Filtros url={url} setUrl={setUrl} />
 

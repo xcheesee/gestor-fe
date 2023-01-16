@@ -37,7 +37,7 @@ const BoxProcessoContratacao = (props) => {
             }
 
             <FormControl 
-                sx={{ /* margin: '1rem 0'  */}}
+                sx={{ margin: '1rem 0' }}
                 error={errors.hasOwnProperty('licitacao_modelo_id')}    
                 fullWidth 
             >
@@ -108,7 +108,7 @@ const BoxProcessoContratacao = (props) => {
                 value={processoContratacao.abertura_certame}
                 name="abertura_certame"
                 onChange={(e) => { handleChange(e, processoContratacao, setProcessoContratacao); }}
-                // margin="1rem 0"
+                margin="1rem 0"
                 error={errors.hasOwnProperty('abertura_certame')}
                 helperText={errors.hasOwnProperty('abertura_certame') ? errors.abertura_certame : " "}
                 fullWidth
@@ -120,7 +120,7 @@ const BoxProcessoContratacao = (props) => {
                 value={processoContratacao.homologacao}
                 name="homologacao"
                 onChange={(e) => { handleChange(e, processoContratacao, setProcessoContratacao); }}
-                // margin="1rem 0"
+                margin="1rem 0"
                 error={errors.hasOwnProperty('homologacao')}
                 helperText={errors.hasOwnProperty('homologacao') ? errors.homologacao : " "}
                 fullWidth
