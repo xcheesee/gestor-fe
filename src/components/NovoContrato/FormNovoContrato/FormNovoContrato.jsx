@@ -182,7 +182,7 @@ const FormNovoContrato = (props) => {
                 />
             </Box>
 
-            <Box sx={{ display: 'flex', justifyContent: 'flex-end', margin: '2rem 0', mt: '0' }}>
+            <Box sx={{ display: 'flex', justifyContent: 'flex-end'/* , margin: '2rem 0' */, mt: '0' }}>
                 <Button 
                     sx={{ textTransform: 'none', mr: '2rem', color: (theme) => theme.palette.error.main }} 
                     onClick={handleClickOpenConfirmSair}

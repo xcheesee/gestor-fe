@@ -10,6 +10,7 @@ import PaginaNaoEncontrada from './components/PaginaNaoEncontrada';
 import Auth from './components/Auth';
 import Footer from './components/Footer';
 import { Routes, Route } from 'react-router-dom';
+import Menu from './components/Menu/menu';
 
 function App() {
   const [snackbar, setSnackbar] = useState({
@@ -43,13 +44,24 @@ function App() {
           <Login />
         } />
 
-        <Route path="/principal" element={
+        <Route path="/contrato" element={
           <Auth>
             <Principal 
               snackbar={snackbar} 
               setSnackbar={setSnackbar} 
               mascaraProcessoSei={mascaraProcessoSei} 
               mascaraContrato={mascaraContrato} 
+            />
+          </Auth>
+        } />
+
+        <Route path="/principal" element={
+          <Auth>
+            <Menu title='Menu Inicial'
+              // snackbar={snackbar} 
+              // setSnackbar={setSnackbar} 
+              // mascaraProcessoSei={mascaraProcessoSei} 
+              // mascaraContrato={mascaraContrato} 
             />
           </Auth>
         } />

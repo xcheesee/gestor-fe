@@ -5,6 +5,7 @@ import { ptBR } from '@mui/material/locale';
 import './index.css';
 import App from './App';
 import { BrowserRouter } from 'react-router-dom';
+import CssBaseline from '@mui/material/CssBaseline';
 
 const theme = createTheme(
   {
@@ -14,15 +15,23 @@ const theme = createTheme(
       error: { main: '#873939' },
       color: { main: '#FFFFFF' }
     },
+    typography: {
+      button: {
+        textTransform: 'none',
+      }
+    }
   },
   ptBR,
 );
 
 ReactDOM.render(
-  <BrowserRouter>
-    <ThemeProvider theme={theme}>
-      <App />
-    </ThemeProvider>
-  </BrowserRouter>,
+  <>
+    <CssBaseline />
+    <BrowserRouter>
+      <ThemeProvider theme={theme}>
+        <App />
+      </ThemeProvider>
+    </BrowserRouter>
+  </>,
   document.getElementById('root')
 );

@@ -148,7 +148,7 @@ const NovoContrato = ({ setSnackbar }) => {
                 alignSelf: 'center', 
                 display: 'flex', 
                 flexDirection: 'column', 
-                margin: '2rem 1rem', 
+                // margin: '2rem 1rem', 
                 maxWidth: '80rem' 
             }}
         >
