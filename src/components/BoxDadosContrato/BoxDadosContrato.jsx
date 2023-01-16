@@ -178,7 +178,6 @@ const BoxDadosContrato = (props) => {
                 state={formContrato}
                 setState={setFormContrato}
                 name="valor_contrato"
-                onChange={(e) => { handleChange(e, formContrato, setFormContrato) }}
                 checaErros={() => {}}
                 error={errors.hasOwnProperty('valor_contrato.error')}
                 helperText={errors.hasOwnProperty('valor_contrato.error') ? errors.valor_contrato : " "}
@@ -194,7 +193,6 @@ const BoxDadosContrato = (props) => {
                 state={formContrato}
                 setState={setFormContrato}
                 name="valor_mensal_estimativo"
-                onChange={(e) => { handleChange(e, formContrato, setFormContrato) }}
                 checaErros={() => {}}
                 error={errors.hasOwnProperty('valor_mensal_estimativo')}
                 helperText={errors.hasOwnProperty('valor_mensal_estimativo') ? errors.valor_mensal_estimativo : " "}
@@ -287,7 +285,6 @@ const BoxDadosContrato = (props) => {
                 state={formContrato}
                 setState={setFormContrato}
                 name="valor_reserva"
-                onChange={(e) => { handleChange(e, formContrato, setFormContrato) }}
                 checaErros={() => {}}
                 error={errors.hasOwnProperty('valor_reserva')}
                 helperText={errors.hasOwnProperty('valor_reserva') ? errors.valor_reserva : " "}

@@ -25,13 +25,10 @@ const theme = createTheme(
 );
 
 ReactDOM.render(
-  <>
-    <CssBaseline />
-    <BrowserRouter>
-      <ThemeProvider theme={theme}>
-        <App />
-      </ThemeProvider>
-    </BrowserRouter>
-  </>,
+  <BrowserRouter basename="/contratos">
+    <ThemeProvider theme={theme}>
+      <App />
+    </ThemeProvider>
+  </BrowserRouter>,
   document.getElementById('root')
 );

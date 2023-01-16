@@ -91,9 +91,6 @@ const FormAditamentoValor = (props) => {
           state={formAditamento}
           setState={setFormAditamento}
           name="valor_aditamento"
-          onChange={(e) => {
-            handleInputChange(e);
-          }}
           checaErros={() => {}}
           error={errors.hasOwnProperty("valor_aditamento")}
           helperText={errors.valor_aditamento}
