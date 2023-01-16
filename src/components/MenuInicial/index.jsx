@@ -1,4 +1,4 @@
-import { Box, Button, Fade, Paper } from "@mui/material"
+import { Box, Button, Fade, Paper, Typography } from "@mui/material"
 import TextSnippetIcon from '@mui/icons-material/TextSnippet';
 import FilePresentIcon from '@mui/icons-material/FilePresent';
 import { useNavigate } from "react-router-dom";
@@ -7,8 +7,8 @@ const MenuInicial = ({ title }) => {
     return(
         <Fade in={true}>
             <Paper className="lg:w-[1024px] w-full px-4 pt-4 pb-8 place-self-center" elevation={6}>
-                <Box className='text-2xl pb-4 font-light text-slate-700'>
-                    {title}
+                <Box>
+                    <Typography className='text-3xl pb-4 font-light'>{title}</Typography>
                 </Box>
                 <Box className='px-4 flex flex-col'>
                     <Box className="grid grid-cols-2 gap-4">
@@ -17,7 +17,7 @@ const MenuInicial = ({ title }) => {
                         </MenuButton>
 
                         <MenuButton>
-                            <FilePresentIcon fontSize="large" className="mx-2"/> Templates
+                            <FilePresentIcon fontSize="large" className="mx-2"/> Docs. Referenciais
                         </MenuButton>
                     </Box>
                 </Box>
