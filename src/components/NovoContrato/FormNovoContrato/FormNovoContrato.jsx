@@ -47,7 +47,7 @@ const FormNovoContrato = (props) => {
     const outras_informacoes = useRef(formContrato.outras_informacoes);
     
     useEffect(() => {
-        const url = `${process.env.REACT_APP_API_URL}/licitacaomodelos`;
+        const url = `${process.env.REACT_APP_API_URL}licitacaomodelos`;
         const token = localStorage.getItem('access_token');
         const options = {
             method: 'GET',
