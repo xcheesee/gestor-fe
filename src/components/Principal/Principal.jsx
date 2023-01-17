@@ -376,7 +376,7 @@ const Principal = ({ snackbar, setSnackbar, mascaraProcessoSei, mascaraContrato 
                                             {row.data_vencimento === null ? "- - -" : row.data_vencimento}
                                         </Box>
                                         { dateDiff !== 0 
-                                        ? <Typography className='text-sm text-yellow-600'><b>Vigencia:</b>{dateDiff} Dia(s)</Typography>
+                                        ? <Typography className='text-sm text-green-500'><b>Vigencia:</b>{dateDiff} Dia(s)</Typography>
                                         : ""}
                                         
                                     </TableCell>
