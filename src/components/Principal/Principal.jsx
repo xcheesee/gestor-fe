@@ -66,10 +66,12 @@ const Principal = ({ snackbar, setSnackbar, mascaraProcessoSei, mascaraContrato 
         const token = localStorage.getItem('access_token');
         const options = {
             method: 'GET',
+            mode: 'cors',
             headers: {
+                'Access-Control-Allow-Origin': '*',
                 'Content-Type': 'application/json',
                 'Accept': 'application/json',
-                'Authorization': `Bearer ${token}`
+                'Authorization': `Bearer ${token}`,
             },
         };
         const urlMontado = `${url.url}page=${url.page}${url.filtros}&sort=${url.sort}`;

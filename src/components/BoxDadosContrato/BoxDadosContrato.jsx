@@ -8,13 +8,15 @@ import {
     InputLabel,
     Select,
     MenuItem,
-    FormHelperText
+    FormHelperText,
+    InputBase
 } from '@mui/material';
 import CampoCpfCnpj from '../CampoCpfCnpj';
 import CampoData from '../CampoData';
 import CampoValores from '../CampoValores';
 import CampoProcessoSei from '../CampoProcessoSei';
 import CampoNumContrato from '../CampoNumContrato';
+import MaxPrazoInput from '../MaxPrazoInput';
 
 const BoxDadosContrato = (props) => {
     const {
@@ -237,8 +239,7 @@ const BoxDadosContrato = (props) => {
                 required
                 fullWidth
             />
-
-            <TextField
+            {/* <TextField
                 variant="outlined"
                 inputRef={prazo_a_partir_de}
                 defaultValue={formContrato.prazo_a_partir_de}
@@ -249,9 +250,15 @@ const BoxDadosContrato = (props) => {
                 error={errors.hasOwnProperty('prazo_a_partir_de')}
                 helperText={errors.hasOwnProperty('prazo_a_partir_de') ? errors.prazo_a_partir_de : "Ex: A contar da ordem de início; A partir da assinatura; A partir da ordem de fornecimento..."}
                 fullWidth
+            /> */}
+
+            <MaxPrazoInput 
+                helperText="Ex: A contar da ordem de início; A partir da assinatura; A partir da ordem de fornecimento..."
+                validade={formContrato.data_vencimento}
+                disabled={formContrato.data_vencimento === ""}
             />
 
-            <CampoData
+            {/* <CampoData
                 className="form__campo"
                 label="Prazo Máximo Prorrogável"
                 value={formContrato.data_prazo_maximo}
@@ -262,7 +269,7 @@ const BoxDadosContrato = (props) => {
                 helperText={errors.hasOwnProperty('data_prazo_maximo') ? errors.data_prazo_maximo : " "}
                 required
                 fullWidth
-            />
+            /> */}
 
             <TextField
                 variant="outlined"
