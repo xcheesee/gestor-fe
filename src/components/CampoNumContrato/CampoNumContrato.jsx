@@ -6,6 +6,7 @@ const CampoNumContrato = (props) => {
     const {
         formContrato,
         setFormContrato,
+        label,
         ...other
     } = props;
 
@@ -29,7 +30,7 @@ const CampoNumContrato = (props) => {
             {() => 
                 <TextField
                     variant="outlined"
-                    label="Nº Contrato / Nota de Empenho Inicial"
+                    label={label}
                     sx={{ margin: '1rem 0' }}
                     name="numero_contrato"
                     className="form__campo"

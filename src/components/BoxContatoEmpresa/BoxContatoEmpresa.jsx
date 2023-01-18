@@ -6,6 +6,7 @@ import {
     TextField, 
 } from '@mui/material';
 import CampoTelefone from '../CampoTelefone';
+import { contratoLabels } from '../utils/constants';
 
 const BoxContatoEmpresa = (props) => {
     const {
@@ -34,7 +35,7 @@ const BoxContatoEmpresa = (props) => {
             <TextField
                 variant="outlined"
                 className="form__campo"
-                label="Nome da empresa"
+                label={contratoLabels.nome_empresa}
                 inputRef={nome_empresa}
                 defaultValue={formContrato.nome_empresa}
                 name="nome_empresa"
@@ -46,6 +47,7 @@ const BoxContatoEmpresa = (props) => {
             />
 
             <CampoTelefone 
+                label={contratoLabels.telefone_empresa}
                 className="contrato-empresa__campo"
                 formContrato={formContrato}
                 setFormContrato={setFormContrato}
@@ -58,7 +60,7 @@ const BoxContatoEmpresa = (props) => {
             <TextField
                 variant="outlined"
                 className="form__campo"
-                label="E-mail da empresa"
+                label={contratoLabels.email_empresa}
                 inputRef={email_empresa}
                 defaultValue={formContrato.email_empresa}
                 name="email_empresa"

@@ -1,7 +1,7 @@
 import { Divider, MenuItem, Select, TextField, Tooltip, Typography } from "@mui/material";
 import { useState } from "react";
 
-export default function MaxPrazoInput ({helperText, validade, disabled}) {
+export default function MaxPrazoInput ({helperText, validade, disabled, label}) {
     const [prazoDias, setPrazoDias] = useState("")
     const [maxPrazo, setMaxPrazo] = useState("")
     const [dayMultiplier, setDayMultiplier] = useState("")
@@ -20,9 +20,8 @@ export default function MaxPrazoInput ({helperText, validade, disabled}) {
                     <div className='flex border border-gray-300 border-solid rounded items-center' >
                         <TextField
                             className="max-w-[300px]"
-                            placeholder='5'
                             variant='outlined'
-                            label="Prazo a partir de"
+                            label={label}
                             fullWidth
                             value={prazoDias}
                             disabled={disabled}

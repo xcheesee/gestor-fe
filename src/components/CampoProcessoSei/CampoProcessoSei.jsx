@@ -33,6 +33,7 @@ const CampoProcessoSei = (props) => {
         error,
         helperText,
         name,
+        label,
         ...other
     } = props;
 
@@ -48,7 +49,7 @@ const CampoProcessoSei = (props) => {
     return (
         <TextField
             variant="outlined"
-            label="Processo SEI"
+            label={label}
             value={processoSei}
             onChange={(e) => { setProcessoSei(e.target.value) }}
             required

@@ -35,6 +35,7 @@ const CampoCpfCnpj = (props) => {
         fullWidth, 
         errors, 
         setErrors,
+        label,
     } = props;
 
     const [cpfCnpj, setCpfCnpj] = useState(formContrato.cnpj_cpf);
@@ -78,7 +79,7 @@ const CampoCpfCnpj = (props) => {
     return (
         <TextField
             variant="outlined"
-            label="CNPJ/CPF"
+            label={label}
             value={cpfCnpj}
             name="cnpj_cpf"
             onChange={mudaCpfCnpj}

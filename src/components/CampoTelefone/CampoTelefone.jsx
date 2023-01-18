@@ -26,7 +26,7 @@ NumberFormatCustom.propTypes = {
     onChange: PropTypes.func.isRequired,
 };
 
-const CampoTelefone = ({ formContrato, setFormContrato, error, helperText, name, ...other }) => {
+const CampoTelefone = ({ formContrato, setFormContrato, error, helperText, name, label, ...other }) => {
     const [telefone_empresa, setTelefone_empresa] = useState(formContrato.telefone_empresa);
 
     const handleBlur = (event) => {
@@ -46,7 +46,7 @@ const CampoTelefone = ({ formContrato, setFormContrato, error, helperText, name,
     return (
         <TextField
             variant="outlined"
-            label="Telefone da empresa"
+            label={label}
             value={telefone_empresa}
             onChange={(e) => { setTelefone_empresa(e.target.value) }}
             required

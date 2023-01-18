@@ -11,6 +11,7 @@ import {
     CircularProgress,
 } from '@mui/material';
 import CampoData from '../CampoData';
+import { contratoLabels } from '../utils/constants';
 
 const BoxProcessoContratacao = (props) => {
     const {
@@ -45,7 +46,7 @@ const BoxProcessoContratacao = (props) => {
                 <Select
                     labelId="licitacao_modelo-label"
                     id="licitacao_modelo"
-                    label="Modalidade de licitação"
+                    label={contratoLabels.licitacao_modelo}
                     value={processoContratacao.licitacao_modelo_id === undefined ? "" : processoContratacao.licitacao_modelo_id}
                     name="licitacao_modelo_id"
                     onChange={(e) => { handleChangeModeloLicitacao(e, processoContratacao, setProcessoContratacao) }}
@@ -80,7 +81,7 @@ const BoxProcessoContratacao = (props) => {
 
             <CampoData
                 className="form__campo"
-                label="Envio material técnico"
+                label={contratoLabels.envio_material_tecnico}
                 value={processoContratacao.envio_material_tecnico}
                 name="envio_material_tecnico"
                 onChange={(e) => { handleChange(e, processoContratacao, setProcessoContratacao); }}
@@ -92,7 +93,7 @@ const BoxProcessoContratacao = (props) => {
 
             <CampoData
                 className="form__campo"
-                label="Minuta edital"
+                label={contratoLabels.minuta_edital}
                 value={processoContratacao.minuta_edital}
                 name="minuta_edital"
                 onChange={(e) => { handleChange(e, processoContratacao, setProcessoContratacao); }}
@@ -104,7 +105,7 @@ const BoxProcessoContratacao = (props) => {
 
             <CampoData
                 className="form__campo"
-                label="Abertura certame"
+                label={contratoLabels.abertura_certame}
                 value={processoContratacao.abertura_certame}
                 name="abertura_certame"
                 onChange={(e) => { handleChange(e, processoContratacao, setProcessoContratacao); }}
@@ -116,7 +117,7 @@ const BoxProcessoContratacao = (props) => {
 
             <CampoData
                 className="form__campo"
-                label="Homologação"
+                label={contratoLabels.homologacao}
                 value={processoContratacao.homologacao}
                 name="homologacao"
                 onChange={(e) => { handleChange(e, processoContratacao, setProcessoContratacao); }}

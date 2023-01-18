@@ -11,6 +11,7 @@ import CheckIcon from '@mui/icons-material/Check';
 import CloseIcon from '@mui/icons-material/Close';
 import * as EmailValidator from 'email-validator';
 import './estilo.css';
+import { contratoLabels } from '../../utils/constants';
 
 const FormNovoContrato = (props) => {
     const {
@@ -179,6 +180,7 @@ const FormNovoContrato = (props) => {
                     errors={errors}
                     outras_informacoes={outras_informacoes}
                     formContrato={formContrato}
+                    label={contratoLabels.outras_informacoes}
                 />
             </Box>
 

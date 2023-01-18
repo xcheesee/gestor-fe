@@ -9,6 +9,7 @@ import {
 const BoxOutrasInformacoes = (props) => {
     const { 
         outras_informacoes,
+        label,
         formContrato,
         errors,
         acao,
@@ -34,7 +35,7 @@ const BoxOutrasInformacoes = (props) => {
                 multiline
                 minRows={6}
                 className="form__campo"
-                label="Informações adicionais"
+                label={label}
                 inputRef={outras_informacoes}
                 defaultValue={defaultValue ? defaultValue : formContrato.outras_informacoes}
                 name="outras_informacoes"

@@ -6,8 +6,10 @@ import {
     DialogActions,
     Button
 } from '@mui/material';
+import { contratoLabels } from '../utils/constants';
 
-const DialogErroEnvio = ({ openErro, setOpenErro, acao }) => {
+const DialogErroEnvio = ({ openErro, setOpenErro, acao, errors, setFocusError }) => {
+
     return (
         <Dialog 
             open={openErro.open} 
@@ -16,14 +18,24 @@ const DialogErroEnvio = ({ openErro, setOpenErro, acao }) => {
             }}
         >
             <DialogContent>
-                <DialogContentText sx={{ mt: '1rem' }}>
-                    <strong>Erro {openErro.status}:</strong> Não foi possível {acao} o contrato. {openErro.status === 422 ? "Revise os dados informados e tente novamente" : ""}
+                <DialogContentText sx={{}}>
+                    <div className='text-lg font-bold text-red-500 text-center'> Não foi possível {acao} o contrato.</div> 
+                    {openErro.status === 422 
+                        ? <div className='pl-2 pt-4 flex gap-4 flex-col'>
+                            <b>Foram observadas irregularidades nos seguintes campos:</b>
+                            {Object.entries(errors)?.map((keyVal) => {
+                                return(
+                                    <div className='pl-4'><b>{contratoLabels[keyVal[0]]}</b>: {keyVal[1]}</div>
+                                )
+                            })}
+                        </div>: ""}
                 </DialogContentText>
             </DialogContent>
             <DialogActions>
                 <Button 
                     onClick={() => { 
-                        setOpenErro({ ...openErro, open: false }); 
+                        setOpenErro({ ...openErro, open: false });
+                        setFocusError(Object.keys(errors)[0])
                     }} 
                 >
                     Ok

@@ -10,10 +10,12 @@ import DialogConfirm from '../DialogConfirm';
 import DialogConfirmSair from '../DialogConfirmSair';
 import DialogErroEnvio from '../DialogErroEnvio';
 import { useNavigate } from 'react-router-dom';
+import { useEffect } from 'react';
 
 const NovoContrato = ({ setSnackbar }) => {
     const [error, setError] = useState(false);
     const [errors, setErrors] = useState({});
+    const [focusError, setFocusError] = useState('')
     const [openConfirm, setOpenConfirm] = useState(false);
     const [openConfirmSair, setOpenConfirmSair] = useState(false);
     const [openErro, setOpenErro] = useState({
@@ -93,6 +95,7 @@ const NovoContrato = ({ setSnackbar }) => {
 
     const handleClickEnviarFormulario = () => {
         setCarregando(true);
+        setFocusError('')
 
         if (!error) {
             const url = `${process.env.REACT_APP_API_URL}/contrato`
@@ -138,6 +141,10 @@ const NovoContrato = ({ setSnackbar }) => {
                 });
         }
     }
+
+    useEffect(() => {
+        document.getElementById(focusError)?.scrollIntoView({behavior: 'smooth', block: 'center'})
+    },[focusError])
 
     return(
         <Box
@@ -185,6 +192,8 @@ const NovoContrato = ({ setSnackbar }) => {
                 <DialogErroEnvio 
                     openErro={openErro}
                     setOpenErro={setOpenErro}
+                    errors={errors}
+                    setFocusError={setFocusError}
                     acao="enviar"
                 />
             </Box>
