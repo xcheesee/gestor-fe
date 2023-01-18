@@ -84,7 +84,6 @@ const BoxDadosContrato = (props) => {
                 error={errors.hasOwnProperty('processo_sei')}
                 helperText={errors.hasOwnProperty('processo_sei') ? errors.processo_sei : " "}
                 label={contratoLabels.processo_sei}
-                id="processo_sei"
                 name="processo_sei"
             />
             

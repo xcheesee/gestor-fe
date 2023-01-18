@@ -1,3 +1,5 @@
+//constante utilizada para manter conformidade entre legenda de formulario e feedback em erros
+
 export const contratoLabels = {
     departamento: "Unidade Requisitante",
     licitacao_modelo_id: "",

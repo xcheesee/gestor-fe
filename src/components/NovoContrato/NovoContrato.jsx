@@ -143,7 +143,8 @@ const NovoContrato = ({ setSnackbar }) => {
     }
 
     useEffect(() => {
-        document.getElementById(focusError)?.scrollIntoView({behavior: 'smooth', block: 'center'})
+        if(focusError === "") return
+        document.querySelector(`input[name=${focusError}]`)?.scrollIntoView({behavior: 'smooth', block: 'center'})
     },[focusError])
 
     return(
