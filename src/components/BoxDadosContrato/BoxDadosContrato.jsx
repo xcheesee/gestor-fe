@@ -9,7 +9,6 @@ import {
     Select,
     MenuItem,
     FormHelperText,
-    InputBase
 } from '@mui/material';
 import CampoCpfCnpj from '../CampoCpfCnpj';
 import CampoData from '../CampoData';
@@ -61,7 +60,7 @@ const BoxDadosContrato = (props) => {
                 <Select
                     labelId="departamento_id-label"
                     id="departamento_id"
-                    label="Departamento"
+                    label="Unidade Requisitante"
                     value={departamento_id}
                     name="departamento_id"
                     onChange={(e) => { setDepartamento_id(e.target.value); }}
