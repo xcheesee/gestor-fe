@@ -9,7 +9,7 @@ import BoxOutrasInformacoes from '../../BoxOutrasInformacoes';
 import CheckIcon from '@mui/icons-material/Check';
 import CloseIcon from '@mui/icons-material/Close';
 import * as EmailValidator from 'email-validator';
-import '../../NovoContrato/FormNovoContrato/estilo.css';
+import '../../FormNovoContrato/estilo.css';
 
 const FormEditarContrato = (props) => {
     const { 

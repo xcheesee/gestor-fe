@@ -11,6 +11,7 @@ import FormDadosContrato from './FormDadosContrato';
 import FormProcessoContratacao from './FormProcessoContratacao';
 import PropTypes from 'prop-types';
 import EditIcon from '@mui/icons-material/Edit';
+import { mascaraContrato, mascaraProcessoSei } from '../utils/utils';
 
 const TabPanel = (props) => {
     const { children, value, index, ...other } = props;
@@ -58,8 +59,6 @@ const ListaDadosContrato = (props) => {
         setSnackbar,
         mudancaContrato,
         setMudancaContrato,
-        mascaraProcessoSei,
-        mascaraContrato
     } = props;
 
     const [value, setValue] = useState(0);

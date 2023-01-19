@@ -37,6 +37,7 @@ const CampoCpfCnpj = (props) => {
         setErrors,
         label,
     } = props;
+    // let scrollTop, scrollLeft;
 
     const [cpfCnpj, setCpfCnpj] = useState(formContrato.cnpj_cpf);
 
@@ -55,9 +56,11 @@ const CampoCpfCnpj = (props) => {
                     ...formContrato,
                     cnpj_cpf: cpfCnpj,
                 });
+                // enableScroll()
             } else {
                 setErrors({...errors, cnpj_cpf: "CPF Inválido"});
                 setError(true);
+                // disableScroll()
             }
         } else if (cpfCnpj.length > 0 && cpfCnpj.length <= 14) {
             if (cnpj.isValid(cpfCnpj)) {
@@ -65,16 +68,33 @@ const CampoCpfCnpj = (props) => {
                 delete errorsTemp.cnpj_cpf;
                 setError(false);
                 setErrors(errorsTemp)
+                // enableScroll()
                 setFormContrato({
                     ...formContrato,
                     cnpj_cpf: cpfCnpj,
                 });
             } else {
                 setErrors({...errors, cnpj_cpf: "CNPJ Inválido"});
+                // disableScroll()
                 setError(true);
             }
         }
     }
+
+    // function disableScroll() {
+    //     // Get the current page scroll position
+    //     scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+    //     scrollLeft = window.pageXOffset || document.documentElement.scrollLeft;
+    
+    //         // if any scroll is attempted, set this to the previous value
+    //         window.onscroll = function() {
+    //             window.scrollTo(scrollLeft, scrollTop);
+    //         };
+    // }
+    
+    // function enableScroll() {
+    //     window.onscroll = function() {};
+    // }
 
     return (
         <TextField

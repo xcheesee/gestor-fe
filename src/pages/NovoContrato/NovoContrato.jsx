@@ -4,11 +4,11 @@ import {
     Box, 
     Fade
 } from '@mui/material';
-import HeaderFormulario from '../HeaderFormulario';
-import FormNovoContrato from './FormNovoContrato';
-import DialogConfirm from '../DialogConfirm';
-import DialogConfirmSair from '../DialogConfirmSair';
-import DialogErroEnvio from '../DialogErroEnvio';
+import FormNovoContrato from '../../components/FormNovoContrato'
+import HeaderFormulario from '../../components/HeaderFormulario';
+import DialogConfirm from '../../components/DialogConfirm';
+import DialogConfirmSair from '../../components/DialogConfirmSair';
+import DialogErroEnvio from '../../components/DialogErroEnvio';
 import { useNavigate } from 'react-router-dom';
 import { useEffect } from 'react';
 

@@ -67,14 +67,18 @@ const BoxDadosContrato = (props) => {
                     onChange={(e) => { setDepartamento_id(e.target.value); }}
                     fullWidth
                 >
-                    {Object.entries(departamentos).map((departamento, index) => {
-                        return (
-                            <MenuItem value={departamento[0]} key={index}>{departamento[1]}</MenuItem>
-                        );
-                    })}
+                    { departamentos !== undefined
+                        ? Object.entries(departamentos)?.map((departamento, index) => {
+                            console.log(departamento)
+                            return (
+                                <MenuItem value={departamento[0]} key={index}>{departamento[1]}</MenuItem>
+                            );
+                        })
+                        : <MenuItem value={0} key={0}></MenuItem>
+                    }
                 </Select>
                 <FormHelperText>
-                    {errors.hasOwnProperty('departamento_id') ? errors.departamento_id : " "}
+                    {errors?.hasOwnProperty('departamento_id') ? errors?.departamento_id : " "}
                 </FormHelperText>
             </FormControl>
 
@@ -100,7 +104,6 @@ const BoxDadosContrato = (props) => {
                 required
                 fullWidth
             />
-
             <CampoCpfCnpj
                 className="form__campo"
                 formContrato={formContrato}
@@ -152,7 +155,7 @@ const BoxDadosContrato = (props) => {
                 required
                 fullWidth
             />
-
+            {/* TODO: MOSTRAR HELPER TEXT E ERROR BORDER EM NUMERO_CONTRATO */}
             <CampoNumContrato 
                 formContrato={formContrato}
                 setFormContrato={setFormContrato}
@@ -174,7 +177,7 @@ const BoxDadosContrato = (props) => {
                 helperText={errors.hasOwnProperty('data_assinatura') ? errors.data_assinatura : " "}
                 fullWidth
             />
-
+            {/* TODO: MOSTRAR HELPER TEXT E ERROR BORDER EM NUMERO_CONTRATO */}
             <CampoValores
                 index=""
                 className="form__campo"

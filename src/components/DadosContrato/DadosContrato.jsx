@@ -138,7 +138,7 @@ const ListaTabs = [
     'Dotações'
 ];
 
-const DadosContrato = ({ snackbar, setSnackbar, mascaraProcessoSei, mascaraContrato }) => {
+const DadosContrato = ({ snackbar, setSnackbar }) => {
     const [value, setValue] = useState(0);
     const [dados, setDados] = useState({});
     const [mudancaContrato, setMudancaContrato] = useState(false);
@@ -342,8 +342,6 @@ const DadosContrato = ({ snackbar, setSnackbar, mascaraProcessoSei, mascaraContr
                                             setSnackbar={setSnackbar}
                                             mudancaContrato={mudancaContrato}
                                             setMudancaContrato={setMudancaContrato}
-                                            mascaraProcessoSei={mascaraProcessoSei} 
-                                            mascaraContrato={mascaraContrato}
                                         />
                                     </TabPanel>
 

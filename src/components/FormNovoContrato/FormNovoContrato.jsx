@@ -3,15 +3,15 @@ import {
     Box, 
     Button,
 } from '@mui/material';
-import BoxProcessoContratacao from '../../BoxProcessoContratacao';
-import BoxDadosContrato from '../../BoxDadosContrato';
-import BoxContatoEmpresa from '../../BoxContatoEmpresa';
-import BoxOutrasInformacoes from '../../BoxOutrasInformacoes';
+import BoxProcessoContratacao from '../BoxProcessoContratacao';
+import BoxDadosContrato from '../BoxDadosContrato';
+import BoxContatoEmpresa from '../BoxContatoEmpresa';
+import BoxOutrasInformacoes from '../BoxOutrasInformacoes';
 import CheckIcon from '@mui/icons-material/Check';
 import CloseIcon from '@mui/icons-material/Close';
 import * as EmailValidator from 'email-validator';
 import './estilo.css';
-import { contratoLabels } from '../../utils/constants';
+import { contratoLabels } from '../utils/constants';
 
 const FormNovoContrato = (props) => {
     const {
