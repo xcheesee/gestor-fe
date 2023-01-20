@@ -68,13 +68,10 @@ const BoxDadosContrato = (props) => {
                     fullWidth
                 >
                     { departamentos !== undefined
-                        ? Object.entries(departamentos)?.map((departamento, index) => {
-                            console.log(departamento)
-                            return (
-                                <MenuItem value={departamento[0]} key={index}>{departamento[1]}</MenuItem>
-                            );
-                        })
-                        : <MenuItem value={0} key={0}></MenuItem>
+                        ? Object.entries(departamentos)?.map((departamento, index) => (
+                            <MenuItem value={departamento[0]} key={index}>{departamento[1]}</MenuItem>
+                        ))
+                        : <MenuItem value="" key={0}></MenuItem>
                     }
                 </Select>
                 <FormHelperText>

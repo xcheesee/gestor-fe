@@ -2,6 +2,7 @@
 
 export const contratoLabels = {
     departamento: "Unidade Requisitante",
+    departamento_id: "Unidade Requisitante",
     licitacao_modelo_id: "",
     licitacao_modelo: "Modalidade de licitação",
     envio_material_tecnico: "Envio material técnico",

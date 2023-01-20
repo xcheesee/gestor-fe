@@ -20,7 +20,6 @@ const SenhaForm = (props) => {
         e.preventDefault()
         const formData = Object.fromEntries(new FormData(e.target))
         setCarregando(true)
-        console.log(formData)
         const res = await pwRequest(formData)
         setReqResponse(res)
         setCarregando(false)         

@@ -28,6 +28,8 @@ import AccountBoxIcon from '@mui/icons-material/AccountBox';
 import { useNavigate, useLocation, Link } from 'react-router-dom';
 import LockIcon from '@mui/icons-material/Lock'
 import DialogAltSenh from '../DialogAltSenh';
+import { mascaraContrato, mascaraProcessoSei } from '../utils/utils';
+import { newPwRequest } from '../utils/api';
 
 const Header = (props) => {
     const [open, setOpen] = useState(false);
@@ -72,28 +74,6 @@ const Header = (props) => {
     }
 
     const showSenhaForm = () => setOpenAltSenha(true)
-
-    const newPwRequest = async (formData) => {
-        const url = new URL(
-            `${process.env.REACT_APP_API_URL}alterar_senha`
-        );
-        
-        const headers = {
-            "Content-Type": "application/json",
-            "Accept": "application/json",
-            "Authorization": `Bearer ${accessToken}`,
-        };
-
-        const data = {...formData, email: localStorage.getItem('usermail')}
-
-        const res = await fetch(url, {
-            method: "POST",
-            headers: headers,
-            body: JSON.stringify(data),
-        })
-
-        return await res.json()
-    }
 
     const handleLogout = () => {
         setCarregando(true);
@@ -159,27 +139,10 @@ const Header = (props) => {
         }
     }
 
-    const mascaraContrato = (contrato) => {
-        if (contrato !== null && contrato !== "" && contrato !== undefined) {
-          return contrato.replace(/([\d]{3})([\w]{4})(\d{4})/gm, '$1/$2/$3');
-        } else {
-          return "";
-        }
-    }
-    const mascaraProcessoSei = (processoSei) => {
-        if (processoSei !== null && processoSei !== "" && processoSei !== undefined) {
-          return processoSei.replace(/([\d]{4})([\d]{4})([\d]{7})([\d]{1})/gm, '$1.$2/$3-$4');
-        } else {
-          return "";
-        }
-    }
-
-    
     const MenuContratoVencido = () => {
         const rows = [];
         Object.values(contratoVencido).map((contrato, index) => {
-            return rows.push(
-                {   
+            return rows.push({   
                     id: contrato.id, 
                     numero_contrato: mascaraContrato(contrato.numero_contrato),
                     processo_sei: mascaraProcessoSei(contrato.processo_sei),
@@ -277,8 +240,7 @@ const Header = (props) => {
                 setOpenAltSenha={setOpenAltSenha}
                 carregando={altCarregando}
                 setCarregando={setAltCarregando}
-                pwRequest={newPwRequest}
-            />
+                pwRequest={newPwRequest} />
             
             <Link to={location.pathname === "/" ? "/" : "../principal"}>
                 <Typography 
