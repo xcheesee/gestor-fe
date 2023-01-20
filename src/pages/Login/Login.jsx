@@ -117,11 +117,12 @@ const Login = () => {
 
                         setCarregando(true);
                         const data = await sendPWData(e)
-                        if (data.data.access_token) {
-                            localStorage.setItem('access_token', data.data.access_token);
-                            localStorage.setItem('username', data.data.username);
-                            localStorage.setItem('departamentos', JSON.stringify(data.data.departamentos));
-                            localStorage.setItem('usermail', data.userMail.email)
+                        if (data.access_token) {
+                            console.log(data)
+                            localStorage.setItem('access_token', data.access_token);
+                            localStorage.setItem('username', data.username);
+                            localStorage.setItem('departamentos', JSON.stringify(data.departamentos));
+                            localStorage.setItem('usermail', data.userMail)
                             navigate("../principal", { replace: true });
                         } else {
                             setError({

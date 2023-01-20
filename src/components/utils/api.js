@@ -46,7 +46,7 @@ export async function sendPWData(formSubmit) {
         //     });
         //     setCarregando(false);
         // })
-    return {data: data, userMail: inputObject.email}
+    return {...data, userMail: inputObject.email}
 }
 
 export const newPwRequest = async (formData) => {
