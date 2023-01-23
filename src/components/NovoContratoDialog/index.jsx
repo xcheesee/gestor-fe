@@ -21,15 +21,10 @@ export default function NovoContratoDialog({novoDialog, setNovoDialog}) {
                         e.preventDefault()
                         const formData = new FormData(e.target)
                         setSendingForm(true)
-                        // console.log(formData)
                         const res = await sendNovoFormData(formData)
-                        console.log(res)
-                        // await new Promise((res, rej) => {
-                        //     setTimeout(() => res(), 3000)
-                        // })
                         irParaTopo()
                         setSendingForm(false)
-                        // navigate('../contrato/1')
+                        navigate(`../contrato/${res.data.id}`)
                         
                     }}>
                         <FormControl fullWidth required>
