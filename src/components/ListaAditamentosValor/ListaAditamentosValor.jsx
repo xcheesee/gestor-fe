@@ -16,14 +16,12 @@ const TabAditamentosValor = (props) => {
   const campos = [
       "Tipo",
       "Valor",
-    //   "Índice reajuste",
-      "Porcentagem reajuste"
+      "Porcentagem"
   ];
   const valores = [
     props.tipo_aditamento,
     formataValores(props.valor_aditamento),
-    // props.indice_reajuste,
-    props.pct_reajuste
+    props.percentual
 ];
 
   return props.retornaCampoValor(campos, valores, props.estaCarregado);}
@@ -56,8 +54,7 @@ const TabAditamentosValor = (props) => {
         contrato_id: numContrato,
         tipo_aditamento: '',
         valor_aditamento: '',
-        // indice_reajuste: '',
-        pct_reajuste: ''
+        percentual: ''
     });
     const [errors, setErrors] = useState({});
 
@@ -134,8 +131,7 @@ const handleClickEditar = (e, aditamento) => {
       contrato_id: aditamento.contrato_id,
       tipo_aditamento: aditamento.tipo_aditamento,
       valor_aditamento: aditamento.valor_aditamento,
-    //   indice_reajuste: aditamento.indice_reajuste,
-      pct_reajuste: aditamento.pct_reajuste
+      percentual: aditamento.percentual
   });
   setOpenFormAditamentos({
       open: true,
@@ -178,8 +174,7 @@ const editaAditamento = (id, formAditamentoEdit) => {
               ...formAditamentos,
               tipo_aditamento: '',
               valor_aditamento: '',
-            //   indice_reajuste: '',
-              pct_reajuste: ''
+              percentual: ''
           });
           return res.json();
       } else {
@@ -203,8 +198,7 @@ const handleClickAdicionar = () => {
       contrato_id: numContrato,
       tipo_aditamento: '',
       valor_aditamento: '',
-    //   indice_reajuste: '',
-      pct_reajuste: ''
+      percentual: ''
   });
 }
 
@@ -242,8 +236,7 @@ const enviaAditamento = () => {
               ...formAditamentos,
               tipo_aditamento: '',
               valor_aditamento: '',
-            //   indice_reajuste: '',
-              pct_reajuste: ''
+              percentual: ''
           });
           return res.json();
       } else if (res.status === 422) {
@@ -295,8 +288,7 @@ const enviaAditamento = () => {
                                 <TabAditamentosValor 
                                     tipo_aditamento={aditamento.tipo_aditamento}
                                     valor_aditamento={aditamento.valor_aditamento}
-                                    // indice_reajuste={aditamento.indice_reajuste}
-                                    pct_reajuste={aditamento.pct_reajuste}
+                                    percentual={aditamento.percentual}
                                     estaCarregado={estaCarregado}
                                     retornaCampoValor={retornaCampoValor}
                                 />
