@@ -72,7 +72,11 @@ const Principal = ({ snackbar, setSnackbar }) => {
         <>
             <Box sx={{ padding: '0 1rem' }}>
                 <Fade in={true} timeout={500}>
-                    <Box sx={{ padding: '1rem', maxWidth: '80rem', margin: '2rem auto', boxSizing: 'border-box' }} component={Paper} elevation={5}>
+                    <Box 
+                        sx={{ padding: '1rem', maxWidth: '80rem', margin: '2rem auto', boxSizing: 'border-box' }} 
+                        component={Paper} 
+                        elevation={5}>
+                            
                         <Typography variant="h2" component="h1" sx={{ fontSize: '2rem' }}>
                             <VoltarArrowBtn onClick={() => navigate("/principal")} />
                             Contratos vigentes
@@ -102,21 +106,6 @@ const Principal = ({ snackbar, setSnackbar }) => {
                                     ordena={ordena}
                                     carregandoSort={carregandoSort}/>
                             }
-                            {/* <Fade in={true}>
-                                <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
-                                    <Button
-                                        variant="contained"
-                                        sx={{ color: (theme) => theme.palette.color.main, margin: '2rem 0', textTransform: 'none' }}
-                                        onClick={() => {
-                                            irParaTopo()
-                                            navigate("../novo-contrato")
-                                        }}
-                                    >
-                                        <AddIcon sx={{ mr: '0.2rem' }} /> Novo contrato
-                                    </Button>
-                                </Box>
-                            </Fade> */}
-                            {/* <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}> */}
                             <Button
                                 className='self-end'
                                 variant="contained"
@@ -128,8 +117,6 @@ const Principal = ({ snackbar, setSnackbar }) => {
                             >
                                 <AddIcon sx={{ mr: '0.2rem' }} /> Novo Novo contrato
                             </Button>
-                                {/* </Box> */}
-                            {/* <Box sx={{ display: 'flex', justifyContent: 'center', margin: '1rem' }}> */}
                             <Pagination
                                 className="self-center m-[1rem]"
                                 count={metaDados?.last_page ?? 1}
@@ -138,7 +125,6 @@ const Principal = ({ snackbar, setSnackbar }) => {
                                 page={url.page}
                                 onChange={mudaPagina}
                             />
-                            {/* </Box> */}
                         </Box>
                     </Box>
                 </Fade>

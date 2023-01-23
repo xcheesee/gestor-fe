@@ -93,6 +93,7 @@ export default function MaxPrazoInput ({helperText, validade, disabled, label}) 
                     <Divider orientation='vertical' sx={{height: 40, m: 0.5}}/>
                     <TextField
                         variant='outlined'
+                        name="data_prazo_maximo"
                         label="Prazo Maximo Prorrogavel"
                         placeholder={disabled ? "" : ""}
                         value={maxPrazo}

@@ -1,4 +1,15 @@
-import { Box, Button, CircularProgress, Dialog, DialogContent, DialogTitle, FormControl, InputLabel, MenuItem, Select, TextField } from "@mui/material";
+import { 
+    Box,
+    Button, 
+    CircularProgress, 
+    Dialog, DialogContent, 
+    DialogTitle, 
+    FormControl, 
+    InputLabel, 
+    MenuItem, 
+    Select, 
+    TextField 
+} from "@mui/material";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { sendNovoFormData } from "../utils/api";
@@ -36,7 +47,12 @@ export default function NovoContratoDialog({novoDialog, setNovoDialog}) {
                                 name="departamento_id"
                                 label={contratoLabels.departamento_id}
                             >
-                                {Object.entries(departamentos)?.map((departamento) => <MenuItem value={departamento[0]}>{departamento[1]}</MenuItem>)}
+                                {Object.entries(departamentos)
+                                    ?.map((departamento, index) => (
+                                        <MenuItem key={`dep_id_${index}`} value={departamento[0]}>
+                                            {departamento[1]}
+                                        </MenuItem>))
+                                }
                             </Select>
                         </FormControl>
                         <TextField name="processo_sei" label={contratoLabels.processo_sei} required/>

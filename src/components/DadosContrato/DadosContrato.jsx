@@ -28,6 +28,7 @@ import ListaAditamentosPrazo from '../ListaAditamentosPrazo';
 import PropTypes from 'prop-types';
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import { useParams, useNavigate, Link } from 'react-router-dom';
+import ListaReajustes from '../ListaReajustes';
 
 const TabPanel = (props) => {
     const { children, value, index, ...other } = props;
@@ -421,13 +422,7 @@ const DadosContrato = ({ snackbar, setSnackbar }) => {
                                         />
                                     </TabPanel>
                                     <TabPanel value={value} index={9}>
-                                        <Fade in={true} timeout={400}>
-                                            <Paper elevation={3} className="p-4 mb-8">
-                                                <Divider textAlign='right' className='font-light text-xl'>
-                                                    Reajuste #X
-                                                </Divider>
-                                            </Paper>
-                                        </Fade>
+                                        <ListaReajustes />
                                     </TabPanel>
                                 </Box>
                             </Box>
