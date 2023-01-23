@@ -30,7 +30,6 @@ const FormExecFinanceira = (props) => {
         setErrors,
         carregando,
         setOpenConfirmacao,
-        formataValores,
         totais
     } = props;
 
@@ -114,7 +113,6 @@ const FormExecFinanceira = (props) => {
 
                 <RefExecucaoFinanceira 
                     totais={totais}
-                    formataValores={formataValores}
                 />
 
                 <CampoValores 

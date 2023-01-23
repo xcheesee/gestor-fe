@@ -93,6 +93,7 @@ const FormNotaEmpenho = (props) => {
                     >
                         <MenuItem value={"complemento"}>Complemento</MenuItem>
                         <MenuItem value={"cancelamento"}>Cancelamento</MenuItem>
+                        <MenuItem value={"novo"}>Novo Empenho</MenuItem>
                     </Select>
                 <FormHelperText>{errors.tipo_empenho}</FormHelperText>
                 </FormControl>

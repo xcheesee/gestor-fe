@@ -24,7 +24,7 @@ const DialogConfirmacao = (props) => {
 
     if (acao === 'excluir') {
         return (
-            <Dialog open={openConfirmacao.open} fullWidth>
+            <Dialog open={openConfirmacao.open} fullWidth className='p-4'>
                 <DialogTitle>
                     Excluir {texto}
                 </DialogTitle>
@@ -36,17 +36,20 @@ const DialogConfirmacao = (props) => {
                 </DialogContent>
                 <DialogActions>
                     <Button 
-                        sx={{ textTransform: 'none', color: '#821f1f' }} 
+                        className='text-neutral-600'
+                        sx={{ textTransform: 'none' }} 
                         onClick={() => { setOpenConfirmacao({ ...openConfirmacao, open: false, id: '' }); }}
                     >
                         Cancelar
                     </Button>
                     <Button 
+                        className='bg-red-600'
+                        variant='contained'
                         sx={{ textTransform: 'none' }}
                         onClick={() => { fnExcluir(openConfirmacao.id); }}
                     >
                         {carregando
-                            ? <CircularProgress size={14} sx={{ mr: '0.3rem' }} /> 
+                            ? <CircularProgress size={14} sx={{ mr: '0.3rem' }} color="color" /> 
                             : ""
                         }
                         Excluir

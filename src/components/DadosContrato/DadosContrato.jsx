@@ -28,7 +28,6 @@ import ListaAditamentosPrazo from '../ListaAditamentosPrazo';
 import PropTypes from 'prop-types';
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import { useParams, useNavigate, Link } from 'react-router-dom';
-import { cpf, cnpj } from 'cpf-cnpj-validator';
 
 const TabPanel = (props) => {
     const { children, value, index, ...other } = props;
@@ -50,11 +49,11 @@ const TabPanel = (props) => {
     );
 }
 
-TabPanel.propTypes = {
-    children: PropTypes.node,
-    index: PropTypes.number.isRequired,
-    value: PropTypes.number.isRequired,
-}
+// TabPanel.propTypes = {
+//     children: PropTypes.node,
+//     index: PropTypes.number.isRequired,
+//     value: PropTypes.number.isRequired,
+// }
 
 const a11yProps = (index) => {
     return {
@@ -80,52 +79,6 @@ const retornaCampoValor = (campos, valores, estaCarregado) => {
     );
 }
 
-const formataData = (data) => {
-    if (data !== undefined && data !== null) {
-        let dArr = data.split("-");
-        let dia = dArr[2];
-        let mes = dArr[1];
-        let ano = dArr[0];
-
-        if (data === "") {
-            return "";
-        } else {
-            return `${dia}/${mes}/${ano}`;
-        };
-    } else {
-        return "---"
-    }
-}
-
-const formataValores = (valor) => {
-    const valores = new Intl.NumberFormat('pt-BR', {
-        style: "currency",
-        currency: "BRL"
-    });
-
-    if (valor === "" || valor === undefined || valor === null || isNaN(valor)) {
-        return valores.format(0);
-    } else {
-        return valores.format(valor);
-    }
-}
-
-const formataCpfCnpj = (cpfCnpj) => {
-    if (cpfCnpj === "" || cpfCnpj === undefined) {
-        return "";
-    } else {
-        return cpfCnpj.length > 11 ? cnpj.format(cpfCnpj) : cpf.format(cpfCnpj);
-    }
-}
-
-const primeiraLetraMaiuscula = (string) => {
-    if (typeof string === "string") {
-        return string[0].toUpperCase() + string.substring(1);
-    } else {
-        return "---";
-    }
-}
-
 const ListaTabs = [
     'Contrato',
     'Certidões',
@@ -135,7 +88,8 @@ const ListaTabs = [
     'Aditamentos de valor',
     'Aditamentos de prazo',
     'Notas de empenho',
-    'Dotações'
+    'Dotações',
+    'Reajuste'
 ];
 
 const DadosContrato = ({ snackbar, setSnackbar }) => {
@@ -200,7 +154,7 @@ const DadosContrato = ({ snackbar, setSnackbar }) => {
                 } else {
                     return res.json()
                         .then(data => {
-                            setDados(data.data);
+                            setDados(data?.data);
                         })
                         .then(() => {
                             fetch(`${url}/dotacao_tipos`, options)
@@ -330,10 +284,6 @@ const DadosContrato = ({ snackbar, setSnackbar }) => {
                                 <Box sx={{ width: '100%' }}>
                                     <TabPanel value={value} index={0}>
                                         <ListaDadosContrato 
-                                            formataCpfCnpj={formataCpfCnpj}
-                                            primeiraLetraMaiuscula={primeiraLetraMaiuscula}
-                                            formataData={formataData}
-                                            formataValores={formataValores}
                                             retornaCampoValor={retornaCampoValor}
                                             dados={dados}
                                             setDados={setDados}
@@ -354,7 +304,6 @@ const DadosContrato = ({ snackbar, setSnackbar }) => {
                                             carregandoCertidoes={carregandoCertidoes}
                                             setCarregandoCertidoes={setCarregandoCertidoes}
                                             estaCarregado={estaCarregado}
-                                            formataData={formataData}
                                             retornaCampoValor={retornaCampoValor} 
                                             snackbar={snackbar}
                                             setSnackbar={setSnackbar}
@@ -371,8 +320,6 @@ const DadosContrato = ({ snackbar, setSnackbar }) => {
                                             carregandoGarantias={carregandoGarantias}
                                             setCarregandoGarantias={setCarregandoGarantias}
                                             estaCarregado={estaCarregado}
-                                            formataData={formataData}
-                                            formataValores={formataValores}
                                             retornaCampoValor={retornaCampoValor}
                                             snackbar={snackbar}
                                             setSnackbar={setSnackbar}
@@ -420,7 +367,6 @@ const DadosContrato = ({ snackbar, setSnackbar }) => {
                                             carregandoAditamentos_valor={carregandoAditamentos_valor}
                                             setCarregandoAditamentos_valor={setCarregandoAditamentos_valor}
                                             estaCarregado={estaCarregado}
-                                            formataValores={formataValores}
                                             retornaCampoValor={retornaCampoValor}
                                             numContrato={numContrato}
                                             setSnackbar={setSnackbar}
@@ -436,7 +382,6 @@ const DadosContrato = ({ snackbar, setSnackbar }) => {
                                             carregandoAditamentos_prazo={carregandoAditamentos_prazo}
                                             setCarregandoAditamentos_prazo={setCarregandoAditamentos_prazo}
                                             estaCarregado={estaCarregado}
-                                            formataData={formataData}
                                             retornaCampoValor={retornaCampoValor}
                                             numContrato={numContrato}
                                             setSnackbar={setSnackbar}
@@ -452,8 +397,6 @@ const DadosContrato = ({ snackbar, setSnackbar }) => {
                                             carregandoNotasEmpenho={carregandoNotasEmpenho}
                                             setCarregandoNotasEmpenho={setCarregandoNotasEmpenho}
                                             estaCarregado={estaCarregado}
-                                            formataData={formataData}
-                                            formataValores={formataValores}
                                             retornaCampoValor={retornaCampoValor} 
                                             snackbar={snackbar}
                                             setSnackbar={setSnackbar}
@@ -470,7 +413,6 @@ const DadosContrato = ({ snackbar, setSnackbar }) => {
                                             carregandoDotacoes={carregandoDotacoes}
                                             setCarregandoDotacoes={setCarregandoDotacoes}
                                             estaCarregado={estaCarregado}
-                                            formataValores={formataValores}
                                             retornaCampoValor={retornaCampoValor}
                                             numContrato={numContrato}
                                             tipoDotacoes={tipoDotacoes}
@@ -478,12 +420,20 @@ const DadosContrato = ({ snackbar, setSnackbar }) => {
                                             setSnackbar={setSnackbar}
                                         />
                                     </TabPanel>
+                                    <TabPanel value={value} index={9}>
+                                        <Fade in={true} timeout={400}>
+                                            <Paper elevation={3} className="p-4 mb-8">
+                                                <Divider textAlign='right' className='font-light text-xl'>
+                                                    Reajuste #X
+                                                </Divider>
+                                            </Paper>
+                                        </Fade>
+                                    </TabPanel>
                                 </Box>
                             </Box>
 
                             <ExecucaoFinanceira 
                                 execucao_financeira={dados.execucao_financeira}
-                                formataValores={formataValores}
                                 numContrato={numContrato}
                                 setSnackbar={setSnackbar}
                                 mudancaContrato={mudancaContrato}

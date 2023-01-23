@@ -9,6 +9,7 @@ import {
     Divider,
     Box
 } from '@mui/material';
+import { formataValores } from '../../../utils/utils';
 
 const dicionarioMeses = [
     "Janeiro",
@@ -30,7 +31,6 @@ const DialogDetalhes = (props) => {
         detalhes,
         openDetalhes,
         setOpenDetalhes,
-        formataValores
     } = props;
 
     return (

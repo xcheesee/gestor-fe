@@ -10,6 +10,7 @@ import DialogConfirmacao from "../DialogConfirmacao";
 import BotoesTab from "../BotoesTab";
 import BotaoAdicionar from "../BotaoAdicionar";
 import FormAditamentoValor from "./FomAditamentoValor/FormAditamentoValor";
+import { formataValores } from "../utils/utils";
 
 const TabAditamentosValor = (props) => {
   const campos = [
@@ -19,7 +20,7 @@ const TabAditamentosValor = (props) => {
   ];
   const valores = [
     props.tipo_aditamento,
-    props.formataValores(props.valor_aditamento),
+    formataValores(props.valor_aditamento),
     props.percentual
 ];
 
@@ -34,7 +35,6 @@ const TabAditamentosValor = (props) => {
         carregandoAditamentos_valor,
         setCarregandoAditamentos_valor,
         estaCarregado,
-        formataValores,
         retornaCampoValor,
         numContrato,
         setSnackbar
@@ -290,7 +290,6 @@ const enviaAditamento = () => {
                                     valor_aditamento={aditamento.valor_aditamento}
                                     percentual={aditamento.percentual}
                                     estaCarregado={estaCarregado}
-                                    formataValores={formataValores}
                                     retornaCampoValor={retornaCampoValor}
                                 />
 

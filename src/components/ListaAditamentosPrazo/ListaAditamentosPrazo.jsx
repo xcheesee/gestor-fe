@@ -30,7 +30,6 @@ const ListaAditamentosPrazo = (props) => {
     setCarregandoAditamentos_prazo,
     estaCarregado,
     retornaCampoValor,
-    formataData,
     setSnackbar,
     numContrato,
   } = props;
@@ -278,7 +277,6 @@ const ListaAditamentosPrazo = (props) => {
                 <TabAditamentosPrazo
                   tipo_aditamento={aditamento.tipo_aditamento}
                   dias_reajuste={aditamento.dias_reajuste}
-                  formataData={formataData}
                   retornaCampoValor={retornaCampoValor}
                   estaCarregado={estaCarregado}
                 />

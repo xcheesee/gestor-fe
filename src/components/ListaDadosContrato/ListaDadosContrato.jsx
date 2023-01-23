@@ -11,7 +11,7 @@ import FormDadosContrato from './FormDadosContrato';
 import FormProcessoContratacao from './FormProcessoContratacao';
 import PropTypes from 'prop-types';
 import EditIcon from '@mui/icons-material/Edit';
-import { mascaraContrato, mascaraProcessoSei } from '../utils/utils';
+import { formataCpfCnpj, formataData, formataValores, mascaraContrato, mascaraProcessoSei, primeiraLetraMaiuscula } from '../utils/utils';
 
 const TabPanel = (props) => {
     const { children, value, index, ...other } = props;
@@ -48,10 +48,6 @@ const a11yProps = (index) => {
 
 const ListaDadosContrato = (props) => {
     const {
-        formataCpfCnpj,
-        primeiraLetraMaiuscula,
-        formataData,
-        formataValores,
         retornaCampoValor,
         dados,
         estaCarregado,

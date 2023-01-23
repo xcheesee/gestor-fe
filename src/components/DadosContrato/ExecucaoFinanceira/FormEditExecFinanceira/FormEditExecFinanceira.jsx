@@ -26,6 +26,7 @@ import CampoValores from '../../../CampoValores';
 import RefExecucaoFinanceira from '../RefExecucaoFinanceira';
 import NumberFormat from 'react-number-format';
 import PropTypes from 'prop-types';
+import { formataValores } from '../../../utils/utils';
 
 const NumberFormatCustom = forwardRef(function NumberFormatCustom(props, ref) {
     const { onChange, ...other } = props;
@@ -63,7 +64,6 @@ const FormEditExecFinanceira = (props) => {
         setErrors,
         carregando,
         setCarregando,
-        formataValores,
         setSnackbar,
         mudancaContrato,
         setMudancaContrato
@@ -359,7 +359,6 @@ const FormEditExecFinanceira = (props) => {
 
                 <RefExecucaoFinanceira 
                     totais={totais}
-                    formataValores={formataValores}
                 />
 
                 <CampoValores 

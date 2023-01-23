@@ -14,6 +14,7 @@ import BotaoAdicionar from '../BotaoAdicionar';
 import FormDotacoes from './FormDotacoes';
 import FormRecursos from './FormRecursos';
 import DialogConfirmacao from '../DialogConfirmacao';
+import { formataValores } from '../utils/utils';
 
 const retornaNumDotacao = (numero_dotacao, descricao) => {
     return [`${numero_dotacao}\n${descricao}`];
@@ -22,12 +23,12 @@ const retornaNumDotacao = (numero_dotacao, descricao) => {
 const TabDotacoes = (props) => {
     const campos = [
         "Número dotação",
-        "Valor",
+        // "Valor",
     ];
 
     const valores = [
         retornaNumDotacao(props.numero_dotacao, props.descricao),
-        props.formataValores(props.valor_dotacao),
+        // formataValores(props.valor_dotacao),
     ];
 
     return props.retornaCampoValor(campos, valores, props.estaCarregado);
@@ -42,7 +43,6 @@ const ListaDotacoes = (props) => {
         carregandoDotacoes,
         setCarregandoDotacoes,
         estaCarregado,
-        formataValores,
         retornaCampoValor,
         numContrato,
         tipoDotacoes,
@@ -69,7 +69,7 @@ const ListaDotacoes = (props) => {
     const [formDotacao, setFormDotacao] = useState({
         dotacao_tipo_id: '',
         contrato_id: numContrato,
-        valor_dotacao: '',
+        // valor_dotacao: '',
         origem_recurso_id: '',
         outros_descricao: '',
     });
@@ -202,7 +202,7 @@ const ListaDotacoes = (props) => {
             id: dotacao.id,
             dotacao_tipo_id: dotacao.dotacao_tipo_id,
             contrato_id: dotacao.contrato_id,
-            valor_dotacao: dotacao.valor_dotacao,
+            // valor_dotacao: dotacao.valor_dotacao,
         });
         setOpenFormDotacao({
             open: true,
@@ -241,7 +241,7 @@ const ListaDotacoes = (props) => {
                         ...formDotacao,
                         dotacao_tipo_id: '',
                         contrato_id: numContrato,
-                        valor_dotacao: '',
+                        // valor_dotacao: '',
                         origem_recurso_id: '',
                         outros_descricao: '',
                     });
@@ -370,7 +370,7 @@ const ListaDotacoes = (props) => {
                     ...formDotacao,
                     dotacao_tipo_id: '',
                     contrato_id: numContrato,
-                    valor_dotacao: '',
+                    // valor_dotacao: '',
                     origem_recurso_id: '',
                     outros_descricao: '',
                 });
@@ -493,10 +493,9 @@ const ListaDotacoes = (props) => {
                                     <TabDotacoes 
                                         retornaCampoValor={retornaCampoValor}
                                         estaCarregado={estaCarregado}
-                                        formataValores={formataValores}
                                         numero_dotacao={dotacao.numero_dotacao}
                                         descricao={dotacao.descricao}
-                                        valor_dotacao={dotacao.valor_dotacao}
+                                        // valor_dotacao={dotacao.valor_dotacao}
                                         recursos={dotacao.recursos}
                                     />
                                 </Box>
