@@ -8,8 +8,13 @@ export default function MaxPrazoInput ({helperText, validade, disabled, label}) 
 
     function setNewDate(day, multiplier) {
         if(day === "" || multiplier === "" || validade === "") return
-        const novaData = new Date(validade)
-        novaData.setDate(novaData.getDate() + (+day * +multiplier))
+        const novaData = new Date(validade+" 00:00:00")
+        if (multiplier > 1){
+            novaData.setMonth(novaData.getMonth() + day)
+        }else{
+
+            novaData.setDate(novaData.getDate() + (day * multiplier))
+        }
         return novaData.toLocaleDateString('pt-br')
     }
     return(
@@ -95,6 +100,7 @@ export default function MaxPrazoInput ({helperText, validade, disabled, label}) 
                         variant='outlined'
                         label="Prazo Maximo Prorrogavel"
                         placeholder={disabled ? "" : ""}
+                        nmae="data_prazo_maximo"
                         value={maxPrazo}
                         fullWidth
                         sx={{
