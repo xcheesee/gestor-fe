@@ -97,27 +97,14 @@ const FormAditamentoValor = (props) => {
           fullWidth
         />
 
-        <TextField
-          variant="outlined"
-          value={formAditamento.indice_reajuste}
-          name="indice_reajuste"
-          inputProps={{ maxLength: 10 }}
-          onChange={handleInputChange}
-          label="Índice Reajuste"
-          sx={{ margin: "1rem 0" }}
-          error={errors.hasOwnProperty("indice_reajuste")}
-          helperText={errors.indice_reajuste}
-          fullWidth
-        />
-
         <CampoPorcentagem
           label="Porcentagem reajuste"
-          value={formAditamento.pct_reajuste}
-          name="pct_reajuste"
+          value={formAditamento.percentual}
+          name="percentual"
           state={formAditamento}
           setState={setFormAditamento}
-          error={errors.hasOwnProperty("pct_reajuste")}
-          helperText={errors.pct_reajuste}
+          error={errors.hasOwnProperty("percentual")}
+          helperText={errors.percentual}
           fullWidth
         />
       </DialogContent>
