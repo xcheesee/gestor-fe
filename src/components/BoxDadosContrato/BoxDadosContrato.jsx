@@ -256,7 +256,7 @@ const BoxDadosContrato = (props) => {
             /> */}
 
             <MaxPrazoInput 
-                helperText="Ex: A contar da ordem de início; A partir da assinatura; A partir da ordem de fornecimento..."
+                helperText="A contar da data de vencimento..."
                 validade={formContrato.data_vencimento}
                 label={contratoLabels.prazo_a_partir_de}
                 disabled={formContrato.data_vencimento === ""}
