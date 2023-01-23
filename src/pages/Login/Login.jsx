@@ -118,19 +118,20 @@ const Login = () => {
                         setCarregando(true);
                         const data = await sendPWData(e)
                         if (data.access_token) {
-                            console.log(data)
                             localStorage.setItem('access_token', data.access_token);
                             localStorage.setItem('username', data.username);
                             localStorage.setItem('departamentos', JSON.stringify(data.departamentos));
                             localStorage.setItem('usermail', data.userMail)
+                            setCarregando(false);
                             navigate("../principal", { replace: true });
                         } else {
                             setError({
                                 error: true,
                                 helperText: 'Usuário e/ou senha inválido(s)'
                             });
+                            setCarregando(false);
                         }
-                        setCarregando(false);
+                        
                     }}>
                     <Paper sx={{ padding: '1rem' }} className="login" elevation={5}>
                         <Typography variant="h2" component="h1" sx={{ fontSize: '2rem' }}>Entrar</Typography>

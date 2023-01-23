@@ -10,6 +10,7 @@ import FormNotaEmpenho from './FormNotaEmpenho';
 import DialogConfirmacao from '../DialogConfirmacao';
 import BotoesTab from '../BotoesTab';
 import BotaoAdicionar from '../BotaoAdicionar';
+import { formataData, formataValores } from '../utils/utils';
 
 const TabNotasEmpenho = (props) => {
     const campos = [
@@ -21,9 +22,9 @@ const TabNotasEmpenho = (props) => {
 
     const valores = [
         props.tipo_empenho,
-        props.formataData(props.data_emissao),
+        formataData(props.data_emissao),
         props.numero_nota,
-        props.formataValores(props.valor_empenho)
+        formataValores(props.valor_empenho)
     ];
 
     return props.retornaCampoValor(campos, valores, props.estaCarregado);
@@ -37,9 +38,7 @@ const ListaNotasEmpenho = (props) => {
         setMudancaNotasEmpenho,
         carregandoNotasEmpenho,
         setCarregandoNotasEmpenho,
-        estaCarregado, 
-        formataData, 
-        formataValores, 
+        estaCarregado,  
         retornaCampoValor,
         numContrato, 
         setSnackbar
@@ -292,8 +291,6 @@ const ListaNotasEmpenho = (props) => {
                                     numero_nota={notaempenho.numero_nota}
                                     valor_empenho={notaempenho.valor_empenho}
                                     estaCarregado={estaCarregado}
-                                    formataData={formataData}
-                                    formataValores={formataValores}
                                     retornaCampoValor={retornaCampoValor}
                                 />
 

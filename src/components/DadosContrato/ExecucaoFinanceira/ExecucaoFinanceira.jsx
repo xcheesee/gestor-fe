@@ -15,6 +15,7 @@ import DialogDetalhes from './DialogDetalhes/DialogDetalhes';
 import FormExecFinanceira from './FormExecFinanceira';
 import FormEditExecFinanceira from './FormEditExecFinanceira';
 import DialogConfirmacao from '../../DialogConfirmacao';
+import { formataValores } from '../../utils/utils';
 
 const ExecucaoFinanceira = (props) => {
     const execucao_financeira = typeof props.execucao_financeira != 'undefined' ? props.execucao_financeira : [];
@@ -249,35 +250,35 @@ const ExecucaoFinanceira = (props) => {
                                             <Typography sx={{ fontWeight: 'medium' }} component="span">
                                                 Planejado
                                                 <Typography sx={{ padding: '0 1rem', mb: '0.5rem' }}>
-                                                    {props.formataValores(execucao_financeira[execucao].planejado)}
+                                                    {formataValores(execucao_financeira[execucao].planejado)}
                                                 </Typography>
                                             </Typography>
                         
                                             <Typography sx={{ fontWeight: 'medium' }} component="span">
                                                 Contratado
                                                 <Typography sx={{ padding: '0 1rem', mb: '0.5rem' }}>
-                                                    {props.formataValores(execucao_financeira[execucao].contratado)}
+                                                    {formataValores(execucao_financeira[execucao].contratado)}
                                                 </Typography>
                                             </Typography>
                         
                                             <Typography sx={{ fontWeight: 'medium' }} component="span">
                                                 Empenhado
                                                 <Typography sx={{ padding: '0 1rem', mb: '0.5rem' }}>
-                                                    {props.formataValores(execucao_financeira[execucao].empenhado)}
+                                                    {formataValores(execucao_financeira[execucao].empenhado)}
                                                 </Typography>
                                             </Typography>
                         
                                             <Typography sx={{ fontWeight: 'medium' }} component="span">
                                                 Executado
                                                 <Typography sx={{ padding: '0 1rem', mb: '0.5rem' }}>
-                                                    {props.formataValores(execucao_financeira[execucao].executado)}
+                                                    {formataValores(execucao_financeira[execucao].executado)}
                                                 </Typography>
                                             </Typography>
                         
                                             <Typography sx={{ fontWeight: 'medium' }} component="span">
                                                 Saldo
                                                 <Typography sx={{ padding: '0 1rem', mb: '0.5rem' }}>
-                                                    {props.formataValores(execucao_financeira[execucao].saldo)}
+                                                    {formataValores(execucao_financeira[execucao].saldo)}
                                                 </Typography>
                                             </Typography>
                                         </Box>
@@ -387,7 +388,6 @@ const ExecucaoFinanceira = (props) => {
                 detalhes={detalheExecFin}
                 openDetalhes={openDetalhes}
                 setOpenDetalhes={setOpenDetalhes}
-                formataValores={props.formataValores}
             />
 
             <FormExecFinanceira 
@@ -400,7 +400,6 @@ const ExecucaoFinanceira = (props) => {
                 setErrors={setErrors}
                 carregando={carregando}
                 setOpenConfirmacao={setOpenConfirmacao}
-                formataValores={props.formataValores}
                 totais={props.totais}
             />
 
@@ -414,7 +413,6 @@ const ExecucaoFinanceira = (props) => {
                 setErrors={setErrors}
                 carregando={carregando}
                 setCarregando={setCarregando}
-                formataValores={props.formataValores}
                 setSnackbar={props.setSnackbar}
                 mudancaContrato={props.mudancaContrato}
                 setMudancaContrato={props.setMudancaContrato}

@@ -3,9 +3,10 @@ import {
     Box,
     Typography 
 } from '@mui/material';
+import { formataValores } from '../../../utils/utils';
 
 const RefExecucaoFinanceira = (props) => {
-    const { totais, formataValores } = props;
+    const { totais } = props;
 
     return (
         <Box 

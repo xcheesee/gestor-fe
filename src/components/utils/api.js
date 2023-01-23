@@ -1,5 +1,6 @@
+const token = localStorage.getItem('access_token');
+
 export async function getContrato (url) {
-    const token = localStorage.getItem('access_token');
         const options = {
             method: 'GET',
             mode: 'cors',
@@ -50,7 +51,7 @@ export async function sendPWData(formSubmit) {
 }
 
 export const newPwRequest = async (formData) => {
-    const token = localStorage.getItem('access_token');
+    
     const url = new URL(
         `${process.env.REACT_APP_API_URL}/alterar_senha`
     );
@@ -70,4 +71,28 @@ export const newPwRequest = async (formData) => {
     })
 
     return await res.json()
+}
+
+export async function sendNovoFormData (form) {
+    console.log(form)
+    const url = new URL(
+        `${process.env.REACT_APP_API_URL}/contrato`
+    );
+    
+    const headers = {
+        "Content-Type": "application/json",
+        "Accept": "application/json",
+        "Authorization": `Bearer ${token}`,
+    };
+    
+    let body = {
+        "departamento_id": form.get("departamento_id"),
+        "processo_sei": form.get("processo_sei"),
+    };
+    
+    return await (await fetch(url, {
+        method: "POST",
+        headers: headers,
+        body: JSON.stringify(body),
+    })).json();
 }

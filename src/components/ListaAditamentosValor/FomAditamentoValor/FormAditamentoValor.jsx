@@ -97,7 +97,7 @@ const FormAditamentoValor = (props) => {
           fullWidth
         />
 
-        <TextField
+        {/* <TextField
           variant="outlined"
           value={formAditamento.indice_reajuste}
           name="indice_reajuste"
@@ -108,7 +108,7 @@ const FormAditamentoValor = (props) => {
           error={errors.hasOwnProperty("indice_reajuste")}
           helperText={errors.indice_reajuste}
           fullWidth
-        />
+        /> */}
 
         <CampoPorcentagem
           label="Porcentagem reajuste"

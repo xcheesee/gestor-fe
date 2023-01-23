@@ -10,18 +10,19 @@ import DialogConfirmacao from "../DialogConfirmacao";
 import BotoesTab from "../BotoesTab";
 import BotaoAdicionar from "../BotaoAdicionar";
 import FormAditamentoValor from "./FomAditamentoValor/FormAditamentoValor";
+import { formataValores } from "../utils/utils";
 
 const TabAditamentosValor = (props) => {
   const campos = [
       "Tipo",
       "Valor",
-      "Índice reajuste",
+    //   "Índice reajuste",
       "Porcentagem reajuste"
   ];
   const valores = [
     props.tipo_aditamento,
-    props.formataValores(props.valor_aditamento),
-    props.indice_reajuste,
+    formataValores(props.valor_aditamento),
+    // props.indice_reajuste,
     props.pct_reajuste
 ];
 
@@ -36,7 +37,6 @@ const TabAditamentosValor = (props) => {
         carregandoAditamentos_valor,
         setCarregandoAditamentos_valor,
         estaCarregado,
-        formataValores,
         retornaCampoValor,
         numContrato,
         setSnackbar
@@ -56,7 +56,7 @@ const TabAditamentosValor = (props) => {
         contrato_id: numContrato,
         tipo_aditamento: '',
         valor_aditamento: '',
-        indice_reajuste: '',
+        // indice_reajuste: '',
         pct_reajuste: ''
     });
     const [errors, setErrors] = useState({});
@@ -134,7 +134,7 @@ const handleClickEditar = (e, aditamento) => {
       contrato_id: aditamento.contrato_id,
       tipo_aditamento: aditamento.tipo_aditamento,
       valor_aditamento: aditamento.valor_aditamento,
-      indice_reajuste: aditamento.indice_reajuste,
+    //   indice_reajuste: aditamento.indice_reajuste,
       pct_reajuste: aditamento.pct_reajuste
   });
   setOpenFormAditamentos({
@@ -178,7 +178,7 @@ const editaAditamento = (id, formAditamentoEdit) => {
               ...formAditamentos,
               tipo_aditamento: '',
               valor_aditamento: '',
-              indice_reajuste: '',
+            //   indice_reajuste: '',
               pct_reajuste: ''
           });
           return res.json();
@@ -203,7 +203,7 @@ const handleClickAdicionar = () => {
       contrato_id: numContrato,
       tipo_aditamento: '',
       valor_aditamento: '',
-      indice_reajuste: '',
+    //   indice_reajuste: '',
       pct_reajuste: ''
   });
 }
@@ -242,7 +242,7 @@ const enviaAditamento = () => {
               ...formAditamentos,
               tipo_aditamento: '',
               valor_aditamento: '',
-              indice_reajuste: '',
+            //   indice_reajuste: '',
               pct_reajuste: ''
           });
           return res.json();
@@ -295,10 +295,9 @@ const enviaAditamento = () => {
                                 <TabAditamentosValor 
                                     tipo_aditamento={aditamento.tipo_aditamento}
                                     valor_aditamento={aditamento.valor_aditamento}
-                                    indice_reajuste={aditamento.indice_reajuste}
+                                    // indice_reajuste={aditamento.indice_reajuste}
                                     pct_reajuste={aditamento.pct_reajuste}
                                     estaCarregado={estaCarregado}
-                                    formataValores={formataValores}
                                     retornaCampoValor={retornaCampoValor}
                                 />
 

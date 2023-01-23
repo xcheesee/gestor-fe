@@ -37,7 +37,10 @@ const FormDotacoes = (props) => {
     const [inputValue, setInputValue] = useState('');
     const [value, setValue] = useState({label: '', id: null});
     const outrosDesc = formDotacao.origem_recurso_id === 999;
-    let tipos_dotacao = [];
+    let tipos_dotacao = [{
+        label: `Não se Aplica`,
+        id: 0
+    }];
 
     const CamposRecurso = () => {
         if (openFormDotacao.acao === 'adicionar') {
@@ -220,13 +223,12 @@ const FormDotacoes = (props) => {
                             }
                             error={errors.hasOwnProperty('dotacao_tipo_id')}
                             sx={{ margin: '1rem 0' }}
-                            required
                         /> 
                     }
                     isOptionEqualToValue={(option, value) => option.value === value.value }
                 />
 
-                <CampoValores 
+                {/* <CampoValores 
                     label="Valor"
                     value={formDotacao.valor_dotacao}
                     name="valor_dotacao"
@@ -241,7 +243,7 @@ const FormDotacoes = (props) => {
                     }
                     error={errors.hasOwnProperty('valor_dotacao')}
                     fullWidth 
-                />
+                /> */}
                 
                 <CamposRecurso />
             </DialogContent>

@@ -10,6 +10,7 @@ import FormCertidao from './FormCertidao';
 import DialogConfirmacao from '../DialogConfirmacao';
 import BotoesTab from '../BotoesTab';
 import BotaoAdicionar from '../BotaoAdicionar';
+import { formataData } from '../utils/utils';
 
 const TabCertidoes = (props) => {
     const campos = [
@@ -19,7 +20,7 @@ const TabCertidoes = (props) => {
 
     const valores = [
         props.certidoes,
-        props.formataData(props.validade_certidoes)
+        formataData(props.validade_certidoes)
     ];
 
     return props.retornaCampoValor(campos, valores, props.estaCarregado);
@@ -34,7 +35,6 @@ const ListaCertidoes = (props) => {
         carregandoCertidoes,
         setCarregandoCertidoes,
         estaCarregado, 
-        formataData, 
         retornaCampoValor,
         numContrato, 
         setSnackbar
@@ -272,7 +272,6 @@ const ListaCertidoes = (props) => {
                                     certidoes={certidao.certidoes}
                                     validade_certidoes={certidao.validade_certidoes}
                                     estaCarregado={estaCarregado}
-                                    formataData={formataData}
                                     retornaCampoValor={retornaCampoValor}
                                 />
 

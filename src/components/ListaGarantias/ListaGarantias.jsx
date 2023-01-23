@@ -10,11 +10,10 @@ import DialogConfirmacao from '../DialogConfirmacao';
 import BotoesTab from '../BotoesTab';
 import BotaoAdicionar from '../BotaoAdicionar';
 import FormGarantia from './FormGarantia';
+import { formataData, formataValores } from '../utils/utils';
 
 const TabGarantias = (props) => {
     const {
-        formataData,
-        formataValores,
         retornaCampoValor
     } = props;
 
@@ -44,7 +43,6 @@ const ListaGarantias = (props) => {
         carregandoGarantias,
         setCarregandoGarantias,
         estaCarregado,
-        formataData,
         formataValores,
         retornaCampoValor,
         setSnackbar,
@@ -298,7 +296,6 @@ const ListaGarantias = (props) => {
                                     data_validade_garantia={garantia.data_validade_garantia}
                                     estaCarregado={estaCarregado}
                                     retornaCampoValor={retornaCampoValor}
-                                    formataData={formataData}
                                     formataValores={formataValores}
                                 />
 
