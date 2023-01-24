@@ -151,7 +151,7 @@ const DadosContrato = ({ snackbar, setSnackbar }) => {
                     navigate("../404", { replace: true });
                 } else if (res.status === 401) {
                     localStorage.removeItem('access_token');
-                    navigate("../principal", { replace: true });
+                    navigate("../contrato", { replace: true });
                 } else {
                     return res.json()
                         .then(data => {
@@ -215,7 +215,7 @@ const DadosContrato = ({ snackbar, setSnackbar }) => {
             <Fade in={true} timeout={750}>
                 <Box sx={{ padding: '0 1rem' }}>
                     <Box sx={{ padding: '1rem', maxWidth: '80rem', margin: '2rem auto', boxSizing: 'border-box' }} component={Paper} elevation={5}>
-                    <Link to="/principal">
+                    <Link to="/contrato">
                         <Button sx={{ textTransform: 'none' }} size="large">
                             <ArrowBackIosIcon /> Voltar
                         </Button>

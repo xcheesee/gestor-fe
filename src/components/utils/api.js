@@ -1,6 +1,8 @@
 const token = localStorage.getItem('access_token');
 
 export async function getContrato (url) {
+    const token = localStorage.getItem('access_token');
+    console.log(`${token}`)
         const options = {
             method: 'GET',
             mode: 'cors',
@@ -50,7 +52,7 @@ export async function sendPWData(formSubmit) {
 }
 
 export const newPwRequest = async (formData) => {
-    
+    const token = localStorage.getItem('access_token');
     const url = new URL(
         `${process.env.REACT_APP_API_URL}/alterar_senha`
     );
@@ -73,6 +75,7 @@ export const newPwRequest = async (formData) => {
 }
 
 export async function sendNovoFormData (form) {
+    const token = localStorage.getItem('access_token');
     console.log(form)
     const url = new URL(
         `${process.env.REACT_APP_API_URL}/contrato`

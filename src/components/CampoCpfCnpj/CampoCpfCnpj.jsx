@@ -114,7 +114,6 @@ const CampoCpfCnpj = (props) => {
             error={errors.hasOwnProperty('cnpj_cpf')}
             helperText={errors.hasOwnProperty('cnpj_cpf') ? errors.cnpj_cpf : "Somente números"}
             fullWidth={fullWidth}
-            required
         />
     );
 }

@@ -65,6 +65,7 @@ const BoxDadosContrato = (props) => {
                     value={departamento_id}
                     name="departamento_id"
                     onChange={(e) => { setDepartamento_id(e.target.value); }}
+                    required
                     fullWidth
                 >
                     { departamentos !== undefined
@@ -98,7 +99,6 @@ const BoxDadosContrato = (props) => {
                 sx={{ margin: '1rem 0' }}
                 error={errors.hasOwnProperty('credor')}
                 helperText={errors.hasOwnProperty('credor') ? errors.credor : " "}
-                required
                 fullWidth
             />
             <CampoCpfCnpj
@@ -149,7 +149,6 @@ const BoxDadosContrato = (props) => {
                 sx={{ margin: '1rem 0' }}
                 error={errors.hasOwnProperty('objeto')}
                 helperText={errors.hasOwnProperty('objeto') ? errors.objeto : " "}
-                required
                 fullWidth
             />
             {/* TODO: MOSTRAR HELPER TEXT E ERROR BORDER EM NUMERO_CONTRATO */}
@@ -159,7 +158,6 @@ const BoxDadosContrato = (props) => {
                 error={error.hasOwnProperty('numero_contrato')}
                 helperText={error.hasOwnProperty('numero_contrato') ? errors.numero_contrato : " "}
                 label={contratoLabels.numero_contrato}
-                required
                 fullWidth
             />
 
@@ -186,7 +184,6 @@ const BoxDadosContrato = (props) => {
                 checaErros={() => {}}
                 error={errors.hasOwnProperty('valor_contrato.error')}
                 helperText={errors.hasOwnProperty('valor_contrato.error') ? errors.valor_contrato : " "}
-                required
                 fullWidth
             />
 
@@ -213,7 +210,6 @@ const BoxDadosContrato = (props) => {
                 margin="1rem 0"
                 error={errors.hasOwnProperty('data_inicio_vigencia')}
                 helperText={errors.hasOwnProperty('data_inicio_vigencia') ? errors.data_inicio_vigencia : " "}
-                required
                 fullWidth
             />
 
@@ -239,7 +235,6 @@ const BoxDadosContrato = (props) => {
                 sx={{ margin: '1rem 0' }}
                 error={errors.hasOwnProperty('condicao_pagamento')}
                 helperText={errors.hasOwnProperty('condicao_pagamento') ? errors.condicao_pagamento : "Ex: Em até 30 dias após o adimplemento."}
-                required
                 fullWidth
             />
             {/* <TextField
