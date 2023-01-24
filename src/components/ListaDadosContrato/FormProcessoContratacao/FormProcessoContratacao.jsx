@@ -11,10 +11,11 @@ import CheckIcon from '@mui/icons-material/Check';
 import CircularProgress from '@mui/material/CircularProgress';
 import BoxProcessoContratacao from '../../BoxProcessoContratacao';
 import DialogConfirmacao from '../../DialogConfirmacao';
+import { editaDadosContrato } from '../../utils/api';
 
 const FormProcessoContratacao = (props) => {
     const {
-        formContrato,
+        dados,
         modelosLicitacao,
         openProcCon,
         setOpenProcCon,
@@ -27,12 +28,12 @@ const FormProcessoContratacao = (props) => {
 
     const [errors, setErrors] = useState({});
     const [processoContratacao, setProcessoContratacao] = useState({
-        licitacao_modelo_id: formContrato.licitacao_modelo_id,
-        licitacao_modelo: formContrato.licitacao_modelo,
-        envio_material_tecnico: formContrato.envio_material_tecnico,
-        minuta_edital: formContrato.minuta_edital,
-        abertura_certame: formContrato.abertura_certame,
-        homologacao: formContrato.homologacao
+        licitacao_modelo_id: dados?.licitacao_modelo_id,
+        licitacao_modelo: dados?.licitacao_modelo,
+        envio_material_tecnico: dados?.envio_material_tecnico,
+        minuta_edital: dados?.minuta_edital,
+        abertura_certame: dados?.abertura_certame,
+        homologacao: dados?.homologacao
     });
     const [carregandoEnvio, setCarregandoEnvio] = useState(false);
     const [openConfirmacao, setOpenConfirmacao] = useState({
@@ -65,47 +66,29 @@ const FormProcessoContratacao = (props) => {
         });
     }
 
-    const editaProcContratacao = (e, formInterno, id) => {
-        const url = `${process.env.REACT_APP_API_URL}/contrato/${id}`;
-        const token = localStorage.getItem('access_token');
-        const options = {
-            method: 'PUT',
-            headers: {
-                'Content-Type': 'application/json',
-                'Accept': 'application/json',
-                'Authorization': `Bearer ${token}`
-            },
-            body: JSON.stringify(formInterno)
-        };
-
+    const enviaDadosProcesso = async (e, formInterno, id) => {
         setCarregandoEnvio(true);
-
-        fetch(url, options)
-            .then(res => {
-                setMudancaContrato(!mudancaContrato);
-                if(res.ok) {
-                    setCarregandoEnvio(false);
-                    setSnackbar({
-                        open: true,
-                        severity: 'success',
-                        text: 'Processo de contratação editado com sucesso!',
-                        color: 'success'
-                    });
-                    setOpenProcCon(false);
-                    return res.json();
-                } else if (res.status === 422) { 
-                    return res.json()
-                        .then(data => setErrors(data.errors));
-                } else {
-                    setCarregandoEnvio(false);
-                    setSnackbar({
-                        open: true,
-                        severity: 'error',
-                        text: `Erro ${res.status} - Não foi possível editar o processo de contratação`,
-                        color: 'error'
-                    });
-                }
+        const res = await editaDadosContrato(e, dados, formInterno, id)
+        if(res.status === 200) {
+            setOpenProcCon(false);
+            setSnackbar({
+                open: true,
+                severity: 'success',
+                text: 'Processo de contratação editado com sucesso!',
+                color: 'success'
             });
+        } else if(res.status === 422) {
+            setErrors(res.errors);
+        } else {
+            setSnackbar({
+                open: true,
+                severity: 'error',
+                text: `Erro ${res.status} - Não foi possível editar o processo de contratação`,
+                color: 'error'
+            });
+        }
+        setCarregandoEnvio(false);
+        setMudancaContrato(!mudancaContrato);
     }
 
     return (
@@ -118,6 +101,8 @@ const FormProcessoContratacao = (props) => {
             <DialogContent>
                 <BoxProcessoContratacao 
                     errors={errors}
+                    enviaDadosProcesso={enviaDadosProcesso}
+                    numContrato={numContrato}
                     processoContratacao={processoContratacao}
                     setProcessoContratacao={setProcessoContratacao}
                     handleChangeModeloLicitacao={handleChangeModeloLicitacao}
@@ -154,9 +139,9 @@ const FormProcessoContratacao = (props) => {
             openConfirmacao={openConfirmacao}
             setOpenConfirmacao={setOpenConfirmacao}
             acao="editar"
-            fnEditar={editaProcContratacao}
+            form="form-contr"
             formInterno={{
-                ...formContrato,
+                ...dados,
                 ...processoContratacao
             }}
             texto="processo de contratação"

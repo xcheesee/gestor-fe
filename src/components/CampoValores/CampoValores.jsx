@@ -32,7 +32,7 @@ NumberFormatCustom.propTypes = {
 const CampoValores = (props) => {
   const { 
     label, 
-    value, 
+    defaultValue, 
     name, 
     required, 
     state, 
@@ -44,26 +44,26 @@ const CampoValores = (props) => {
     ...other
   } = props;  
   
-  const [valor, setValor] = useState(value);
+  // const [valor, setValor] = useState(value);
 
-  const handleChange = (event) => {
-    setValor(event.target.value);
-  }
+  // const handleChange = (event) => {
+  //   setValor(event.target.value);
+  // }
 
-  const handleBlur = (event) => {
-    setState({
-      ...state,
-      [event.target.name]: valor
-    });
-  }
+  // const handleBlur = (event) => {
+  //   setState({
+  //     ...state,
+  //     [event.target.name]: valor
+  //   });
+  // }
 
   return (
       <TextField
           label={label}
-          value={valor}
+          defaultValue={defaultValue}
           name={name}
-          onChange={handleChange}
-          onBlur={(e) => { handleBlur(e); checaErros(e);}}
+          // onChange={handleChange}
+          onBlur={(e) => { checaErros(e);}}
           InputProps={{
               startAdornment: <InputAdornment position="start">R$</InputAdornment>,
               inputComponent: NumberFormatCustom,

@@ -6,10 +6,10 @@ const CampoData = (props) => {
         <TextField 
             variant="outlined"
             label={props.label} 
-            value={props.value}
+            defaultValue={props.defaultValue}
             name={props.name}
-            onChange={props.onChange}
-            onBlur={props.onBlur}
+            // onChange={props.onChange}
+            // onBlur={props.onBlur}
             helperText={props.helperText}
             error={props.error} 
             size={props.size}

@@ -12,7 +12,7 @@ import AddIcon from '@mui/icons-material/Add';
 import { useNavigate } from "react-router-dom";
 import Filtros from '../../components/Filtros';
 import { irParaTopo } from '../../components/utils/utils';
-import { getContrato } from '../../components/utils/api';
+import { getContratos } from '../../components/utils/api';
 import ContratoTable from '../../components/ContratoTable';
 import VoltarArrowBtn from '../../components/VoltarArrowBtn';
 import NovoContratoDialog from '../../components/NovoContratoDialog';
@@ -56,7 +56,7 @@ const Principal = ({ snackbar, setSnackbar }) => {
         (async () => {
             if (!sort) 
                 setEstaCarregado(false);
-            const data = await getContrato(url)
+            const data = await getContratos(url)
             setEstaCarregado(true);
             setDados(data.data);
             setMetaDados(data.meta);

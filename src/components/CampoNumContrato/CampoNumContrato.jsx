@@ -4,28 +4,30 @@ import InputMask from 'react-input-mask';
 
 const CampoNumContrato = (props) => {
     const {
-        formContrato,
-        setFormContrato,
+        // formContrato,
+        // setFormContrato,
+        defaultValue,
         label,
         ...other
     } = props;
 
-    const [numeroContrato, setNumeroContrato] = useState(formContrato.numero_contrato);
+    // const [numeroContrato, setNumeroContrato] = useState(formContrato.numero_contrato);
 
-    const handleBlur = (event) => {
-        setFormContrato({
-            ...formContrato,
-            numero_contrato: numeroContrato.replaceAll(/\//gm, '').toUpperCase()
-        });
-    }
+    // const handleBlur = (event) => {
+    //     setFormContrato({
+    //         ...formContrato,
+    //         numero_contrato: numeroContrato.replaceAll(/\//gm, '').toUpperCase()
+    //     });
+    // }
 
     return(
         <InputMask
             mask="999/aaaa/9999"
             maskChar=" "
-            value={numeroContrato}
-            onChange={(e) => {setNumeroContrato(e.target.value)}}
-            onBlur={handleBlur}
+            defaultValue={defaultValue}
+            // value={defaultValue}
+            // onChange={(e) => {setNumeroContrato(e.target.value)}}
+            // onBlur={handleBlur}
         >
             {() => 
                 <TextField

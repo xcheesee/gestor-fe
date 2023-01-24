@@ -9,7 +9,6 @@ import {
 } from '@mui/material';
 import FormDadosContrato from './FormDadosContrato';
 import FormProcessoContratacao from './FormProcessoContratacao';
-import PropTypes from 'prop-types';
 import EditIcon from '@mui/icons-material/Edit';
 import { formataCpfCnpj, formataData, formataValores, mascaraContrato, mascaraProcessoSei, primeiraLetraMaiuscula } from '../utils/utils';
 
@@ -32,12 +31,6 @@ const TabPanel = (props) => {
         </div>
     );
 }
-
-TabPanel.propTypes = {
-    children: PropTypes.node,
-    index: PropTypes.number.isRequired,
-    value: PropTypes.number.isRequired,
-};
 
 const a11yProps = (index) => {
     return {
@@ -62,7 +55,6 @@ const ListaDadosContrato = (props) => {
     const [openProcCon, setOpenProcCon] = useState(false);
     const [openDadosCon, setOpenDadosCon] = useState(false);
     const [carregando, setCarregando] = useState(false);
-    const [contratoEditado, setContratoEditado] = useState({...dados});
 
     useEffect(() => {
         const url = `${process.env.REACT_APP_API_URL}/licitacaomodelos`;
@@ -86,15 +78,11 @@ const ListaDadosContrato = (props) => {
             });
     }, [])
 
-    useEffect(() => {
-        setContratoEditado({...dados})
-    }, [setContratoEditado, dados])
-
     const handleChange = (e, newValue) => {
         setValue(newValue);
     }
 
-    const TabContrato = (props) => {
+    const TabContrato = ({ dados , estaCarregado }) => {
         const campos = [
             "Departamento",
             "Processo SEI",
@@ -116,26 +104,26 @@ const ListaDadosContrato = (props) => {
         ];
     
         const valores = [
-            props.departamento,
-            mascaraProcessoSei(props.processo_sei),
-            props.credor,
-            formataCpfCnpj(props.cnpj_cpf),
-            primeiraLetraMaiuscula(props.tipo_objeto),
-            props.objeto,
-            mascaraContrato(props.numero_contrato),
-            formataData(props.data_assinatura),
-            formataValores(props.valor_contrato),
-            formataValores(props.valor_mensal_estimativo),
-            formataData(props.data_inicio_vigencia),
-            formataData(props.data_vencimento),
-            props.condicao_pagamento,
-            props.prazo_a_partir_de,
-            formataData(props.data_prazo_maximo),
-            props.numero_nota_reserva,
-            formataValores(props.valor_reserva),
+            dados?.departamento,
+            mascaraProcessoSei(dados?.processo_sei),
+            dados?.credor,
+            formataCpfCnpj(dados?.cnpj_cpf),
+            primeiraLetraMaiuscula(dados?.tipo_objeto),
+            dados?.objeto,
+            mascaraContrato(dados?.numero_contrato),
+            formataData(dados?.data_assinatura),
+            formataValores(dados?.valor_contrato),
+            formataValores(dados?.valor_mensal_estimativo),
+            formataData(dados?.data_inicio_vigencia),
+            formataData(dados?.data_vencimento),
+            dados?.condicao_pagamento,
+            dados?.prazo_a_partir_de,
+            formataData(dados?.data_prazo_maximo),
+            dados?.numero_nota_reserva,
+            formataValores(dados?.valor_reserva),
         ];
     
-        return retornaCampoValor(campos, valores, props.estaCarregado);
+        return retornaCampoValor(campos, valores, estaCarregado);
     }
 
     const TabProcessoContratacao = (props) => {
@@ -170,29 +158,7 @@ const ListaDadosContrato = (props) => {
                 
                 <TabPanel value={value} index={0}>
                     <TabContrato 
-                        departamento={dados.departamento}
-                        processo_sei={dados.processo_sei}
-                        credor={dados.credor}
-                        cnpj_cpf={dados.cnpj_cpf}
-                        tipo_contratacao={dados.tipo_contratacao}
-                        tipo_objeto={dados.tipo_objeto}
-                        objeto={dados.objeto}
-                        numero_contrato={dados.numero_contrato}
-                        data_assinatura={dados.data_assinatura}
-                        valor_contrato={dados.valor_contrato}
-                        valor_mensal_estimativo={dados.valor_mensal_estimativo}
-                        data_inicio_vigencia={dados.data_inicio_vigencia}
-                        data_vencimento={dados.data_vencimento}
-                        condicao_pagamento={dados.condicao_pagamento}
-                        prazo_a_partir_de={dados.prazo_a_partir_de}
-                        data_prazo_maximo={dados.data_prazo_maximo}
-                        numero_nota_reserva={dados.numero_nota_reserva}
-                        valor_reserva={dados.valor_reserva}
-                        envio_material_tecnico={dados.envio_material_tecnico}
-                        minuta_edital={dados.minuta_edital}
-                        abertura_certame={dados.abertura_certame}
-                        homologacao={dados.homologacao}
-                        fonte_recurso={dados.fonte_recurso}
+                        dados={dados}
                         estaCarregado={estaCarregado}
                     />
 
@@ -213,7 +179,7 @@ const ListaDadosContrato = (props) => {
                     </Fab>
 
                     <FormDadosContrato 
-                        formContrato={dados}
+                        dados={dados}
                         numContrato={numContrato}
                         openDadosCon={openDadosCon}
                         setOpenDadosCon={setOpenDadosCon}
@@ -221,18 +187,16 @@ const ListaDadosContrato = (props) => {
                         carregando={carregando}
                         mudancaContrato={mudancaContrato}
                         setMudancaContrato={setMudancaContrato}
-                        contratoEditado={contratoEditado}
-                        setContratoEditado={setContratoEditado}
                     />
                 </TabPanel>
 
                 <TabPanel value={value} index={1}>
                     <TabProcessoContratacao 
-                        licitacao_modelo={dados.licitacao_modelo}
-                        envio_material_tecnico={dados.envio_material_tecnico}
-                        minuta_edital={dados.minuta_edital}
-                        abertura_certame={dados.abertura_certame}
-                        homologacao={dados.homologacao}
+                        licitacao_modelo={dados?.licitacao_modelo}
+                        envio_material_tecnico={dados?.envio_material_tecnico}
+                        minuta_edital={dados?.minuta_edital}
+                        abertura_certame={dados?.abertura_certame}
+                        homologacao={dados?.homologacao}
                         estaCarregado={estaCarregado}
                     />
 
@@ -253,7 +217,7 @@ const ListaDadosContrato = (props) => {
                     </Fab>
 
                     <FormProcessoContratacao 
-                        formContrato={dados}
+                        dados={dados}
                         modelosLicitacao={modelosLicitacao}
                         openProcCon={openProcCon}
                         setOpenProcCon={setOpenProcCon}

@@ -1,6 +1,6 @@
 const token = localStorage.getItem('access_token');
 
-export async function getContrato (url) {
+export async function getContratos (url) {
         const options = {
             method: 'GET',
             mode: 'cors',
@@ -20,6 +20,62 @@ export async function getContrato (url) {
     }
 
     return await data.json()
+}
+
+export async function getContrato (numContrato) {
+    const url = `${process.env.REACT_APP_API_URL}`
+    const options = {
+        headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+            'Authorization': `Bearer ${token}`
+        },
+        method: 'GET'
+    }
+    const resContr = await fetch(`${url}/contrato/${numContrato}`, options)
+    if(resContr.status === 404 || resContr.status === 401) return {status: resContr.status}
+    const data = await resContr.json()
+
+    return {status: resContr.status, ...data}
+}
+
+export async function getDotacao () {
+    const url = `${process.env.REACT_APP_API_URL}`
+    const options = {
+        headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+            'Authorization': `Bearer ${token}`
+        },
+        method: 'GET'
+    }
+    return await (await fetch(`${url}/dotacao_tipos`, options)).json()
+}
+
+export async function getRecursos () {
+    const url = `${process.env.REACT_APP_API_URL}`
+    const options = {
+        headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+            'Authorization': `Bearer ${token}`
+        },
+        method: 'GET'
+    }
+    return await (await fetch(`${url}/origem_recursos`, options)).json()
+}
+
+export async function getContrTot (numContrato) {
+    const url = `${process.env.REACT_APP_API_URL}`
+    const options = {
+        headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+            'Authorization': `Bearer ${token}`
+        },
+        method: 'GET'
+    }
+    return fetch(`${url}/contrato_totais/${numContrato}`, options)
 }
 
 export async function sendPWData(formSubmit) {
@@ -94,4 +150,27 @@ export async function sendNovoFormData (form) {
         headers: headers,
         body: JSON.stringify(body),
     })).json();
+}
+
+export const editaDadosContrato = async (e, dados, formInterno, id) => {
+    const url = `${process.env.REACT_APP_API_URL}/contrato/${id}`;
+    dados.processo_sei += "/" /* gambiarra para validacao no backend */
+    let data = {...dados}
+    for(const objArray of formInterno.entries()) {
+        data[objArray[0]] = objArray[1]
+    }
+    const options = {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+            'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify(data)
+    };
+
+    const res = await fetch(url, options)
+    const json = await res.json()
+
+    return {status: res.status, ...json}
 }

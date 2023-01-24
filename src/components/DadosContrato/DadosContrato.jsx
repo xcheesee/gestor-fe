@@ -29,6 +29,7 @@ import PropTypes from 'prop-types';
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import ListaReajustes from '../ListaReajustes';
+import { getContrato, getContrTot, getDotacao, getRecursos } from '../utils/api';
 
 const TabPanel = (props) => {
     const { children, value, index, ...other } = props;
@@ -134,53 +135,26 @@ const DadosContrato = ({ snackbar, setSnackbar }) => {
     }, [setEstaCarregado, numContrato])
 
     useEffect(() => {
-        const url = `${process.env.REACT_APP_API_URL}`
-        const token = localStorage.getItem('access_token');
-        const options = {
-            headers: {
-                'Content-Type': 'application/json',
-                'Accept': 'application/json',
-                'Authorization': `Bearer ${token}`
-            },
-            method: 'GET'
-        }
-        
-        fetch(`${url}/contrato/${numContrato}`, options)
-            .then(res => {
-                if (res.status === 404) {
-                    navigate("../404", { replace: true });
-                } else if (res.status === 401) {
-                    localStorage.removeItem('access_token');
-                    navigate("../principal", { replace: true });
-                } else {
-                    return res.json()
-                        .then(data => {
-                            setDados(data?.data);
-                        })
-                        .then(() => {
-                            fetch(`${url}/dotacao_tipos`, options)
-                                .then(res => res.json())
-                                .then(data => {
-                                    setTipoDotacoes(data.data);
-                                })
-                        })
-                        .then(() => {
-                            fetch(`${url}/origem_recursos`, options)
-                                .then(res => res.json())
-                                .then(data => {
-                                    setOrigemRecursos(data.data);
-                                })
-                        })
-                        .then(() => {
-                            fetch(`${url}/contrato_totais/${numContrato}`, options)
-                                .then(res => res.json())
-                                .then(data => {
-                                    setTotais(data.data);
-                                    setEstaCarregado(true);
-                                })
-                        })
-                }
-            })
+        (async () => {
+            setEstaCarregado(false)
+            const contrato = await getContrato(numContrato)
+            if (contrato.status === 404) {
+                navigate("../404", { replace: true });
+            } else if(contrato.status === 401) {
+                localStorage.removeItem('access_token');
+                navigate("../principal", { replace: true });
+            }
+            setDados(contrato?.data)
+            const [tiposDot, recOri, totRec] = await Promise.all([
+                getDotacao(),
+                getRecursos(),
+                getContrTot(numContrato),
+            ])
+            setTipoDotacoes(tiposDot.data)
+            setOrigemRecursos(recOri.data)
+            setTotais(totRec.data)
+            setEstaCarregado(true)
+        })();
     }, [numContrato, navigate, mudancaContrato])
 
     const handleChange = (event, newValue) => {
@@ -222,7 +196,7 @@ const DadosContrato = ({ snackbar, setSnackbar }) => {
                     </Link>
                         <Box sx={{ display: 'flex', flexDirection: 'column', margin: '1rem' }}>
                             <Typography variant="h2" component="h1" sx={{ fontSize: '2rem' }}>
-                                Contrato # <strong>{estaCarregado ? dados.id : " "}</strong>
+                                Contrato # <strong>{estaCarregado ? dados?.id : " "}</strong>
                             </Typography>
 
                             <Box sx={{ display: 'flex', width: '100%', margin: '2rem 0' }} component={Paper} elevation={5}>
@@ -287,7 +261,6 @@ const DadosContrato = ({ snackbar, setSnackbar }) => {
                                         <ListaDadosContrato 
                                             retornaCampoValor={retornaCampoValor}
                                             dados={dados}
-                                            setDados={setDados}
                                             estaCarregado={estaCarregado}
                                             numContrato={numContrato}
                                             setSnackbar={setSnackbar}
@@ -428,7 +401,7 @@ const DadosContrato = ({ snackbar, setSnackbar }) => {
                             </Box>
 
                             <ExecucaoFinanceira 
-                                execucao_financeira={dados.execucao_financeira}
+                                execucao_financeira={dados?.execucao_financeira}
                                 numContrato={numContrato}
                                 setSnackbar={setSnackbar}
                                 mudancaContrato={mudancaContrato}
@@ -437,12 +410,11 @@ const DadosContrato = ({ snackbar, setSnackbar }) => {
                             />
 
                             <DadosEmpresa
-                                nome_empresa={dados.nome_empresa}
-                                telefone_empresa={dados.telefone_empresa}
-                                email_empresa={dados.email_empresa}
+                                nome_empresa={dados?.nome_empresa}
+                                telefone_empresa={dados?.telefone_empresa}
+                                email_empresa={dados?.email_empresa}
                                 estaCarregado={estaCarregado}
-                                formContrato={dados}
-                                setFormContrato={setDados}
+                                dados={dados}
                                 numContrato={numContrato}
                                 setSnackbar={setSnackbar}
                                 mudancaContrato={mudancaContrato}
@@ -450,9 +422,8 @@ const DadosContrato = ({ snackbar, setSnackbar }) => {
                             />
 
                             <OutrasInformacoes 
-                                outras_informacoes={dados.outras_informacoes}
-                                formContrato={dados}
-                                setFormContrato={setDados}
+                                outras_informacoes={dados?.outras_informacoes}
+                                dados={dados}
                                 numContrato={numContrato}
                                 setSnackbar={setSnackbar}
                                 mudancaContrato={mudancaContrato}

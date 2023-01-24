@@ -24,24 +24,23 @@ const BoxDadosContrato = (props) => {
         setErrors,
         error,
         setError,
-        formContrato,
-        setFormContrato,
-        handleChange,
+        dados,
+        enviaDadosContrato,
         departamentos,
-        departamento_id,
-        setDepartamento_id,
-        credor,
-        tipo_objeto,
-        setTipo_objeto,
-        objeto,
-        condicao_pagamento,
-        prazo_a_partir_de,
-        numero_nota_reserva,
+        numContrato,
         acao
     } = props;
 
     return (
-        <Box>
+        <Box
+            component="form"
+            id="contrato-form"
+            onSubmit={(e) => {
+                e.preventDefault()
+                const formData = new FormData(e.target)
+                enviaDadosContrato(e, formData, numContrato)
+            }}
+        >
             {
             acao === "editar"
             ?
@@ -62,9 +61,9 @@ const BoxDadosContrato = (props) => {
                     labelId="departamento_id-label"
                     id="departamento_id"
                     label={contratoLabels.departamento}
-                    value={departamento_id}
+                    defaultValue={dados?.departamento_id}
                     name="departamento_id"
-                    onChange={(e) => { setDepartamento_id(e.target.value); }}
+                    // onChange={(e) => { setDepartamento_id(e.target.value); }}
                     fullWidth
                 >
                     { departamentos !== undefined
@@ -80,8 +79,7 @@ const BoxDadosContrato = (props) => {
             </FormControl>
 
             <CampoProcessoSei 
-                formContrato={formContrato}
-                setFormContrato={setFormContrato}
+                defaultValue={dados.processo_sei}
                 error={errors.hasOwnProperty('processo_sei')}
                 helperText={errors.hasOwnProperty('processo_sei') ? errors.processo_sei : " "}
                 label={contratoLabels.processo_sei}
@@ -90,21 +88,18 @@ const BoxDadosContrato = (props) => {
             
             <TextField
                 variant="outlined"
-                inputRef={credor}
-                defaultValue={formContrato.credor}
+                defaultValue={dados.credor}
                 name="credor"
                 className="form__campo"
                 label={contratoLabels.credor}
                 sx={{ margin: '1rem 0' }}
                 error={errors.hasOwnProperty('credor')}
                 helperText={errors.hasOwnProperty('credor') ? errors.credor : " "}
-                required
                 fullWidth
             />
             <CampoCpfCnpj
                 className="form__campo"
-                formContrato={formContrato}
-                setFormContrato={setFormContrato}
+                defaultValue={dados?.cnpj_cpf}
                 setError={setError}
                 error={errors.hasOwnProperty('cnpj_cpf')}
                 errors={errors}
@@ -123,9 +118,9 @@ const BoxDadosContrato = (props) => {
                     labelId="tipo_objeto-label"
                     id="tipo_objeto"
                     label={contratoLabels.tipo_objeto}
-                    value={tipo_objeto}
+                    defaultValue={dados?.tipo_objeto}
                     name="tipo_objeto"
-                    onChange={(e) => { setTipo_objeto(e.target.value); }}
+                    // onChange={(e) => { setTipo_objeto(e.target.value); }}
                     fullWidth
                 >
                     <MenuItem value={""}>---</MenuItem>
@@ -141,34 +136,30 @@ const BoxDadosContrato = (props) => {
 
             <TextField
                 variant="outlined"
-                inputRef={objeto}
-                defaultValue={formContrato.objeto}
+                // inputRef={objeto}
+                defaultValue={dados?.objeto}
                 name="objeto"
                 className="form__campo"
                 label={contratoLabels.objeto}
                 sx={{ margin: '1rem 0' }}
                 error={errors.hasOwnProperty('objeto')}
                 helperText={errors.hasOwnProperty('objeto') ? errors.objeto : " "}
-                required
                 fullWidth
             />
             {/* TODO: MOSTRAR HELPER TEXT E ERROR BORDER EM NUMERO_CONTRATO */}
             <CampoNumContrato 
-                formContrato={formContrato}
-                setFormContrato={setFormContrato}
+                defaultValue={dados?.numero_contrato}
                 error={error.hasOwnProperty('numero_contrato')}
                 helperText={error.hasOwnProperty('numero_contrato') ? errors.numero_contrato : " "}
                 label={contratoLabels.numero_contrato}
-                required
                 fullWidth
             />
 
             <CampoData
                 className="form__campo"
                 label={contratoLabels.data_assinatura}
-                value={formContrato.data_assinatura}
+                defaultValue={dados?.data_assinatura}
                 name="data_assinatura"
-                onChange={(e) => { handleChange(e, formContrato, setFormContrato) }}
                 margin="1rem 0"
                 error={errors.hasOwnProperty('data_assinatura')}
                 helperText={errors.hasOwnProperty('data_assinatura') ? errors.data_assinatura : " "}
@@ -179,14 +170,11 @@ const BoxDadosContrato = (props) => {
                 index=""
                 className="form__campo"
                 label={contratoLabels.valor_contrato}
-                value={formContrato.valor_contrato}
-                state={formContrato}
-                setState={setFormContrato}
+                defaultValue={dados?.valor_contrato}
                 name="valor_contrato"
                 checaErros={() => {}}
                 error={errors.hasOwnProperty('valor_contrato.error')}
                 helperText={errors.hasOwnProperty('valor_contrato.error') ? errors.valor_contrato : " "}
-                required
                 fullWidth
             />
 
@@ -194,9 +182,7 @@ const BoxDadosContrato = (props) => {
                 index=""
                 className="form__campo"
                 label={contratoLabels.valor_mensal_estimativo}
-                value={formContrato.valor_mensal_estimativo}
-                state={formContrato}
-                setState={setFormContrato}
+                defaultValue={dados?.valor_mensal_estimativo}
                 name="valor_mensal_estimativo"
                 checaErros={() => {}}
                 error={errors.hasOwnProperty('valor_mensal_estimativo')}
@@ -207,22 +193,19 @@ const BoxDadosContrato = (props) => {
             <CampoData
                 className="form__campo"
                 label={contratoLabels.data_inicio_vigencia}
-                value={formContrato.data_inicio_vigencia}
+                defaultValue={dados?.data_inicio_vigencia}
                 name="data_inicio_vigencia"
-                onChange={(e) => { handleChange(e, formContrato, setFormContrato) }}
                 margin="1rem 0"
                 error={errors.hasOwnProperty('data_inicio_vigencia')}
                 helperText={errors.hasOwnProperty('data_inicio_vigencia') ? errors.data_inicio_vigencia : " "}
-                required
                 fullWidth
             />
 
             <CampoData
                 className="form__campo"
                 label={contratoLabels.data_vencimento}
-                value={formContrato.data_vencimento}
+                defaultValue={dados?.data_vencimento}
                 name="data_vencimento"
-                onChange={(e) => { handleChange(e, formContrato, setFormContrato) }}
                 margin="1rem 0"
                 error={errors.hasOwnProperty('data_vencimento')}
                 helperText={errors.hasOwnProperty('data_vencimento') ? errors.data_vencimento : " "}
@@ -231,54 +214,27 @@ const BoxDadosContrato = (props) => {
 
             <TextField
                 variant="outlined"
-                inputRef={condicao_pagamento}
-                defaultValue={formContrato.condicao_pagamento}
+                defaultValue={dados?.condicao_pagamento}
                 name="condicao_pagamento"
                 className="form__campo"
                 label={contratoLabels.condicao_pagamento}
                 sx={{ margin: '1rem 0' }}
                 error={errors.hasOwnProperty('condicao_pagamento')}
                 helperText={errors.hasOwnProperty('condicao_pagamento') ? errors.condicao_pagamento : "Ex: Em até 30 dias após o adimplemento."}
-                required
                 fullWidth
             />
-            {/* <TextField
-                variant="outlined"
-                inputRef={prazo_a_partir_de}
-                defaultValue={formContrato.prazo_a_partir_de}
-                name="prazo_a_partir_de"
-                className="form__campo"
-                label="Prazo a partir de"
-                sx={{ margin: '1rem 0' }}
-                error={errors.hasOwnProperty('prazo_a_partir_de')}
-                helperText={errors.hasOwnProperty('prazo_a_partir_de') ? errors.prazo_a_partir_de : "Ex: A contar da ordem de início; A partir da assinatura; A partir da ordem de fornecimento..."}
-                fullWidth
-            /> */}
 
             <MaxPrazoInput 
                 helperText="A contar da data de vencimento..."
-                validade={formContrato.data_vencimento}
+                validade={dados?.data_vencimento}
+                defaultValue={dados?.data_prazo_maximo}
                 label={contratoLabels.prazo_a_partir_de}
-                disabled={formContrato.data_vencimento === ""}
+                disabled={dados?.data_vencimento === ""}
             />
-
-            {/* <CampoData
-                className="form__campo"
-                label="Prazo Máximo Prorrogável"
-                value={formContrato.data_prazo_maximo}
-                name="data_prazo_maximo"
-                onChange={(e) => { handleChange(e, formContrato, setFormContrato) }}
-                margin="1rem 0"
-                error={errors.hasOwnProperty('data_prazo_maximo')}
-                helperText={errors.hasOwnProperty('data_prazo_maximo') ? errors.data_prazo_maximo : " "}
-                required
-                fullWidth
-            /> */}
 
             <TextField
                 variant="outlined"
-                inputRef={numero_nota_reserva}
-                defaultValue={formContrato.numero_nota_reserva}
+                defaultValue={dados?.numero_nota_reserva}
                 name="numero_nota_reserva"
                 className="form__campo"
                 label={contratoLabels.numero_nota_reserva}
@@ -292,9 +248,7 @@ const BoxDadosContrato = (props) => {
                 index=""
                 className="form__campo"
                 label={contratoLabels.valor_reserva}
-                value={formContrato.valor_reserva}
-                state={formContrato}
-                setState={setFormContrato}
+                defaultValue={dados?.valor_reserva}
                 name="valor_reserva"
                 checaErros={() => {}}
                 error={errors.hasOwnProperty('valor_reserva')}

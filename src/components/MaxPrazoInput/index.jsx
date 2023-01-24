@@ -1,13 +1,13 @@
 import { Divider, MenuItem, Select, TextField, Tooltip, Typography } from "@mui/material";
 import { useState } from "react";
 
-export default function MaxPrazoInput ({helperText, validade, disabled, label}) {
+export default function MaxPrazoInput ({helperText, validade, disabled, label, defaultValue}) {
     const [prazoDias, setPrazoDias] = useState("")
-    const [maxPrazo, setMaxPrazo] = useState("")
+    const [maxPrazo, setMaxPrazo] = useState(defaultValue)
     const [dayMultiplier, setDayMultiplier] = useState("")
 
     function setNewDate(day, multiplier) {
-        if(day === "" || multiplier === "" || validade === "") return
+        if(day === "" || multiplier === "" || validade === "") return ""
         const novaData = new Date(validade+" 00:00:00")
         if (multiplier > 1){
             novaData.setMonth(novaData.getMonth() + day)
@@ -100,8 +100,7 @@ export default function MaxPrazoInput ({helperText, validade, disabled, label}) 
                         variant='outlined'
                         name="data_prazo_maximo"
                         label="Prazo Maximo Prorrogavel"
-                        placeholder={disabled ? "" : ""}
-                        nmae="data_prazo_maximo"
+                        placeholder={""}
                         value={maxPrazo}
                         fullWidth
                         sx={{

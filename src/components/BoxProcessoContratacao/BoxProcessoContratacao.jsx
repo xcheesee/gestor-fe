@@ -19,6 +19,8 @@ const BoxProcessoContratacao = (props) => {
         processoContratacao,
         setProcessoContratacao,
         handleChangeModeloLicitacao,
+        numContrato,
+        enviaDadosProcesso,
         modelosLicitacao,
         carregando,
         handleChange,
@@ -26,7 +28,16 @@ const BoxProcessoContratacao = (props) => {
     } = props;
 
     return (
-        <Box>
+        <Box
+            component="form"
+            id="form-contr"
+            onSubmit={(e) => {
+                e.preventDefault()
+                const formData = new FormData(e.target)
+                enviaDadosProcesso(e, formData, numContrato)
+                console.log(formData)
+            }}
+        >
             {
             acao === "editar"
                 ?

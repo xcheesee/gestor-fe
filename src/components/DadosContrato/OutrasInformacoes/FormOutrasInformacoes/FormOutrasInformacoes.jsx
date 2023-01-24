@@ -16,7 +16,7 @@ const FormOutrasInformacoes = (props) => {
     const {
         openOutrasInformacoes,
         setOpenOutrasInformacoes,
-        formContrato,
+        dados,
         numContrato,
         setSnackbar,
         formataInformacoes,
@@ -86,10 +86,10 @@ const FormOutrasInformacoes = (props) => {
             <DialogContent>
                 <BoxOutrasInformacoes 
                     outras_informacoes={outras_informacoes}
-                    formContrato={formContrato}
+                    dados={dados}
                     errors={errors}
                     acao="editar"
-                    defaultValue={formataInformacoes(formContrato.outras_informacoes)}
+                    defaultValue={formataInformacoes(dados?.outras_informacoes)}
                 />
             </DialogContent>
 
@@ -105,7 +105,7 @@ const FormOutrasInformacoes = (props) => {
                     sx={{ textTransform: 'none' }} 
                     variant="contained"
                     onMouseDown={() => setInfoAdicionaisEditado({
-                        ...formContrato,
+                        ...dados,
                         outras_informacoes: outras_informacoes.current.value
                     })}
                     onMouseUp={() => setOpenConfirmacao({ open: true, id: numContrato })}

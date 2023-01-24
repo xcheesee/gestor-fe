@@ -15,10 +15,10 @@ const DialogConfirmacao = (props) => {
         setOpenConfirmacao,
         acao,
         fnExcluir,
-        fnEditar,
         formInterno,
         carregando,
         texto,
+        form,
         ...other
     } = props;
 
@@ -118,8 +118,9 @@ const DialogConfirmacao = (props) => {
                     </Button>
                     <Button 
                         sx={{ textTransform: 'none' }}  
+                        type="submit"
+                        form={form}
                         onClick={(e) => { 
-                            fnEditar(e, formInterno, openConfirmacao.id); 
                             setOpenConfirmacao({ open: false, id: '' }); 
                         }}
                     >

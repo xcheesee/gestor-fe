@@ -1,35 +1,10 @@
-import React, { forwardRef, useState } from 'react';
-import NumberFormat from 'react-number-format';
-import PropTypes from 'prop-types';
+import React, { useState } from 'react';
 import { TextField } from '@mui/material';
-
-const NumberFormatCustom = forwardRef(function NumberFormatCustom(props, ref) {
-    const { onChange, ...other } = props;
-
-    return (
-        <NumberFormat
-            {...other}
-            getInputRef={ref}
-            onValueChange={(values) => {
-                onChange({
-                    target: {
-                        value: values.value,
-                    },
-                });
-            }}
-            isNumericString
-        />
-    );
-});
-
-NumberFormatCustom.propTypes = {
-    onChange: PropTypes.func.isRequired,
-};
+import ReactInputMask from 'react-input-mask';
 
 const CampoProcessoSei = (props) => {
     const {
-        formContrato,
-        setFormContrato,
+        defaultValue,
         error,
         helperText,
         name,
@@ -37,36 +12,28 @@ const CampoProcessoSei = (props) => {
         ...other
     } = props;
 
-    const [processoSei, setProcessoSei] = useState(formContrato.processo_sei);
-
-    const handleBlur = (event) => {
-        setFormContrato({
-            ...formContrato,
-            processo_sei: processoSei
-        });
-    }
+    const [processoSei, setProcessoSei] = useState(defaultValue);
 
     return (
-        <TextField
-            variant="outlined"
-            label={label}
+        <ReactInputMask
+            mask="9999.9999/9999999-9"
+            maskChar=""
             value={processoSei}
             onChange={(e) => { setProcessoSei(e.target.value) }}
-            required
-            sx={{ margin: '1rem 0' }}
-            InputProps={{
-                inputComponent: NumberFormatCustom,
-                inputProps: {
-                    format: "####.####/#######-#"
-                },
-            }}
-            onBlur={handleBlur}
-            helperText={helperText}
-            error={error}
-            name={name}
-            fullWidth
-            {...other}
-        />
+        >
+            {() => (<TextField
+                    variant="outlined"
+                    label={label}
+                    sx={{ margin: '1rem 0' }}
+                    helperText={helperText}
+                    error={error}
+                    name={name}
+                    fullWidth
+                    required
+                    {...other}
+                />)
+            }
+        </ReactInputMask>
     );
 }
 

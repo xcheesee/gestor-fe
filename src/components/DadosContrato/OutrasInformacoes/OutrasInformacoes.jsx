@@ -6,7 +6,7 @@ import FormOutrasInformacoes from './FormOutrasInformacoes';
 const OutrasInformacoes = (props) => {
     const {
         outras_informacoes,
-        formContrato,
+        dados,
         numContrato,
         setSnackbar,
         mudancaContrato,
@@ -89,7 +89,7 @@ const OutrasInformacoes = (props) => {
             <FormOutrasInformacoes 
                 openOutrasInformacoes={openOutrasInformacoes}
                 setOpenOutrasInformacoes={setOpenOutrasInformacoes}
-                formContrato={formContrato}
+                dados={dados}
                 numContrato={numContrato}
                 setSnackbar={setSnackbar}
                 formataInformacoes={formataInformacoes}
