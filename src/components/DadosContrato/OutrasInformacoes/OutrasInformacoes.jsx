@@ -92,7 +92,6 @@ const OutrasInformacoes = (props) => {
                 dados={dados}
                 numContrato={numContrato}
                 setSnackbar={setSnackbar}
-                formataInformacoes={formataInformacoes}
                 mudancaContrato={mudancaContrato}
                 setMudancaContrato={setMudancaContrato}
             /> 

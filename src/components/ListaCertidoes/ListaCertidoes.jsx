@@ -10,7 +10,8 @@ import FormCertidao from './FormCertidao';
 import DialogConfirmacao from '../DialogConfirmacao';
 import BotoesTab from '../BotoesTab';
 import BotaoAdicionar from '../BotaoAdicionar';
-import { formataData } from '../utils/utils';
+import { formataData } from '../../commom/utils/utils';
+import { sendCertidaoEdit, sendNewCertidao } from '../../commom/utils/api';
 
 const TabCertidoes = (props) => {
     const campos = [
@@ -138,52 +139,36 @@ const ListaCertidoes = (props) => {
         setAcao('editar');
     }
 
-    const editaCertidao = (e, formCertidaoEdit, id) => {
-        const url = `${process.env.REACT_APP_API_URL}/certidao/${id}`;
-        const token = localStorage.getItem('access_token');
-        const options = {
-            method: 'PUT',
-            headers: {
-                'Content-Type': 'application/json',
-                'Accept': 'application/json',
-                'Authorization': `Bearer ${token}`
-            },
-            body: JSON.stringify(formCertidaoEdit)
-        }
+    const editaCertidao = async (e, formCertidaoEdit, id) => {
 
         setCarregando(true);
-        
-        fetch(url, options)
-            .then(res => {
-                setMudancaCertidoes(!mudancaCertidoes);
-                if (res.ok) {
-                    setCarregando(false);
-                    setSnackbar({
-                        open: true,
-                        severity: 'success',
-                        text: 'Certidão editada com sucesso!',
-                        color: 'success'
-                    });
-                    setOpenFormCertidao({ 
-                        open: false, 
-                        acao: 'adicionar' 
-                    });
-                    setFormCertidao({
-                        ...formCertidao,
-                        certidoes: '',
-                        validade_certidoes: '',
-                    });
-                    return res.json();
-                } else {
-                    setCarregando(false);
-                    setSnackbar({
-                        open: true,
-                        severity: 'error',
-                        text: `Erro ${res.status} - Não foi possível editar a certidão`,
-                        color: 'error'
-                    });
-                }
+        setMudancaCertidoes(!mudancaCertidoes);
+        const res = await sendCertidaoEdit(e, formCertidaoEdit, id)
+        if (res.status === 200) {
+            setSnackbar({
+                open: true,
+                severity: 'success',
+                text: 'Certidão editada com sucesso!',
+                color: 'success'
             });
+            setOpenFormCertidao({ 
+                open: false, 
+                acao: 'adicionar' 
+            });
+            setFormCertidao({
+                ...formCertidao,
+                certidoes: '',
+                validade_certidoes: '',
+            });
+        } else {
+            setSnackbar({
+                open: true,
+                severity: 'error',
+                text: `Erro ${res.status} - Não foi possível editar a certidão`,
+                color: 'error'
+            });
+        }
+        setCarregando(false);
     }
 
     const handleClickAdicionar = () => {
@@ -198,53 +183,35 @@ const ListaCertidoes = (props) => {
         });
     }
 
-    const enviaCertidao = () => {
-        const url = `${process.env.REACT_APP_API_URL}/certidao`;
-        const token = localStorage.getItem('access_token');
-        const options = {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Accept': 'application/json',
-                'Authorization': `Bearer ${token}`
-            },
-            body: JSON.stringify(formCertidao)
-        };
-
-        fetch(url, options)
-            .then(res => {
-                setMudancaCertidoes(!mudancaCertidoes);
-                if (res.ok) {
-                    setCarregando(false);
-                    setSnackbar({
-                        open: true,
-                        severity: 'success',
-                        text: 'Certidão enviada com sucesso!',
-                        color: 'success'
-                    });
-                    setOpenFormCertidao({ 
-                        open: false, 
-                        acao: 'adicionar' 
-                    });
-                    setFormCertidao({
-                        ...formCertidao,
-                        certidoes: '',
-                        validade_certidoes: '',
-                    });
-                    return res.json();
-                } else {
-                    setCarregando(false);
-                    setSnackbar({
-                        open: true,
-                        severity: 'error',
-                        text: `Erro ${res.status} - Não foi possível enviar a certidão`,
-                        color: 'error'
-                    });
-                }
-            })
-            .catch(err => {
-                console.log(err);
+    const enviaCertidao = async (formData) => {
+        setMudancaCertidoes(!mudancaCertidoes);
+        setCarregando(true)
+        const res = await sendNewCertidao(formData)
+        if (res.status === 201) {
+            setSnackbar({
+                open: true,
+                severity: 'success',
+                text: 'Certidão enviada com sucesso!',
+                color: 'success'
             });
+            setOpenFormCertidao({ 
+                open: false, 
+                acao: 'adicionar' 
+            });
+            setFormCertidao({
+                ...formCertidao,
+                certidoes: '',
+                validade_certidoes: '',
+            });
+        } else {
+            setSnackbar({
+                open: true,
+                severity: 'error',
+                text: `Erro ${res.status} - Não foi possível enviar a certidão`,
+                color: 'error'
+            });
+        }
+        setCarregando(false);
     }
     
     return (
@@ -290,6 +257,7 @@ const ListaCertidoes = (props) => {
                 setFormCertidao={setFormCertidao} 
                 openFormCertidao={openFormCertidao}
                 setOpenFormCertidao={setOpenFormCertidao}
+                editaCertidao={editaCertidao}
                 enviaCertidao={enviaCertidao}
                 carregando={carregando}
                 setOpenConfirmacao={setOpenConfirmacao}
@@ -315,6 +283,7 @@ const ListaCertidoes = (props) => {
             <DialogConfirmacao
                 openConfirmacao={openConfirmacao} 
                 setOpenConfirmacao={setOpenConfirmacao}
+                form="certidao_form"
                 acao={acao} 
                 fnExcluir={excluiCertidao}
                 fnEditar={editaCertidao}

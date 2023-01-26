@@ -6,22 +6,30 @@ import {
     TextField, 
 } from '@mui/material';
 import CampoTelefone from '../CampoTelefone';
-import { contratoLabels } from '../utils/constants';
+import { contratoLabels } from '../../commom/utils/constants';
 
 const BoxContatoEmpresa = (props) => {
     const {
         errors,
-        formContrato,
-        setFormContrato,
-        nome_empresa,
+        dados,
         email_empresa,
         checaErrosEmail,
+        editaDadosEmpresa,
+        numContrato,
         acao,
         ...other
     } = props;
 
     return (
-        <Box>
+        <Box
+            component="form"
+            id="dados_empresa_form"
+            onSubmit={(e) => {
+                e.preventDefault()
+                const formData = new FormData(e.target)
+                editaDadosEmpresa(e, formData, numContrato)
+            }}
+        >
             {
             acao === "editar"
             ?
@@ -36,8 +44,7 @@ const BoxContatoEmpresa = (props) => {
                 variant="outlined"
                 className="form__campo"
                 label={contratoLabels.nome_empresa}
-                inputRef={nome_empresa}
-                defaultValue={formContrato.nome_empresa}
+                defaultValue={dados.nome_empresa}
                 name="nome_empresa"
                 sx={{ margin: '1rem 0' }}
                 error={errors.hasOwnProperty('nome_empresa')}
@@ -49,8 +56,7 @@ const BoxContatoEmpresa = (props) => {
             <CampoTelefone 
                 label={contratoLabels.telefone_empresa}
                 className="contrato-empresa__campo"
-                formContrato={formContrato}
-                setFormContrato={setFormContrato}
+                dados={dados}
                 error={errors.hasOwnProperty('telefone_empresa')}
                 helperText={errors.hasOwnProperty('telefone_empresa') ? errors.telefone_empresa : " "}
                 name="telefone_empresa"
@@ -62,7 +68,7 @@ const BoxContatoEmpresa = (props) => {
                 className="form__campo"
                 label={contratoLabels.email_empresa}
                 inputRef={email_empresa}
-                defaultValue={formContrato.email_empresa}
+                defaultValue={dados.email_empresa}
                 name="email_empresa"
                 onBlur={checaErrosEmail}
                 type="email"

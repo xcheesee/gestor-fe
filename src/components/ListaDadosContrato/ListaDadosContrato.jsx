@@ -10,7 +10,7 @@ import {
 import FormDadosContrato from './FormDadosContrato';
 import FormProcessoContratacao from './FormProcessoContratacao';
 import EditIcon from '@mui/icons-material/Edit';
-import { formataCpfCnpj, formataData, formataValores, mascaraContrato, mascaraProcessoSei, primeiraLetraMaiuscula } from '../utils/utils';
+import { formataCpfCnpj, formataData, formataValores, mascaraContrato, mascaraProcessoSei, primeiraLetraMaiuscula } from '../../commom/utils/utils';
 
 const TabPanel = (props) => {
     const { children, value, index, ...other } = props;

@@ -12,9 +12,9 @@ import {
 } from "@mui/material";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { sendNovoFormData } from "../utils/api";
-import { contratoLabels } from "../utils/constants";
-import { irParaTopo } from "../utils/utils";
+import { sendNovoFormData } from "../../commom/utils/api";
+import { contratoLabels } from "../../commom/utils/constants";
+import { irParaTopo } from "../../commom/utils/utils";
 import VoltarArrowBtn from "../VoltarArrowBtn";
 
 export default function NovoContratoDialog({novoDialog, setNovoDialog}) {

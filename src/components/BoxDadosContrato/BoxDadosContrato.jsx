@@ -16,7 +16,7 @@ import CampoValores from '../CampoValores';
 import CampoProcessoSei from '../CampoProcessoSei';
 import CampoNumContrato from '../CampoNumContrato';
 import MaxPrazoInput from '../MaxPrazoInput';
-import { contratoLabels } from '../utils/constants';
+import { contratoLabels } from '../../commom/utils/constants';
 
 const BoxDadosContrato = (props) => {
     const {
@@ -120,7 +120,6 @@ const BoxDadosContrato = (props) => {
                     label={contratoLabels.tipo_objeto}
                     defaultValue={dados?.tipo_objeto}
                     name="tipo_objeto"
-                    // onChange={(e) => { setTipo_objeto(e.target.value); }}
                     fullWidth
                 >
                     <MenuItem value={""}>---</MenuItem>
@@ -136,8 +135,7 @@ const BoxDadosContrato = (props) => {
 
             <TextField
                 variant="outlined"
-                // inputRef={objeto}
-                defaultValue={dados?.objeto}
+                defaultValue={dados.objeto ?? ""}
                 name="objeto"
                 className="form__campo"
                 label={contratoLabels.objeto}
@@ -148,7 +146,7 @@ const BoxDadosContrato = (props) => {
             />
             {/* TODO: MOSTRAR HELPER TEXT E ERROR BORDER EM NUMERO_CONTRATO */}
             <CampoNumContrato 
-                defaultValue={dados?.numero_contrato}
+                defaultValue={dados.numero_contrato ?? ""}
                 error={error.hasOwnProperty('numero_contrato')}
                 helperText={error.hasOwnProperty('numero_contrato') ? errors.numero_contrato : " "}
                 label={contratoLabels.numero_contrato}

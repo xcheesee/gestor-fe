@@ -3,7 +3,7 @@ import {
     Box,
     Typography 
 } from '@mui/material';
-import { formataValores } from '../../../utils/utils';
+import { formataValores } from '../../../../commom/utils/utils';
 
 const RefExecucaoFinanceira = (props) => {
     const { totais } = props;
@@ -25,42 +25,42 @@ const RefExecucaoFinanceira = (props) => {
             <Typography sx={{ fontWeight: 'medium' }} component="span">
                 Valor do contrato
                 <Typography sx={{ padding: '0 1rem', mb: '0.5rem' }}>
-                    {formataValores(totais.valor_contrato)}
+                    {formataValores(totais?.valor_contrato)}
                 </Typography>
             </Typography>
             
             <Typography sx={{ fontWeight: 'medium' }} component="span">
                 Valor de reserva
                 <Typography sx={{ padding: '0 1rem', mb: '0.5rem' }}>
-                    {formataValores(totais.valor_reserva)}
+                    {formataValores(totais?.valor_reserva)}
                 </Typography>
             </Typography>
             
             <Typography sx={{ fontWeight: 'medium' }} component="span">
                 Valor das dotações
                 <Typography sx={{ padding: '0 1rem', mb: '0.5rem' }}>
-                    {formataValores(totais.valor_dotacoes)}
+                    {formataValores(totais?.valor_dotacoes)}
                 </Typography>
             </Typography>
 
             <Typography sx={{ fontWeight: 'medium' }} component="span">
                 Valor total de empenho
                 <Typography sx={{ padding: '0 1rem', mb: '0.5rem' }}>
-                    {formataValores(totais.valor_empenhos)}
+                    {formataValores(totais?.valor_empenhos)}
                 </Typography>
             </Typography>
 
             <Typography sx={{ fontWeight: 'medium' }} component="span">
                 Total planejado
                 <Typography sx={{ padding: '0 1rem', mb: '0.5rem' }}>
-                    {formataValores(totais.valor_planejados)}
+                    {formataValores(totais?.valor_planejados)}
                 </Typography>
             </Typography>
 
             <Typography sx={{ fontWeight: 'medium' }} component="span">
                 Valor dos aditamentos
                 <Typography sx={{ padding: '0 1rem', mb: '0.5rem' }}>
-                    {formataValores(totais.valor_aditamentos)}
+                    {formataValores(totais?.valor_aditamentos)}
                 </Typography>
             </Typography>
         </Box>

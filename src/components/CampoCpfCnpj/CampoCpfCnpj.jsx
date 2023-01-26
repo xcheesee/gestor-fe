@@ -15,13 +15,12 @@ const CampoCpfCnpj = (props) => {
         label,
     } = props;
 
-    const [cpfCnpj, setCpfCnpj] = useState(defaultValue);
+    const [cpfCnpj, setCpfCnpj] = useState(defaultValue ?? "");
 
     const mudaCpfCnpj = (event) => {
         const raw = event.target.value
         const val = raw.replace(/[^0-9]+/g, '')
         setCpfCnpj(val);
-        console.log(cpfCnpj)
     };
 
     const validaCpfCnpj = (event) => {

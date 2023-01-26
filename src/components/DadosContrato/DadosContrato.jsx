@@ -29,7 +29,7 @@ import PropTypes from 'prop-types';
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import ListaReajustes from '../ListaReajustes';
-import { getContrato, getContrTot, getDotacao, getRecursos } from '../utils/api';
+import { getContrato, getContrTot, getDotacao, getRecursos } from '../../commom/utils/api';
 
 const TabPanel = (props) => {
     const { children, value, index, ...other } = props;

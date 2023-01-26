@@ -10,7 +10,7 @@ import DialogConfirmacao from '../DialogConfirmacao';
 import BotoesTab from '../BotoesTab';
 import BotaoAdicionar from '../BotaoAdicionar';
 import FormGarantia from './FormGarantia';
-import { formataData, formataValores } from '../utils/utils';
+import { formataData, formataValores } from '../../commom/utils/utils';
 
 const TabGarantias = (props) => {
     const {

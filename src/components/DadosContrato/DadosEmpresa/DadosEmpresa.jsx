@@ -9,8 +9,8 @@ const DadosEmpresa = (props) => {
         telefone_empresa,
         email_empresa,
         estaCarregado,
-        formContrato,
-        setFormContrato,
+        dados,
+        // setdados,
         numContrato,
         setSnackbar,
         mudancaContrato,
@@ -94,8 +94,7 @@ const DadosEmpresa = (props) => {
             </Box>
 
             <FormDadosEmpresa 
-                formContrato={formContrato}
-                setFormContrato={setFormContrato}
+                dados={dados}
                 numContrato={numContrato}
                 openDadosEmpresa={openDadosEmpresa}
                 setOpenDadosEmpresa={setOpenDadosEmpresa}

@@ -11,7 +11,7 @@ import CheckIcon from '@mui/icons-material/Check';
 import CircularProgress from '@mui/material/CircularProgress';
 import BoxProcessoContratacao from '../../BoxProcessoContratacao';
 import DialogConfirmacao from '../../DialogConfirmacao';
-import { editaDadosContrato } from '../../utils/api';
+import { editaDadosContrato } from '../../../commom/utils/api';
 
 const FormProcessoContratacao = (props) => {
     const {

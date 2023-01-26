@@ -1,6 +1,6 @@
 import React, { forwardRef, useState } from 'react';
 import NumberFormat from 'react-number-format';
-import PropTypes from 'prop-types';
+// import PropTypes from 'prop-types';
 import { TextField } from '@mui/material';
 
 const NumberFormatCustom = forwardRef(function NumberFormatCustom(props, ref) {
@@ -22,32 +22,14 @@ const NumberFormatCustom = forwardRef(function NumberFormatCustom(props, ref) {
     );
 });
 
-NumberFormatCustom.propTypes = {
-    onChange: PropTypes.func.isRequired,
-};
-
-const CampoTelefone = ({ formContrato, setFormContrato, error, helperText, name, label, ...other }) => {
-    const [telefone_empresa, setTelefone_empresa] = useState(formContrato.telefone_empresa);
-
-    const handleBlur = (event) => {
-        if (other.edicao) {
-            other.setFormInterno({
-                ...other.formInterno,
-                telefone_empresa: telefone_empresa
-            });
-        } else {
-            setFormContrato({
-                ...formContrato,
-                telefone_empresa: telefone_empresa
-            });
-        }
-    }
+const CampoTelefone = ({ dados, error, helperText, name, label, ...other }) => {
+    const [telefone_empresa, setTelefone_empresa] = useState(dados.telefone_empresa.replace(/[^\d]+/g, ''))
 
     return (
         <TextField
             variant="outlined"
             label={label}
-            value={telefone_empresa}
+            defaultValue={telefone_empresa ?? ""}
             onChange={(e) => { setTelefone_empresa(e.target.value) }}
             required
             sx={{ margin: '1rem 0' }}
@@ -57,7 +39,6 @@ const CampoTelefone = ({ formContrato, setFormContrato, error, helperText, name,
                     format: telefone_empresa.length > 10 ? "(##) #####-####" : "(##) ####-#####"
                 },
             }}
-            onBlur={handleBlur}
             helperText={helperText}
             error={error}
             name={name}

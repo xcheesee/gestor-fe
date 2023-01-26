@@ -11,13 +11,23 @@ const BoxOutrasInformacoes = (props) => {
         outras_informacoes,
         label,
         dados,
+        numContrato,
+        editaOutrasInformacoes,
         errors,
         acao,
         defaultValue
      } = props;
 
     return (
-        <Box>
+        <Box
+            component='form'
+            id='outras_infos_form'
+            onSubmit={(e) => {
+                e.preventDefault()
+                const formData = new FormData(e.target)
+                editaOutrasInformacoes(e, formData, numContrato)
+            }}
+        >
             {
             acao === 'editar'
             ?
@@ -36,7 +46,7 @@ const BoxOutrasInformacoes = (props) => {
                 minRows={6}
                 className="form__campo"
                 label={label}
-                inputRef={outras_informacoes}
+                // inputRef={outras_informacoes}
                 defaultValue={defaultValue ? defaultValue : dados?.outras_informacoes}
                 name="outras_informacoes"
                 sx={{ margin: '1rem 0' }}

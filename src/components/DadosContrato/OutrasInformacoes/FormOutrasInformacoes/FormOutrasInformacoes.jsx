@@ -11,6 +11,7 @@ import CheckIcon from '@mui/icons-material/Check';
 import CircularProgress from '@mui/material/CircularProgress';
 import BoxOutrasInformacoes from '../../../BoxOutrasInformacoes';
 import DialogConfirmacao from '../../../DialogConfirmacao';
+import { editaDadosContrato } from '../../../../commom/utils/api';
 
 const FormOutrasInformacoes = (props) => {
     const {
@@ -19,7 +20,6 @@ const FormOutrasInformacoes = (props) => {
         dados,
         numContrato,
         setSnackbar,
-        formataInformacoes,
         mudancaContrato,
         setMudancaContrato
     } = props;
@@ -33,47 +33,30 @@ const FormOutrasInformacoes = (props) => {
     const [infoAdicionaisEditado, setInfoAdicionaisEditado] = useState({});
     const outras_informacoes = useRef(null);
 
-    const editaOutrasInformacoes = (e, formInterno, id) => {
-        const url = `${process.env.REACT_APP_API_URL}/contrato/${id}`;
-        const token = localStorage.getItem('access_token');
-        const options = {
-            method: 'PUT',
-            headers: {
-                'Content-Type': 'application/json',
-                'Accept': 'application/json',
-                'Authorization': `Bearer ${token}`
-            },
-            body: JSON.stringify(formInterno)
-        };
-
+    const editaOutrasInformacoes = async (e, formInterno, id) => {
         setCarregandoEnvio(true);
-
-        fetch(url, options)
-            .then(res => {
-                setMudancaContrato(!mudancaContrato);
-                if(res.ok) {
-                    setCarregandoEnvio(false);
-                    setSnackbar({
-                        open: true,
-                        severity: 'success',
-                        text: 'Informações adicionais editadas com sucesso!',
-                        color: 'success'
-                    });
-                    setOpenOutrasInformacoes(false);
-                    return res.json();
-                } else if (res.status === 422) { 
-                    return res.json()
-                        .then(data => setErrors(data.errors));
-                } else {
-                    setCarregandoEnvio(false);
-                    setSnackbar({
-                        open: true,
-                        severity: 'error',
-                        text: `Erro ${res.status} - Não foi possível editar as informações adicionais`,
-                        color: 'error'
-                    });
-                }
+        const res = await editaDadosContrato(e, dados, formInterno, id)
+        if(res.status === 200) {
+            setSnackbar({
+                open: true,
+                severity: 'success',
+                text: 'Informações adicionais editadas com sucesso!',
+                color: 'success'
             });
+            setOpenOutrasInformacoes(false);
+        } else if (res.status === 422) { 
+            setErrors(res.errors)
+        } else {
+            setCarregandoEnvio(false);
+            setSnackbar({
+                open: true,
+                severity: 'error',
+                text: `Erro ${res.status} - Não foi possível editar as informações adicionais`,
+                color: 'error'
+            });
+        }
+        setMudancaContrato(!mudancaContrato);
+        setCarregandoEnvio(false);
     }
 
     return (
@@ -87,9 +70,11 @@ const FormOutrasInformacoes = (props) => {
                 <BoxOutrasInformacoes 
                     outras_informacoes={outras_informacoes}
                     dados={dados}
+                    editaOutrasInformacoes={editaOutrasInformacoes}
+                    numContrato={numContrato}
                     errors={errors}
                     acao="editar"
-                    defaultValue={formataInformacoes(dados?.outras_informacoes)}
+                    defaultValue={dados?.outras_informacoes}
                 />
             </DialogContent>
 
@@ -104,11 +89,7 @@ const FormOutrasInformacoes = (props) => {
                 <Button 
                     sx={{ textTransform: 'none' }} 
                     variant="contained"
-                    onMouseDown={() => setInfoAdicionaisEditado({
-                        ...dados,
-                        outras_informacoes: outras_informacoes.current.value
-                    })}
-                    onMouseUp={() => setOpenConfirmacao({ open: true, id: numContrato })}
+                    onClick={() => setOpenConfirmacao({ open: true, id: numContrato })}
                 >
                     {carregandoEnvio
                         ? <CircularProgress size={16} sx={{ color: '#FFFFFF', mr: '0.7rem' }} />
@@ -123,7 +104,7 @@ const FormOutrasInformacoes = (props) => {
             openConfirmacao={openConfirmacao}
             setOpenConfirmacao={setOpenConfirmacao}
             acao="editar"
-            fnEditar={editaOutrasInformacoes}
+            form="outras_infos_form"
             formInterno={infoAdicionaisEditado}
             texto="informações adicionais"
         />

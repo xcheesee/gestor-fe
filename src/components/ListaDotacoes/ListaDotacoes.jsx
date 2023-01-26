@@ -14,7 +14,7 @@ import BotaoAdicionar from '../BotaoAdicionar';
 import FormDotacoes from './FormDotacoes';
 import FormRecursos from './FormRecursos';
 import DialogConfirmacao from '../DialogConfirmacao';
-import { formataValores } from '../utils/utils';
+import { formataValores } from '../../commom/utils/utils';
 
 const retornaNumDotacao = (numero_dotacao, descricao) => {
     return [`${numero_dotacao}\n${descricao}`];

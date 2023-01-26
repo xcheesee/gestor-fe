@@ -10,7 +10,7 @@ import DialogConfirmacao from "../DialogConfirmacao";
 import BotoesTab from "../BotoesTab";
 import BotaoAdicionar from "../BotaoAdicionar";
 import FormAditamentoValor from "./FomAditamentoValor/FormAditamentoValor";
-import { formataValores } from "../utils/utils";
+import { formataValores } from "../../commom/utils/utils";
 
 const TabAditamentosValor = (props) => {
   const campos = [

@@ -99,7 +99,7 @@ const FormGarantia = (props) => {
 
                 <CampoData 
                     label="Validade"
-                    value={formGarantia.data_validade_garantia}
+                    defaultValue={formGarantia.data_validade_garantia}
                     name="data_validade_garantia"
                     onChange={handleInputChange}
                     margin="1rem 0"

@@ -21,11 +21,9 @@ import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import CircularProgress from '@mui/material/CircularProgress';
 import { useNavigate } from "react-router-dom";
-import { sendPWData } from '../../components/utils/api';
+import { sendPWData } from '../../commom/utils/api';
 
 const Login = () => {
-    // const [email, setEmail] = useState("");
-    // const [senha, setSenha] = useState("");
     const [mostraSenha, setMostraSenha] = useState(false);
     const [error, setError] = useState({
         error: false,
@@ -45,62 +43,26 @@ const Login = () => {
         }
     }, [navigate]);
 
-    // const handleChange = (e) => {
-    //     setError({
-    //         error: false,
-    //         helperText: ''
-    //     });
+    async function validateUser (e) {
+        e.preventDefault()
 
-    //     if (e.target.name === "email") {
-    //         setEmail(e.target.value);
-    //     } else {
-    //         setSenha(e.target.value);
-    //     }
-    // }
-
-    // const handleClickEntrar = (e) => {
-
-    //     setCarregando(true);
-
-    //     if (data.access_token) {
-    //         localStorage.setItem('access_token', data.access_token);
-    //         localStorage.setItem('username', data.username);
-    //         localStorage.setItem('departamentos', JSON.stringify(data.departamentos));
-    //         localStorage.setItem('usermail', email)
-    //         navigate("../principal", { replace: true });
-    //     } else {
-    //         setError({
-    //             error: true,
-    //             helperText: 'Usuário e/ou senha inválido(s)'
-    //         });
-    //         setCarregando(false);
-    //     }
-
-        // fetch(url, options)
-        //     .then(res => res.json())
-        //     .then((data) => {
-        //         if (data.access_token) {
-        //             localStorage.setItem('access_token', data.access_token);
-        //             localStorage.setItem('username', data.username);
-        //             localStorage.setItem('departamentos', JSON.stringify(data.departamentos));
-        //             localStorage.setItem('usermail', email)
-        //             navigate("../principal", { replace: true });
-        //         } else {
-        //             setError({
-        //                 error: true,
-        //                 helperText: 'Usuário e/ou senha inválido(s)'
-        //             });
-        //             setCarregando(false);
-        //         }
-        //     })
-        //     .catch((err) => {
-        //         setDialogErro({
-        //             open: true,
-        //             message: `${err.message}`
-        //         });
-        //         setCarregando(false);
-        //     })
-    // }
+        setCarregando(true);
+        const data = await sendPWData(e)
+        if (data.access_token) {
+            localStorage.setItem('access_token', data.access_token);
+            localStorage.setItem('username', data.username);
+            localStorage.setItem('departamentos', JSON.stringify(data.departamentos));
+            localStorage.setItem('usermail', data.userMail)
+            setCarregando(false);
+            navigate("../principal", { replace: true });
+        } else {
+            setError({
+                error: true,
+                helperText: 'Usuário e/ou senha inválido(s)'
+            });
+            setCarregando(false);
+        }
+    }
 
     const handleClickMostraSenha = (e) => {
         e.preventDefault();
@@ -112,27 +74,7 @@ const Login = () => {
             <Fade in={true}>
                 <Box 
                     component='form'
-                    onSubmit={async (e) => {
-                        e.preventDefault()
-
-                        setCarregando(true);
-                        const data = await sendPWData(e)
-                        if (data.access_token) {
-                            localStorage.setItem('access_token', data.access_token);
-                            localStorage.setItem('username', data.username);
-                            localStorage.setItem('departamentos', JSON.stringify(data.departamentos));
-                            localStorage.setItem('usermail', data.userMail)
-                            setCarregando(false);
-                            navigate("../principal", { replace: true });
-                        } else {
-                            setError({
-                                error: true,
-                                helperText: 'Usuário e/ou senha inválido(s)'
-                            });
-                            setCarregando(false);
-                        }
-                        
-                    }}>
+                    onSubmit={ validateUser }>
                     <Paper sx={{ padding: '1rem' }} className="login" elevation={5}>
                         <Typography variant="h2" component="h1" sx={{ fontSize: '2rem' }}>Entrar</Typography>
                         <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-around', padding: '1rem 1rem 0 1rem' }}>

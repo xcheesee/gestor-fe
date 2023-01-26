@@ -154,11 +154,13 @@ export async function sendNovoFormData (form) {
 
 export const editaDadosContrato = async (e, dados, formInterno, id) => {
     const url = `${process.env.REACT_APP_API_URL}/contrato/${id}`;
-    dados.processo_sei += "/" /* gambiarra para validacao no backend */
     let data = {...dados}
     for(const objArray of formInterno.entries()) {
         data[objArray[0]] = objArray[1]
     }
+    data.processo_sei += "/" /* gambiarra para validacao no backend */
+    const [dia, mes, ano] = data.data_prazo_maximo ? data.data_prazo_maximo.split(/[/|-]/) : ["", "", ""] // formatacao de data para envio ao backend
+    data.data_prazo_maximo = dia === "" ? "" : dados.data_prazo_maximo ?? `${ano}-${mes}-${dia}`
     const options = {
         method: 'PUT',
         headers: {
@@ -173,4 +175,79 @@ export const editaDadosContrato = async (e, dados, formInterno, id) => {
     const json = await res.json()
 
     return {status: res.status, ...json}
+}
+
+export const sendCertidaoEdit = async (e, formCertidaoEdit, id) => {
+    let data = {};
+    for(const objArray of formCertidaoEdit.entries()) {
+        data[objArray[0]] = objArray[1]
+    }
+    const url = `${process.env.REACT_APP_API_URL}/certidao/${id}`;
+    const options = {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+            'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify(data)
+    }
+
+    const res = await fetch(url, options)
+    const json = await res.json()
+    return {status: res.status, ...json}
+}
+
+export const sendNewCertidao = async (formCertidao) => {
+    let data = {};
+    for(const objArray of formCertidao.entries()) {
+        data[objArray[0]] = objArray[1]
+    }
+    const url = `${process.env.REACT_APP_API_URL}/certidao`;
+    const token = localStorage.getItem('access_token');
+    const options = {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+            'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify(data)
+    };
+    const res = await fetch(url, options)
+    const json = await res.json()
+    return {status: res.status, ...json}
+            // .then(res => {
+                // setMudancaCertidoes(!mudancaCertidoes);
+                // if (res.ok) {
+                //     setCarregando(false);
+                //     setSnackbar({
+                //         open: true,
+                //         severity: 'success',
+                //         text: 'Certidão enviada com sucesso!',
+                //         color: 'success'
+                //     });
+                //     setOpenFormCertidao({ 
+                //         open: false, 
+                //         acao: 'adicionar' 
+                //     });
+                //     setFormCertidao({
+                //         ...formCertidao,
+                //         certidoes: '',
+                //         validade_certidoes: '',
+                //     });
+                //     return res.json();
+                // } else {
+                //     setCarregando(false);
+                //     setSnackbar({
+                //         open: true,
+                //         severity: 'error',
+                //         text: `Erro ${res.status} - Não foi possível enviar a certidão`,
+                //         color: 'error'
+                //     });
+                // }
+            // })
+            // .catch(err => {
+                // console.log(err);
+            // });
 }

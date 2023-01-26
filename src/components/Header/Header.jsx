@@ -28,8 +28,8 @@ import AccountBoxIcon from '@mui/icons-material/AccountBox';
 import { useNavigate, useLocation, Link } from 'react-router-dom';
 import LockIcon from '@mui/icons-material/Lock'
 import DialogAltSenh from '../DialogAltSenh';
-import { mascaraContrato, mascaraProcessoSei } from '../utils/utils';
-import { newPwRequest } from '../utils/api';
+import { mascaraContrato, mascaraProcessoSei } from '../../commom/utils/utils';
+import { newPwRequest } from '../../commom/utils/api';
 
 const Header = (props) => {
     const [open, setOpen] = useState(false);

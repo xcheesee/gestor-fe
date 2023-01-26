@@ -6,7 +6,7 @@ import {
     DialogActions,
     Button
 } from '@mui/material';
-import { contratoLabels } from '../utils/constants';
+import { contratoLabels } from '../../commom/utils/constants';
 
 const DialogErroEnvio = ({ openErro, setOpenErro, acao, errors, setFocusError }) => {
 

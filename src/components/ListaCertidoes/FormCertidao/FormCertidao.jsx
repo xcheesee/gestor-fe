@@ -5,7 +5,8 @@ import {
     DialogContent,
     DialogActions,
     Button,
-    TextField
+    TextField,
+    Box
 } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import CheckIcon from '@mui/icons-material/Check';
@@ -19,6 +20,7 @@ const FormCertidao = (props) => {
         openFormCertidao, 
         setOpenFormCertidao, 
         enviaCertidao,
+        editaCertidao,
         carregando,
         setOpenConfirmacao,
         errors,
@@ -38,7 +40,7 @@ const FormCertidao = (props) => {
 
     const handleClickConfirmar = () => {
         if (openFormCertidao.acao === 'adicionar') {
-            enviaCertidao();
+            return
         } else if (openFormCertidao.acao === 'editar') {
             setOpenConfirmacao({
                 open: true,
@@ -57,30 +59,42 @@ const FormCertidao = (props) => {
             </DialogTitle>
 
             <DialogContent>
-                <TextField
-                    variant="outlined"
-                    value={formCertidao.certidoes}
-                    name="certidoes"
-                    onChange={handleInputChange}
-                    label="Certidão"
-                    sx={{ margin: '1rem 0' }}
-                    error={errors.hasOwnProperty('certidoes')}
-                    helperText={errors.hasOwnProperty('certidoes') ? errors.certidoes : "Ex: Certidão negativa de débitos"}
-                    fullWidth
-                    required
-                />
+                <Box
+                    component='form'
+                    id='certidao_form'
+                    onSubmit={(e) => {
+                        e.preventDefault()
+                        const formData = new FormData(e.target)
+                        formData.append("contrato_id", formCertidao.contrato_id)
+                        openFormCertidao.acao === "adicionar" ? enviaCertidao(formData) : editaCertidao(e, formData, formCertidao.id)
+                    }}
+                >
+                    <TextField
+                        variant="outlined"
+                        value={formCertidao.certidoes}
+                        name="certidoes"
+                        onChange={handleInputChange}
+                        label="Certidão"
+                        sx={{ margin: '1rem 0' }}
+                        error={errors.hasOwnProperty('certidoes')}
+                        helperText={errors.hasOwnProperty('certidoes') ? errors.certidoes : "Ex: Certidão negativa de débitos"}
+                        fullWidth
+                        required
+                    />
 
-                <CampoData
-                    label="Validade"
-                    value={formCertidao.validade_certidoes}
-                    name="validade_certidoes"
-                    onChange={handleInputChange}
-                    margin="1rem 0"
-                    error={errors.hasOwnProperty('validade_certidoes')}
-                    helperText={errors.validade_certidoes}
-                    fullWidth
-                    required
-                />
+                    <CampoData
+                        label="Validade"
+                        defaultValue={formCertidao.validade_certidoes}
+                        name="validade_certidoes"
+                        onChange={handleInputChange}
+                        margin="1rem 0"
+                        error={errors.hasOwnProperty('validade_certidoes')}
+                        helperText={errors.validade_certidoes}
+                        fullWidth
+                        required
+                    />
+
+                </Box>
             </DialogContent>
 
             <DialogActions sx={{ margin: '1rem' }}>
@@ -93,6 +107,8 @@ const FormCertidao = (props) => {
 
                 <Button 
                     sx={{ textTransform: 'none' }} 
+                    type={openFormCertidao.acao === 'adicionar' ? 'submit' : ""}
+                    form={openFormCertidao.acao === 'adicionar' ? 'certidao_form' : ""}
                     variant="contained"
                     onClick={handleClickConfirmar}    
                 >

@@ -8,8 +8,6 @@ const CampoData = (props) => {
             label={props.label} 
             defaultValue={props.defaultValue}
             name={props.name}
-            // onChange={props.onChange}
-            // onBlur={props.onBlur}
             helperText={props.helperText}
             error={props.error} 
             size={props.size}

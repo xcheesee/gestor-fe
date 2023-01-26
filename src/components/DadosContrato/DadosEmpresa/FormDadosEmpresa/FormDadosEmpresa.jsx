@@ -12,11 +12,12 @@ import CircularProgress from '@mui/material/CircularProgress';
 import BoxContatoEmpresa from '../../../BoxContatoEmpresa';
 import DialogConfirmacao from '../../../DialogConfirmacao';
 import * as EmailValidator from 'email-validator';
+import { editaDadosContrato } from '../../../../commom/utils/api';
 
 const FormDadosEmpresa = (props) => {
     const {
-        formContrato,
-        setFormContrato,
+        dados,
+        // setdados,
         numContrato,
         openDadosEmpresa,
         setOpenDadosEmpresa,
@@ -32,7 +33,7 @@ const FormDadosEmpresa = (props) => {
         open: false,
         id: numContrato
     });
-    const [contatoEditado, setContatoEditado] = useState({...formContrato});
+    const [contatoEditado, setContatoEditado] = useState({...dados});
     const nome_empresa = useRef(null);
     const email_empresa = useRef(null);
 
@@ -51,47 +52,30 @@ const FormDadosEmpresa = (props) => {
         }
     }
 
-    const editaDadosEmpresa = (e, formInterno, id) => {
-        const url = `${process.env.REACT_APP_API_URL}/contrato/${id}`;
-        const token = localStorage.getItem('access_token');
-        const options = {
-            method: 'PUT',
-            headers: {
-                'Content-Type': 'application/json',
-                'Accept': 'application/json',
-                'Authorization': `Bearer ${token}`
-            },
-            body: JSON.stringify(formInterno)
-        };
-
+    const editaDadosEmpresa = async (e, formInterno, id) => {
         setCarregandoEnvio(true);
-
-        fetch(url, options)
-            .then(res => {
-                setMudancaContrato(!mudancaContrato);
-                if(res.ok) {
-                    setCarregandoEnvio(false);
-                    setSnackbar({
-                        open: true,
-                        severity: 'success',
-                        text: 'Contato editado com sucesso!',
-                        color: 'success'
-                    });
-                    setOpenDadosEmpresa(false);
-                    return res.json();
-                } else if (res.status === 422) { 
-                    return res.json()
-                        .then(data => setErrors(data.errors));
-                } else {
-                    setCarregandoEnvio(false);
-                    setSnackbar({
-                        open: true,
-                        severity: 'error',
-                        text: `Erro ${res.status} - Não foi possível editar os dados de contato`,
-                        color: 'error'
-                    });
-                }
+        const res = await editaDadosContrato(e, dados, formInterno, id)
+        if(res.status === 200) {
+            setSnackbar({
+                open: true,
+                severity: 'success',
+                text: 'Contato editado com sucesso!',
+                color: 'success'
             });
+            setOpenDadosEmpresa(false);
+        } else if (res.status === 422) { 
+            setErrors(res.errors)
+        } else {
+            setSnackbar({
+                open: true,
+                severity: 'error',
+                text: `Erro ${res.status} - Não foi possível editar os dados de contato`,
+                color: 'error'
+            });
+        }
+
+        setMudancaContrato(!mudancaContrato);
+        setCarregandoEnvio(false);
     }
 
     return (
@@ -104,10 +88,10 @@ const FormDadosEmpresa = (props) => {
             <DialogContent>
                 <BoxContatoEmpresa 
                     errors={errors}
-                    formContrato={formContrato}
-                    setFormContrato={setFormContrato}
-                    nome_empresa={nome_empresa}
+                    dados={dados}
                     email_empresa={email_empresa}
+                    editaDadosEmpresa={editaDadosEmpresa}
+                    numContrato={numContrato}
                     checaErrosEmail={checaErrosEmail}
                     acao="editar"
                     edicao={true}
@@ -127,13 +111,7 @@ const FormDadosEmpresa = (props) => {
                 <Button 
                     sx={{ textTransform: 'none' }} 
                     variant="contained"
-                    onMouseDown={() => setContatoEditado({
-                        ...formContrato,
-                        nome_empresa: nome_empresa.current.value,
-                        telefone_empresa: contatoEditado.telefone_empresa,
-                        email_empresa: email_empresa.current.value
-                    })}
-                    onMouseUp={() => setOpenConfirmacao({ open: true, id: numContrato })}
+                    onClick={() => setOpenConfirmacao({ open: true, id: numContrato })}
                     disabled={error}
                 >
                     {carregandoEnvio
@@ -149,8 +127,9 @@ const FormDadosEmpresa = (props) => {
             openConfirmacao={openConfirmacao}
             setOpenConfirmacao={setOpenConfirmacao}
             acao="editar"
-            fnEditar={editaDadosEmpresa}
-            formInterno={contatoEditado}
+            form='dados_empresa_form'
+            // fnEditar={editaDadosEmpresa}
+            // formInterno={contatoEditado}
             texto="contato"
         />
         </>

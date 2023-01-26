@@ -11,8 +11,8 @@ import {
 import AddIcon from '@mui/icons-material/Add';
 import { useNavigate } from "react-router-dom";
 import Filtros from '../../components/Filtros';
-import { irParaTopo } from '../../components/utils/utils';
-import { getContratos } from '../../components/utils/api';
+import { irParaTopo } from '../../commom/utils/utils';
+import { getContratos } from '../../commom/utils/api';
 import ContratoTable from '../../components/ContratoTable';
 import VoltarArrowBtn from '../../components/VoltarArrowBtn';
 import NovoContratoDialog from '../../components/NovoContratoDialog';

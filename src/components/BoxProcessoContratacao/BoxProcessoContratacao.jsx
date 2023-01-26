@@ -11,7 +11,7 @@ import {
     CircularProgress,
 } from '@mui/material';
 import CampoData from '../CampoData';
-import { contratoLabels } from '../utils/constants';
+import { contratoLabels } from '../../commom/utils/constants';
 
 const BoxProcessoContratacao = (props) => {
     const {
