@@ -11,6 +11,7 @@ import BotoesTab from '../BotoesTab';
 import BotaoAdicionar from '../BotaoAdicionar';
 import FormGarantia from './FormGarantia';
 import { formataData, formataValores } from '../../commom/utils/utils';
+import { postFormData, putFormData, sendGarantiaEdit, sendNewGarantia } from '../../commom/utils/api';
 
 const TabGarantias = (props) => {
     const {
@@ -151,54 +152,37 @@ const ListaGarantias = (props) => {
         setAcao('editar');
     }
 
-    const editaGarantia = (id, formGarantiaEdit) => {
-        const url = `${process.env.REACT_APP_API_URL}/garantia/${id}`
-        const token = localStorage.getItem('access_token');
-        const options = {
-            method: 'PUT',
-            headers: {
-                'Content-Type': 'application/json',
-                'Accept': 'application/json',
-                'Authorization': `Bearer ${token}`
-            },
-            body: JSON.stringify(formGarantiaEdit)
-        }
-
+    const editaGarantia = async (id, formGarantiaEdit) => {
         setCarregando(true);
-
-        fetch(url, options)
-            .then(res => {
-                setMudancaGarantias(!mudancaGarantias);
-                if(res.ok) {
-                    setCarregando(false);
-                    setSnackbar({
-                        open: true,
-                        severity: 'success',
-                        text: 'Garantia editada com sucesso!',
-                        color: 'success'
-                    });
-                    setOpenFormGarantia({
-                        open: false,
-                        acao: 'adicionar'
-                    });
-                    setFormGarantia({
-                        ...formGarantia,
-                        instituicao_financeira: '',
-                        numero_documento: '',
-                        valor_garantia: '',
-                        data_validade_garantia: ''
-                    });
-                    return res.json();
-                } else {
-                    setCarregando(false);
-                    setSnackbar({
-                        open: true,
-                        severity: 'error',
-                        text: `Erro ${res.status} - Não foi possível editar a garantia`,
-                        color: 'error'
-                    });
-                }
+        const res = await putFormData(id, formGarantiaEdit, "garantia")
+        if(res.status === 200) {
+            setSnackbar({
+                open: true,
+                severity: 'success',
+                text: 'Garantia editada com sucesso!',
+                color: 'success'
             });
+            setOpenFormGarantia({
+                open: false,
+                acao: 'adicionar'
+            });
+            setFormGarantia({
+                ...formGarantia,
+                instituicao_financeira: '',
+                numero_documento: '',
+                valor_garantia: '',
+                data_validade_garantia: ''
+            });
+        } else {
+            setSnackbar({
+                open: true,
+                severity: 'error',
+                text: `Erro ${res.status} - Não foi possível editar a garantia`,
+                color: 'error'
+            });
+        }
+        setCarregando(false);
+        setMudancaGarantias(!mudancaGarantias);
     }
 
     const handleClickAdicionar = () => {
@@ -215,57 +199,37 @@ const ListaGarantias = (props) => {
         });
     }
 
-    const enviaGarantia = () => {
-        const url = `${process.env.REACT_APP_API_URL}/garantia/`
-        const token = localStorage.getItem('access_token');
-        const options = {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Accept': 'application/json',
-                'Authorization': `Bearer ${token}`
-            },
-            body: JSON.stringify(formGarantia)
-        };
-
+    const enviaGarantia = async (formGarantia) => {
         setCarregando(true);
-
-        fetch(url, options)
-            .then(res => {
-                setMudancaGarantias(!mudancaGarantias);
-                if (res.ok) {
-                    setCarregando(false);
-                    setSnackbar({
-                        open: true,
-                        severity: 'success',
-                        text: 'Garantia enviada com sucesso!',
-                        color: 'success'
-                    });
-                    setOpenFormGarantia({
-                        open: false,
-                        acao: 'adicionar'
-                    });
-                    setFormGarantia({
-                        ...formGarantia,
-                        instituicao_financeira: '',
-                        numero_documento: '',
-                        valor_garantia: '',
-                        data_validade_garantia: ''
-                    });
-                    return res.json();
-                } else {
-                    setCarregando(false);
-                    setSnackbar({
-                        open: true,
-                        severity: 'error',
-                        text: `Erro ${res.status} - Não foi possível enviar a garantia`,
-                        color: 'error'
-                    });
-                }
-            })
-            .catch(err => {
-                console.log(err);
+        const res = await postFormData(formGarantia, "garantia")
+        if (res.status === 201) {
+            setSnackbar({
+                open: true,
+                severity: 'success',
+                text: 'Garantia enviada com sucesso!',
+                color: 'success'
             });
+            setOpenFormGarantia({
+                open: false,
+                acao: 'adicionar'
+            });
+            setFormGarantia({
+                ...formGarantia,
+                instituicao_financeira: '',
+                numero_documento: '',
+                valor_garantia: '',
+                data_validade_garantia: ''
+            });
+        } else {
+            setSnackbar({
+                open: true,
+                severity: 'error',
+                text: `Erro ${res.status} - Não foi possível enviar a garantia`,
+                color: 'error'
+            });
+        }
+        setMudancaGarantias(!mudancaGarantias);
+        setCarregando(false);
     }
 
     return (
@@ -313,6 +277,7 @@ const ListaGarantias = (props) => {
                 formGarantia={formGarantia}
                 setFormGarantia={setFormGarantia}
                 enviaGarantia={enviaGarantia}
+                editaGarantia={editaGarantia}
                 carregando={carregando}
                 openFormGarantia={openFormGarantia}
                 setOpenFormGarantia={setOpenFormGarantia}
@@ -346,6 +311,7 @@ const ListaGarantias = (props) => {
                 openConfirmacao={openConfirmacao} 
                 setOpenConfirmacao={setOpenConfirmacao}
                 acao={acao} 
+                form="garantia_form"
                 fnExcluir={excluiGarantia}
                 fnEditar={editaGarantia}
                 formInterno={formGarantia}

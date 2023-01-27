@@ -10,7 +10,8 @@ import {
   InputLabel,
   Select,
   TextField,
-  MenuItem
+  MenuItem,
+  Box
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import CheckIcon from "@mui/icons-material/Check";
@@ -25,6 +26,7 @@ const FormAditamentoValor = (props) => {
     openFormAditamento,
     setOpenFormAditamento,
     enviaAditamento,
+    editaAditamento,
     carregando,
     setOpenConfirmacao,
     errors,
@@ -62,51 +64,60 @@ const FormAditamentoValor = (props) => {
       </DialogTitle>
 
       <DialogContent>
-        <FormControl
-          sx={{ margin: "1rem 0" }}
-          error={errors.hasOwnProperty("tipo_aditamento")}
-          fullWidth
-        >
-          <InputLabel id="tipo_aditamento-label">Tipo</InputLabel>
-          <Select
-            labelId="tipo_aditamento-label"
-            id="tipo_aditamento"
-            label="Tipo"
-            value={formAditamento.tipo_aditamento}
-            name="tipo_aditamento"
-            onChange={handleInputChange}
-            required
+        <Box
+          component="form"
+          id="aditamento_val_form"
+          onSubmit={(e) => {
+            e.preventDefault()
+            const formData = new FormData(e.target)
+            formData.append("contrato_id", formAditamento.contrato_id)
+            openFormAditamento.acao === "adicionar" ? enviaAditamento(formData) : editaAditamento(formAditamento.id, formData)
+          }}>
+
+          <FormControl
+            sx={{ margin: "1rem 0" }}
+            error={errors.hasOwnProperty("tipo_aditamento")}
             fullWidth
           >
-            <MenuItem value="Acréscimo de valor">Acréscimo de valor</MenuItem>
-            <MenuItem value="Redução de valor">Redução de valor</MenuItem>
-          </Select>
-          <FormHelperText>{errors.tipo_aditamento}</FormHelperText>
-        </FormControl>
+            <InputLabel id="tipo_aditamento-label">Tipo</InputLabel>
+            <Select
+              labelId="tipo_aditamento-label"
+              id="tipo_aditamento"
+              label="Tipo"
+              value={formAditamento.tipo_aditamento}
+              name="tipo_aditamento"
+              onChange={handleInputChange}
+              required
+              fullWidth
+            >
+              <MenuItem value="Acréscimo de valor">Acréscimo de valor</MenuItem>
+              <MenuItem value="Redução de valor">Redução de valor</MenuItem>
+            </Select>
+            <FormHelperText>{errors.tipo_aditamento}</FormHelperText>
+          </FormControl>
 
-        <CampoValores
-          index=""
-          label="Valor"
-          value={formAditamento.valor_aditamento}
-          state={formAditamento}
-          setState={setFormAditamento}
-          name="valor_aditamento"
-          checaErros={() => {}}
-          error={errors.hasOwnProperty("valor_aditamento")}
-          helperText={errors.valor_aditamento}
-          fullWidth
-        />
+          <CampoValores
+            index=""
+            label="Valor"
+            defaultValue={formAditamento.valor_aditamento ?? ""}
+            name="valor_aditamento"
+            checaErros={() => {}}
+            error={errors.hasOwnProperty("valor_aditamento")}
+            helperText={errors.valor_aditamento}
+            fullWidth
+          />
 
-        <CampoPorcentagem
-          label="Porcentagem reajuste"
-          value={formAditamento.percentual}
-          name="percentual"
-          state={formAditamento}
-          setState={setFormAditamento}
-          error={errors.hasOwnProperty("percentual")}
-          helperText={errors.percentual}
-          fullWidth
-        />
+          <CampoPorcentagem
+            label="Porcentagem reajuste"
+            value={formAditamento.percentual}
+            name="percentual"
+            state={formAditamento}
+            setState={setFormAditamento}
+            error={errors.hasOwnProperty("percentual")}
+            helperText={errors.percentual}
+            fullWidth
+          />
+        </Box>
       </DialogContent>
 
       <DialogActions sx={{ margin: "1rem" }}>
@@ -126,6 +137,8 @@ const FormAditamentoValor = (props) => {
           sx={{ textTransform: "none" }}
           variant="contained"
           onClick={handleClickConfirmar}
+          form={openFormAditamento.acao === "adicionar" ? "aditamento_val_form" : ""}
+          type={openFormAditamento.acao === "adicionar" ? "submit" : ""}
         >
           {carregando ? (
             <CircularProgress

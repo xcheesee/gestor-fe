@@ -1,5 +1,13 @@
 const token = localStorage.getItem('access_token');
 
+function getFormattedFormData(form, initialValue={}) {
+    let data = {...initialValue};
+    for(const objArray of form.entries()) {
+        data[objArray[0]] = objArray[1]
+    }
+    return data
+} 
+
 export async function getContratos (url) {
         const options = {
             method: 'GET',
@@ -95,13 +103,6 @@ export async function sendPWData(formSubmit) {
     };
     
     const data = await (await fetch(url, options)).json()
-        // .catch((err) => {
-        //     setDialogErro({
-        //         open: true,
-        //         message: `${err.message}`
-        //     });
-        //     setCarregando(false);
-        // })
     return {...data, userMail: inputObject.email}
 }
 
@@ -129,7 +130,6 @@ export const newPwRequest = async (formData) => {
 }
 
 export async function sendNovoFormData (form) {
-    console.log(form)
     const url = new URL(
         `${process.env.REACT_APP_API_URL}/contrato`
     );
@@ -154,12 +154,10 @@ export async function sendNovoFormData (form) {
 
 export const editaDadosContrato = async (e, dados, formInterno, id) => {
     const url = `${process.env.REACT_APP_API_URL}/contrato/${id}`;
-    let data = {...dados}
-    for(const objArray of formInterno.entries()) {
-        data[objArray[0]] = objArray[1]
-    }
+    let data = getFormattedFormData(formInterno, dados)
     data.processo_sei += "/" /* gambiarra para validacao no backend */
     const [dia, mes, ano] = data.data_prazo_maximo ? data.data_prazo_maximo.split(/[/|-]/) : ["", "", ""] // formatacao de data para envio ao backend
+    const dataFormatada = new Date(ano, mes, dia)
     data.data_prazo_maximo = dia === "" ? "" : dados.data_prazo_maximo ?? `${ano}-${mes}-${dia}`
     const options = {
         method: 'PUT',
@@ -177,36 +175,29 @@ export const editaDadosContrato = async (e, dados, formInterno, id) => {
     return {status: res.status, ...json}
 }
 
-export const sendCertidaoEdit = async (e, formCertidaoEdit, id) => {
-    let data = {};
-    for(const objArray of formCertidaoEdit.entries()) {
-        data[objArray[0]] = objArray[1]
-    }
-    const url = `${process.env.REACT_APP_API_URL}/certidao/${id}`;
+export async function postFormData (form, path) {
+    let data = getFormattedFormData(form)
+    const url = `${process.env.REACT_APP_API_URL}/${path}`;
     const options = {
-        method: 'PUT',
+        method: 'POST',
         headers: {
             'Content-Type': 'application/json',
             'Accept': 'application/json',
             'Authorization': `Bearer ${token}`
         },
         body: JSON.stringify(data)
-    }
+    };
 
     const res = await fetch(url, options)
     const json = await res.json()
     return {status: res.status, ...json}
 }
 
-export const sendNewCertidao = async (formCertidao) => {
-    let data = {};
-    for(const objArray of formCertidao.entries()) {
-        data[objArray[0]] = objArray[1]
-    }
-    const url = `${process.env.REACT_APP_API_URL}/certidao`;
-    const token = localStorage.getItem('access_token');
+export async function putFormData (id, form, path) {
+    let data = getFormattedFormData(form)
+    const url = `${process.env.REACT_APP_API_URL}/${path}/${id}`;
     const options = {
-        method: 'POST',
+        method: 'PUT',
         headers: {
             'Content-Type': 'application/json',
             'Accept': 'application/json',
@@ -217,37 +208,4 @@ export const sendNewCertidao = async (formCertidao) => {
     const res = await fetch(url, options)
     const json = await res.json()
     return {status: res.status, ...json}
-            // .then(res => {
-                // setMudancaCertidoes(!mudancaCertidoes);
-                // if (res.ok) {
-                //     setCarregando(false);
-                //     setSnackbar({
-                //         open: true,
-                //         severity: 'success',
-                //         text: 'Certidão enviada com sucesso!',
-                //         color: 'success'
-                //     });
-                //     setOpenFormCertidao({ 
-                //         open: false, 
-                //         acao: 'adicionar' 
-                //     });
-                //     setFormCertidao({
-                //         ...formCertidao,
-                //         certidoes: '',
-                //         validade_certidoes: '',
-                //     });
-                //     return res.json();
-                // } else {
-                //     setCarregando(false);
-                //     setSnackbar({
-                //         open: true,
-                //         severity: 'error',
-                //         text: `Erro ${res.status} - Não foi possível enviar a certidão`,
-                //         color: 'error'
-                //     });
-                // }
-            // })
-            // .catch(err => {
-                // console.log(err);
-            // });
 }

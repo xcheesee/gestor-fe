@@ -5,7 +5,8 @@ import {
     DialogContent,
     DialogActions,
     Button,
-    TextField
+    TextField,
+    Box
 } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import CheckIcon from '@mui/icons-material/Check';
@@ -19,7 +20,9 @@ const FormGarantia = (props) => {
         setFormGarantia,
         openFormGarantia,
         setOpenFormGarantia,
+        numContrato,
         enviaGarantia,
+        editaGarantia,
         carregando,
         setOpenConfirmacao,
         errors,
@@ -39,7 +42,7 @@ const FormGarantia = (props) => {
 
     const handleClickConfirmar = () => {
         if (openFormGarantia.acao === 'adicionar') {
-            enviaGarantia();
+            // enviaGarantia();
         } else if (openFormGarantia.acao === 'editar') {
             setOpenConfirmacao({
                 open: true,
@@ -58,56 +61,64 @@ const FormGarantia = (props) => {
             </DialogTitle>
 
             <DialogContent>
-                <TextField
-                    variant="outlined"
-                    value={formGarantia.instituicao_financeira}
-                    name="instituicao_financeira"
-                    onChange={handleInputChange}
-                    label="Instituição financeira"
-                    sx={{ margin: '1rem 0' }}
-                    error={errors.hasOwnProperty('instituicao_financeira')}
-                    helperText={errors.instituicao_financeira}
-                    fullWidth
-                    required
-                />
+                <Box
+                    component="form"
+                    id="garantia_form"
+                    onSubmit={(e) => {
+                        e.preventDefault()
+                        const formData = new FormData(e.target)
+                        formData.append("contrato_id", formGarantia.contrato_id)
+                        openFormGarantia.acao === "adicionar"? enviaGarantia(formData) : editaGarantia(formGarantia.id, formData)
+                    }}>
+                    <TextField
+                        variant="outlined"
+                        defaultValue={formGarantia.instituicao_financeira ?? ""}
+                        name="instituicao_financeira"
+                        // onChange={handleInputChange}
+                        label="Instituição financeira"
+                        sx={{ margin: '1rem 0' }}
+                        error={errors.hasOwnProperty('instituicao_financeira')}
+                        helperText={errors.instituicao_financeira}
+                        fullWidth
+                        required
+                    />
 
-                <TextField
-                    variant="outlined"
-                    value={formGarantia.numero_documento}
-                    name="numero_documento"
-                    onChange={handleInputChange}
-                    label="Número do documento"
-                    sx={{ margin: '1rem 0' }}
-                    error={errors.hasOwnProperty('numero_documento')}
-                    helperText={errors.numero_documento}
-                    fullWidth
-                    required
-                />
+                    <TextField
+                        variant="outlined"
+                        defaultValue={formGarantia.numero_documento ?? ""}
+                        name="numero_documento"
+                        // onChange={handleInputChange}
+                        label="Número do documento"
+                        sx={{ margin: '1rem 0' }}
+                        error={errors.hasOwnProperty('numero_documento')}
+                        helperText={errors.numero_documento}
+                        fullWidth
+                        required
+                    />
 
-                <CampoValores 
-                    label="Valor"
-                    value={formGarantia.valor_garantia}
-                    state={formGarantia}
-                    setState={setFormGarantia}
-                    name="valor_garantia"
-                    checaErros={() => {}}
-                    error={errors.hasOwnProperty('valor_garantia')}
-                    helperText={errors.valor_garantia}
-                    fullWidth
-                    required
-                />
+                    <CampoValores 
+                        label="Valor"
+                        defaultValue={formGarantia.valor_garantia ?? ""}
+                        name="valor_garantia"
+                        checaErros={() => {}}
+                        error={errors.hasOwnProperty('valor_garantia')}
+                        helperText={errors.valor_garantia}
+                        fullWidth
+                        required
+                    />
 
-                <CampoData 
-                    label="Validade"
-                    defaultValue={formGarantia.data_validade_garantia}
-                    name="data_validade_garantia"
-                    onChange={handleInputChange}
-                    margin="1rem 0"
-                    error={errors.hasOwnProperty('data_validade_garantia')}
-                    helperText={errors.data_validade_garantia}
-                    fullWidth
-                    required
-                />
+                    <CampoData 
+                        label="Validade"
+                        defaultValue={formGarantia.data_validade_garantia ?? ""}
+                        name="data_validade_garantia"
+                        onChange={handleInputChange}
+                        margin="1rem 0"
+                        error={errors.hasOwnProperty('data_validade_garantia')}
+                        helperText={errors.data_validade_garantia}
+                        fullWidth
+                        required
+                    />
+                </Box>
             </DialogContent>
 
             <DialogActions sx={{ margin: '1rem' }}>
@@ -121,6 +132,8 @@ const FormGarantia = (props) => {
                 <Button 
                     sx={{ textTransform: 'none' }} 
                     variant="contained"
+                    type={openFormGarantia.acao === 'adicionar' ? "submit" : ""}
+                    form={openFormGarantia.acao === 'adicionar' ? "garantia_form" : ""}
                     onClick={handleClickConfirmar}
                 >
                     {carregando

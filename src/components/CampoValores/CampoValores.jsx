@@ -35,8 +35,6 @@ const CampoValores = (props) => {
     defaultValue, 
     name, 
     required, 
-    state, 
-    setState, 
     checaErros, 
     helperText, 
     error, 
@@ -62,7 +60,6 @@ const CampoValores = (props) => {
           label={label}
           defaultValue={defaultValue}
           name={name}
-          // onChange={handleChange}
           onBlur={(e) => { checaErros(e);}}
           InputProps={{
               startAdornment: <InputAdornment position="start">R$</InputAdornment>,

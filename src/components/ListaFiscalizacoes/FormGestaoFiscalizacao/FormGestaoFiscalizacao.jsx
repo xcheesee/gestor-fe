@@ -5,7 +5,8 @@ import {
     DialogContent,
     DialogActions,
     Button,
-    TextField
+    TextField,
+    Box
 } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import CheckIcon from '@mui/icons-material/Check';
@@ -16,6 +17,7 @@ const FormGestaoFiscalizacao = (props) => {
         formFiscalizacao,
         setFormFiscalizacao,
         enviaFiscalizacao,
+        editaFiscalizacao,
         carregando,
         openFormFiscalizacao,
         setOpenFormFiscalizacao,
@@ -56,83 +58,91 @@ const FormGestaoFiscalizacao = (props) => {
             </DialogTitle>
 
             <DialogContent>
-                <TextField
-                    variant="outlined"
-                    value={formFiscalizacao.nome_gestor}
-                    name="nome_gestor"
-                    onChange={handleInputChange}
-                    label="Gestor"
-                    sx={{ margin: '1rem 0' }}
-                    error={errors.hasOwnProperty('nome_gestor')}
-                    helperText={errors.nome_gestor}
-                    fullWidth
-                    required
-                />
+                <Box
+                    component="form"
+                    id="fisc_form"
+                    onSubmit={(e) => {
+                        e.preventDefault()
+                        const formData = new FormData(e.target)
+                        formData.append("contrato_id", formFiscalizacao.contrato_id)
+                        openFormFiscalizacao.acao === 'adicionar' ? enviaFiscalizacao(formData) : editaFiscalizacao(formFiscalizacao.id, formData)
+                    }}>
+                    <TextField
+                        variant="outlined"
+                        defaultValue={formFiscalizacao.nome_gestor ?? ""}
+                        name="nome_gestor"
+                        label="Gestor"
+                        sx={{ margin: '1rem 0' }}
+                        error={errors.hasOwnProperty('nome_gestor')}
+                        helperText={errors.nome_gestor}
+                        fullWidth
+                        required
+                    />
 
-                <TextField
-                    variant="outlined"
-                    value={formFiscalizacao.email_gestor}
-                    name="email_gestor"
-                    onChange={handleInputChange}
-                    label="E-mail do Gestor"
-                    sx={{ margin: '1rem 0' }}
-                    error={errors.hasOwnProperty('email_gestor')}
-                    helperText={errors.email_gestor}
-                    fullWidth
-                    required
-                />
+                    <TextField
+                        variant="outlined"
+                        defaultValue={formFiscalizacao.email_gestor ?? ""}
+                        name="email_gestor"
+                        label="E-mail do Gestor"
+                        sx={{ margin: '1rem 0' }}
+                        error={errors.hasOwnProperty('email_gestor')}
+                        helperText={errors.email_gestor}
+                        fullWidth
+                        required
+                    />
 
-                <TextField
-                    variant="outlined"
-                    value={formFiscalizacao.nome_fiscal}
-                    name="nome_fiscal"
-                    onChange={handleInputChange}
-                    label="Fiscal"
-                    sx={{ margin: '1rem 0' }}
-                    error={errors.hasOwnProperty('nome_fiscal')}
-                    helperText={errors.nome_fiscal}
-                    fullWidth
-                    required
-                />
+                    <TextField
+                        variant="outlined"
+                        defaultValue={formFiscalizacao.nome_fiscal ?? ""}
+                        name="nome_fiscal"
+                        // onChange={handleInputChange}
+                        label="Fiscal"
+                        sx={{ margin: '1rem 0' }}
+                        error={errors.hasOwnProperty('nome_fiscal')}
+                        helperText={errors.nome_fiscal}
+                        fullWidth
+                        required
+                    />
 
-                <TextField
-                    variant="outlined"
-                    value={formFiscalizacao.email_fiscal}
-                    name="email_fiscal"
-                    onChange={handleInputChange}
-                    label="E-mail do Fiscal"
-                    sx={{ margin: '1rem 0' }}
-                    error={errors.hasOwnProperty('email_fiscal')}
-                    helperText={errors.email_fiscal}
-                    fullWidth
-                    required
-                />
+                    <TextField
+                        variant="outlined"
+                        defaultValue={formFiscalizacao.email_fiscal ?? ""}
+                        name="email_fiscal"
+                        // onChange={handleInputChange}
+                        label="E-mail do Fiscal"
+                        sx={{ margin: '1rem 0' }}
+                        error={errors.hasOwnProperty('email_fiscal')}
+                        helperText={errors.email_fiscal}
+                        fullWidth
+                        required
+                    />
 
-                <TextField
-                    variant="outlined"
-                    value={formFiscalizacao.nome_suplente}
-                    name="nome_suplente"
-                    onChange={handleInputChange}
-                    label="Suplente"
-                    sx={{ margin: '1rem 0' }}
-                    error={errors.hasOwnProperty('nome_suplente')}
-                    helperText={errors.nome_suplente}
-                    fullWidth
-                    required
-                />
+                    <TextField
+                        variant="outlined"
+                        defaultValue={formFiscalizacao.nome_suplente ?? ""}
+                        name="nome_suplente"
+                        onChange={handleInputChange}
+                        label="Suplente"
+                        sx={{ margin: '1rem 0' }}
+                        error={errors.hasOwnProperty('nome_suplente')}
+                        helperText={errors.nome_suplente}
+                        fullWidth
+                        required
+                    />
 
-                <TextField
-                    variant="outlined"
-                    value={formFiscalizacao.email_suplente}
-                    name="email_suplente"
-                    onChange={handleInputChange}
-                    label="E-mail do Suplente"
-                    sx={{ margin: '1rem 0' }}
-                    error={errors.hasOwnProperty('email_fiscal')}
-                    helperText={errors.email_fiscal}
-                    fullWidth
-                    required
-                />
+                    <TextField
+                        variant="outlined"
+                        defaultValue={formFiscalizacao.email_suplente ?? ""}
+                        name="email_suplente"
+                        onChange={handleInputChange}
+                        label="E-mail do Suplente"
+                        sx={{ margin: '1rem 0' }}
+                        error={errors.hasOwnProperty('email_fiscal')}
+                        helperText={errors.email_fiscal}
+                        fullWidth
+                        required
+                    />
+                </Box>
             </DialogContent>
 
             <DialogActions sx={{ margin: '1rem' }}>
@@ -147,6 +157,8 @@ const FormGestaoFiscalizacao = (props) => {
                     sx={{ textTransform: 'none' }} 
                     variant="contained"
                     onClick={handleClickConfirmar}
+                    type={openFormFiscalizacao.acao === 'adicionar' ? "submit" : ""}
+                    form={openFormFiscalizacao.acao === 'adicionar' ? "fisc_form" : ""}
                 >
                     {carregando
                         ? <CircularProgress size={16} sx={{ color: '#FFFFFF', mr: '0.7rem' }} />

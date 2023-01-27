@@ -11,7 +11,7 @@ import DialogConfirmacao from '../DialogConfirmacao';
 import BotoesTab from '../BotoesTab';
 import BotaoAdicionar from '../BotaoAdicionar';
 import { formataData } from '../../commom/utils/utils';
-import { sendCertidaoEdit, sendNewCertidao } from '../../commom/utils/api';
+import { postFormData, putFormData, sendCertidaoEdit, sendNewCertidao } from '../../commom/utils/api';
 
 const TabCertidoes = (props) => {
     const campos = [
@@ -143,7 +143,7 @@ const ListaCertidoes = (props) => {
 
         setCarregando(true);
         setMudancaCertidoes(!mudancaCertidoes);
-        const res = await sendCertidaoEdit(e, formCertidaoEdit, id)
+        const res = await putFormData(id, formCertidaoEdit, "certidao")
         if (res.status === 200) {
             setSnackbar({
                 open: true,
@@ -186,7 +186,7 @@ const ListaCertidoes = (props) => {
     const enviaCertidao = async (formData) => {
         setMudancaCertidoes(!mudancaCertidoes);
         setCarregando(true)
-        const res = await sendNewCertidao(formData)
+        const res = await postFormData(formData, "certidao")
         if (res.status === 201) {
             setSnackbar({
                 open: true,

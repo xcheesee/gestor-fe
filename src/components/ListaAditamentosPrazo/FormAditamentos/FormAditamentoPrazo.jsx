@@ -10,7 +10,8 @@ import {
   InputLabel,
   Select,
   TextField,
-  MenuItem
+  MenuItem,
+  Box
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import CheckIcon from "@mui/icons-material/Check";
@@ -23,6 +24,7 @@ const FormAditamentoPrazo = (props) => {
     openFormAditamento,
     setOpenFormAditamento,
     enviaAditamento,
+    editaAditamento,
     carregando,
     setOpenConfirmacao,
     errors,
@@ -42,7 +44,6 @@ const FormAditamentoPrazo = (props) => {
 
   const handleClickConfirmar = () => {
     if (openFormAditamento.acao === "adicionar") {
-      enviaAditamento();
     } else if (openFormAditamento.acao === "editar") {
       setOpenConfirmacao({
         open: true,
@@ -60,44 +61,55 @@ const FormAditamentoPrazo = (props) => {
       </DialogTitle>
 
       <DialogContent>
-        <FormControl
-          sx={{ margin: "1rem 0" }}
-          error={errors.hasOwnProperty("tipo_aditamento")}
-          fullWidth
-        >
-          <InputLabel id="tipo_aditamento-label">Tipo</InputLabel>
-          <Select
-            labelId="tipo_aditamento-label"
-            id="tipo_aditamento"
-            label="Tipo"
-            value={formAditamento.tipo_aditamento}
-            name="tipo_aditamento"
-            onChange={handleInputChange}
-            required
-            fullWidth
-          >
-            <MenuItem value="Prorrogação de prazo">
-              Prorrogação de prazo
-            </MenuItem>
-            <MenuItem value="Supressão de prazo">Supressão de prazo</MenuItem>
-            <MenuItem value="Suspensão">Suspensão</MenuItem>
-            <MenuItem value="Rescisão">Rescisão</MenuItem>
-          </Select>
-          <FormHelperText>{errors.tipo_aditamento}</FormHelperText>
-        </FormControl>
+        <Box
+          component="form"
+          id="aditamento_prazo_form"
+          onSubmit={(e) => {
+            e.preventDefault()
+            const formData = new FormData(e.target)
+            formData.append("contrato_id", formAditamento.contrato_id)
+            openFormAditamento.acao === "adicionar" ? enviaAditamento(formData) : editaAditamento(formAditamento.id, formData)
+          }}>
 
-        <TextField
-          variant="outlined"
-          value={formAditamento.dias_reajuste}
-          name="dias_reajuste"
-          onChange={handleInputChange}
-          label="Dias Reajuste"
-          sx={{ margin: "1rem 0" }}
-          error={errors.hasOwnProperty("dias_reajuste")}
-          helperText={errors.dias_reajuste}
-          fullWidth
-          required
-        />
+            <FormControl
+              sx={{ margin: "1rem 0" }}
+              error={errors.hasOwnProperty("tipo_aditamento")}
+              fullWidth
+            >
+              <InputLabel id="tipo_aditamento-label">Tipo</InputLabel>
+              <Select
+                labelId="tipo_aditamento-label"
+                id="tipo_aditamento"
+                label="Tipo"
+                value={formAditamento.tipo_aditamento}
+                name="tipo_aditamento"
+                onChange={handleInputChange}
+                required
+                fullWidth
+              >
+                <MenuItem value="Prorrogação de prazo">
+                  Prorrogação de prazo
+                </MenuItem>
+                <MenuItem value="Supressão de prazo">Supressão de prazo</MenuItem>
+                <MenuItem value="Suspensão">Suspensão</MenuItem>
+                <MenuItem value="Rescisão">Rescisão</MenuItem>
+              </Select>
+              <FormHelperText>{errors.tipo_aditamento}</FormHelperText>
+            </FormControl>
+
+            <TextField
+              variant="outlined"
+              value={formAditamento.dias_reajuste}
+              name="dias_reajuste"
+              onChange={handleInputChange}
+              label="Dias Reajuste"
+              sx={{ margin: "1rem 0" }}
+              error={errors.hasOwnProperty("dias_reajuste")}
+              helperText={errors.dias_reajuste}
+              fullWidth
+              required
+            />
+          </Box>
       </DialogContent>
 
       <DialogActions sx={{ margin: "1rem" }}>
@@ -117,6 +129,8 @@ const FormAditamentoPrazo = (props) => {
           sx={{ textTransform: "none" }}
           variant="contained"
           onClick={handleClickConfirmar}
+          type={openFormAditamento.acao === "adicionar" ? "submit" : ""}
+          form={openFormAditamento.acao === "adicionar" ? "aditamento_prazo_form" : ""}
         >
           {carregando ? (
             <CircularProgress

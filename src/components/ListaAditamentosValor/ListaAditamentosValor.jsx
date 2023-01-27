@@ -11,6 +11,7 @@ import BotoesTab from "../BotoesTab";
 import BotaoAdicionar from "../BotaoAdicionar";
 import FormAditamentoValor from "./FomAditamentoValor/FormAditamentoValor";
 import { formataValores } from "../../commom/utils/utils";
+import { postFormData, putFormData, sendNewAditamentoVal } from "../../commom/utils/api";
 
 const TabAditamentosValor = (props) => {
   const campos = [
@@ -140,53 +141,36 @@ const handleClickEditar = (e, aditamento) => {
   setAcao('editar');
 }
 
-const editaAditamento = (id, formAditamentoEdit) => {
-  const url = `${process.env.REACT_APP_API_URL}/aditamento_valor/${id}`;
-  const token = localStorage.getItem('access_token');
-  const options = {
-      method: 'PUT',
-      headers: {
-          'Content-Type': 'application/json',
-          'Accept': 'application/json',
-          'Authorization': `Bearer ${token}`
-      },
-      body: JSON.stringify(formAditamentoEdit)
-  };
-
-  setCarregando(true);
-
-  fetch(url, options)
-  .then(res => {
-      setMudancaAditamentos_valor(!mudancaAditamentos_valor);
-      if (res.ok) {
-          setCarregando(false);
-          setSnackbar({
-              open: true,
-              severity: 'success',
-              text: 'Aditamento editado com sucesso!',
-              color: 'success'
-          });
-          setOpenFormAditamentos({
-              open: false,
-              acao: 'adicionar'
-          });
-          setFormAditamentos({
-              ...formAditamentos,
-              tipo_aditamento: '',
-              valor_aditamento: '',
-              percentual: ''
-          });
-          return res.json();
-      } else {
-          setCarregando(false);
-          setSnackbar({
-              open: true,
-              severity: 'error',
-              text: `Erro ${res.status} - Não foi possível editar o aditamento`,
-              color: 'error'
-          });
-      }
-  });
+const editaAditamento = async (id, formAditamentoEdit) => {
+    setCarregando(true);
+    const res = await putFormData(id, formAditamentoEdit, "aditamento_valor")
+    if (res.status === 200) {
+        setSnackbar({
+            open: true,
+            severity: 'success',
+            text: 'Aditamento editado com sucesso!',
+            color: 'success'
+        });
+        setOpenFormAditamentos({
+            open: false,
+            acao: 'adicionar'
+        });
+        setFormAditamentos({
+            ...formAditamentos,
+            tipo_aditamento: '',
+            valor_aditamento: '',
+            percentual: ''
+        });
+    } else {
+        setSnackbar({
+            open: true,
+            severity: 'error',
+            text: `Erro ${res.status} - Não foi possível editar o aditamento`,
+            color: 'error'
+        });
+    }
+    setCarregando(false);
+    setMudancaAditamentos_valor(!mudancaAditamentos_valor);
 }
 
 const handleClickAdicionar = () => {
@@ -202,66 +186,44 @@ const handleClickAdicionar = () => {
   });
 }
 
-const enviaAditamento = () => {
-  const url = `${process.env.REACT_APP_API_URL}/aditamento_valor`;
-  const token = localStorage.getItem('access_token');
-  const options = {
-      method: 'POST',
-      headers: {
-          'Content-Type': 'application/json',
-          'Accept': 'application/json',
-          'Authorization': `Bearer ${token}`
-      },
-      body: JSON.stringify(formAditamentos)
-  };
-
-  setCarregando(true);
-
-  fetch(url, options)
-  .then(res => {
-      setMudancaAditamentos_valor(!mudancaAditamentos_valor);
-      if (res.ok) {
-          setCarregando(false);
-          setSnackbar({
-              open: true,
-              severity: 'success',
-              text: 'Aditamento enviado com sucesso!',
-              color: 'success'
-          });
-          setOpenFormAditamentos({ 
-              open: false, 
-              acao: 'adicionar' 
-          });
-          setFormAditamentos({
-              ...formAditamentos,
-              tipo_aditamento: '',
-              valor_aditamento: '',
-              percentual: ''
-          });
-          return res.json();
-      } else if (res.status === 422) {
-          setCarregando(false);
-          setSnackbar({
-              open: true,
-              severity: 'error',
-              text: `Erro ${res.status} - Não foi possível enviar o aditamento`,
-              color: 'error'
-          });
-          return res.json()
-              .then(data => setErrors(data.errors));
-      } else {
-          setCarregando(false);
-          setSnackbar({
-              open: true,
-              severity: 'error',
-              text: `Erro ${res.status} - Não foi possível enviar o aditamento`,
-              color: 'error'
-          });
-      }
-  })
-  .catch(err => {
-      console.log(err);
-  });
+const enviaAditamento = async (form) => {
+    setCarregando(true);
+    const res = await postFormData(form, "aditamento_valor")
+    if (res.status === 201) {
+        setSnackbar({
+            open: true,
+            severity: 'success',
+            text: 'Aditamento enviado com sucesso!',
+            color: 'success'
+        });
+        setOpenFormAditamentos({ 
+            open: false, 
+            acao: 'adicionar' 
+        });
+        setFormAditamentos({
+            ...formAditamentos,
+            tipo_aditamento: '',
+            valor_aditamento: '',
+            percentual: ''
+        });
+    } else if (res.status === 422) {
+        setSnackbar({
+            open: true,
+            severity: 'error',
+            text: `Erro ${res.status} - Não foi possível enviar o aditamento`,
+            color: 'error'
+        });
+        setErrors(res.errors)
+    } else {
+        setSnackbar({
+            open: true,
+            severity: 'error',
+            text: `Erro ${res.status} - Não foi possível enviar o aditamento`,
+            color: 'error'
+        });
+    }
+    setCarregando(false);
+    setMudancaAditamentos_valor(!mudancaAditamentos_valor);
 }
 
   return (
@@ -309,6 +271,7 @@ const enviaAditamento = () => {
                 openFormAditamento={openFormAditamentos} 
                 setOpenFormAditamento={setOpenFormAditamentos} 
                 enviaAditamento={enviaAditamento}
+                editaAditamento={editaAditamento}
                 carregando={carregando}
                 setOpenConfirmacao={setOpenConfirmacao}
                 errors={errors}
@@ -333,7 +296,8 @@ const enviaAditamento = () => {
             <DialogConfirmacao
                 openConfirmacao={openConfirmacao} 
                 setOpenConfirmacao={setOpenConfirmacao}
-                acao={acao} 
+                acao={acao}
+                form="aditamento_val_form"
                 fnExcluir={excluiAditamento}
                 fnEditar={editaAditamento}
                 formInterno={formAditamentos}

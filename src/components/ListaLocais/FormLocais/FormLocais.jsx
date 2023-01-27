@@ -11,7 +11,8 @@ import {
     MenuItem,
     TextField,
     CircularProgress,
-    FormHelperText
+    FormHelperText,
+    Box
 } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import CheckIcon from '@mui/icons-material/Check';
@@ -23,6 +24,7 @@ const FormLocais = (props) => {
         openFormLocal,
         setOpenFormLocal,
         enviaLocal,
+        editaLocal,
         carregando,
         setOpenConfirmacao,
         acao,
@@ -229,122 +231,134 @@ const FormLocais = (props) => {
             </DialogTitle>
 
             <DialogContent>
-                <FormControl 
-                    sx={{ margin: '1rem 0' }}
-                    error={errors.hasOwnProperty('regiao')}
-                    fullWidth 
-                    required
-                >
-                    <InputLabel id="regiao-label">Região</InputLabel>
-                    <Select
-                        labelId="regiao-label"
-                        id="regiao"
-                        label="Região"
-                        value={regiao}
-                        name="regiao"
-                        onChange={(e) => { handleChangeRegiao(e.target.value); }}
-                        fullWidth
+                <Box
+                    component="form"
+                    id="local_form"
+                    onSubmit={(e) => {
+                        e.preventDefault()
+                        const formData = new FormData(e.target)
+                        formData.append("contrato_id", formLocal.contrato_id)
+                        console.log(formData)
+                        openFormLocal.acao === 'adicionar' ? enviaLocal(formData) : editaLocal(formLocal.id, formData)
+                    }}>
+
+                    <FormControl 
+                        sx={{ margin: '1rem 0' }}
+                        error={errors.hasOwnProperty('regiao')}
+                        fullWidth 
+                        required
                     >
-                        <MenuItem value={"CO"}>Centro-Oeste</MenuItem>
-                        <MenuItem value={"L"}>Leste</MenuItem>
-                        <MenuItem value={"N"}>Norte</MenuItem>
-                        <MenuItem value={"S"}>Sul</MenuItem>
-                    </Select>
-                <FormHelperText>{errors.regiao}</FormHelperText>
-                </FormControl>
+                        <InputLabel id="regiao-label">Região</InputLabel>
+                        <Select
+                            labelId="regiao-label"
+                            id="regiao"
+                            label="Região"
+                            value={regiao}
+                            name="regiao"
+                            onChange={(e) => { handleChangeRegiao(e.target.value); }}
+                            fullWidth
+                        >
+                            <MenuItem value={"CO"}>Centro-Oeste</MenuItem>
+                            <MenuItem value={"L"}>Leste</MenuItem>
+                            <MenuItem value={"N"}>Norte</MenuItem>
+                            <MenuItem value={"S"}>Sul</MenuItem>
+                        </Select>
+                    <FormHelperText>{errors.regiao}</FormHelperText>
+                    </FormControl>
 
-                <FormControl 
-                    sx={{ margin: '1rem 0', position: 'relative' }} 
-                    error={errors.hasOwnProperty('subprefeitura_id')}
-                    fullWidth 
-                    required 
-                >
-                    <InputLabel id="subprefeitura-label">Subprefeitura</InputLabel>
-                    <Select
-                        labelId="subprefeitura-label"
-                        id="subprefeitura"
-                        label="Subprefeitura"
-                        value={subprefeitura.value}
-                        name="subprefeitura"
-                        onChange={(e) => { handleChangeSubprefeitura(e.target.value); }}
-                        disabled={subprefeitura.disabled}
-                        fullWidth
+                    <FormControl 
+                        sx={{ margin: '1rem 0', position: 'relative' }} 
+                        error={errors.hasOwnProperty('subprefeitura_id')}
+                        fullWidth 
+                        required 
                     >
-                        {listaSubpref.map((subpref, index) => {
-                            return (
-                                <MenuItem key={index} value={subpref.id}>{subpref.nome}</MenuItem>
-                            );
-                        })}
-                    </Select>
+                        <InputLabel id="subprefeitura-label">Subprefeitura</InputLabel>
+                        <Select
+                            labelId="subprefeitura-label"
+                            id="subprefeitura_id"
+                            label="Subprefeitura"
+                            value={subprefeitura.value}
+                            name="subprefeitura_id"
+                            onChange={(e) => { handleChangeSubprefeitura(e.target.value); }}
+                            disabled={subprefeitura.disabled}
+                            fullWidth
+                        >
+                            {listaSubpref.map((subpref, index) => {
+                                return (
+                                    <MenuItem key={index} value={subpref.id}>{subpref.nome}</MenuItem>
+                                );
+                            })}
+                        </Select>
 
-                    {subprefeitura.carregando === true
-                        ? 
-                        <CircularProgress 
-                            size={20} 
-                            sx={{ 
-                                margin: '1rem',
-                                position: 'absolute',
-                                left: '87%',
-                                top: '7%'
-                            }} 
-                        />
-                        : ""
-                    }
-                    <FormHelperText>{errors.subprefeitura_id}</FormHelperText>
-                </FormControl>
+                        {subprefeitura.carregando === true
+                            ? 
+                            <CircularProgress 
+                                size={20} 
+                                sx={{ 
+                                    margin: '1rem',
+                                    position: 'absolute',
+                                    left: '87%',
+                                    top: '7%'
+                                }} 
+                            />
+                            : ""
+                        }
+                        <FormHelperText>{errors.subprefeitura_id}</FormHelperText>
+                    </FormControl>
 
-                <FormControl 
-                    sx={{ margin: '1rem 0', position: 'relative' }} 
-                    error={errors.hasOwnProperty('distrito_id')}
-                    fullWidth 
-                    required
-                >
-                    <InputLabel id="distrito-label">Distrito</InputLabel>
-                    <Select
-                        labelId="distrito-label"
-                        id="distrito"
-                        label="Distrito"
-                        value={distrito.value}
-                        name="distrito"
-                        onChange={(e) => { handleChangeDistrito(e.target.value); }}
-                        disabled={distrito.disabled}
-                        fullWidth
+                    <FormControl 
+                        sx={{ margin: '1rem 0', position: 'relative' }} 
+                        error={errors.hasOwnProperty('distrito_id')}
+                        fullWidth 
+                        required
                     >
-                        {listaDistrito.map((distrito, index) => {
-                            return (
-                                <MenuItem key={index} value={distrito.id}>{distrito.nome}</MenuItem>
-                            );
-                        })}
-                    </Select>
+                        <InputLabel id="distrito-label">Distrito</InputLabel>
+                        <Select
+                            labelId="distrito-label"
+                            id="distrito_id"
+                            label="Distrito"
+                            value={distrito.value}
+                            name="distrito_id"
+                            onChange={(e) => { handleChangeDistrito(e.target.value); }}
+                            disabled={distrito.disabled}
+                            fullWidth
+                        >
+                            {listaDistrito.map((distrito, index) => {
+                                return (
+                                    <MenuItem key={index} value={distrito.id}>{distrito.nome}</MenuItem>
+                                );
+                            })}
+                        </Select>
 
-                    {distrito.carregando === true
-                        ? 
-                        <CircularProgress 
-                            size={20} 
-                            sx={{ 
-                                margin: '1rem',
-                                position: 'absolute',
-                                left: '87%',
-                                top: '7%'
-                            }} 
-                        />
-                        : ""
-                    }
-                    <FormHelperText>{errors.distrito_id}</FormHelperText>
-                </FormControl>
+                        {distrito.carregando === true
+                            ? 
+                            <CircularProgress 
+                                size={20} 
+                                sx={{ 
+                                    margin: '1rem',
+                                    position: 'absolute',
+                                    left: '87%',
+                                    top: '7%'
+                                }} 
+                            />
+                            : ""
+                        }
+                        <FormHelperText>{errors.distrito_id}</FormHelperText>
+                    </FormControl>
 
-                <TextField
-                    variant="outlined"
-                    value={unidade}
-                    name="unidade"
-                    onChange={handleInputChange}
-                    label="Unidade"
-                    sx={{ margin: '1rem 0' }}
-                    error={errors.hasOwnProperty('unidade')}
-                    helperText={errors.unidade}
-                    fullWidth
-                    required
-                />
+                    <TextField
+                        variant="outlined"
+                        value={unidade}
+                        name="unidade"
+                        onChange={handleInputChange}
+                        label="Unidade"
+                        sx={{ margin: '1rem 0' }}
+                        error={errors.hasOwnProperty('unidade')}
+                        helperText={errors.unidade}
+                        fullWidth
+                        required
+                    />
+                </Box>
                     
             </DialogContent>
 
@@ -359,6 +373,8 @@ const FormLocais = (props) => {
                 <Button
                     sx={{ textTransform: 'none' }} 
                     variant="contained"
+                    type={openFormLocal.acao === 'adicionar' ? 'submit' : ""}
+                    form={openFormLocal.acao === 'adicionar' ? "local_form" : ""}
                     onClick={confirmar}
                 >
                     {carregando

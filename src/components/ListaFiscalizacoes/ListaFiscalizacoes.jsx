@@ -10,6 +10,7 @@ import FormGestaoFiscalizacao from './FormGestaoFiscalizacao';
 import DialogConfirmacao from '../DialogConfirmacao';
 import BotoesTab from '../BotoesTab';
 import BotaoAdicionar from '../BotaoAdicionar';
+import { postFormData, putFormData, sendFiscalizacaoEdit, sendNewFiscalizacao } from '../../commom/utils/api';
 
 const TabFiscalizacao = (props) => {
     const campos = [
@@ -153,56 +154,39 @@ const ListaFiscalizacoes = (props) => {
         setAcao('editar');
     }
 
-    const editaFiscalizacao = (id, formFiscalizacaoEdit) => {
-        const url = `${process.env.REACT_APP_API_URL}/gestaofiscalizacao/${id}`
-        const token = localStorage.getItem('access_token');
-        const options = {
-            method: 'PUT',
-            headers: {
-                'Content-Type': 'application/json',
-                'Accept': 'application/json',
-                'Authorization': `Bearer ${token}`
-            },
-            body: JSON.stringify(formFiscalizacaoEdit)
-        }
-
+    const editaFiscalizacao = async (id, formFiscalizacaoEdit) => {
         setCarregando(true);
-
-        fetch(url, options)
-            .then(res => {
-                setMudancaFiscalizacoes(!mudancaFiscalizacoes);
-                if(res.ok) {
-                    setCarregando(false);
-                    setSnackbar({
-                        open: true,
-                        severity: 'success',
-                        text: 'Gestão/fiscalização editada com sucesso!',
-                        color: 'success'
-                    });
-                    setOpenFormFiscalizacao({
-                        open: false,
-                        acao: 'adicionar'
-                    });
-                    setFormFiscalizacao({
-                        ...formFiscalizacao,
-                        nome_gestor: '',
-                        email_gestor: '',
-                        nome_fiscal: '',
-                        email_fiscal: '',
-                        nome_suplente: '',
-                        email_suplente: ''
-                    });
-                    return res.json();
-                } else {
-                    setCarregando(false);
-                    setSnackbar({
-                        open: true,
-                        severity: 'error',
-                        text: `Erro ${res.status} - Não foi possível editar a gestão/fiscalização`,
-                        color: 'error'
-                    });
-                }
+        const res = await putFormData( id, formFiscalizacaoEdit, "gestaofiscalizacao")
+        if(res.status === 200) {
+            setSnackbar({
+                open: true,
+                severity: 'success',
+                text: 'Gestão/fiscalização editada com sucesso!',
+                color: 'success'
             });
+            setOpenFormFiscalizacao({
+                open: false,
+                acao: 'adicionar'
+            });
+            setFormFiscalizacao({
+                ...formFiscalizacao,
+                nome_gestor: '',
+                email_gestor: '',
+                nome_fiscal: '',
+                email_fiscal: '',
+                nome_suplente: '',
+                email_suplente: ''
+            });
+        } else {
+            setSnackbar({
+                open: true,
+                severity: 'error',
+                text: `Erro ${res.status} - Não foi possível editar a gestão/fiscalização`,
+                color: 'error'
+            });
+        }
+        setMudancaFiscalizacoes(!mudancaFiscalizacoes);
+        setCarregando(false);
     }
 
     const handleClickAdicionar = () => {
@@ -221,72 +205,50 @@ const ListaFiscalizacoes = (props) => {
         });
     }
 
-    const enviaFiscalizacao = () => {
-        const url = `${process.env.REACT_APP_API_URL}/gestaofiscalizacao`
-        const token = localStorage.getItem('access_token');
-        const options = {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Accept': 'application/json',
-                'Authorization': `Bearer ${token}`
-            },
-            body: JSON.stringify(formFiscalizacao)
-        };
-
+    const enviaFiscalizacao = async (formFisc) => {
         setCarregando(true);
-
-        fetch(url, options)
-            .then(res => {
-                setMudancaFiscalizacoes(!mudancaFiscalizacoes);
-                if (res.ok) {
-                    setCarregando(false);
-                    setSnackbar({
-                        open: true,
-                        severity: 'success',
-                        text: 'Gestão/fiscalização enviada com sucesso!',
-                        color: 'success'
-                    });
-                    setOpenFormFiscalizacao({
-                        open: false,
-                        acao: 'adicionar'
-                    });
-                    setFormFiscalizacao({
-                        ...formFiscalizacao,
-                        nome_gestor: '',
-                        email_gestor: '',
-                        nome_fiscal: '',
-                        email_fiscal: '',
-                        nome_suplente: '',
-                        email_suplente: ''
-                    });
-                    return res.json();
-                } else if (res.status === 422) {
-                    setCarregando(false);
-                    setSnackbar({
-                        open: true,
-                        severity: 'error',
-                        text: `Erro ${res.status} - Não foi possível enviar a gestão/fiscalização`,
-                        color: 'error'
-                    });
-                    return res.json()
-                        .then(data => {
-                            setErrors(data.errors);
-                        });
-                } else {
-                    setCarregando(false);
-                    setSnackbar({
-                        open: true,
-                        severity: 'error',
-                        text: `Erro ${res.status} - Não foi possível enviar a gestão/fiscalização`,
-                        color: 'error'
-                    });
-                }
-            })
-            .catch(err => {
-                console.log(err);
+        const res = await postFormData(formFisc, "gestaofiscalizacao")
+        if (res.status === 201) {
+            setSnackbar({
+                open: true,
+                severity: 'success',
+                text: 'Gestão/fiscalização enviada com sucesso!',
+                color: 'success'
             });
-    }
+            setOpenFormFiscalizacao({
+                open: false,
+                acao: 'adicionar'
+            });
+            setFormFiscalizacao({
+                ...formFiscalizacao,
+                nome_gestor: '',
+                email_gestor: '',
+                nome_fiscal: '',
+                email_fiscal: '',
+                nome_suplente: '',
+                email_suplente: ''
+            });
+        } else if (res.status === 422) {
+            setCarregando(false);
+            setSnackbar({
+                open: true,
+                severity: 'error',
+                text: `Erro ${res.status} - Não foi possível enviar a gestão/fiscalização`,
+                color: 'error'
+            });
+            setErrors(res.errors);
+        } else {
+            setCarregando(false);
+            setSnackbar({
+                open: true,
+                severity: 'error',
+                text: `Erro ${res.status} - Não foi possível enviar a gestão/fiscalização`,
+                color: 'error'
+            });
+        }
+        setCarregando(false);
+        setMudancaFiscalizacoes(!mudancaFiscalizacoes);
+        }
 
     return (
         <Box>
@@ -334,6 +296,7 @@ const ListaFiscalizacoes = (props) => {
                 formFiscalizacao={formFiscalizacao}
                 setFormFiscalizacao={setFormFiscalizacao}
                 enviaFiscalizacao={enviaFiscalizacao}
+                editaFiscalizacao={editaFiscalizacao}
                 carregando={carregando}
                 openFormFiscalizacao={openFormFiscalizacao}
                 setOpenFormFiscalizacao={setOpenFormFiscalizacao}
@@ -361,6 +324,7 @@ const ListaFiscalizacoes = (props) => {
                 openConfirmacao={openConfirmacao}
                 setOpenConfirmacao={setOpenConfirmacao}
                 acao={acao}
+                form="fisc_form"
                 fnExcluir={excluiFiscalizacao}
                 fnEditar={editaFiscalizacao}
                 formInterno={formFiscalizacao}

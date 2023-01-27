@@ -10,6 +10,7 @@ import DialogConfirmacao from '../DialogConfirmacao';
 import BotoesTab from '../BotoesTab';
 import BotaoAdicionar from '../BotaoAdicionar';
 import FormLocais from './FormLocais';
+import { postFormData, putFormData, sendLocalEdit, sendNewLocal } from '../../commom/utils/api';
 
 const dicionarioRegioes = {
     "CO": "Centro-Oeste",
@@ -152,54 +153,38 @@ const ListaLocais = (props) => {
         setAcao('editar');
     }
 
-    const editaLocal = (id, formLocalEdit) => {
-        const url = `${process.env.REACT_APP_API_URL}/servicolocal/${id}`;
-        const token = localStorage.getItem('access_token');
-        const options = {
-            method: 'PUT',
-            headers: {
-                'Content-Type': 'application/json',
-                'Accept': 'application/json',
-                'Authorization': `Bearer ${token}`
-            },
-            body: JSON.stringify(formLocalEdit)
-        };
-
+    const editaLocal = async (id, formLocalEdit) => {
         setCarregando(true);
+        const res = await putFormData(id, formLocalEdit, "servicolocal")
 
-        fetch(url, options)
-            .then(res => {
-                setMudancaLocais(!mudancaLocais);
-                if (res.ok) {
-                    setCarregando(false);
-                    setSnackbar({
-                        open: true,
-                        severity: 'success',
-                        text: 'Local de serviço editado com sucesso!',
-                        color: 'success'
-                    });
-                    setOpenFormLocal({
-                        open: false,
-                        acao: 'adicionar'
-                    });
-                    setFormLocal({
-                        ...formLocal,
-                        regiao: '',
-                        subprefeitura_id: '',
-                        distrito_id: '',
-                        unidade: ''
-                    });
-                    return res.json();
-                } else {
-                    setCarregando(false);
-                    setSnackbar({
-                        open: true,
-                        severity: 'error',
-                        text: `Erro ${res.status} - Não foi possível editar o local`,
-                        color: 'error'
-                    });
-                }
+        if (res.status === 200) {
+            setSnackbar({
+                open: true,
+                severity: 'success',
+                text: 'Local de serviço editado com sucesso!',
+                color: 'success'
             });
+            setOpenFormLocal({
+                open: false,
+                acao: 'adicionar'
+            });
+            setFormLocal({
+                ...formLocal,
+                regiao: '',
+                subprefeitura_id: '',
+                distrito_id: '',
+                unidade: ''
+            });
+        } else {
+            setSnackbar({
+                open: true,
+                severity: 'error',
+                text: `Erro ${res.status} - Não foi possível editar o local`,
+                color: 'error'
+            });
+        }
+        setCarregando(false);
+        setMudancaLocais(!mudancaLocais);
     }
 
     const handleClickAdicionar = () => {
@@ -210,66 +195,46 @@ const ListaLocais = (props) => {
         setAcao('adicionar');
     }
 
-    const enviaLocal = (form) => {
-        const url = `${process.env.REACT_APP_API_URL}/servicolocal`;
-        const token = localStorage.getItem('access_token');
-        const options = {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Accept': 'application/json',
-                'Authorization': `Bearer ${token}`
-            },
-            body: JSON.stringify(form)
-        };
-
+    const enviaLocal = async (form) => {
         setCarregando(true);
-
-        fetch(url, options)
-            .then(res => {
-                setMudancaLocais(!mudancaLocais);
-                if (res.ok) {
-                    setCarregando(false);
-                    setSnackbar({
-                        open: true,
-                        severity: 'success',
-                        text: 'Local de serviço enviado com sucesso!',
-                        color: 'success'
-                    });
-                    setOpenFormLocal({
-                        open: false,
-                        acao: 'adicionar'
-                    });
-                    setFormLocal({
-                        ...formLocal,
-                        regiao: '',
-                        subprefeitura_id: '',
-                        distrito_id: '',
-                        unidade: ''
-                    });
-                    return res.json();
-                } else if (res.status === 422) {
-                    setCarregando(false);
-                    setSnackbar({
-                        open: true,
-                        severity: 'error',
-                        text: `Erro ${res.status} - Não foi possível enviar o local`,
-                        color: 'error'
-                    });
-                    return res.json()
-                        .then(data => {
-                            setErrors(data.errors);
-                        });
-                } else {
-                    setCarregando(false);
-                    setSnackbar({
-                        open: true,
-                        severity: 'error',
-                        text: `Erro ${res.status} - Não foi possível enviar o local`,
-                        color: 'error'
-                    });
-                }
-            })
+        const res = await postFormData(form, "servicolocal")
+        if (res.status === 201) {
+            setSnackbar({
+                open: true,
+                severity: 'success',
+                text: 'Local de serviço enviado com sucesso!',
+                color: 'success'
+            });
+            setOpenFormLocal({
+                open: false,
+                acao: 'adicionar'
+            });
+            setFormLocal({
+                ...formLocal,
+                regiao: '',
+                subprefeitura_id: '',
+                distrito_id: '',
+                unidade: ''
+            });
+        } else if (res.status === 422) {
+            setSnackbar({
+                open: true,
+                severity: 'error',
+                text: `Erro ${res.status} - Não foi possível enviar o local`,
+                color: 'error'
+            });
+            setErrors(res.errors);
+        } else {
+            setCarregando(false);
+            setSnackbar({
+                open: true,
+                severity: 'error',
+                text: `Erro ${res.status} - Não foi possível enviar o local`,
+                color: 'error'
+            });
+        }
+        setCarregando(false);
+        setMudancaLocais(!mudancaLocais);
     }
 
     return (
@@ -318,6 +283,7 @@ const ListaLocais = (props) => {
                 openFormLocal={openFormLocal}
                 setOpenFormLocal={setOpenFormLocal}
                 enviaLocal={enviaLocal}
+                editaLocal={editaLocal}
                 carregando={carregando}
                 setOpenConfirmacao={setOpenConfirmacao}
                 acao={acao}
@@ -343,7 +309,8 @@ const ListaLocais = (props) => {
             <DialogConfirmacao
                 openConfirmacao={openConfirmacao} 
                 setOpenConfirmacao={setOpenConfirmacao}
-                acao={acao} 
+                acao={acao}
+                form="local_form"
                 fnExcluir={excluiLocal}
                 fnEditar={editaLocal}
                 formInterno={formLocal}

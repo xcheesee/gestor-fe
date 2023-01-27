@@ -10,7 +10,8 @@ import {
     Select,
     MenuItem,
     FormHelperText,
-    TextField
+    TextField,
+    Box
 } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import CheckIcon from '@mui/icons-material/Check';
@@ -25,6 +26,7 @@ const FormNotaEmpenho = (props) => {
         openFormNotaEmpenho, 
         setOpenFormNotaEmpenho, 
         enviaNotaEmpenho,
+        editaNotaEmpenho,
         carregando,
         setOpenConfirmacao,
         errors,
@@ -55,7 +57,6 @@ const FormNotaEmpenho = (props) => {
 
     const handleClickConfirmar = () => {
         if (openFormNotaEmpenho.acao === 'adicionar') {
-            enviaNotaEmpenho();
         } else if (openFormNotaEmpenho.acao === 'editar') {
             setOpenConfirmacao({
                 open: true,
@@ -74,67 +75,75 @@ const FormNotaEmpenho = (props) => {
             </DialogTitle>
 
             <DialogContent>
-                <FormControl 
-                    sx={{ margin: '1rem 0' }}
-                    error={errors.hasOwnProperty('tipo_empenho')}
-                    fullWidth 
-                    required
-                >
-                    <InputLabel id="tipo_empenho-label">Tipo de Empenho</InputLabel>
-                    <Select
-                        labelId="tipo_empenho-label"
-                        id="tipo_empenho"
-                        label="Tipo de Empenho"
-                        value={formNotaEmpenho.tipo_empenho}
-                        name="tipo_empenho"
-                        onChange={handleInputChange}
-                        fullWidth
+                <Box
+                    component="form"
+                    id="empenho_form"
+                    onSubmit={(e) => {
+                        e.preventDefault()
+                        const formData = new FormData(e.target)
+                        formData.append("contrato_id", formNotaEmpenho.contrato_id)
+                        openFormNotaEmpenho.acao === 'adicionar' ? enviaNotaEmpenho(formData) : editaNotaEmpenho(formNotaEmpenho.id, formData)
+                    }}>
+
+                    <FormControl 
+                        sx={{ margin: '1rem 0' }}
+                        error={errors.hasOwnProperty('tipo_empenho')}
+                        fullWidth 
                         required
                     >
-                        <MenuItem value={"complemento"}>Complemento</MenuItem>
-                        <MenuItem value={"cancelamento"}>Cancelamento</MenuItem>
-                        <MenuItem value={"novo"}>Novo Empenho</MenuItem>
-                    </Select>
-                <FormHelperText>{errors.tipo_empenho}</FormHelperText>
-                </FormControl>
+                        <InputLabel id="tipo_empenho-label">Tipo de Empenho</InputLabel>
+                        <Select
+                            labelId="tipo_empenho-label"
+                            id="tipo_empenho"
+                            label="Tipo de Empenho"
+                            value={formNotaEmpenho.tipo_empenho}
+                            name="tipo_empenho"
+                            onChange={handleInputChange}
+                            fullWidth
+                            required
+                        >
+                            <MenuItem value={"complemento"}>Complemento</MenuItem>
+                            <MenuItem value={"cancelamento"}>Cancelamento</MenuItem>
+                            <MenuItem value={"novo_empenho"}>Novo Empenho</MenuItem>
+                        </Select>
+                    <FormHelperText>{errors.tipo_empenho}</FormHelperText>
+                    </FormControl>
 
-                <CampoData
-                    label="Data de Emissão da Nota"
-                    value={formNotaEmpenho.data_emissao}
-                    name="data_emissao"
-                    onChange={handleInputChange}
-                    margin="1rem 0"
-                    error={errors.hasOwnProperty('data_emissao')}
-                    helperText={errors.data_emissao}
-                    fullWidth
-                    required
-                />
+                    <CampoData
+                        label="Data de Emissão da Nota"
+                        defaultValue={formNotaEmpenho.data_emissao}
+                        name="data_emissao"
+                        onChange={handleInputChange}
+                        margin="1rem 0"
+                        error={errors.hasOwnProperty('data_emissao')}
+                        helperText={errors.data_emissao}
+                        fullWidth
+                        required
+                    />
 
-                <TextField
-                    variant="outlined"
-                    value={formNotaEmpenho.numero_nota}
-                    name="numero_nota"
-                    onChange={handleInputChange}
-                    label="Número da Nota de Empenho"
-                    sx={{ margin: '1rem 0' }}
-                    error={errors.hasOwnProperty('numero_nota')}
-                    helperText={errors.hasOwnProperty('numero_nota') ? errors.tipo_empenho : "Ex: 1234"}
-                    fullWidth
-                    required
-                />
+                    <TextField
+                        variant="outlined"
+                        defaultValue={formNotaEmpenho.numero_nota}
+                        name="numero_nota"
+                        label="Número da Nota de Empenho"
+                        sx={{ margin: '1rem 0' }}
+                        error={errors.hasOwnProperty('numero_nota')}
+                        helperText={errors.hasOwnProperty('numero_nota') ? errors.tipo_empenho : "Ex: 1234"}
+                        fullWidth
+                        required
+                    />
 
-                <CampoValores
-                    label="Valor de empenho"
-                    value={formNotaEmpenho.valor_empenho}
-                    state={formNotaEmpenho}
-                    setState={setFormNotaEmpenho}
-                    name="valor_empenho"
-                    checaErros={() => {}}
-                    error={errors.hasOwnProperty('valor_garantia')}
-                    helperText={errors.valor_empenho}
-                    required
-                    fullWidth
-                />
+                    <CampoValores
+                        label="Valor de empenho"
+                        defaultValue={formNotaEmpenho.valor_empenho}
+                        name="valor_empenho"
+                        checaErros={() => {}}
+                        error={errors.hasOwnProperty('valor_garantia')}
+                        helperText={errors.valor_empenho}
+                        required
+                        fullWidth
+                    />
+                </Box>
             </DialogContent>
 
             <DialogActions sx={{ margin: '1rem' }}>
@@ -148,7 +157,9 @@ const FormNotaEmpenho = (props) => {
                 <Button 
                     sx={{ textTransform: 'none' }} 
                     variant="contained"
-                    onClick={handleClickConfirmar}    
+                    onClick={handleClickConfirmar}  
+                    form={openFormNotaEmpenho.acao === 'adicionar' ? "empenho_form" : ""} 
+                    type={openFormNotaEmpenho.acao === 'adicionar' ? "submit" : ""}
                 >
                     {carregando
                         ? <CircularProgress size={16} sx={{ color: '#FFFFFF', mr: '0.7rem' }} />

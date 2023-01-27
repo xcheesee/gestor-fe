@@ -11,6 +11,7 @@ import DialogConfirmacao from '../DialogConfirmacao';
 import BotoesTab from '../BotoesTab';
 import BotaoAdicionar from '../BotaoAdicionar';
 import { formataData, formataValores } from '../../commom/utils/utils';
+import { postFormData, putFormData } from '../../commom/utils/api';
 
 const TabNotasEmpenho = (props) => {
     const campos = [
@@ -146,54 +147,38 @@ const ListaNotasEmpenho = (props) => {
         setAcao('editar');
     }
 
-    const editaNotaEmpenho = (e, formNotaEmpenhoEdit, id) => {
-        const url = `${process.env.REACT_APP_API_URL}/empenho_nota/${id}`;
-        const token = localStorage.getItem('access_token');
-        const options = {
-            method: 'PUT',
-            headers: {
-                'Content-Type': 'application/json',
-                'Accept': 'application/json',
-                'Authorization': `Bearer ${token}`
-            },
-            body: JSON.stringify(formNotaEmpenhoEdit)
-        }
-
+    const editaNotaEmpenho = async (id, formNotaEmpenhoEdit) => {
         setCarregando(true);
-        
-        fetch(url, options)
-            .then(res => {
-                setMudancaNotasEmpenho(!mudancaNotasEmpenho);
-                if (res.ok) {
-                    setCarregando(false);
-                    setSnackbar({
-                        open: true,
-                        severity: 'success',
-                        text: 'Nota de Empenho editada com sucesso!',
-                        color: 'success'
-                    });
-                    setOpenFormNotaEmpenho({ 
-                        open: false, 
-                        acao: 'adicionar' 
-                    });
-                    setFormNotaEmpenho({
-                        ...formNotaEmpenho,
-                        tipo_empenho: '',
-                        data_emissao: '',
-                        numero_nota: '',
-                        valor_empenho: ''
-                    });
-                    return res.json();
-                } else {
-                    setCarregando(false);
-                    setSnackbar({
-                        open: true,
-                        severity: 'error',
-                        text: `Erro ${res.status} - Não foi possível editar a nota de empenho`,
-                        color: 'error'
-                    });
-                }
+        const res = await putFormData(id, formNotaEmpenhoEdit, "empenho_nota")
+        if (res.status === 200) {
+            setSnackbar({
+                open: true,
+                severity: 'success',
+                text: 'Nota de Empenho editada com sucesso!',
+                color: 'success'
             });
+            setOpenFormNotaEmpenho({ 
+                open: false, 
+                acao: 'adicionar' 
+            });
+            setFormNotaEmpenho({
+                ...formNotaEmpenho,
+                tipo_empenho: '',
+                data_emissao: '',
+                numero_nota: '',
+                valor_empenho: ''
+            });
+        } else {
+            setCarregando(false);
+            setSnackbar({
+                open: true,
+                severity: 'error',
+                text: `Erro ${res.status} - Não foi possível editar a nota de empenho`,
+                color: 'error'
+            });
+        }
+        setCarregando(false);
+        setMudancaNotasEmpenho(!mudancaNotasEmpenho);
     }
 
     const handleClickAdicionar = () => {
@@ -210,62 +195,43 @@ const ListaNotasEmpenho = (props) => {
         });
     }
 
-    const enviaNotaEmpenho = () => {
-        const url = `${process.env.REACT_APP_API_URL}/empenho_nota`;
-        const token = localStorage.getItem('access_token');
-        const options = {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Accept': 'application/json',
-                'Authorization': `Bearer ${token}`
-            },
-            body: JSON.stringify(formNotaEmpenho)
-        };
-
+    const enviaNotaEmpenho = async (form) => {
         setCarregando(true);
-
-        fetch(url, options)
-            .then(res => {
-                setMudancaNotasEmpenho(!mudancaNotasEmpenho);
-                if (res.ok) {
-                    setCarregando(false);
-                    setSnackbar({
-                        open: true,
-                        severity: 'success',
-                        text: 'Nota de Empenho enviada com sucesso!',
-                        color: 'success'
-                    });
-                    setOpenFormNotaEmpenho({ 
-                        open: false, 
-                        acao: 'adicionar' 
-                    });
-                    setFormNotaEmpenho({
-                        ...formNotaEmpenho,
-                        tipo_empenho: '',
-                        data_emissao: '',
-                        numero_nota: '',
-                        valor_empenho: ''
-                    });
-                    return res.json();
-                } else {
-                    setCarregando(false);
-                    setSnackbar({
-                        open: true,
-                        severity: 'error',
-                        text: `Erro ${res.status} - Não foi possível enviar a nota de empenho`,
-                        color: 'error'
-                    });
-                }
-            })
-            .catch(err => {
-                console.log(err);
+        const res = await postFormData(form, "empenho_nota")
+        if (res.status === 201) {
+            setSnackbar({
+                open: true,
+                severity: 'success',
+                text: 'Nota de Empenho enviada com sucesso!',
+                color: 'success'
             });
+            setOpenFormNotaEmpenho({ 
+                open: false, 
+                acao: 'adicionar' 
+            });
+            setFormNotaEmpenho({
+                ...formNotaEmpenho,
+                tipo_empenho: '',
+                data_emissao: '',
+                numero_nota: '',
+                valor_empenho: ''
+            });
+        } else {
+            setSnackbar({
+                open: true,
+                severity: 'error',
+                text: `Erro ${res.status} - Não foi possível enviar a nota de empenho`,
+                color: 'error'
+            });
+        }
+        setCarregando(false);
+        setMudancaNotasEmpenho(!mudancaNotasEmpenho);
     }
     
     return (
         <Box>
             {notasempenho.map((notaempenho, index) => {
+                console.log(notasempenho)
                 return (
                     <Fade in={true} timeout={400} key={index}>
                         <Box 
@@ -310,6 +276,7 @@ const ListaNotasEmpenho = (props) => {
                 openFormNotaEmpenho={openFormNotaEmpenho}
                 setOpenFormNotaEmpenho={setOpenFormNotaEmpenho}
                 enviaNotaEmpenho={enviaNotaEmpenho}
+                editaNotaEmpenho={editaNotaEmpenho}
                 carregando={carregando}
                 setOpenConfirmacao={setOpenConfirmacao}
                 errors={errors}
@@ -335,6 +302,7 @@ const ListaNotasEmpenho = (props) => {
                 openConfirmacao={openConfirmacao} 
                 setOpenConfirmacao={setOpenConfirmacao}
                 acao={acao} 
+                form="empenho_form"
                 fnExcluir={excluiNotaEmpenho}
                 fnEditar={editaNotaEmpenho}
                 formInterno={formNotaEmpenho}
