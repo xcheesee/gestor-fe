@@ -18,6 +18,7 @@ import CampoNumContrato from '../CampoNumContrato';
 import MaxPrazoInput from '../MaxPrazoInput';
 import { contratoLabels } from '../../commom/utils/constants';
 import CampoDataControlada from '../CampoDataControlada';
+import { useEffect } from 'react';
 
 const BoxDadosContrato = (props) => {
     const {
@@ -33,6 +34,9 @@ const BoxDadosContrato = (props) => {
     } = props;
 
     const [validade, setValidade] = useState(dados.data_vencimento ?? "")
+    useEffect(() => {
+        console.log(dados)
+    })
 
     return (
         <Box
