@@ -93,9 +93,9 @@ const BoxProcessoContratacao = (props) => {
             <CampoData
                 className="form__campo"
                 label={contratoLabels.envio_material_tecnico}
-                value={processoContratacao.envio_material_tecnico}
+                defaultValue={processoContratacao.envio_material_tecnico ?? ""}
                 name="envio_material_tecnico"
-                onChange={(e) => { handleChange(e, processoContratacao, setProcessoContratacao); }}
+                // onChange={(e) => { handleChange(e, processoContratacao, setProcessoContratacao); }}
                 margin="1rem 0"
                 error={errors.hasOwnProperty('envio_material_tecnico')}
                 helperText={errors.hasOwnProperty('envio_material_tecnico') ? errors.envio_material_tecnico : " "}
@@ -105,9 +105,9 @@ const BoxProcessoContratacao = (props) => {
             <CampoData
                 className="form__campo"
                 label={contratoLabels.minuta_edital}
-                value={processoContratacao.minuta_edital}
+                defaultValue={processoContratacao.minuta_edital ?? ""}
                 name="minuta_edital"
-                onChange={(e) => { handleChange(e, processoContratacao, setProcessoContratacao); }}
+                // onChange={(e) => { handleChange(e, processoContratacao, setProcessoContratacao); }}
                 margin="1rem 0"
                 error={errors.hasOwnProperty('minuta_edital')}
                 helperText={errors.hasOwnProperty('minuta_edital') ? errors.minuta_edital : " "}
@@ -117,9 +117,9 @@ const BoxProcessoContratacao = (props) => {
             <CampoData
                 className="form__campo"
                 label={contratoLabels.abertura_certame}
-                value={processoContratacao.abertura_certame}
+                defaultValue={processoContratacao.abertura_certame ?? ""}
                 name="abertura_certame"
-                onChange={(e) => { handleChange(e, processoContratacao, setProcessoContratacao); }}
+                // onChange={(e) => { handleChange(e, processoContratacao, setProcessoContratacao); }}
                 margin="1rem 0"
                 error={errors.hasOwnProperty('abertura_certame')}
                 helperText={errors.hasOwnProperty('abertura_certame') ? errors.abertura_certame : " "}
@@ -129,9 +129,9 @@ const BoxProcessoContratacao = (props) => {
             <CampoData
                 className="form__campo"
                 label={contratoLabels.homologacao}
-                value={processoContratacao.homologacao}
+                defaultValue={processoContratacao.homologacao ?? ""}
                 name="homologacao"
-                onChange={(e) => { handleChange(e, processoContratacao, setProcessoContratacao); }}
+                // onChange={(e) => { handleChange(e, processoContratacao, setProcessoContratacao); }}
                 margin="1rem 0"
                 error={errors.hasOwnProperty('homologacao')}
                 helperText={errors.hasOwnProperty('homologacao') ? errors.homologacao : " "}

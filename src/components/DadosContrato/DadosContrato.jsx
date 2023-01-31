@@ -142,7 +142,7 @@ const DadosContrato = ({ snackbar, setSnackbar }) => {
                 navigate("../404", { replace: true });
             } else if(contrato.status === 401) {
                 localStorage.removeItem('access_token');
-                navigate("../principal", { replace: true });
+                navigate("../contrato", { replace: true });
             }
             setDados(contrato?.data)
             console.log(dados)

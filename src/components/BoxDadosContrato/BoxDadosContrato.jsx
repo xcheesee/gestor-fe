@@ -62,6 +62,7 @@ const BoxDadosContrato = (props) => {
                 sx={{ margin: '1rem 0' }}
                 error={errors.hasOwnProperty('departamento_id')}
                 fullWidth 
+                required
             >
                 <InputLabel id="departamento_id-label">{contratoLabels.departamento}</InputLabel>
                 <Select
