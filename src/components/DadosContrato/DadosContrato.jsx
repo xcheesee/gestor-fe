@@ -396,7 +396,7 @@ const DadosContrato = ({ snackbar, setSnackbar }) => {
                                         />
                                     </TabPanel>
                                     <TabPanel value={value} index={9}>
-                                        <ListaReajustes numContrato={numContrato}/>
+                                        <ListaReajustes numContrato={numContrato} setSnackbar={setSnackbar}/>
                                     </TabPanel>
                                 </Box>
                             </Box>

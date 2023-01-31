@@ -1,6 +1,7 @@
 import { Button, CircularProgress, Dialog, DialogActions, DialogContent, DialogTitle } from "@mui/material";
 import CloseIcon from '@mui/icons-material/Close';
 import CheckIcon from '@mui/icons-material/Check';
+import { Box } from "@mui/system";
 
 export default function ContratoFormWrapper({open, acao, title, form, setFormDialog, children}) {
     let carregando = false
@@ -11,6 +12,8 @@ export default function ContratoFormWrapper({open, acao, title, form, setFormDia
                 {children}
             </DialogContent>
             <DialogActions>
+                <Box className="mb-4 mr-4">
+
                 <Button
                     onClick={() => setFormDialog(false)}
                     sx={{ textTransform: 'none', mr: '1rem', color: (theme) => theme.palette.error.main }}
@@ -21,9 +24,8 @@ export default function ContratoFormWrapper({open, acao, title, form, setFormDia
                 <Button
                     sx={{ textTransform: 'none' }} 
                     variant="contained"
-                    // onClick={() => confirmar()}
-                    form={acao === 'adicionar' ? {form} : ""}
                     type={acao === 'adicionar' ? "submit" : ""}
+                    form={acao === 'adicionar' ? `${form}` : ""}
                 >
                     {carregando
                         ? <CircularProgress size={16} sx={{ color: (theme) => theme.palette.color.main, mr: '0.7rem' }} />
@@ -35,6 +37,7 @@ export default function ContratoFormWrapper({open, acao, title, form, setFormDia
                         : "Editar"
                     }
                 </Button>
+                </Box>
             </DialogActions>
         </Dialog>
     )
