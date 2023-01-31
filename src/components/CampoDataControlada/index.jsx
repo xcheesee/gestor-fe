@@ -1,12 +1,13 @@
 import React from 'react';
 import { TextField, InputAdornment } from '@mui/material';
 
-const CampoData = ({ label, defaultValue, name, helperText, error, size, required, margin, fullWidth }) => {
+const CampoDataControlada = ({ label, value, setValue, name, helperText, error, size, required, margin, fullWidth }) => {
     return (
         <TextField 
             variant="outlined"
             label={label} 
-            defaultValue={defaultValue}
+            value={value}
+            onChange={(e) => setValue(e.target.value)}
             name={name}
             helperText={helperText}
             error={error} 
@@ -23,4 +24,4 @@ const CampoData = ({ label, defaultValue, name, helperText, error, size, require
     );
 }
 
-export default CampoData;
+export default CampoDataControlada;

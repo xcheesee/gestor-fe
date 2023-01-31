@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef, useState } from 'react';
 import { 
     Box,
     Divider,
@@ -17,6 +17,7 @@ import CampoProcessoSei from '../CampoProcessoSei';
 import CampoNumContrato from '../CampoNumContrato';
 import MaxPrazoInput from '../MaxPrazoInput';
 import { contratoLabels } from '../../commom/utils/constants';
+import CampoDataControlada from '../CampoDataControlada';
 
 const BoxDadosContrato = (props) => {
     const {
@@ -30,6 +31,8 @@ const BoxDadosContrato = (props) => {
         numContrato,
         acao
     } = props;
+
+    const [validade, setValidade] = useState(dados.data_vencimento ?? "")
 
     return (
         <Box
@@ -61,9 +64,8 @@ const BoxDadosContrato = (props) => {
                     labelId="departamento_id-label"
                     id="departamento_id"
                     label={contratoLabels.departamento}
-                    defaultValue={dados?.departamento_id}
+                    defaultValue={dados.departamento_id ?? ""}
                     name="departamento_id"
-                    // onChange={(e) => { setDepartamento_id(e.target.value); }}
                     fullWidth
                 >
                     { departamentos !== undefined
@@ -79,7 +81,7 @@ const BoxDadosContrato = (props) => {
             </FormControl>
 
             <CampoProcessoSei 
-                defaultValue={dados.processo_sei}
+                defaultValue={dados.processo_sei ?? ""}
                 error={errors.hasOwnProperty('processo_sei')}
                 helperText={errors.hasOwnProperty('processo_sei') ? errors.processo_sei : " "}
                 label={contratoLabels.processo_sei}
@@ -88,7 +90,7 @@ const BoxDadosContrato = (props) => {
             
             <TextField
                 variant="outlined"
-                defaultValue={dados.credor}
+                defaultValue={dados.credor ?? ""}
                 name="credor"
                 className="form__campo"
                 label={contratoLabels.credor}
@@ -99,7 +101,7 @@ const BoxDadosContrato = (props) => {
             />
             <CampoCpfCnpj
                 className="form__campo"
-                defaultValue={dados?.cnpj_cpf}
+                defaultValue={dados.cnpj_cpf ?? ""}
                 setError={setError}
                 error={errors.hasOwnProperty('cnpj_cpf')}
                 errors={errors}
@@ -118,7 +120,7 @@ const BoxDadosContrato = (props) => {
                     labelId="tipo_objeto-label"
                     id="tipo_objeto"
                     label={contratoLabels.tipo_objeto}
-                    defaultValue={dados?.tipo_objeto}
+                    defaultValue={dados.tipo_objeto ?? ""}
                     name="tipo_objeto"
                     fullWidth
                 >
@@ -156,7 +158,7 @@ const BoxDadosContrato = (props) => {
             <CampoData
                 className="form__campo"
                 label={contratoLabels.data_assinatura}
-                defaultValue={dados?.data_assinatura}
+                defaultValue={dados.data_assinatura ?? ""}
                 name="data_assinatura"
                 margin="1rem 0"
                 error={errors.hasOwnProperty('data_assinatura')}
@@ -168,7 +170,7 @@ const BoxDadosContrato = (props) => {
                 index=""
                 className="form__campo"
                 label={contratoLabels.valor_contrato}
-                defaultValue={dados?.valor_contrato}
+                defaultValue={dados.valor_contrato ?? ""}
                 name="valor_contrato"
                 checaErros={() => {}}
                 error={errors.hasOwnProperty('valor_contrato.error')}
@@ -180,7 +182,7 @@ const BoxDadosContrato = (props) => {
                 index=""
                 className="form__campo"
                 label={contratoLabels.valor_mensal_estimativo}
-                defaultValue={dados?.valor_mensal_estimativo}
+                defaultValue={dados.valor_mensal_estimativo ?? ""}
                 name="valor_mensal_estimativo"
                 checaErros={() => {}}
                 error={errors.hasOwnProperty('valor_mensal_estimativo')}
@@ -191,7 +193,7 @@ const BoxDadosContrato = (props) => {
             <CampoData
                 className="form__campo"
                 label={contratoLabels.data_inicio_vigencia}
-                defaultValue={dados?.data_inicio_vigencia}
+                defaultValue={dados.data_inicio_vigencia ?? ""}
                 name="data_inicio_vigencia"
                 margin="1rem 0"
                 error={errors.hasOwnProperty('data_inicio_vigencia')}
@@ -199,10 +201,11 @@ const BoxDadosContrato = (props) => {
                 fullWidth
             />
 
-            <CampoData
+            <CampoDataControlada
                 className="form__campo"
                 label={contratoLabels.data_vencimento}
-                defaultValue={dados?.data_vencimento}
+                value={validade}
+                setValue={setValidade}
                 name="data_vencimento"
                 margin="1rem 0"
                 error={errors.hasOwnProperty('data_vencimento')}
@@ -224,10 +227,10 @@ const BoxDadosContrato = (props) => {
 
             <MaxPrazoInput 
                 helperText="A contar da data de vencimento..."
-                validade={dados?.data_vencimento}
-                defaultValue={dados?.data_prazo_maximo}
+                validade={validade}
+                defaultValue={dados.data_prazo_maximo ?? ""}
                 label={contratoLabels.prazo_a_partir_de}
-                disabled={dados?.data_vencimento === ""}
+                disabled={validade === "" ?? true}
             />
 
             <TextField

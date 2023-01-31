@@ -1,26 +1,31 @@
 import { Divider, MenuItem, Select, TextField, Tooltip, Typography } from "@mui/material";
+import { useEffect } from "react";
 import { useState } from "react";
 
 export default function MaxPrazoInput ({helperText, validade, disabled, label, defaultValue}) {
     const [prazoDias, setPrazoDias] = useState("")
-    const [maxPrazo, setMaxPrazo] = useState(new Date(defaultValue+" 00:00:00").toLocaleDateString("pt-br"))
     const [dayMultiplier, setDayMultiplier] = useState("")
+    const [maxPrazo, setMaxPrazo] = useState(setNewDate(0, 1, defaultValue))
+    useEffect(() => {
+        console.log(prazoDias, dayMultiplier, validade)
+        setMaxPrazo(setNewDate(prazoDias, dayMultiplier, validade))
+    }, [validade])
 
     function setNewDate(day, multiplier) {
         if(day === "" || multiplier === "" || validade === "") return ""
-        const novaData = new Date(validade+" 00:00:00")
+        const novaData = new Date(validade + " 00:00:00")
+        console.log(novaData)
         if (multiplier > 1){
-            novaData.setMonth(novaData.getMonth() + day)
+            novaData.setMonth(novaData.getMonth() + +day)
         }else{
-
             novaData.setDate(novaData.getDate() + (day * multiplier))
         }
+
         return novaData.toLocaleDateString('pt-br')
     }
     return(
         <>
-        {/* tooltip nao passa ref para custom element. bug com relacao a ref inheritance? Bruh */}
-            {disabled 
+            {disabled
                 ? <Tooltip title="Defina a data de vencimento para definir um prazo maximo prorrogavel">
                     <div className='flex border border-gray-300 border-solid rounded items-center' >
                         <TextField
@@ -74,7 +79,6 @@ export default function MaxPrazoInput ({helperText, validade, disabled, label, d
                         label="Prazo a partir de"
                         fullWidth
                         value={prazoDias}
-                        disabled={disabled}
                         onChange={ (e) => setPrazoDias(e.target.value) }
                         onBlur={ () => setMaxPrazo(setNewDate(prazoDias, dayMultiplier)) }
                         sx={{
@@ -87,7 +91,6 @@ export default function MaxPrazoInput ({helperText, validade, disabled, label, d
                         className="max-w-[300px]"
                         fullWidth
                         sx={{ "& fieldset": { border: 'none' }, }}
-                        disabled={disabled}
                         value={dayMultiplier}
                         onChange={(e) => {
                             setDayMultiplier(e.target.value)
