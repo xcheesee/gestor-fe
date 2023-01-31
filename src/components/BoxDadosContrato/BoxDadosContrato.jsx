@@ -70,6 +70,7 @@ const BoxDadosContrato = (props) => {
                     label={contratoLabels.departamento}
                     defaultValue={dados.departamento_id ?? ""}
                     name="departamento_id"
+                    required
                     fullWidth
                 >
                     { departamentos !== undefined
