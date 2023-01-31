@@ -145,6 +145,7 @@ const DadosContrato = ({ snackbar, setSnackbar }) => {
                 navigate("../principal", { replace: true });
             }
             setDados(contrato?.data)
+            console.log(dados)
             const [tiposDot, recOri, totRec] = await Promise.all([
                 getDotacao(),
                 getRecursos(),
@@ -395,7 +396,7 @@ const DadosContrato = ({ snackbar, setSnackbar }) => {
                                         />
                                     </TabPanel>
                                     <TabPanel value={value} index={9}>
-                                        <ListaReajustes />
+                                        <ListaReajustes numContrato={numContrato}/>
                                     </TabPanel>
                                 </Box>
                             </Box>

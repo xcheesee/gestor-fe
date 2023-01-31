@@ -231,7 +231,6 @@ const ListaNotasEmpenho = (props) => {
     return (
         <Box>
             {notasempenho.map((notaempenho, index) => {
-                console.log(notasempenho)
                 return (
                     <Fade in={true} timeout={400} key={index}>
                         <Box 

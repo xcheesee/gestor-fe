@@ -175,6 +175,19 @@ export const editaDadosContrato = async (e, dados, formInterno, id) => {
     return {status: res.status, ...json}
 }
 
+export async function getFormData (path) {{
+    const url = `${process.env.REACT_APP_API_URL}`
+    const options = {
+        headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+            'Authorization': `Bearer ${token}`
+        },
+        method: 'GET'
+    }
+    return await (await fetch(`${url}/${path}`, options)).json()
+}} 
+
 export async function postFormData (form, path) {
     let data = getFormattedFormData(form)
     const url = `${process.env.REACT_APP_API_URL}/${path}`;

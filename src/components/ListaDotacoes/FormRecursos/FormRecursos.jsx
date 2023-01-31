@@ -11,7 +11,8 @@ import {
     MenuItem,
     TextField,
     CircularProgress,
-    FormHelperText
+    FormHelperText,
+    Box
 } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import CheckIcon from '@mui/icons-material/Check';
@@ -27,6 +28,7 @@ const FormRecursos = (props) => {
         setFormRecurso,
         origemRecursos,
         enviaRecurso,
+        editaRecurso,
         setOpenConfirmacao
     } = props;
 
@@ -47,7 +49,7 @@ const FormRecursos = (props) => {
         setErrors({});
 
         if (openFormRecurso.acao === 'adicionar') {
-            enviaRecurso(formRecurso);
+            // enviaRecurso(formRecurso);
         } else if (openFormRecurso.acao === 'editar') {
             setOpenConfirmacao({
                 open: true,
@@ -67,78 +69,89 @@ const FormRecursos = (props) => {
             </DialogTitle>
 
             <DialogContent>
-                <FormControl
-                    sx={{ margin: '1rem 0', position: 'relative' }}
-                    error={errors.hasOwnProperty('origem_recurso_id')}
-                    fullWidth
-                    required
-                >
-                    <InputLabel id="dotacao_recurso-label">Fonte de recurso</InputLabel>
+                <Box
+                    component="form"
+                    id="dotacao_form"
+                    onSubmit={(e) => {
+                        e.preventDefault()
+                        const formData = new FormData(e.target)
+                        formData.append("dotacao_id", formRecurso.dotacao_id)
+                        openFormRecurso.acao === 'adicionar' ? enviaRecurso(formData) : editaRecurso(formRecurso.id, formData)
+                    }}>
 
-                    <Select
-                        labelId="dotacao_recurso-label"
-                        id="dotacao_recurso"
-                        label="Fonte de recurso"
-                        value={formRecurso.origem_recurso_id}
-                        name="dotacao_recurso"
-                        onChange={(e) => {
-                            if (e.target.value !== 999) {
-                                setFormRecurso({
-                                    ...formRecurso,
-                                    origem_recurso_id: e.target.value,
-                                    outros_descricao: ""
-                                });
-                            } else {
-                                setFormRecurso({
-                                    ...formRecurso,
-                                    origem_recurso_id: 999
-                                });
-                            }
-                        }}
-                        fullWidth
-                    >
-                        {origemRecursos.map((origemRecurso, index) => {
-                            return (
-                                <MenuItem key={index} value={origemRecurso.id}>{origemRecurso.nome}</MenuItem>
-                            );
-                        })}
-                    </Select>
-                    <FormHelperText>
-                        {
-                            errors.hasOwnProperty('origem_recurso_id')
-                            ? errors.origem_recurso_id
-                            : " "
-                        }
-                    </FormHelperText>
-                </FormControl>
-                
-                {
-                outrosDesc
-                ?
-                    <TextField 
-                        variant="outlined"
-                        value={formRecurso.outros_descricao}
-                        name="outros_descricao"
-                        onChange={(e) => {
-                            setFormRecurso({
-                                ...formRecurso,
-                                outros_descricao: e.target.value
-                            });
-                        }}
-                        label="Descrição"
-                        sx={{ margin: '1rem 0' }}
-                        error={errors.hasOwnProperty('outros_descricao')}
-                        helperText={
-                            errors.hasOwnProperty('outros_descricao')
-                            ? errors.outros_descricao 
-                            : "Descreva brevemente a fonte de recurso"
-                        }
+                    <FormControl
+                        sx={{ margin: '1rem 0', position: 'relative' }}
+                        error={errors.hasOwnProperty('origem_recurso_id')}
                         fullWidth
                         required
-                    />
-                :
-                    ""
-                }
+                    >
+                        <InputLabel id="dotacao_recurso-label">Fonte de recurso</InputLabel>
+
+                        <Select
+                            labelId="dotacao_recurso-label"
+                            id="origem_recurso_id"
+                            label="Fonte de recurso"
+                            value={formRecurso.origem_recurso_id ?? ""}
+                            name="origem_recurso_id"
+                            onChange={(e) => {
+                                if (e.target.value !== 999) {
+                                    setFormRecurso({
+                                        ...formRecurso,
+                                        origem_recurso_id: e.target.value,
+                                        outros_descricao: ""
+                                    });
+                                } else {
+                                    setFormRecurso({
+                                        ...formRecurso,
+                                        origem_recurso_id: 999
+                                    });
+                                }
+                            }}
+                            fullWidth
+                        >
+                            {origemRecursos.map((origemRecurso, index) => {
+                                return (
+                                    <MenuItem key={index} value={origemRecurso.id}>{origemRecurso.nome}</MenuItem>
+                                );
+                            })}
+                        </Select>
+                        <FormHelperText>
+                            {
+                                errors.hasOwnProperty('origem_recurso_id')
+                                ? errors.origem_recurso_id
+                                : " "
+                            }
+                        </FormHelperText>
+                    </FormControl>
+                    
+                    {
+                    outrosDesc
+                    ?
+                        <TextField 
+                            variant="outlined"
+                            value={formRecurso.outros_descricao}
+                            name="outros_descricao"
+                            onChange={(e) => {
+                                setFormRecurso({
+                                    ...formRecurso,
+                                    outros_descricao: e.target.value
+                                });
+                            }}
+                            label="Descrição"
+                            sx={{ margin: '1rem 0' }}
+                            error={errors.hasOwnProperty('outros_descricao')}
+                            helperText={
+                                errors.hasOwnProperty('outros_descricao')
+                                ? errors.outros_descricao 
+                                : "Descreva brevemente a fonte de recurso"
+                            }
+                            fullWidth
+                            required
+                        />
+                    :
+                        ""
+                    }
+                </Box>
             </DialogContent>
 
             <DialogActions sx={{ margin: '1rem' }}>
@@ -153,6 +166,8 @@ const FormRecursos = (props) => {
                     sx={{ textTransform: 'none' }} 
                     variant="contained"
                     onClick={confirmar}
+                    type={ openFormRecurso.acao === 'adicionar' ? "submit" : ""}
+                    form={ openFormRecurso.acao === 'adicionar' ? "dotacao_form" : ""}
                 >
                     {carregando
                         ? <CircularProgress size={16} sx={{ color: (theme) => theme.palette.color.main, mr: '0.7rem' }} />

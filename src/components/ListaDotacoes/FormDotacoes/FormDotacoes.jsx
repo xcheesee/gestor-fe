@@ -12,11 +12,11 @@ import {
     TextField,
     CircularProgress,
     FormHelperText,
-    Autocomplete
+    Autocomplete,
+    Box
 } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import CheckIcon from '@mui/icons-material/Check';
-import CampoValores from '../../CampoValores';
 
 const FormDotacoes = (props) => {
     const {
@@ -30,6 +30,7 @@ const FormDotacoes = (props) => {
         numContrato,
         origemRecursos,
         enviaDotacao,
+        editaDotacao,
         tipoDotacoes,
         setOpenConfirmacao
     } = props;
@@ -39,75 +40,75 @@ const FormDotacoes = (props) => {
     const outrosDesc = formDotacao.origem_recurso_id === 999;
     let tipos_dotacao = [{
         label: `Não se Aplica`,
-        id: 0
+        id: 999
     }];
 
     const CamposRecurso = () => {
         if (openFormDotacao.acao === 'adicionar') {
             return (
-                <>
-                    <FormControl
-                        sx={{ margin: '1rem 0', position: 'relative' }}
-                        error={errors.hasOwnProperty('dotacao_recurso')}
-                        fullWidth
-                        required
-                    >
-                        <InputLabel id="dotacao_recurso-label">Fonte de recurso</InputLabel>
-
-                        <Select
-                            labelId="dotacao_recurso-label"
-                            id="dotacao_recurso"
-                            label="Fonte de recurso"
-                            value={formDotacao.origem_recurso_id}
-                            name="dotacao_recurso"
-                            onChange={(e) => {
-                                if (e.target.value !== 999) {
-                                    setFormDotacao({
-                                        ...formDotacao,
-                                        origem_recurso_id: e.target.value,
-                                        outros_descricao: ""
-                                    });
-                                } else {
-                                    setFormDotacao({
-                                        ...formDotacao,
-                                        origem_recurso_id: 999
-                                    });
-                                }
-                            }}
+                    <>
+                        <FormControl
+                            sx={{ margin: '1rem 0', position: 'relative' }}
+                            error={errors.hasOwnProperty('dotacao_recurso')}
                             fullWidth
+                            required
                         >
-                            {origemRecursos.map((origemRecurso, index) => {
-                                return (
-                                    <MenuItem key={index} value={origemRecurso.id}>{origemRecurso.nome}</MenuItem>
-                                );
-                            })}
-                        </Select>
-                        <FormHelperText> </FormHelperText>
-                    </FormControl>
-                    
-                    {
-                        outrosDesc === true
-                        ?
-                            <TextField 
-                                variant="outlined"
-                                value={formDotacao.outros_descricao}
-                                name="outros_descricao"
+                            <InputLabel id="dotacao_recurso-label">Fonte de recurso</InputLabel>
+
+                            <Select
+                                labelId="dotacao_recurso-label"
+                                id="origem_recurso_id"
+                                label="Fonte de recurso"
+                                value={formDotacao.origem_recurso_id ?? ""}
+                                name="origem_recurso_id"
                                 onChange={(e) => {
-                                    setFormDotacao({
-                                        ...formDotacao,
-                                        outros_descricao: e.target.value
-                                    });
+                                    if (e.target.value !== 999) {
+                                        setFormDotacao({
+                                            ...formDotacao,
+                                            origem_recurso_id: e.target.value,
+                                            outros_descricao: ""
+                                        });
+                                    } else {
+                                        setFormDotacao({
+                                            ...formDotacao,
+                                            origem_recurso_id: 999
+                                        });
+                                    }
                                 }}
-                                label="Descrição"
-                                sx={{ margin: '1rem 0' }}
-                                helperText="Descreva brevemente a fonte de recurso"
                                 fullWidth
-                                required
-                            />
-                        :
-                            ""
-                    }
-                </>
+                            >
+                                {origemRecursos.map((origemRecurso, index) => {
+                                    return (
+                                        <MenuItem key={index} value={origemRecurso.id}>{origemRecurso.nome}</MenuItem>
+                                    );
+                                })}
+                            </Select>
+                            <FormHelperText> </FormHelperText>
+                        </FormControl>
+                        
+                        {
+                            outrosDesc === true
+                            ?
+                                <TextField 
+                                    variant="outlined"
+                                    defaultValue={formDotacao.outros_descricao ?? ""}
+                                    name="outros_descricao"
+                                    onChange={(e) => {
+                                        setFormDotacao({
+                                            ...formDotacao,
+                                            outros_descricao: e.target.value
+                                        });
+                                    }}
+                                    label="Descrição"
+                                    sx={{ margin: '1rem 0' }}
+                                    helperText="Descreva brevemente a fonte de recurso"
+                                    fullWidth
+                                    required
+                                />
+                            :
+                                ""
+                        }
+                    </>
             );
         } else if (openFormDotacao.acao === 'editar') {
             return ("");
@@ -140,7 +141,6 @@ const FormDotacoes = (props) => {
         setErrors({});
 
         if (openFormDotacao.acao === 'adicionar') {
-            enviaDotacao(formDotacao);
         } else if (openFormDotacao.acao === 'editar') {
             setOpenConfirmacao({
                 open: true,
@@ -190,62 +190,57 @@ const FormDotacoes = (props) => {
             </DialogTitle>
         
             <DialogContent>
-                <Autocomplete 
-                    value={value}
-                    options={tipos_dotacao}
-                    onChange={(e, newValue) => {
-                        if (newValue !== null) {
-                            setValue(newValue);
-                            setFormDotacao({
-                                ...formDotacao,
-                                dotacao_tipo_id: newValue.id
-                            });
-                        } else {
-                            setValue({label: '', id: null});
-                            setFormDotacao({
-                                ...formDotacao,
-                                dotacao_tipo_id: ''
-                            });
-                        }
-                    }}
-                    inputValue={inputValue}
-                    onInputChange={(e, newInputValue) => {
-                        setInputValue(newInputValue);
-                    }}
-                    renderInput={(params) => 
-                        <TextField 
-                            {...params}
-                            label="Tipo de dotação"
-                            helperText={
-                                errors.hasOwnProperty('dotacao_tipo_id')
-                                ? errors.dotacao_tipo_id
-                                : "Número da dotação (com pontos), descrição ou tipo de despesa"
-                            }
-                            error={errors.hasOwnProperty('dotacao_tipo_id')}
-                            sx={{ margin: '1rem 0' }}
-                        /> 
-                    }
-                    isOptionEqualToValue={(option, value) => option.value === value.value }
-                />
+                <Box
+                    component="form"
+                    id="dotacao_form"
+                    onSubmit={(e) => {
+                        e.preventDefault()
+                        const formData = new FormData(e.target)
+                        formData.append("contrato_id", formDotacao.contrato_id)
+                        formData.append("dotacao_tipo_id", value.id)
+                        openFormDotacao.acao === 'adicionar' ?  enviaDotacao(formData) : editaDotacao(formDotacao.id, formData)
+                        
+                    }}>
 
-                {/* <CampoValores 
-                    label="Valor"
-                    value={formDotacao.valor_dotacao}
-                    name="valor_dotacao"
-                    required
-                    state={formDotacao}
-                    setState={setFormDotacao}
-                    checaErros={() => {}}
-                    helperText={
-                        errors.hasOwnProperty('valor_dotacao')
-                        ? errors.valor_dotacao
-                        : " "
-                    }
-                    error={errors.hasOwnProperty('valor_dotacao')}
-                    fullWidth 
-                /> */}
-                
+                    <Autocomplete 
+                        value={value}
+                        options={tipos_dotacao}
+                        onChange={(e, newValue) => {
+                            if (newValue !== null) {
+                                setValue(newValue);
+                                setFormDotacao({
+                                    ...formDotacao,
+                                    dotacao_tipo_id: newValue.id
+                                });
+                            } else {
+                                setValue({label: '', id: null});
+                                setFormDotacao({
+                                    ...formDotacao,
+                                    dotacao_tipo_id: ''
+                                });
+                            }
+                        }}
+                        inputValue={inputValue}
+                        onInputChange={(e, newInputValue) => {
+                            setInputValue(newInputValue);
+                        }}
+                        renderInput={(params) => 
+                            <TextField 
+                                {...params}
+                                label="Tipo de dotação"
+                                helperText={
+                                    errors.hasOwnProperty('dotacao_tipo_id')
+                                    ? errors.dotacao_tipo_id
+                                    : "Número da dotação (com pontos), descrição ou tipo de despesa"
+                                }
+                                error={errors.hasOwnProperty('dotacao_tipo_id')}
+                                sx={{ margin: '1rem 0' }}
+                            /> 
+                        }
+                        isOptionEqualToValue={(option, value) => option.value === value.value }
+                    />
                 <CamposRecurso />
+                </Box>
             </DialogContent>
 
             <DialogActions sx={{ margin: '1rem' }}>
@@ -259,7 +254,9 @@ const FormDotacoes = (props) => {
                 <Button
                     sx={{ textTransform: 'none' }} 
                     variant="contained"
-                    onClick={confirmar}
+                    onClick={() => confirmar()}
+                    form={openFormDotacao.acao === 'adicionar' ? "dotacao_form" : ""}
+                    type={openFormDotacao.acao === 'adicionar' ? "submit" : ""}
                 >
                     {carregando
                         ? <CircularProgress size={16} sx={{ color: (theme) => theme.palette.color.main, mr: '0.7rem' }} />

@@ -29,4 +29,6 @@ export const contratoLabels = {
     telefone_empresa: "Telefone da empresa",
     email_empresa: "E-mail da empresa",
     outras_informacoes: "Informações adicionais",
+    reajuste_valor: "Valor",
+    reajuste_indice: "Indice de Reajuste"
 }

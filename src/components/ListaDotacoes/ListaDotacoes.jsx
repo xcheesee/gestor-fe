@@ -14,7 +14,7 @@ import BotaoAdicionar from '../BotaoAdicionar';
 import FormDotacoes from './FormDotacoes';
 import FormRecursos from './FormRecursos';
 import DialogConfirmacao from '../DialogConfirmacao';
-import { formataValores } from '../../commom/utils/utils';
+import { postFormData, putFormData } from '../../commom/utils/api';
 
 const retornaNumDotacao = (numero_dotacao, descricao) => {
     return [`${numero_dotacao}\n${descricao}`];
@@ -23,12 +23,10 @@ const retornaNumDotacao = (numero_dotacao, descricao) => {
 const TabDotacoes = (props) => {
     const campos = [
         "Número dotação",
-        // "Valor",
     ];
 
     const valores = [
         retornaNumDotacao(props.numero_dotacao, props.descricao),
-        // formataValores(props.valor_dotacao),
     ];
 
     return props.retornaCampoValor(campos, valores, props.estaCarregado);
@@ -202,7 +200,6 @@ const ListaDotacoes = (props) => {
             id: dotacao.id,
             dotacao_tipo_id: dotacao.dotacao_tipo_id,
             contrato_id: dotacao.contrato_id,
-            // valor_dotacao: dotacao.valor_dotacao,
         });
         setOpenFormDotacao({
             open: true,
@@ -211,56 +208,38 @@ const ListaDotacoes = (props) => {
         setAcao('editar');
     }
 
-    const editaDotacao = (id, formDotacao) => {
-        const url = `${process.env.REACT_APP_API_URL}/dotacao/${id}`;
-        const token = localStorage.getItem('access_token');
-        const options = {
-            method: 'PUT',
-            headers: {
-                'Content-Type': 'application/json',
-                'Accept': 'application/json',
-                'Authorization': `Bearer ${token}`
-            },
-            body: JSON.stringify(formDotacao)
-        };
-
+    const editaDotacao = async (id, formDotacao) => {
         setCarregando(true);
-
-        fetch(url, options)
-            .then(res => {
-                setMudancaDotacoes(!mudancaDotacoes);
-                if (res.ok) {
-                    setCarregando(false);
-                    setSnackbar({
-                        open: true,
-                        severity: 'success',
-                        text: 'Dotação editada com sucesso!',
-                        color: 'success'
-                    });
-                    setFormDotacao({
-                        ...formDotacao,
-                        dotacao_tipo_id: '',
-                        contrato_id: numContrato,
-                        // valor_dotacao: '',
-                        origem_recurso_id: '',
-                        outros_descricao: '',
-                    });
-                    setOpenFormDotacao({
-                        open: false,
-                        acao: 'adicionar',
-                        elemento: 'dotacao'
-                    });
-                    return res.json();
-                } else {
-                    setCarregando(false);
-                    setSnackbar({
-                        open: true,
-                        severity: 'error',
-                        text: `Erro ${res.status} - Não foi possível editar a dotação`,
-                        color: 'error'
-                    });
-                }
+        const res = await putFormData(id, formDotacao, "dotacao")
+        if (res.status === 200) {
+            setSnackbar({
+                open: true,
+                severity: 'success',
+                text: 'Dotação editada com sucesso!',
+                color: 'success'
             });
+            setFormDotacao({
+                ...formDotacao,
+                dotacao_tipo_id: '',
+                contrato_id: numContrato,
+                origem_recurso_id: '',
+                outros_descricao: '',
+            });
+            setOpenFormDotacao({
+                open: false,
+                acao: 'adicionar',
+                elemento: 'dotacao'
+            });
+        } else {
+            setSnackbar({
+                open: true,
+                severity: 'error',
+                text: `Erro ${res.status} - Não foi possível editar a dotação`,
+                color: 'error'
+            });
+        }
+        setCarregando(false);
+        setMudancaDotacoes(!mudancaDotacoes);
     }
 
     const handleClickEditarRecurso = (recurso) => {
@@ -277,54 +256,37 @@ const ListaDotacoes = (props) => {
         setAcao('editar');
     }
 
-    const editaRecurso = (id, formRecurso) => {
-        const url = `${process.env.REACT_APP_API_URL}/dotacao_recurso/${id}`;
-        const token = localStorage.getItem('access_token');
-        const options = {
-            method: 'PUT',
-            headers: {
-                'Content-Type': 'application/json',
-                'Accept': 'application/json',
-                'Authorization': `Bearer ${token}`
-            },
-            body: JSON.stringify(formRecurso)
-        };
-
+    const editaRecurso = async (id, formRecurso) => {
         setCarregando(true);
-
-        fetch(url, options)
-            .then(res => {
-                setMudancaDotacoes(!mudancaDotacoes);
-                if (res.ok) {
-                    setCarregando(false);
-                    setSnackbar({
-                        open: true,
-                        severity: 'success',
-                        text: 'Fonte de recurso editada com sucesso!',
-                        color: 'success'
-                    });
-                    setFormRecurso({
-                        ...formRecurso,
-                        dotacao_id: '',
-                        origem_recurso_id: '',
-                        outros_descricao: ''
-                    });
-                    setOpenFormRecurso({
-                        open: false,
-                        acao: 'adicionar',
-                        elemento: 'recurso'
-                    });
-                    return res.json();
-                } else {
-                    setCarregando(false);
-                    setSnackbar({
-                        open: true,
-                        severity: 'error',
-                        text: `Erro ${res.status} - Não foi possível editar a fonte de recurso`,
-                        color: 'error'
-                    });
-                }
+        const res = await putFormData(id, formRecurso, "dotacao_recurso")
+        if (res.status === 200) {
+            setSnackbar({
+                open: true,
+                severity: 'success',
+                text: 'Fonte de recurso editada com sucesso!',
+                color: 'success'
             });
+            setFormRecurso({
+                ...formRecurso,
+                dotacao_id: '',
+                origem_recurso_id: '',
+                outros_descricao: ''
+            });
+            setOpenFormRecurso({
+                open: false,
+                acao: 'adicionar',
+                elemento: 'recurso'
+            });
+        } else {
+            setSnackbar({
+                open: true,
+                severity: 'error',
+                text: `Erro ${res.status} - Não foi possível editar a fonte de recurso`,
+                color: 'error'
+            });
+        }
+        setCarregando(false);
+        setMudancaDotacoes(!mudancaDotacoes);
     }
     
     // adição
@@ -336,65 +298,45 @@ const ListaDotacoes = (props) => {
         setAcao('adicionar');
     }
 
-    const enviaDotacao = (form) => {
-        const url = `${process.env.REACT_APP_API_URL}/dotacao`;
-        const token = localStorage.getItem('access_token');
-        const options = {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Accept': 'application/json',
-                'Authorization': `Bearer ${token}`
-            },
-            body: JSON.stringify(form)
-        };
-
+    const enviaDotacao = async (form) => {
         setCarregando(true);
-
-        fetch(url, options)
-        .then(res => {
-            setMudancaDotacoes(!mudancaDotacoes);
-            if (res.ok) {
-                setCarregando(false);
-                setSnackbar({
-                    open: true,
-                    severity: 'success',
-                    text: 'Dotação enviada com sucesso!',
-                    color: 'success'
-                });
-                setOpenFormDotacao({
-                    open: false,
-                    acao: 'adicionar'
-                });
-                setFormDotacao({
-                    ...formDotacao,
-                    dotacao_tipo_id: '',
-                    contrato_id: numContrato,
-                    // valor_dotacao: '',
-                    origem_recurso_id: '',
-                    outros_descricao: '',
-                });
-                return res.json();
-            } else if (res.status === 422) {
-                setCarregando(false);
-                setSnackbar({
-                    open: true,
-                    severity: 'error',
-                    text: `Erro ${res.status} - Não foi possível enviar a dotação`,
-                    color: 'error'
-                });
-                return res.json()
-                .then(data => setErrors(data.errors));
-            } else {
-                setCarregando(false);
-                setSnackbar({
-                    open: true,
-                    severity: 'error',
-                    text: `Erro ${res.status} - Não foi possível enviar a dotação`,
-                    color: 'error'
-                });
-            }
-        });
+        const res = await postFormData(form, "dotacao")
+        if (res.status === 201) {
+            setSnackbar({
+                open: true,
+                severity: 'success',
+                text: 'Dotação enviada com sucesso!',
+                color: 'success'
+            });
+            setOpenFormDotacao({
+                open: false,
+                acao: 'adicionar'
+            });
+            setFormDotacao({
+                ...formDotacao,
+                dotacao_tipo_id: '',
+                contrato_id: numContrato,
+                origem_recurso_id: '',
+                outros_descricao: '',
+            });
+        } else if (res.status === 422) {
+            setSnackbar({
+                open: true,
+                severity: 'error',
+                text: `Erro ${res.status} - Não foi possível enviar a dotação`,
+                color: 'error'
+            });
+            setErrors(res.errors)
+        } else {
+            setSnackbar({
+                open: true,
+                severity: 'error',
+                text: `Erro ${res.status} - Não foi possível enviar a dotação`,
+                color: 'error'
+            });
+        }
+        setCarregando(false);
+        setMudancaDotacoes(!mudancaDotacoes);
     }
 
     const handleClickAdicionarRecurso = (id) => {
@@ -409,63 +351,44 @@ const ListaDotacoes = (props) => {
         setAcao('adicionar');
     }
 
-    const enviaRecurso = (form) => {
-        const url = `${process.env.REACT_APP_API_URL}/dotacao_recurso`;
-        const token = localStorage.getItem('access_token');
-        const options = {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Accept': 'application/json',
-                'Authorization': `Bearer ${token}`
-            },
-            body: JSON.stringify(form)
-        };
-
+    const enviaRecurso = async (form) => {
         setCarregando(true);
-
-        fetch(url, options)
-        .then(res => {
-            setMudancaDotacoes(!mudancaDotacoes);
-            if (res.ok) {
-                setCarregando(false);
-                setSnackbar({
-                    open: true,
-                    severity: 'success',
-                    text: 'Fonte de recurso enviada com sucesso!',
-                    color: 'success'
-                });
-                setOpenFormRecurso({
-                    open: false,
-                    acao: 'adicionar'
-                });
-                setFormRecurso({
-                    ...formRecurso,
-                    dotacao_id: '',
-                    origem_recurso_id: '',
-                    outros_descricao: ''
-                });
-                return res.json();
-            } else if (res.status === 422) {
-                setCarregando(false);
-                setSnackbar({
-                    open: true,
-                    severity: 'error',
-                    text: `Erro ${res.status} - Não foi possível enviar a fonte de recurso`,
-                    color: 'error'
-                });
-                return res.json()
-                .then(data => setErrors(data.errors));
-            } else {
-                setCarregando(false);
-                setSnackbar({
-                    open: true,
-                    severity: 'error',
-                    text: `Erro ${res.status} - Não foi possível enviar a fonte de recurso`,
-                    color: 'error'
-                });
-            }
-        });
+        const res = await postFormData(form, "dotacao_recurso")
+        if (res.status === 201) {
+            setSnackbar({
+                open: true,
+                severity: 'success',
+                text: 'Fonte de recurso enviada com sucesso!',
+                color: 'success'
+            });
+            setOpenFormRecurso({
+                open: false,
+                acao: 'adicionar'
+            });
+            setFormRecurso({
+                ...formRecurso,
+                dotacao_id: '',
+                origem_recurso_id: '',
+                outros_descricao: ''
+            });
+        } else if (res.status === 422) {
+            setSnackbar({
+                open: true,
+                severity: 'error',
+                text: `Erro ${res.status} - Não foi possível enviar a fonte de recurso`,
+                color: 'error'
+            });
+            setErrors(res.errors)
+        } else {
+            setSnackbar({
+                open: true,
+                severity: 'error',
+                text: `Erro ${res.status} - Não foi possível enviar a fonte de recurso`,
+                color: 'error'
+            });
+        }
+        setCarregando(false);
+        setMudancaDotacoes(!mudancaDotacoes);
     }
 
     return (
@@ -495,7 +418,6 @@ const ListaDotacoes = (props) => {
                                         estaCarregado={estaCarregado}
                                         numero_dotacao={dotacao.numero_dotacao}
                                         descricao={dotacao.descricao}
-                                        // valor_dotacao={dotacao.valor_dotacao}
                                         recursos={dotacao.recursos}
                                     />
                                 </Box>
@@ -592,6 +514,7 @@ const ListaDotacoes = (props) => {
                 tipoDotacoes={tipoDotacoes}
                 origemRecursos={origemRecursos}
                 enviaDotacao={enviaDotacao}
+                editaDotacao={editaDotacao}
                 setOpenConfirmacao={setOpenConfirmacao}
             />
 
@@ -605,6 +528,7 @@ const ListaDotacoes = (props) => {
                 setFormRecurso={setFormRecurso}
                 origemRecursos={origemRecursos}
                 enviaRecurso={enviaRecurso}
+                editaRecurso={editaRecurso}
                 setOpenConfirmacao={setOpenConfirmacao}
             />
 
@@ -627,6 +551,7 @@ const ListaDotacoes = (props) => {
                 openConfirmacao={openConfirmacao}
                 setOpenConfirmacao={setOpenConfirmacao}
                 acao={acao}
+                form="dotacao_form"
                 fnExcluir={
                     openConfirmacao.elemento === 'dotacao'
                     ? excluiDotacao
@@ -649,7 +574,6 @@ const ListaDotacoes = (props) => {
                     : "fonte de recurso"
                 }
             />
-
         </Box>
     );
 }
