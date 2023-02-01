@@ -221,3 +221,19 @@ export async function putFormData (id, form, path) {
     const json = await res.json()
     return {status: res.status, ...json}
 }
+
+export async function deleteReajuste(id) {
+    const url = `${process.env.REACT_APP_API_URL}/reajuste/${id}`;
+    const options = {
+        method: 'DELETE',
+        headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+            'Authorization': `Bearer ${token}`
+        },
+    };
+
+    const res = await fetch(url, options)
+    const json = await res.json()
+    return {status: res.status, ...json}
+}

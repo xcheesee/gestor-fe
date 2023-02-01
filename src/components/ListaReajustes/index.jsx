@@ -1,21 +1,28 @@
 import { Box, TextField } from "@mui/material";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { useEffect } from "react";
+import { useRef } from "react";
 import { useState } from "react";
-import { getFormData, postFormData, putFormData } from "../../commom/utils/api";
+import { deleteReajuste, getFormData, postFormData, putFormData } from "../../commom/utils/api";
 import { formataValores } from "../../commom/utils/utils";
 import BotaoAdicionar from "../BotaoAdicionar";
+import CampoValores from "../CampoValores";
 import ContratoFormWrapper from "../ContratoFormWrapper";
+import DialogConfirmacao from "../DialogConfirmacao";
 import TabContrato from "../TabContrato";
 
 export default function ListaReajustes ({ numContrato, setSnackbar }) {
-    // const queryClient = useQueryClient()
     let dados = []
-    const errors = ""
+
+    const queryClient = useQueryClient()
+    const dadosReajuste = useQuery({queryKey: ['reajuste', numContrato], queryFn: () => getFormData(`reajustes/${numContrato}`)})
+
+    const currDados = useRef({id: 0, valor_reajuste: "300", indice_reajuste: "5"})
     const [formDialog, setFormDialog] = useState(false)
     const [acao, setAcao] = useState("")
-    const dadosReajuste = useQuery({queryKey: ['reajuste'], queryFn: () => getFormData("reajustes")})
-    const addReajusteMutation = useMutation({
+    const [openConfirmacao, setOpenConfirmacao] = useState({open: false, id: ""})
+    const errors = ""
+
+    const addReajuste = useMutation({
         mutationFn: async (formData) => {
                 return await postFormData(formData, "reajuste")
         }, onSuccess: async (res) => {
@@ -23,20 +30,53 @@ export default function ListaReajustes ({ numContrato, setSnackbar }) {
             setSnackbar({
                 open: true,
                 severity: 'success',
-                text: 'Nota de Empenho editada com sucesso!',
+                text: 'Reajuste criado com sucesso!',
                 color: 'success'
             });
+            queryClient.invalidateQueries(['reajuste'])
         }
     })
-    const editReajusteMutation = useMutation({
-        mutationFn: async (formData) => {
-                return await putFormData(numContrato, formData, "reajuste")
+    const editReajuste = useMutation({
+        mutationFn: async ({id, formData}) => {
+                return await putFormData(id, formData, "reajuste")
+        }, onSuccess: async (res) => {
+            setFormDialog(false)
+            setSnackbar({
+                open: true,
+                severity: 'success',
+                text: 'Reajuste editado com sucesso!',
+                color: 'success'
+            });
+            queryClient.invalidateQueries(['reajuste'])
         }
     })
-    function handleEditPress () {
+    const deleteReajusteFn = useMutation({
+        mutationFn: async (id) => {
+            return await deleteReajuste(id)
+        }, onSuccess: async (res) => {
+            setOpenConfirmacao({open: false, id: ""})
+            setSnackbar({
+                open: true,
+                severity: 'success',
+                text: 'Reajuste excluido com sucesso!',
+                color: 'success'
+            });
+            queryClient.invalidateQueries(['reajuste'])
+        }
+    })
+    async function handleEditPress (id) {
         setAcao("editar")
+        const res = await getFormData(`reajuste/${id}`)
+        currDados.current = {id: res.data.id, valor_reajuste: res.data.valor_reajuste, indice_reajuste: res.data.indice_reajuste}
         setFormDialog(true)
     }
+    async function handleDeletePress (id) {
+        setAcao("excluir")
+        const res = await getFormData(`reajuste/${id}`)
+        currDados.current = { id: res.data.id }
+        setOpenConfirmacao({open: true, id: res.data.id})
+    }
+    
     dados = dadosReajuste?.data?.data?.map((entry) => {
         return({
             id: entry.id,
@@ -45,17 +85,14 @@ export default function ListaReajustes ({ numContrato, setSnackbar }) {
             indice_reajuste: `${entry.indice_reajuste}%`
         })
     })
-    // dados.reajuste_valor = formataValores(dados.reajuste_valor)
-    useEffect(() => {
-        console.log(dadosReajuste?.data?.data)
-    }, [])
+
     return(
         <>
             <TabContrato
                 label="Reajuste"
-                editFn={handleEditPress}
+                handleEditPress={handleEditPress}
+                handleDeletePress={handleDeletePress}
                 dados={dados ?? []}
-                dadosInternos={dadosReajuste}
                 isLoading={dadosReajuste.isLoading}
                 num="0"/>
             <BotaoAdicionar
@@ -64,11 +101,14 @@ export default function ListaReajustes ({ numContrato, setSnackbar }) {
                     setFormDialog(true)
                 }}
                 texto={`Adicionar Reajuste`}/>
-            <ContratoFormWrapper 
+            <ContratoFormWrapper
                 open={formDialog}
                 setFormDialog={setFormDialog}
+                isLoading={addReajuste.isLoading || editReajuste.isLoading}
+                setOpenConfirmacao={setOpenConfirmacao}
                 acao={acao}
-                title={acao === "adicionar" ? "Novo Reajuste" : "Editar Reajuste"}
+                currId={currDados.current.id}
+                title="Reajuste"
                 form="reajuste_form">
                 <Box
                     component='form'
@@ -77,15 +117,14 @@ export default function ListaReajustes ({ numContrato, setSnackbar }) {
                         e.preventDefault()
                         const formData = new FormData(e.target)
                         formData.append("contrato_id", numContrato)
-                        acao === "adicionar" ? addReajusteMutation.mutate(formData) : editReajusteMutation.mutate(formData)
+                        acao === "adicionar" ? addReajuste.mutate(formData) : editReajuste.mutate({id: currDados.current.id, formData: formData})
                     }}
                 >
-                    <TextField
-                        variant="outlined"
-                        defaultValue={acao === "adicionar" ? "" : dadosReajuste?.data?.valor_reajuste}
+                    <CampoValores
+                        defaultValue={acao === "adicionar" ? "" : currDados.current.valor_reajuste}
                         name="valor_reajuste"
                         label="Valor de Reajuste"
-                        sx={{ margin: '1rem 0' }}
+                        checaErros={() => {}}
                         error={errors.hasOwnProperty('valor_reajuste')}
                         helperText={errors.hasOwnProperty('valor_reajuste') ? errors : "Ex: "}
                         fullWidth
@@ -93,7 +132,7 @@ export default function ListaReajustes ({ numContrato, setSnackbar }) {
                     />
                     <TextField
                         variant="outlined"
-                        defaultValue={acao === "adicionar" ? "" : dadosReajuste?.data?.indice_reajuste}
+                        defaultValue={acao === "adicionar" ? "" : currDados.current.indice_reajuste}
                         name="indice_reajuste"
                         label="Indice de Reajuste"
                         sx={{ margin: '1rem 0' }}
@@ -104,6 +143,21 @@ export default function ListaReajustes ({ numContrato, setSnackbar }) {
                     />
                 </Box>
             </ContratoFormWrapper>
+            <DialogConfirmacao 
+                openConfirmacao={openConfirmacao}
+                setOpenConfirmacao={setOpenConfirmacao}
+                acao={acao}
+                fnExcluir={id => deleteReajusteFn.mutate(id)}
+                texto={"Reajuste"}
+                carregando={
+                    acao === "editar" 
+                    ? editReajuste.isLoading 
+                    : acao === "excluir" 
+                        ? deleteReajusteFn.isLoading 
+                        : false
+                }
+                form="reajuste_form"
+            />
         </>
     )
 }

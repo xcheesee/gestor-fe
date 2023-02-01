@@ -2,10 +2,8 @@ import { Box, CircularProgress, Divider, Fade, IconButton, Paper, Typography } f
 import { contratoLabels } from "../../commom/utils/constants";
 import ModeIcon from '@mui/icons-material/Mode';
 import DeleteIcon from '@mui/icons-material/Delete';
-import BotaoAdicionar from "../BotaoAdicionar";
 
-export default function TabContrato({label, dados, dadosInternos, num, editFn, isLoading}) {
-    console.log(dados)
+export default function TabContrato({label, dados, handleEditPress, handleDeletePress, isLoading}) {
     return(
         <>
             {
@@ -15,7 +13,7 @@ export default function TabContrato({label, dados, dadosInternos, num, editFn, i
                     </Box>
                     :dados?.map((entry, index) => {
                         return(
-                            <Fade in={true} timeout={400}>
+                            <Fade in={true} timeout={400} key={`${label}-${index}`}>
                                 <Paper elevation={3} className="p-4 mb-8">
                                     <Divider textAlign='right' className='font-light text-xl'>
                                         {label} #{entry.id}
@@ -23,20 +21,19 @@ export default function TabContrato({label, dados, dadosInternos, num, editFn, i
                                     <Box className="grid grid-cols-[1fr_min-content-min-content]">
                                         <Box className="grid grid-cols-[1fr_min-content]">
                                             <Box>
-                                                {Object.entries(entry)?.map((keyVal, index) => {
-                                                    if(keyVal[0] === "id" || keyVal[0] === "contrato_id") return
-                                                    return(
+                                                {Object.entries(entry)?.filter((keyVal) => !(keyVal[0] === "id" || keyVal[0] === "contrato_id"))?.map((keyVal, index) => 
+                                                    (
                                                         <Box className="m-4" key={`tab-${label}-${index}`}>
                                                             <Typography className="font-bold pb-2">{contratoLabels[keyVal[0]]}</Typography>
                                                             <Typography className="ml-4">{keyVal[1]}</Typography>
                                                         </Box>
-                                                )})}
+                                                ))}
                                             </Box>
                                             <Box className="flex items-start m-4">
-                                                <IconButton onClick={editFn}>
+                                                <IconButton onClick={() => handleEditPress(entry.id)}>
                                                     <ModeIcon />
                                                 </IconButton>
-                                                <IconButton>
+                                                <IconButton onClick={() => handleDeletePress(entry.id)}>
                                                     <DeleteIcon />
                                                 </IconButton>
                                             </Box>
