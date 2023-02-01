@@ -10,7 +10,6 @@ const DadosEmpresa = (props) => {
         email_empresa,
         estaCarregado,
         dados,
-        // setdados,
         numContrato,
         setSnackbar,
         mudancaContrato,

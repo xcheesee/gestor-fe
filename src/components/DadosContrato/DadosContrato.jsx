@@ -145,7 +145,6 @@ const DadosContrato = ({ snackbar, setSnackbar }) => {
                 navigate("../contrato", { replace: true });
             }
             setDados(contrato?.data)
-            console.log(dados)
             const [tiposDot, recOri, totRec] = await Promise.all([
                 getDotacao(),
                 getRecursos(),

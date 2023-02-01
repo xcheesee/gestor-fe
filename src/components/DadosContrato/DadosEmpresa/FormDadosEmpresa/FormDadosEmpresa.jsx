@@ -17,7 +17,6 @@ import { editaDadosContrato } from '../../../../commom/utils/api';
 const FormDadosEmpresa = (props) => {
     const {
         dados,
-        // setdados,
         numContrato,
         openDadosEmpresa,
         setOpenDadosEmpresa,

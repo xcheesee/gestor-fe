@@ -35,12 +35,12 @@ const FormDotacoes = (props) => {
         setOpenConfirmacao
     } = props;
 
-    const [inputValue, setInputValue] = useState('');
-    const [value, setValue] = useState({label: '', id: null});
+    const [inputValue, setInputValue] = useState('Não se Aplica');
+    const [value, setValue] = useState({label: 'Não se Aplica', id: 999});
     const outrosDesc = formDotacao.origem_recurso_id === 999;
     let tipos_dotacao = [{
         label: `Não se Aplica`,
-        id: 999
+        id: null
     }];
 
     const CamposRecurso = () => {
@@ -171,8 +171,8 @@ const FormDotacoes = (props) => {
                 origem_recurso_id: '',
                 outros_descricao: ''
             });
-            setInputValue('');
-            setValue({label: '', id: null});
+            setInputValue('Não se Aplica');
+            setValue({label: 'Não se Aplica', id: null});
         } else if (openFormDotacao.acao === 'editar') {
             setErrors({});
             setInputValue('');
