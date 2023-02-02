@@ -32,7 +32,6 @@ const  CampoEmpresa = React.forwardRef(({ }, ref) => {
             console.log(res)
         }
     })
-    const empresaSelecionada = Boolean(ref?.current)
     const openAnchor = Boolean(anchorEl)
     function handleBtnClick (e) {
         setAnchorEl(e.currentTarget)
@@ -41,7 +40,7 @@ const  CampoEmpresa = React.forwardRef(({ }, ref) => {
     return(
         <>
             {
-                empresaSelecionada 
+                ref?.current?.id !== null
                     ?<ButtonBase className="w-full text-start" onClick={handleBtnClick}>
                         <CardEmpresa empresa={ref.current}/>
                     </ButtonBase>
@@ -72,8 +71,8 @@ const  CampoEmpresa = React.forwardRef(({ }, ref) => {
                         <MenuItem
                             key={`empresa-${index}`}
                             onClick={() => {
-                            setAnchorEl(null)
-                            ref.current = entry
+                                setAnchorEl(null)
+                                ref.current = entry
                             }}>
                             <CardEmpresa empresa={entry}/>
                         </MenuItem>
