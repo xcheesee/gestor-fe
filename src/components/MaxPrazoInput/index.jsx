@@ -14,7 +14,7 @@ export default function MaxPrazoInput ({helperText, validade, disabled, label, d
             setMaxPrazo(setNewDate(prazoDias, dayMultiplier, validade))
         }
     }, [validade])
-
+    console.log(defaultValue)
     function setNewDate(day, multiplier) {
         if(day === "" || multiplier === "" || validade === "") return ""
         const novaData = new Date(validade + " 00:00:00")
