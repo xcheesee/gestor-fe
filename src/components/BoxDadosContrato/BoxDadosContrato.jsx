@@ -260,7 +260,7 @@ const BoxDadosContrato = (props) => {
                 helperText={errors.hasOwnProperty('valor_reserva') ? errors.valor_reserva : " "}
                 fullWidth 
             />
-            <CampoEmpresa />
+            {/* <CampoEmpresa /> */}
         </Box>
     );
 }

@@ -157,7 +157,8 @@ export const editaDadosContrato = async (e, dados, formInterno, id) => {
     let data = getFormattedFormData(formInterno, dados)
     data.processo_sei += "/" /* gambiarra para validacao no backend */
     const [dia, mes, ano] = data.data_prazo_maximo ? data.data_prazo_maximo.split(/[/|-]/) : ["", "", ""] // formatacao de data para envio ao backend
-    data.data_prazo_maximo = dia === "" ? "" : dados.data_prazo_maximo ?? `${ano}-${mes}-${dia}`
+    data.data_prazo_maximo = dia === "" ? dados.data_prazo_maximo ?? "" :  `${ano}-${mes}-${dia}`
+    console.log(data.data_prazo_maximo)
     const options = {
         method: 'PUT',
         headers: {
