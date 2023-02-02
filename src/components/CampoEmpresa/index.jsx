@@ -1,21 +1,21 @@
 import { Autocomplete, Button, ButtonBase, CircularProgress, Menu, MenuItem, Paper, TextField, Typography } from "@mui/material";
 import { Box } from "@mui/system";
 import { useQuery } from "@tanstack/react-query";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { getFormData } from "../../commom/utils/api";
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import "./style.css"
 
-function CardEmpresa({}) {
+function CardEmpresa({empresa}) {
     return(
         <Paper
             elevation={2}
             className="p-4 w-full" sx={{backgroundColor: "hsl(175, 50%, 92%)"}}>
-                <Typography className="font-bold text-xl" sx={{color: "hsl(175, 50%, 20%)"}}>Empresa Bala</Typography>
-                <Typography className="pl-4" sx={{color: "hsl(175, 50%, 40%)"}}>12.321.321.0111/11</Typography>
+                <Typography className="font-bold text-xl" sx={{color: "hsl(175, 50%, 20%)"}}>{empresa.nome}</Typography>
+                <Typography className="pl-4" sx={{color: "hsl(175, 50%, 40%)"}}>{empresa.cnpj_formatado}</Typography>
                 <Box className="flex justify-between px-2 pt-6">
-                    <Typography sx={{color: "hsl(175, 50%, 40%)"}}>lojadamasc@loja.com</Typography>
-                    <Typography sx={{color: "hsl(175, 50%, 40%)"}}>(11) 95555-5555</Typography>
+                    <Typography sx={{color: "hsl(175, 50%, 40%)"}}>{empresa.email}</Typography>
+                    <Typography sx={{color: "hsl(175, 50%, 40%)"}}>{empresa.telefone}</Typography>
                 </Box>
             </Paper>
     )
@@ -25,14 +25,18 @@ export default function CampoEmpresa() {
     const [open, setOpen] = useState(false)
     const [anchorEl, setAnchorEl] = useState(null)
     const [filter, setFilter] = useState("")
-    const [empresaSelecionada, setEmpresaSelecionada] = useState(false)
+    // const [empresaSelecionada, setEmpresaSelecionada] = useState(false)
+    const currEmpresa = useRef(null)
+    const empresaSelecionada = Boolean(currEmpresa?.current)
     const openAnchor = Boolean(anchorEl)
     const empresaDados = useQuery({
         queryKey: ['empresas'],
         queryFn: () => getFormData("empresas"),
         enabled: open,
+        onSuccess: (res) => {
+            console.log(res)
+        }
     })
-    const loading = open && empresaDados.isLoading
     function handleBtnClick (e) {
         setAnchorEl(e.currentTarget)
         setOpen(true)
@@ -43,7 +47,7 @@ export default function CampoEmpresa() {
             {
                 empresaSelecionada 
                     ?<ButtonBase className="w-full text-start" onClick={handleBtnClick}>
-                        <CardEmpresa />
+                        <CardEmpresa empresa={currEmpresa.current}/>
                     </ButtonBase>
                     :<Box className="block flex h-32">
                         <Button className="justify-center" fullWidth onClick={handleBtnClick}>
@@ -65,7 +69,20 @@ export default function CampoEmpresa() {
                     horizontal: 'center',
                   }}>
                 <TextField value={filter} onChange={(e) => setFilter(e.target.value)} className="mx-4 w-[400px]" label="Dados da empresa"/>
-                <MenuItem onClick={() => {
+                {empresaDados.isLoading 
+                    ? <Typography>Carregando...</Typography>
+                    :empresaDados?.data?.data?.map((entry) => {
+                    return (
+                        <MenuItem onClick={() => {
+                            setAnchorEl(null)
+                            currEmpresa.current = entry
+                            // setEmpresaSelecionada(true)
+                            }}>
+                            <CardEmpresa empresa={entry}/>
+                        </MenuItem>
+                    )
+                })}
+                {/* <MenuItem onClick={() => {
                     setAnchorEl(null)
                     setEmpresaSelecionada(true)
                     }}>
@@ -78,17 +95,11 @@ export default function CampoEmpresa() {
                     <CardEmpresa />
                 </MenuItem>
                 <MenuItem onClick={() => {
-                    setAnchorEl(null)
-                    setEmpresaSelecionada(true)
-                    }}>
-                    <CardEmpresa />
-                </MenuItem>
-                <MenuItem onClick={() => {
                     setEmpresaSelecionada(true)
                     setAnchorEl(null)
                     }}>
                     <CardEmpresa />
-                </MenuItem>
+                </MenuItem> */}
                 {/* <Autocomplete
                     id="id"
                     open
