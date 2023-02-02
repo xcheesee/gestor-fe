@@ -82,7 +82,7 @@ export default function ListaReajustes ({ numContrato, setSnackbar }) {
             id: entry.id,
             contrato_id: entry.contrato_id,
             valor_reajuste: formataValores(entry.valor_reajuste),
-            indice_reajuste: `${entry.indice_reajuste}%`
+            indice_reajuste: `${entry.indice_reajuste}`
         })
     })
 
