@@ -3,6 +3,7 @@ const token = localStorage.getItem('access_token');
 function getFormattedFormData(form, initialValue={}) {
     let data = {...initialValue};
     for(const objArray of form.entries()) {
+        console.log(objArray)
         data[objArray[0]] = objArray[1]
     }
     return data

@@ -20,6 +20,7 @@ import { contratoLabels } from '../../commom/utils/constants';
 import CampoDataControlada from '../CampoDataControlada';
 import { useEffect } from 'react';
 import CampoEmpresa from '../CampoEmpresa';
+import { formataCpfCnpj } from '../../commom/utils/utils';
 
 const BoxDadosContrato = (props) => {
     const {
@@ -33,16 +34,25 @@ const BoxDadosContrato = (props) => {
         numContrato,
         acao
     } = props;
-
+    console.log(dados)
     const [validade, setValidade] = useState(dados.data_vencimento ?? "")
+    const empresa = useRef({
+        id: dados.empresa_id, 
+        nome: dados.empresa, 
+        telefone: dados.empresa_telefone,
+        email: dados.empresa_email, 
+        cnpj_formatado: formataCpfCnpj(dados.empresa_cnpj)})
 
     return (
         <Box
             component="form"
             id="contrato-form"
             onSubmit={(e) => {
+                console.log(empresa.current)
                 e.preventDefault()
                 const formData = new FormData(e.target)
+                formData.append('empresa_id', empresa.current.id)
+                console.log(formData)
                 enviaDadosContrato(e, formData, numContrato)
             }}
         >
@@ -260,7 +270,9 @@ const BoxDadosContrato = (props) => {
                 helperText={errors.hasOwnProperty('valor_reserva') ? errors.valor_reserva : " "}
                 fullWidth 
             />
-            <CampoEmpresa />
+            <CampoEmpresa
+                ref={empresa}
+             />
         </Box>
     );
 }
