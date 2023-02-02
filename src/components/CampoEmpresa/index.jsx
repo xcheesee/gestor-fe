@@ -6,14 +6,15 @@ import { getFormData } from "../../commom/utils/api";
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import "./style.css"
 
-function CardEmpresa({empresa}) {
+export function CardEmpresa({empresa, centered=false}) {
+    const toCenter = centered ? "text-center" : ""
     return(
         <Paper
             elevation={2}
             className="p-4 w-full" sx={{backgroundColor: "hsl(175, 50%, 92%)"}}>
-                <Typography className="font-bold text-xl" sx={{color: "hsl(175, 50%, 20%)"}}>{empresa.nome}</Typography>
-                <Typography className="pl-4" sx={{color: "hsl(175, 50%, 40%)"}}>{empresa.cnpj_formatado}</Typography>
-                <Box className="flex justify-between px-2 pt-6">
+                <Typography className={`font-bold text-xl ${toCenter}`} sx={{color: "hsl(175, 50%, 20%)"}}>{empresa.nome}</Typography>
+                <Typography className={`pl-4 ${toCenter}`} sx={{color: "hsl(175, 50%, 40%)"}}>{empresa.cnpj_formatado}</Typography>
+                <Box className="flex justify-around px-2 pt-6">
                     <Typography sx={{color: "hsl(175, 50%, 40%)"}}>{empresa.email}</Typography>
                     <Typography sx={{color: "hsl(175, 50%, 40%)"}}>{empresa.telefone}</Typography>
                 </Box>
@@ -29,7 +30,6 @@ const  CampoEmpresa = React.forwardRef(({ }, ref) => {
         queryKey: ['empresas'],
         queryFn: () => getFormData("empresas"),
         onSuccess: (res) => {
-            console.log(res)
         }
     })
     const openAnchor = Boolean(anchorEl)
@@ -63,7 +63,11 @@ const  CampoEmpresa = React.forwardRef(({ }, ref) => {
                     vertical: 'bottom',
                     horizontal: 'center',
                   }}>
-                <TextField value={filter} onChange={(e) => setFilter(e.target.value)} className="mx-4 w-[400px]" label="Dados da empresa"/>
+                <TextField 
+                    value={filter} 
+                    onChange={(e) => setFilter(e.target.value)} 
+                    className="ml-4 mr-8 my-2 w-[400px]" 
+                    label="Dados da empresa"/>
                 {empresaDados.isLoading 
                     ? <Typography>Carregando...</Typography>
                     :empresaDados?.data?.data?.map((entry, index) => {

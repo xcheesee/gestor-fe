@@ -34,14 +34,14 @@ const BoxDadosContrato = (props) => {
         numContrato,
         acao
     } = props;
-    console.log(dados)
     const [validade, setValidade] = useState(dados.data_vencimento ?? "")
     const empresa = useRef({
         id: dados.empresa_id, 
         nome: dados.empresa, 
         telefone: dados.empresa_telefone,
         email: dados.empresa_email, 
-        cnpj_formatado: formataCpfCnpj(dados.empresa_cnpj)})
+        cnpj_formatado: formataCpfCnpj(dados.empresa_cnpj)
+    })
 
     return (
         <Box

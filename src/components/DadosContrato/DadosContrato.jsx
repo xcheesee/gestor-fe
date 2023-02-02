@@ -30,6 +30,8 @@ import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import ListaReajustes from '../ListaReajustes';
 import { getContrato, getContrTot, getDotacao, getRecursos } from '../../commom/utils/api';
+import { formataCpfCnpj } from '../../commom/utils/utils';
+import { CardEmpresa } from '../CampoEmpresa';
 
 const TabPanel = (props) => {
     const { children, value, index, ...other } = props;
@@ -409,7 +411,7 @@ const DadosContrato = ({ snackbar, setSnackbar }) => {
                                 totais={totais}
                             />
 
-                            <DadosEmpresa
+                            {/* <DadosEmpresa
                                 nome_empresa={dados?.nome_empresa}
                                 telefone_empresa={dados?.telefone_empresa}
                                 email_empresa={dados?.email_empresa}
@@ -419,6 +421,18 @@ const DadosContrato = ({ snackbar, setSnackbar }) => {
                                 setSnackbar={setSnackbar}
                                 mudancaContrato={mudancaContrato}
                                 setMudancaContrato={setMudancaContrato}
+                            /> */}
+                            <Typography variant="h2" sx={{ fontSize: '2rem', margin: '2rem 0' }}>
+                                Dados da empresa
+                            </Typography>
+                            <CardEmpresa 
+                                centered
+                                empresa={{
+                                    nome: dados?.empresa,
+                                    cnpj_formatado: formataCpfCnpj(dados?.empresa_cnpj),
+                                    email: dados?.empresa_email,
+                                    telefone: dados?.empresa_telefone
+                                }} 
                             />
 
                             <OutrasInformacoes 
