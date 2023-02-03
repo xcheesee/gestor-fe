@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { 
     Dialog,
     DialogTitle,
@@ -17,6 +17,7 @@ import {
 } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import CheckIcon from '@mui/icons-material/Check';
+import CampoTipoDotacao from '../../CampoTipoDotacao';
 
 const FormDotacoes = (props) => {
     const {
@@ -37,78 +38,83 @@ const FormDotacoes = (props) => {
 
     const [inputValue, setInputValue] = useState('Não se Aplica');
     const [value, setValue] = useState({label: 'Não se Aplica', id: 999});
+    const dotacaoRef = useRef({
+        descricao: formDotacao.descricao,
+        numero_dotacao: formDotacao.numero_dotacao,
+        tipo_despesa: formDotacao.tipo_despesa
+    })
     const outrosDesc = formDotacao.origem_recurso_id === 999;
     let tipos_dotacao = [{
         label: `Não se Aplica`,
         id: null
     }];
-
+    console.log(formDotacao)
     const CamposRecurso = () => {
         if (openFormDotacao.acao === 'adicionar') {
             return (
-                    <>
-                        <FormControl
-                            sx={{ margin: '1rem 0', position: 'relative' }}
-                            error={errors.hasOwnProperty('dotacao_recurso')}
-                            fullWidth
-                            required
-                        >
-                            <InputLabel id="dotacao_recurso-label">Fonte de recurso</InputLabel>
+                <>
+                    <FormControl
+                        sx={{ margin: '1rem 0', position: 'relative' }}
+                        error={errors.hasOwnProperty('dotacao_recurso')}
+                        fullWidth
+                        required
+                    >
+                        <InputLabel id="dotacao_recurso-label">Fonte de recurso</InputLabel>
 
-                            <Select
-                                labelId="dotacao_recurso-label"
-                                id="origem_recurso_id"
-                                label="Fonte de recurso"
-                                value={formDotacao.origem_recurso_id ?? ""}
-                                name="origem_recurso_id"
+                        <Select
+                            labelId="dotacao_recurso-label"
+                            id="origem_recurso_id"
+                            label="Fonte de recurso"
+                            value={formDotacao.origem_recurso_id ?? ""}
+                            name="origem_recurso_id"
+                            onChange={(e) => {
+                                if (e.target.value !== 999) {
+                                    setFormDotacao({
+                                        ...formDotacao,
+                                        origem_recurso_id: e.target.value,
+                                        outros_descricao: ""
+                                    });
+                                } else {
+                                    setFormDotacao({
+                                        ...formDotacao,
+                                        origem_recurso_id: 999
+                                    });
+                                }
+                            }}
+                            fullWidth
+                        >
+                            {origemRecursos.map((origemRecurso, index) => {
+                                return (
+                                    <MenuItem key={index} value={origemRecurso.id}>{origemRecurso.nome}</MenuItem>
+                                );
+                            })}
+                        </Select>
+                        <FormHelperText> </FormHelperText>
+                    </FormControl>
+                    
+                    {
+                        outrosDesc === true
+                        ?
+                            <TextField 
+                                variant="outlined"
+                                defaultValue={formDotacao.outros_descricao ?? ""}
+                                name="outros_descricao"
                                 onChange={(e) => {
-                                    if (e.target.value !== 999) {
-                                        setFormDotacao({
-                                            ...formDotacao,
-                                            origem_recurso_id: e.target.value,
-                                            outros_descricao: ""
-                                        });
-                                    } else {
-                                        setFormDotacao({
-                                            ...formDotacao,
-                                            origem_recurso_id: 999
-                                        });
-                                    }
+                                    setFormDotacao({
+                                        ...formDotacao,
+                                        outros_descricao: e.target.value
+                                    });
                                 }}
+                                label="Descrição"
+                                sx={{ margin: '1rem 0' }}
+                                helperText="Descreva brevemente a fonte de recurso"
                                 fullWidth
-                            >
-                                {origemRecursos.map((origemRecurso, index) => {
-                                    return (
-                                        <MenuItem key={index} value={origemRecurso.id}>{origemRecurso.nome}</MenuItem>
-                                    );
-                                })}
-                            </Select>
-                            <FormHelperText> </FormHelperText>
-                        </FormControl>
-                        
-                        {
-                            outrosDesc === true
-                            ?
-                                <TextField 
-                                    variant="outlined"
-                                    defaultValue={formDotacao.outros_descricao ?? ""}
-                                    name="outros_descricao"
-                                    onChange={(e) => {
-                                        setFormDotacao({
-                                            ...formDotacao,
-                                            outros_descricao: e.target.value
-                                        });
-                                    }}
-                                    label="Descrição"
-                                    sx={{ margin: '1rem 0' }}
-                                    helperText="Descreva brevemente a fonte de recurso"
-                                    fullWidth
-                                    required
-                                />
-                            :
-                                ""
-                        }
-                    </>
+                                required
+                            />
+                        :
+                            ""
+                    }
+                </>
             );
         } else if (openFormDotacao.acao === 'editar') {
             return ("");
@@ -201,7 +207,7 @@ const FormDotacoes = (props) => {
                         openFormDotacao.acao === 'adicionar' ?  enviaDotacao(formData) : editaDotacao(formDotacao.id, formData)
                         
                     }}>
-
+                        <CampoTipoDotacao ref={dotacaoRef}/>
                     <Autocomplete 
                         value={value}
                         options={tipos_dotacao}

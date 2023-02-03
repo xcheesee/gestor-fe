@@ -67,7 +67,6 @@ const ListaDotacoes = (props) => {
     const [formDotacao, setFormDotacao] = useState({
         dotacao_tipo_id: '',
         contrato_id: numContrato,
-        // valor_dotacao: '',
         origem_recurso_id: '',
         outros_descricao: '',
     });
@@ -92,6 +91,7 @@ const ListaDotacoes = (props) => {
         fetch(url, options)
             .then(res => res.json())
             .then(data => {
+                console.log(data)
                 setDotacoes(data.data);
                 setCarregandoDotacoes(false);
             })
@@ -196,10 +196,14 @@ const ListaDotacoes = (props) => {
 
     // edição
     const handleClickEditarDotacao = (dotacao) => {
+        console.log(dotacao)
         setFormDotacao({
             id: dotacao.id,
             dotacao_tipo_id: dotacao.dotacao_tipo_id,
             contrato_id: dotacao.contrato_id,
+            numero_dotacao: dotacao.numero_dotacao,
+            tipo_despesa: dotacao.tipo_despesa,
+            descricao: dotacao.descricao
         });
         setOpenFormDotacao({
             open: true,
