@@ -425,7 +425,8 @@ const DadosContrato = ({ snackbar, setSnackbar }) => {
                             <Typography variant="h2" sx={{ fontSize: '2rem', margin: '2rem 0' }}>
                                 Dados da empresa
                             </Typography>
-                            <CardEmpresa 
+                            {   dados?.empresa_id !== null 
+                                ?<CardEmpresa 
                                 centered
                                 empresa={{
                                     nome: dados?.empresa,
@@ -433,7 +434,8 @@ const DadosContrato = ({ snackbar, setSnackbar }) => {
                                     email: dados?.empresa_email,
                                     telefone: dados?.empresa_telefone
                                 }} 
-                            />
+                                />
+                                :<Typography className='text-red-500 font-bold'>Não há empresa cadastrada neste contrato!</Typography>}
 
                             <OutrasInformacoes 
                                 outras_informacoes={dados?.outras_informacoes}
