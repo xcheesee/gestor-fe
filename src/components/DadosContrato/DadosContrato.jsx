@@ -435,7 +435,7 @@ const DadosContrato = ({ snackbar, setSnackbar }) => {
                                     telefone: dados?.empresa_telefone
                                 }} 
                                 />
-                                :<Typography className='text-red-500 font-bold'>Não há empresa cadastrada neste contrato!</Typography>}
+                                :<Typography className='text-red-500 font-bold'>Nenhum dado de empresa disponível para este contrato!</Typography>}
 
                             <OutrasInformacoes 
                                 outras_informacoes={dados?.outras_informacoes}
