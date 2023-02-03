@@ -1,30 +1,53 @@
-import { Autocomplete, Button, ButtonBase, CircularProgress, Menu, MenuItem, Paper, TextField, Typography } from "@mui/material";
+import { Button, ButtonBase, IconButton, Menu, MenuItem, Paper, TextField, Typography } from "@mui/material";
 import { Box } from "@mui/system";
 import { useQuery } from "@tanstack/react-query";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useState } from "react";
 import { getFormData } from "../../commom/utils/api";
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
+import DeleteIcon from '@mui/icons-material/Delete';
 import "./style.css"
 
-export function CardEmpresa({empresa, centered=false}) {
+export function CardEmpresa({empresa, centered=false, displayOnly=false, onClick=() => {}, handleDelClick=() => {}}) {
     const toCenter = centered ? "text-center" : ""
+    function CardBody() {
+        return(
+            <Box>
+                <Typography className={`font-bold text-xl ${toCenter}`} sx={{color: "hsl(175, 50%, 20%)"}}>{empresa?.nome}</Typography>
+                <Typography className={`pl-4 ${toCenter}`} sx={{color: "hsl(175, 50%, 40%)"}}>{empresa?.cnpj_formatado}</Typography>
+                <Box className="flex justify-around gap-16 px-2 pt-6">
+                    <Typography sx={{color: "hsl(175, 50%, 40%)"}}>{empresa?.email}</Typography>
+                    <Typography sx={{color: "hsl(175, 50%, 40%)"}}>{empresa?.telefone}</Typography>
+                </Box>
+            </Box>
+        )
+    }
     return(
         <Paper
             elevation={2}
-            className="p-4 w-full" sx={{backgroundColor: "hsl(175, 50%, 92%)"}}>
-                <Typography className={`font-bold text-xl ${toCenter}`} sx={{color: "hsl(175, 50%, 20%)"}}>{empresa.nome}</Typography>
-                <Typography className={`pl-4 ${toCenter}`} sx={{color: "hsl(175, 50%, 40%)"}}>{empresa.cnpj_formatado}</Typography>
-                <Box className="flex justify-around px-2 pt-6">
-                    <Typography sx={{color: "hsl(175, 50%, 40%)"}}>{empresa.email}</Typography>
-                    <Typography sx={{color: "hsl(175, 50%, 40%)"}}>{empresa.telefone}</Typography>
-                </Box>
+            className="p-4 w-full grid grid-cols-[1fr_min-content] items-start" sx={{backgroundColor: "hsl(175, 50%, 92%)"}}>
+                {displayOnly
+                    ?<Box>
+                        <CardBody />
+                    </Box>
+                    :<ButtonBase className="w-full" onClick={onClick}>
+                        <CardBody />
+                    </ButtonBase>
+                }
+                
+                {displayOnly 
+                    ?""
+                    :<IconButton className="z-50" onClick={handleDelClick}>
+                        <DeleteIcon />
+                    </IconButton>
+                }
             </Paper>
     )
 }
 
 const  CampoEmpresa = React.forwardRef(({ }, ref) => {
     const [anchorEl, setAnchorEl] = useState(null)
-    const [filter, setFilter] = useState("")
+    // const [filter, setFilter] = useState("")
+    const [currEmpresa, setCurrEmpresa] = useState(ref.current)
     
     const empresaDados = useQuery({
         queryKey: ['empresas'],
@@ -40,10 +63,19 @@ const  CampoEmpresa = React.forwardRef(({ }, ref) => {
     return(
         <>
             {
-                ref?.current?.id !== null
-                    ?<ButtonBase className="w-full text-start" onClick={handleBtnClick}>
-                        <CardEmpresa empresa={ref.current}/>
-                    </ButtonBase>
+                currEmpresa?.id !== null
+                    ?<CardEmpresa empresa={currEmpresa} onClick={handleBtnClick} handleDelClick={(e) => {
+                        ref.current = {
+                            id: "",
+                            nome: "",
+                            cnpj: "",
+                            telefone: "",
+                            email: ""
+                        }
+                        setCurrEmpresa({
+                            id: null
+                        })
+                    }}/>
                     :<Box className="block flex h-32">
                         <Button className="justify-center" fullWidth onClick={handleBtnClick}>
                             <Typography className="text-3xl font-light">Adicionar Empresa</Typography>
@@ -63,11 +95,11 @@ const  CampoEmpresa = React.forwardRef(({ }, ref) => {
                     vertical: 'bottom',
                     horizontal: 'center',
                   }}>
-                <TextField 
+                {/* <TextField 
                     value={filter} 
                     onChange={(e) => setFilter(e.target.value)} 
                     className="ml-4 mr-8 my-2 w-[400px]" 
-                    label="Dados da empresa"/>
+                    label="Dados da empresa"/> */}
                 {empresaDados.isLoading 
                     ? <Typography>Carregando...</Typography>
                     :empresaDados?.data?.data?.map((entry, index) => {
@@ -77,8 +109,11 @@ const  CampoEmpresa = React.forwardRef(({ }, ref) => {
                             onClick={() => {
                                 setAnchorEl(null)
                                 ref.current = entry
+                                setCurrEmpresa(entry)
                             }}>
-                            <CardEmpresa empresa={entry}/>
+                            <CardEmpresa 
+                                empresa={entry} 
+                                displayOnly/>
                         </MenuItem>
                     )
                 })}

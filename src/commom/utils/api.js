@@ -3,7 +3,6 @@ const token = localStorage.getItem('access_token');
 function getFormattedFormData(form, initialValue={}) {
     let data = {...initialValue};
     for(const objArray of form.entries()) {
-        console.log(objArray)
         data[objArray[0]] = objArray[1]
     }
     return data
@@ -236,5 +235,9 @@ export async function deleteReajuste(id) {
 
     const res = await fetch(url, options)
     const json = await res.json()
-    return {status: res.status, ...json}
+    if(res.ok) {
+        return {status: res.status, ...json}
+    } else {
+        throw ({'message': 'Nao foi possivel deletar o reajuste'})
+    }
 }

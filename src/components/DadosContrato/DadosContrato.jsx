@@ -14,7 +14,6 @@ import {
     Alert,
 } from '@mui/material';
 import ExecucaoFinanceira from './ExecucaoFinanceira';
-import DadosEmpresa from './DadosEmpresa';
 import OutrasInformacoes from './OutrasInformacoes';
 import ListaDadosContrato from '../ListaDadosContrato';
 import ListaCertidoes from '../ListaCertidoes';
@@ -25,7 +24,6 @@ import ListaDotacoes from '../ListaDotacoes';
 import ListaNotasEmpenho from '../ListaNotasEmpenho';
 import ListaAditamentosValor from '../ListaAditamentosValor';
 import ListaAditamentosPrazo from '../ListaAditamentosPrazo';
-import PropTypes from 'prop-types';
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import ListaReajustes from '../ListaReajustes';
@@ -52,12 +50,6 @@ const TabPanel = (props) => {
         </div>
     );
 }
-
-// TabPanel.propTypes = {
-//     children: PropTypes.node,
-//     index: PropTypes.number.isRequired,
-//     value: PropTypes.number.isRequired,
-// }
 
 const a11yProps = (index) => {
     return {
@@ -132,9 +124,9 @@ const DadosContrato = ({ snackbar, setSnackbar }) => {
     
     const navigate = useNavigate();
 
-    useEffect(() => {
-        setEstaCarregado(false);
-    }, [setEstaCarregado, numContrato])
+    // useEffect(() => {
+    //     setEstaCarregado(false);
+    // }, [setEstaCarregado, numContrato])
 
     useEffect(() => {
         (async () => {
@@ -397,7 +389,9 @@ const DadosContrato = ({ snackbar, setSnackbar }) => {
                                         />
                                     </TabPanel>
                                     <TabPanel value={value} index={9}>
-                                        <ListaReajustes numContrato={numContrato} setSnackbar={setSnackbar}/>
+                                        <ListaReajustes 
+                                            numContrato={numContrato} 
+                                            setSnackbar={setSnackbar}/>
                                     </TabPanel>
                                 </Box>
                             </Box>
@@ -411,31 +405,22 @@ const DadosContrato = ({ snackbar, setSnackbar }) => {
                                 totais={totais}
                             />
 
-                            {/* <DadosEmpresa
-                                nome_empresa={dados?.nome_empresa}
-                                telefone_empresa={dados?.telefone_empresa}
-                                email_empresa={dados?.email_empresa}
-                                estaCarregado={estaCarregado}
-                                dados={dados}
-                                numContrato={numContrato}
-                                setSnackbar={setSnackbar}
-                                mudancaContrato={mudancaContrato}
-                                setMudancaContrato={setMudancaContrato}
-                            /> */}
                             <Typography variant="h2" sx={{ fontSize: '2rem', margin: '2rem 0' }}>
                                 Dados da empresa
                             </Typography>
-                            {   dados?.empresa_id !== null 
+                            {dados?.empresa_id !== null 
                                 ?<CardEmpresa 
-                                centered
-                                empresa={{
-                                    nome: dados?.empresa,
-                                    cnpj_formatado: formataCpfCnpj(dados?.empresa_cnpj),
-                                    email: dados?.empresa_email,
-                                    telefone: dados?.empresa_telefone
-                                }} 
+                                    centered
+                                    displayOnly
+                                    empresa={{
+                                        nome: dados?.empresa,
+                                        cnpj_formatado: formataCpfCnpj(dados?.empresa_cnpj),
+                                        email: dados?.empresa_email,
+                                        telefone: dados?.empresa_telefone
+                                    }} 
                                 />
-                                :<Typography className='text-red-500 font-bold'>Nenhum dado de empresa disponível para este contrato!</Typography>}
+                                :<Typography className='text-red-500 font-bold'>Nenhum dado de empresa disponível para este contrato!</Typography>
+                            }
 
                             <OutrasInformacoes 
                                 outras_informacoes={dados?.outras_informacoes}

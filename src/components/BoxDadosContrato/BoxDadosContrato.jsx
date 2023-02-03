@@ -40,6 +40,7 @@ const BoxDadosContrato = (props) => {
         nome: dados.empresa, 
         telefone: dados.empresa_telefone,
         email: dados.empresa_email, 
+        cnpj: dados.empresa_cnpj,
         cnpj_formatado: formataCpfCnpj(dados.empresa_cnpj)
     })
 
@@ -48,11 +49,9 @@ const BoxDadosContrato = (props) => {
             component="form"
             id="contrato-form"
             onSubmit={(e) => {
-                console.log(empresa.current)
                 e.preventDefault()
                 const formData = new FormData(e.target)
                 formData.append('empresa_id', empresa.current.id)
-                console.log(formData)
                 enviaDadosContrato(e, formData, numContrato)
             }}
         >
