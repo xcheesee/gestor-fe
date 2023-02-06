@@ -1,5 +1,3 @@
-const token = localStorage.getItem('access_token');
-
 function getFormattedFormData(form, initialValue={}) {
     let data = {...initialValue};
     for(const objArray of form.entries()) {
@@ -9,15 +7,16 @@ function getFormattedFormData(form, initialValue={}) {
 } 
 
 export async function getContratos (url) {
-        const options = {
-            method: 'GET',
-            mode: 'cors',
-            headers: {
-                'Content-Type': 'application/json',
-                'Accept': 'application/json',
-                'Authorization': `Bearer ${token}`,
-            },
-        };
+    const token = localStorage.getItem('access_token');
+    const options = {
+        method: 'GET',
+        mode: 'cors',
+        headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+            'Authorization': `Bearer ${token}`,
+        },
+    };
     const urlMontado = `${url.url}page=${url.page}${url.filtros}&sort=${url.sort}`;
 
     const data = await fetch(urlMontado, options)
@@ -31,6 +30,7 @@ export async function getContratos (url) {
 }
 
 export async function getContrato (numContrato) {
+    const token = localStorage.getItem('access_token');
     const url = `${process.env.REACT_APP_API_URL}`
     const options = {
         headers: {
@@ -48,6 +48,7 @@ export async function getContrato (numContrato) {
 }
 
 export async function getDotacao () {
+    const token = localStorage.getItem('access_token');
     const url = `${process.env.REACT_APP_API_URL}`
     const options = {
         headers: {
@@ -61,6 +62,7 @@ export async function getDotacao () {
 }
 
 export async function getRecursos () {
+    const token = localStorage.getItem('access_token');
     const url = `${process.env.REACT_APP_API_URL}`
     const options = {
         headers: {
@@ -74,6 +76,7 @@ export async function getRecursos () {
 }
 
 export async function getContrTot (numContrato) {
+    const token = localStorage.getItem('access_token');
     const url = `${process.env.REACT_APP_API_URL}`
     const options = {
         headers: {
@@ -107,7 +110,7 @@ export async function sendPWData(formSubmit) {
 }
 
 export const newPwRequest = async (formData) => {
-    
+    const token = localStorage.getItem('access_token');
     const url = new URL(
         `${process.env.REACT_APP_API_URL}/alterar_senha`
     );
@@ -130,6 +133,7 @@ export const newPwRequest = async (formData) => {
 }
 
 export async function sendNovoFormData (form) {
+    const token = localStorage.getItem('access_token');
     const url = new URL(
         `${process.env.REACT_APP_API_URL}/contrato`
     );
@@ -153,6 +157,7 @@ export async function sendNovoFormData (form) {
 }
 
 export const editaDadosContrato = async (e, dados, formInterno, id) => {
+    const token = localStorage.getItem('access_token');
     const url = `${process.env.REACT_APP_API_URL}/contrato/${id}`;
     let data = getFormattedFormData(formInterno, dados)
     data.processo_sei += "/" /* gambiarra para validacao no backend */
@@ -175,6 +180,7 @@ export const editaDadosContrato = async (e, dados, formInterno, id) => {
 }
 
 export async function getFormData (path) {{
+    const token = localStorage.getItem('access_token');
     const url = `${process.env.REACT_APP_API_URL}`
     const options = {
         headers: {
@@ -188,6 +194,7 @@ export async function getFormData (path) {{
 }} 
 
 export async function postFormData (form, path) {
+    const token = localStorage.getItem('access_token');
     let data = getFormattedFormData(form)
     const url = `${process.env.REACT_APP_API_URL}/${path}`;
     const options = {
@@ -206,6 +213,7 @@ export async function postFormData (form, path) {
 }
 
 export async function putFormData (id, form, path) {
+    const token = localStorage.getItem('access_token');
     let data = getFormattedFormData(form)
     const url = `${process.env.REACT_APP_API_URL}/${path}/${id}`;
     const options = {
@@ -223,6 +231,7 @@ export async function putFormData (id, form, path) {
 }
 
 export async function deleteReajuste(id) {
+    const token = localStorage.getItem('access_token');
     const url = `${process.env.REACT_APP_API_URL}/reajuste/${id}`;
     const options = {
         method: 'DELETE',

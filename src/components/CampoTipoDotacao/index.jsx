@@ -12,8 +12,8 @@ export function CardDotacao({dotacao, centered=false, displayOnly=false, onClick
     function CardBody() {
         return(
             <Box className="p-4">
-                <Typography className={`font-bold text-xl ${toCenter}`} sx={{color: "hsl(175, 50%, 20%)"}}>{dotacao?.descricao}</Typography>
-                <Typography className={`pl-4 ${toCenter}`} sx={{color: "hsl(175, 50%, 40%)"}}>{dotacao?.numero_dotacao}</Typography>
+                <Typography className={`font-bold text-xl ${toCenter}`} sx={{color: "hsl(175, 50%, 20%)"}}>{dotacao?.numero_dotacao}</Typography>
+                <Typography className={`pl-4 ${toCenter}`} sx={{color: "hsl(175, 50%, 20%)"}}>{dotacao?.descricao}</Typography>
                 <Box className="flex justify-around gap-16 px-2 pt-6">
                     <Typography sx={{color: "hsl(175, 50%, 40%)"}}>{dotacao?.tipo_despesa}</Typography>
                     {/* <Typography sx={{color: "hsl(175, 50%, 40%)"}}>{dotacao?.tipo_despesa}</Typography> */}
@@ -88,11 +88,11 @@ const  CampoTipoDotacao = React.forwardRef(({ }, ref) => {
                 anchorEl={anchorEl} 
                 onClose={() => setAnchorEl(null)}
                 anchorOrigin={{
-                    vertical: 'top',
+                    vertical: 'bottom',
                     horizontal: 'center',
                   }}
                   transformOrigin={{
-                    vertical: 'bottom',
+                    vertical: 'top',
                     horizontal: 'center',
                   }}>
                 {/* <TextField 
