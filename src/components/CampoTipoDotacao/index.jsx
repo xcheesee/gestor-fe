@@ -1,4 +1,4 @@
-import { Button, ButtonBase, Dialog, DialogContent, DialogTitle, IconButton, Menu, MenuItem, Paper, TextField, Typography } from "@mui/material";
+import { Button, ButtonBase, Dialog, DialogContent, DialogTitle, IconButton, Paper, TextField, Typography } from "@mui/material";
 import { Box } from "@mui/system";
 import { useQuery } from "@tanstack/react-query";
 import React, { useState } from "react";
@@ -47,13 +47,11 @@ export function CardDotacao({dotacao, centered=false, displayOnly=false, onClick
 const  CampoTipoDotacao = React.forwardRef(({ dotacao, setDotacao }, ref) => {
     const [anchorEl, setAnchorEl] = useState(null)
     // const [filter, setFilter] = useState("")
-    const [currEmpresa, setCurrEmpresa] = useState(dotacao)
     
-    const empresaDados = useQuery({
+    const dotacoesDados = useQuery({
         queryKey: ['dotacao_tipos'],
         queryFn: () => getFormData("dotacao_tipos"),
         onSuccess: (res) => {
-            console.log(res)
         }
     })
     const openAnchor = Boolean(anchorEl)
@@ -72,21 +70,18 @@ const  CampoTipoDotacao = React.forwardRef(({ dotacao, setDotacao }, ref) => {
                             dotacao_tipo_id: "",
                             tipo_despesa: "",
                         }))
-                        setCurrEmpresa({
-                            id: null
-                        })
                     }}/>
                     :<Box className="block flex h-32">
                         <Button className="justify-center" fullWidth onClick={handleBtnClick}>
-                            <Typography className="text-3xl font-light">Adicionar Dotacao</Typography>
+                            <Typography className="text-3xl font-light">Definir Tipo de Dotacao</Typography>
                             <AddCircleOutlineIcon className="mx-4 text-3xl"/>
                         </Button>
                     </Box>
             }
             <Dialog 
                 open={openAnchor} 
-                // anchorEl={anchorEl} 
-                onClose={() => setAnchorEl(null)}>
+                onClose={() => setAnchorEl(null)}
+            >
                 <DialogTitle>
                     <TextField 
                         // value={filter} 
@@ -96,15 +91,14 @@ const  CampoTipoDotacao = React.forwardRef(({ dotacao, setDotacao }, ref) => {
                         label="Dados da dotacao"/>
                 </DialogTitle>
                 <DialogContent>
-                    {empresaDados.isLoading 
+                    {dotacoesDados.isLoading 
                         ? <Typography>Carregando...</Typography>
-                        :empresaDados?.data?.data?.map((entry, index) => {
+                        :dotacoesDados?.data?.data?.map((entry, index) => {
                         return (
                             <ButtonBase
                                 key={`empresa-${index}`}
                                 className='m-2 w-full'
                                 onClick={() => {
-                                    console.log(entry)
                                     setAnchorEl(null)
                                     setDotacao((prev) => ({
                                         ...prev,
@@ -113,7 +107,6 @@ const  CampoTipoDotacao = React.forwardRef(({ dotacao, setDotacao }, ref) => {
                                         tipo_despesa: entry.tipo_despesa,
                                         descricao: entry.descricao
                                     }))
-                                    setCurrEmpresa(entry)
                                 }}>
                                 <CardDotacao 
                                     dotacao={entry} 

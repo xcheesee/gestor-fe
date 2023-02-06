@@ -116,17 +116,12 @@ const DadosContrato = ({ snackbar, setSnackbar }) => {
     const [dotacoes, setDotacoes] = useState([]);
     const [mudancaDotacoes, setMudancaDotacoes] = useState(false);
     const [carregandoDotacoes, setCarregandoDotacoes] = useState(true);
-    const [tipoDotacoes, setTipoDotacoes] = useState([]);
     const [origemRecursos, setOrigemRecursos] = useState([]);
     const [totais, setTotais] = useState([]);
     const [estaCarregado, setEstaCarregado] = useState(false);
     const { numContrato } = useParams();
     
     const navigate = useNavigate();
-
-    // useEffect(() => {
-    //     setEstaCarregado(false);
-    // }, [setEstaCarregado, numContrato])
 
     useEffect(() => {
         (async () => {
@@ -139,12 +134,10 @@ const DadosContrato = ({ snackbar, setSnackbar }) => {
                 navigate("../contrato", { replace: true });
             }
             setDados(contrato?.data)
-            const [tiposDot, recOri, totRec] = await Promise.all([
-                getDotacao(),
+            const [recOri, totRec] = await Promise.all([
                 getRecursos(),
                 getContrTot(numContrato),
             ])
-            setTipoDotacoes(tiposDot.data)
             setOrigemRecursos(recOri.data)
             setTotais(totRec.data)
             setEstaCarregado(true)
@@ -383,7 +376,6 @@ const DadosContrato = ({ snackbar, setSnackbar }) => {
                                             estaCarregado={estaCarregado}
                                             retornaCampoValor={retornaCampoValor}
                                             numContrato={numContrato}
-                                            tipoDotacoes={tipoDotacoes}
                                             origemRecursos={origemRecursos}
                                             setSnackbar={setSnackbar}
                                         />
@@ -430,7 +422,6 @@ const DadosContrato = ({ snackbar, setSnackbar }) => {
                                 mudancaContrato={mudancaContrato}
                                 setMudancaContrato={setMudancaContrato}
                             />
-
                         </Box>
                     </Box>
                 </Box>

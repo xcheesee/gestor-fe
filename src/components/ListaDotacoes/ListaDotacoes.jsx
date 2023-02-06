@@ -6,7 +6,11 @@ import {
     Typography,
     Button,
     CircularProgress,
-    Fade
+    Fade,
+    Dialog,
+    DialogContent,
+    DialogTitle,
+    DialogActions
 } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import BotoesTab from '../BotoesTab';
@@ -15,6 +19,8 @@ import FormDotacoes from './FormDotacoes';
 import FormRecursos from './FormRecursos';
 import DialogConfirmacao from '../DialogConfirmacao';
 import { postFormData, putFormData } from '../../commom/utils/api';
+import CloseIcon from '@mui/icons-material/Close';
+import CheckIcon from '@mui/icons-material/Check';
 
 const retornaNumDotacao = (numero_dotacao, descricao) => {
     return [`${numero_dotacao}\n${descricao}`];
@@ -43,7 +49,6 @@ const ListaDotacoes = (props) => {
         estaCarregado,
         retornaCampoValor,
         numContrato,
-        tipoDotacoes,
         origemRecursos,
         setSnackbar
     } = props;
@@ -66,7 +71,6 @@ const ListaDotacoes = (props) => {
     });
     const [formDotacao, setFormDotacao] = useState({
         dotacao_tipo_id: '',
-        contrato_id: numContrato,
         origem_recurso_id: '',
         outros_descricao: '',
     });
@@ -91,7 +95,6 @@ const ListaDotacoes = (props) => {
         fetch(url, options)
             .then(res => res.json())
             .then(data => {
-                console.log(data)
                 setDotacoes(data.data);
                 setCarregandoDotacoes(false);
             })
@@ -133,6 +136,7 @@ const ListaDotacoes = (props) => {
                         text: 'Dotação excluída com sucesso',
                         color: 'success'
                     });
+                    setErrors({})
                     return res.json();
                 } else {
                     setCarregando(false);
@@ -181,6 +185,7 @@ const ListaDotacoes = (props) => {
                         text: 'Fonte de recurso excluída com sucesso',
                         color: 'success'
                     });
+                    setErrors({})
                     return res.json();
                 } else {
                     setCarregando(false);
@@ -224,7 +229,7 @@ const ListaDotacoes = (props) => {
             setFormDotacao({
                 ...formDotacao,
                 dotacao_tipo_id: '',
-                contrato_id: numContrato,
+                // contrato_id: numContrato,
                 origem_recurso_id: '',
                 outros_descricao: '',
             });
@@ -233,6 +238,7 @@ const ListaDotacoes = (props) => {
                 acao: 'adicionar',
                 elemento: 'dotacao'
             });
+            setErrors({})
         } else {
             setSnackbar({
                 open: true,
@@ -246,7 +252,6 @@ const ListaDotacoes = (props) => {
     }
 
     const handleClickEditarRecurso = (recurso) => {
-        console.log(recurso)
         setFormRecurso({
             id: recurso.id,
             dotacao_id: recurso.dotacao_id,
@@ -282,6 +287,7 @@ const ListaDotacoes = (props) => {
                 acao: 'adicionar',
                 elemento: 'recurso'
             });
+            setErrors({})
         } else {
             setSnackbar({
                 open: true,
@@ -326,10 +332,11 @@ const ListaDotacoes = (props) => {
             setFormDotacao({
                 ...formDotacao,
                 dotacao_tipo_id: '',
-                contrato_id: numContrato,
+                // contrato_id: numContrato,
                 origem_recurso_id: '',
                 outros_descricao: '',
             });
+            setErrors({})
         } else if (res.status === 422) {
             setSnackbar({
                 open: true,
@@ -382,6 +389,7 @@ const ListaDotacoes = (props) => {
                 origem_recurso_id: '',
                 outros_descricao: ''
             });
+            setErrors({})
         } else if (res.status === 422) {
             setSnackbar({
                 open: true,
@@ -512,22 +520,64 @@ const ListaDotacoes = (props) => {
                     </Fade>
                 );
             })}
-            
-            <FormDotacoes 
-                carregando={carregando}
-                openFormDotacao={openFormDotacao}
-                setOpenFormDotacao={setOpenFormDotacao}
-                errors={errors}
-                setErrors={setErrors}
-                formDotacao={formDotacao}
-                setFormDotacao={setFormDotacao}
-                numContrato={numContrato}
-                tipoDotacoes={tipoDotacoes}
-                origemRecursos={origemRecursos}
-                enviaDotacao={enviaDotacao}
-                editaDotacao={editaDotacao}
-                setOpenConfirmacao={setOpenConfirmacao}
-            />
+
+            <Dialog open={openFormDotacao.open} fullWidth>
+                <DialogTitle>
+                    {openFormDotacao.acao === 'adicionar'
+                        ? "Nova dotação"
+                        : "Editar dotação"
+                    }
+                </DialogTitle>
+                <DialogContent>
+                    <FormDotacoes 
+                        openFormDotacao={openFormDotacao}
+                        errors={errors}
+                        formDotacao={formDotacao}
+                        setFormDotacao={setFormDotacao}
+                        numContrato={numContrato}
+                        origemRecursos={origemRecursos}
+                        enviaDotacao={enviaDotacao}
+                        editaDotacao={editaDotacao}
+                    />
+                </DialogContent>
+                <DialogActions sx={{ margin: '1rem' }}>
+                    <Button
+                        onClick={() => {
+                            setOpenFormDotacao({ ...openFormDotacao, open: false });
+                            setErrors({});
+                        }}
+                        sx={{ textTransform: 'none', mr: '1rem', color: (theme) => theme.palette.error.main }}
+                    >
+                        <CloseIcon sx={{ mr: '0.2rem' }} fontSize="small" /> Cancelar
+                    </Button>
+
+                    <Button
+                        sx={{ textTransform: 'none' }} 
+                        variant="contained"
+                        onClick={() => {
+                            if (openFormDotacao.acao === 'editar') {
+                                setOpenConfirmacao({
+                                    open: true,
+                                    id: formDotacao.id,
+                                    elemento: 'dotacao'
+                                });
+                            }
+                        }}
+                        form={openFormDotacao.acao === 'adicionar' ? "dotacao_form" : ""}
+                        type={openFormDotacao.acao === 'adicionar' ? "submit" : ""}
+                    >
+                        {carregando
+                            ? <CircularProgress size={16} sx={{ color: (theme) => theme.palette.color.main, mr: '0.7rem' }} />
+                            : <CheckIcon sx={{ mr: '0.2rem' }} fontSize="small" /> 
+                        }
+
+                        {openFormDotacao.acao === 'adicionar'
+                            ? "Enviar"
+                            : "Editar"
+                        }
+                    </Button>
+                </DialogActions>
+            </Dialog>
 
             <FormRecursos 
                 openFormRecurso={openFormRecurso}
