@@ -65,12 +65,13 @@ const  CampoTipoDotacao = React.forwardRef(({ dotacao, setDotacao }, ref) => {
             {
                 dotacao?.dotacao_tipo_id !== ""
                     ?<CardDotacao dotacao={dotacao} setDotacao={setDotacao} onClick={handleBtnClick} handleDelClick={(e) => {
-                        setDotacao({
-                            id: "",
+                        setDotacao(prev => ({
+                            ...prev,
                             descricao: "",
                             numero_dotacao: "",
+                            dotacao_tipo_id: "",
                             tipo_despesa: "",
-                        })
+                        }))
                         setCurrEmpresa({
                             id: null
                         })
@@ -103,8 +104,15 @@ const  CampoTipoDotacao = React.forwardRef(({ dotacao, setDotacao }, ref) => {
                                 key={`empresa-${index}`}
                                 className='m-2 w-full'
                                 onClick={() => {
+                                    console.log(entry)
                                     setAnchorEl(null)
-                                    setDotacao(entry)
+                                    setDotacao((prev) => ({
+                                        ...prev,
+                                        dotacao_tipo_id: entry.id, 
+                                        numero_dotacao: entry.numero_dotacao,
+                                        tipo_despesa: entry.tipo_despesa,
+                                        descricao: entry.descricao
+                                    }))
                                     setCurrEmpresa(entry)
                                 }}>
                                 <CardDotacao 

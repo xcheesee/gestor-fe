@@ -197,8 +197,9 @@ const FormDotacoes = (props) => {
                     onSubmit={(e) => {
                         e.preventDefault()
                         const formData = new FormData(e.target)
-                        formData.append("contrato_id", formDotacao.contrato_id)
-                        formData.append("dotacao_tipo_id", value.id)
+                        formData.append("contrato_id", numContrato)
+                        formData.append("dotacao_tipo_id", formDotacao.dotacao_tipo_id)
+                        console.log(formData, formDotacao)
                         openFormDotacao.acao === 'adicionar' ?  enviaDotacao(formData) : editaDotacao(formDotacao.id, formData)
                         
                     }}>

@@ -246,9 +246,11 @@ const ListaDotacoes = (props) => {
     }
 
     const handleClickEditarRecurso = (recurso) => {
+        console.log(recurso)
         setFormRecurso({
             id: recurso.id,
             dotacao_id: recurso.dotacao_id,
+            dotacao_tipo_id: recurso.dotacao_tipo_id,
             origem_recurso_id: recurso.origem_recurso_id,
             outros_descricao: recurso.outros_descricao
         });
