@@ -27,7 +27,7 @@ const FormDotacoes = (props) => {
         origem_recurso_id: ""
     })
     const [outrosDesc, setOutrosDesc] = useState(false)
-
+    console.log(origemRecursos)
     const CamposRecurso = () => {
         if (openFormDotacao.acao === 'adicionar') {
             return (
@@ -47,7 +47,6 @@ const FormDotacoes = (props) => {
                             defaultValue={novoRecursoRef.current.origem_recurso_id ?? ""}
                             onChange={(e) => {
                                 novoRecursoRef.current.origem_recurso_id = e.target.value
-                                // setFormDotacao((prev) => ({...prev, origem_recurso_id: e.target.value}))
                                 if(e.target.value === 999) {
                                     setOutrosDesc(true)
                                 } else {

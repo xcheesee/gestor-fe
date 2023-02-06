@@ -11,7 +11,7 @@ export function CardEmpresa({empresa, centered=false, displayOnly=false, onClick
     const toCenter = centered ? "text-center" : ""
     function CardBody() {
         return(
-            <Box>
+            <Box className="p-4">
                 <Typography className={`font-bold text-xl ${toCenter}`} sx={{color: "hsl(175, 50%, 20%)"}}>{empresa?.nome}</Typography>
                 <Typography className={`pl-4 ${toCenter}`} sx={{color: "hsl(175, 50%, 40%)"}}>{empresa?.cnpj_formatado}</Typography>
                 <Box className="flex justify-around gap-16 px-2 pt-6">
@@ -24,7 +24,7 @@ export function CardEmpresa({empresa, centered=false, displayOnly=false, onClick
     return(
         <Paper
             elevation={2}
-            className="p-4 w-full grid grid-cols-[1fr_min-content] items-start" sx={{backgroundColor: "hsl(175, 50%, 92%)"}}>
+            className="w-full grid grid-cols-[1fr_min-content] items-start" sx={{backgroundColor: "hsl(175, 50%, 92%)"}}>
                 {displayOnly
                     ?<Box>
                         <CardBody />
