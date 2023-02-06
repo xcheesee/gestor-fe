@@ -38,17 +38,11 @@ const FormDotacoes = (props) => {
 
     const [inputValue, setInputValue] = useState('Não se Aplica');
     const [value, setValue] = useState({label: 'Não se Aplica', id: 999});
-    const dotacaoRef = useRef({
-        descricao: formDotacao.descricao,
-        numero_dotacao: formDotacao.numero_dotacao,
-        tipo_despesa: formDotacao.tipo_despesa
-    })
     const outrosDesc = formDotacao.origem_recurso_id === 999;
     let tipos_dotacao = [{
         label: `Não se Aplica`,
         id: null
     }];
-    console.log(formDotacao)
     const CamposRecurso = () => {
         if (openFormDotacao.acao === 'adicionar') {
             return (
@@ -199,6 +193,7 @@ const FormDotacoes = (props) => {
                 <Box
                     component="form"
                     id="dotacao_form"
+                    className='flex flex-col gap-4 mt-4'
                     onSubmit={(e) => {
                         e.preventDefault()
                         const formData = new FormData(e.target)
@@ -207,8 +202,8 @@ const FormDotacoes = (props) => {
                         openFormDotacao.acao === 'adicionar' ?  enviaDotacao(formData) : editaDotacao(formDotacao.id, formData)
                         
                     }}>
-                        <CampoTipoDotacao ref={dotacaoRef}/>
-                    <Autocomplete 
+                    <CampoTipoDotacao dotacao={formDotacao} setDotacao={setFormDotacao}/>
+                    {/* <Autocomplete 
                         value={value}
                         options={tipos_dotacao}
                         onChange={(e, newValue) => {
@@ -244,7 +239,7 @@ const FormDotacoes = (props) => {
                             /> 
                         }
                         isOptionEqualToValue={(option, value) => option.value === value.value }
-                    />
+                    /> */}
                 <CamposRecurso />
                 </Box>
             </DialogContent>

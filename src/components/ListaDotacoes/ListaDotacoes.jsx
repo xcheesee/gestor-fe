@@ -196,7 +196,6 @@ const ListaDotacoes = (props) => {
 
     // edição
     const handleClickEditarDotacao = (dotacao) => {
-        console.log(dotacao)
         setFormDotacao({
             id: dotacao.id,
             dotacao_tipo_id: dotacao.dotacao_tipo_id,
@@ -295,6 +294,12 @@ const ListaDotacoes = (props) => {
     
     // adição
     const handleClickAdicionarDotacao = () => {
+        setFormDotacao({
+            dotacao_tipo_id: '',
+            contrato_id: numContrato,
+            origem_recurso_id: '',
+            outros_descricao: '',
+        })
         setOpenFormDotacao({
             open: true,
             acao: 'adicionar'

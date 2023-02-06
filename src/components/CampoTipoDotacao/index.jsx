@@ -1,4 +1,4 @@
-import { Button, ButtonBase, IconButton, Menu, MenuItem, Paper, TextField, Typography } from "@mui/material";
+import { Button, ButtonBase, Dialog, DialogContent, DialogTitle, IconButton, Menu, MenuItem, Paper, TextField, Typography } from "@mui/material";
 import { Box } from "@mui/system";
 import { useQuery } from "@tanstack/react-query";
 import React, { useState } from "react";
@@ -44,11 +44,10 @@ export function CardDotacao({dotacao, centered=false, displayOnly=false, onClick
     )
 }
 
-const  CampoTipoDotacao = React.forwardRef(({ }, ref) => {
+const  CampoTipoDotacao = React.forwardRef(({ dotacao, setDotacao }, ref) => {
     const [anchorEl, setAnchorEl] = useState(null)
     // const [filter, setFilter] = useState("")
-    const [currEmpresa, setCurrEmpresa] = useState(ref.current)
-    console.log(ref.current)
+    const [currEmpresa, setCurrEmpresa] = useState(dotacao)
     
     const empresaDados = useQuery({
         queryKey: ['dotacao_tipos'],
@@ -64,14 +63,14 @@ const  CampoTipoDotacao = React.forwardRef(({ }, ref) => {
     return(
         <>
             {
-                currEmpresa?.id !== null
-                    ?<CardDotacao dotacao={currEmpresa} onClick={handleBtnClick} handleDelClick={(e) => {
-                        ref.current = {
+                dotacao?.dotacao_tipo_id !== ""
+                    ?<CardDotacao dotacao={dotacao} setDotacao={setDotacao} onClick={handleBtnClick} handleDelClick={(e) => {
+                        setDotacao({
                             id: "",
                             descricao: "",
                             numero_dotacao: "",
                             tipo_despesa: "",
-                        }
+                        })
                         setCurrEmpresa({
                             id: null
                         })
@@ -83,41 +82,39 @@ const  CampoTipoDotacao = React.forwardRef(({ }, ref) => {
                         </Button>
                     </Box>
             }
-            <Menu 
+            <Dialog 
                 open={openAnchor} 
-                anchorEl={anchorEl} 
-                onClose={() => setAnchorEl(null)}
-                anchorOrigin={{
-                    vertical: 'bottom',
-                    horizontal: 'center',
-                  }}
-                  transformOrigin={{
-                    vertical: 'top',
-                    horizontal: 'center',
-                  }}>
-                {/* <TextField 
-                    value={filter} 
-                    onChange={(e) => setFilter(e.target.value)} 
-                    className="ml-4 mr-8 my-2 w-[400px]" 
-                    label="Dados da empresa"/> */}
-                {empresaDados.isLoading 
-                    ? <Typography>Carregando...</Typography>
-                    :empresaDados?.data?.data?.map((entry, index) => {
-                    return (
-                        <MenuItem
-                            key={`empresa-${index}`}
-                            onClick={() => {
-                                setAnchorEl(null)
-                                ref.current = entry
-                                setCurrEmpresa(entry)
-                            }}>
-                            <CardDotacao 
-                                dotacao={entry} 
-                                displayOnly/>
-                        </MenuItem>
-                    )
-                })}
-            </Menu>
+                // anchorEl={anchorEl} 
+                onClose={() => setAnchorEl(null)}>
+                <DialogTitle>
+                    <TextField 
+                        // value={filter} 
+                        // onChange={(e) => setFilter(e.target.value)} 
+                        fullWidth
+                        className="my-2" 
+                        label="Dados da dotacao"/>
+                </DialogTitle>
+                <DialogContent>
+                    {empresaDados.isLoading 
+                        ? <Typography>Carregando...</Typography>
+                        :empresaDados?.data?.data?.map((entry, index) => {
+                        return (
+                            <ButtonBase
+                                key={`empresa-${index}`}
+                                className='m-2 w-full'
+                                onClick={() => {
+                                    setAnchorEl(null)
+                                    setDotacao(entry)
+                                    setCurrEmpresa(entry)
+                                }}>
+                                <CardDotacao 
+                                    dotacao={entry} 
+                                    displayOnly/>
+                            </ButtonBase>
+                        )
+                    })}
+                </DialogContent>
+            </Dialog>
         </>
     )
 })
