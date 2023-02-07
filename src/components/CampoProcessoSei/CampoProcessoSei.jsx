@@ -9,6 +9,7 @@ const CampoProcessoSei = (props) => {
         helperText,
         name,
         label,
+        required = false,
         ...other
     } = props;
 
@@ -28,8 +29,8 @@ const CampoProcessoSei = (props) => {
                     helperText={helperText}
                     error={error}
                     name={name}
+                    required={required}
                     fullWidth
-                    required
                     {...other}
                 />)
             }

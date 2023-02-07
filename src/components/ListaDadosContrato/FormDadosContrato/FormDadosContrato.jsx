@@ -26,6 +26,7 @@ const FormDadosContrato = (props) => {
 
     const [errors, setErrors] = useState({});
     const [error, setError] = useState(false);
+    const [focusError, setFocusError] = useState('')
     const [carregandoEnvio, setCarregandoEnvio] = useState(false);
     const departamentos = JSON.parse(localStorage.getItem('departamentos'));
     const [openConfirmacao, setOpenConfirmacao] = useState({
@@ -46,6 +47,7 @@ const FormDadosContrato = (props) => {
             });
         } else if(res.status === 422) {
             setErrors(res.errors);
+            setFocusError(Object.keys(errors)[0])
         } else {
             setSnackbar({
                 open: true,
@@ -75,6 +77,8 @@ const FormDadosContrato = (props) => {
                     departamentos={departamentos}
                     enviaDadosContrato={enviaDadosContrato}
                     numContrato={numContrato}
+                    focusError={focusError}
+                    setFocusError={setFocusError}
                     acao="editar"
                 />
             </DialogContent>

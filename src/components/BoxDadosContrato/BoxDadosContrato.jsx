@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { 
     Box,
     Divider,
@@ -31,7 +31,9 @@ const BoxDadosContrato = (props) => {
         enviaDadosContrato,
         departamentos,
         numContrato,
-        acao
+        acao,
+        focusError,
+        setFocusError,
     } = props;
     const [validade, setValidade] = useState(dados.data_vencimento ?? "")
     const empresaRef = useRef({
@@ -42,6 +44,11 @@ const BoxDadosContrato = (props) => {
         cnpj: dados.empresa_cnpj,
         cnpj_formatado: formataCpfCnpj(dados.empresa_cnpj)
     })
+
+    useEffect(() => {
+        if(focusError === "") return
+        document.querySelector(`input[name=${focusError}]`)?.scrollIntoView({behavior: 'smooth', block: 'center'})
+    },[focusError])
 
     return (
         <Box
@@ -104,6 +111,7 @@ const BoxDadosContrato = (props) => {
                 variant="outlined"
                 defaultValue={dados.credor ?? ""}
                 name="credor"
+                id="credor"
                 className="form__campo"
                 label={contratoLabels.credor}
                 sx={{ margin: '1rem 0' }}
