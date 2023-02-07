@@ -93,7 +93,10 @@ const  CampoTipoDotacao = React.forwardRef(({ dotacao, setDotacao }, ref) => {
             }
             <Dialog 
                 open={openAnchor} 
-                onClose={() => setAnchorEl(null)}
+                onClose={() => {
+                    setAnchorEl(null)
+                    filter.current = ""
+                }}
             >
                 <DialogTitle>
                     <TextField 
@@ -130,6 +133,7 @@ const  CampoTipoDotacao = React.forwardRef(({ dotacao, setDotacao }, ref) => {
                                                 tipo_despesa: entry.item.tipo_despesa,
                                                 descricao: entry.item.descricao
                                             }))
+                                            filter.current = ""
                                         }}>
                                         <CardDotacao 
                                             dotacao={{
