@@ -4,7 +4,7 @@ import ReactInputMask from 'react-input-mask';
 
 const CampoProcessoSei = (props) => {
     const {
-        defaultValue,
+        defaultValue="",
         error,
         helperText,
         name,
