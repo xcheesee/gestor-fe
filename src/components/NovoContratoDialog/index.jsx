@@ -15,6 +15,7 @@ import { useNavigate } from "react-router-dom";
 import { sendNovoFormData } from "../../commom/utils/api";
 import { contratoLabels } from "../../commom/utils/constants";
 import { irParaTopo } from "../../commom/utils/utils";
+import CampoProcessoSei from "../CampoProcessoSei";
 import VoltarArrowBtn from "../VoltarArrowBtn";
 
 export default function NovoContratoDialog({novoDialog, setNovoDialog}) {
@@ -55,7 +56,7 @@ export default function NovoContratoDialog({novoDialog, setNovoDialog}) {
                                 }
                             </Select>
                         </FormControl>
-                        <TextField name="processo_sei" label={contratoLabels.processo_sei} required/>
+                        <CampoProcessoSei name="processo_sei" label={contratoLabels.processo_sei} required/>
                         <Button type="submit" variant="contained" className="self-end">
                             {sendingForm
                                 ?

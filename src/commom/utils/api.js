@@ -161,8 +161,9 @@ export const editaDadosContrato = async (e, dados, formInterno, id) => {
     const url = `${process.env.REACT_APP_API_URL}/contrato/${id}`;
     let data = getFormattedFormData(formInterno, dados)
     data.processo_sei += "/" /* gambiarra para validacao no backend */
-    const [dia, mes, ano] = data.data_prazo_maximo ? data.data_prazo_maximo.split(/[/]/) : ["", "", ""] // formatacao de data para envio ao backend
-    data.data_prazo_maximo = ano === undefined ? dados.data_prazo_maximo ?? "" :  `${ano}-${mes}-${dia}`
+    const [dia, mes, ano] = data.data_prazo_maximo ? data.data_prazo_maximo.split(/[/]/) : [null, null, null] // formatacao de data para envio ao backend
+    data.data_prazo_maximo = ano === undefined || ano === null ? dados.data_prazo_maximo ?? "" :  `${ano}-${mes}-${dia}`
+    console.log(data.data_prazo_maximo, dados.data_prazo_maximo)
     const options = {
         method: 'PUT',
         headers: {
