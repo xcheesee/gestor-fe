@@ -3,14 +3,14 @@
 export const contratoLabels = {
     departamento: "Unidade Requisitante",
     departamento_id: "Unidade Requisitante",
+    processo_sei: "Processo SEI",
+    credor: "Credor",
     licitacao_modelo_id: "",
     licitacao_modelo: "Modalidade de licitação",
     envio_material_tecnico: "Envio material técnico",
     minuta_edital: "Minuta edital",
     abertura_certame: "Abertura certame",
     homologacao: "Homologação",
-    processo_sei: "Processo SEI",
-    credor: "Credor",
     dotacao_orcamentaria: "",
     cnpj_cpf: "CNPJ/CPF",
     tipo_objeto: "Tipo de objeto",
@@ -32,3 +32,23 @@ export const contratoLabels = {
     valor_reajuste: "Valor",
     indice_reajuste: "Indice de Reajuste"
 }
+
+export const contratoKeys = [
+    "departamento_id",
+    "processo_sei",
+    "credor",
+    "cnpj_cpf",
+    "tipo_objeto",
+    "objeto",
+    "numero_contrato",
+    "data_assinatura",
+    "valor_contratado",
+    "valor_mensal_estimativo",
+    "data_inicio_vigencia",
+    "data_vencimento",
+    "condicao_pagamento",
+    "data_prazo_maximo",
+    "numero_nota_reserva",
+    "valor_reserva",
+    "empresa_id"
+]

@@ -20,6 +20,7 @@ import { contratoLabels } from '../../commom/utils/constants';
 import CampoDataControlada from '../CampoDataControlada';
 import CampoEmpresa from '../CampoEmpresa';
 import { formataCpfCnpj } from '../../commom/utils/utils';
+import CampoTexto from '../CampoTexto';
 
 const BoxDadosContrato = (props) => {
     const {
@@ -109,7 +110,10 @@ const BoxDadosContrato = (props) => {
             
             <TextField
                 variant="outlined"
-                defaultValue={dados.credor ?? ""}
+                defaultValue={dados.credor ?? localStorage.getItem(`contrato-${numContrato}-credor`) ?? ""}
+                onChange={e => {
+                    localStorage.setItem(`contrato-${numContrato}-credor`, e.target.value)
+                }}
                 name="credor"
                 id="credor"
                 className="form__campo"
@@ -233,7 +237,7 @@ const BoxDadosContrato = (props) => {
                 fullWidth
             />
 
-            <TextField
+            {/* <TextField
                 variant="outlined"
                 defaultValue={dados?.condicao_pagamento}
                 name="condicao_pagamento"
@@ -243,6 +247,11 @@ const BoxDadosContrato = (props) => {
                 error={errors.hasOwnProperty('condicao_pagamento')}
                 helperText={errors.hasOwnProperty('condicao_pagamento') ? errors.condicao_pagamento : "Ex: Em até 30 dias após o adimplemento."}
                 fullWidth
+            /> */}
+            <CampoTexto
+                defaultValue={dados?.condicao_pagamento}
+                name="condicao_pagamento"
+                errors={errors}
             />
 
             <MaxPrazoInput 

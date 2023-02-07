@@ -69,3 +69,11 @@ export const formataValores = (valor) => {
       return valores.format(valor);
   }
 }
+
+export function saveLocalStorageInput(numeroContrato, campo, valor) {
+  return localStorage.setItem(`contrato-${numeroContrato}-${campo}`, valor)
+}
+
+export function getLocalStorageInput(numeroContrato, campo) {
+  return localStorage.getItem(`contrato-${numeroContrato}-${campo}`)
+}
