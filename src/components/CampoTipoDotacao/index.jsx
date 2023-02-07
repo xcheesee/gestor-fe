@@ -105,7 +105,6 @@ const  CampoTipoDotacao = React.forwardRef(({ dotacao, setDotacao }, ref) => {
                             filter.current = e.target.value
                             if(filter.current.length > 2) {
                                 setDotacoesFiltradas(fuse.search(filter.current))
-                                console.log(dotacoesFiltradas)
                             } else {
                                 setDotacoesFiltradas(dotacoesDados?.data?.data)
                             }
