@@ -115,7 +115,7 @@ const Principal = ({ snackbar, setSnackbar }) => {
                                     setNovoDialog(true)
                                 }}
                             >
-                                <AddIcon sx={{ mr: '0.2rem' }} /> Novo Novo contrato
+                                <AddIcon sx={{ mr: '0.2rem' }} /> Novo contrato
                             </Button>
                             <Pagination
                                 className="self-center m-[1rem]"

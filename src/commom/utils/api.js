@@ -163,7 +163,6 @@ export const editaDadosContrato = async (e, dados, formInterno, id) => {
     data.processo_sei += "/" /* gambiarra para validacao no backend */
     const [dia, mes, ano] = data.data_prazo_maximo ? data.data_prazo_maximo.split(/[/]/) : [null, null, null] // formatacao de data para envio ao backend
     data.data_prazo_maximo = ano === undefined || ano === null ? dados.data_prazo_maximo ?? "" :  `${ano}-${mes}-${dia}`
-    console.log(data.data_prazo_maximo, dados.data_prazo_maximo)
     const options = {
         method: 'PUT',
         headers: {

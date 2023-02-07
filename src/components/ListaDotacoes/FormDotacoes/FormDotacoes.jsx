@@ -27,7 +27,6 @@ const FormDotacoes = (props) => {
         origem_recurso_id: ""
     })
     const [outrosDesc, setOutrosDesc] = useState(false)
-    console.log(origemRecursos)
     const CamposRecurso = () => {
         if (openFormDotacao.acao === 'adicionar') {
             return (
