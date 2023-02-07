@@ -18,7 +18,6 @@ import CampoNumContrato from '../CampoNumContrato';
 import MaxPrazoInput from '../MaxPrazoInput';
 import { contratoLabels } from '../../commom/utils/constants';
 import CampoDataControlada from '../CampoDataControlada';
-import { useEffect } from 'react';
 import CampoEmpresa from '../CampoEmpresa';
 import { formataCpfCnpj } from '../../commom/utils/utils';
 
@@ -35,7 +34,7 @@ const BoxDadosContrato = (props) => {
         acao
     } = props;
     const [validade, setValidade] = useState(dados.data_vencimento ?? "")
-    const empresa = useRef({
+    const empresaRef = useRef({
         id: dados.empresa_id, 
         nome: dados.empresa, 
         telefone: dados.empresa_telefone,
@@ -51,7 +50,7 @@ const BoxDadosContrato = (props) => {
             onSubmit={(e) => {
                 e.preventDefault()
                 const formData = new FormData(e.target)
-                formData.append('empresa_id', empresa.current.id)
+                formData.append('empresa_id', empresaRef.current.id)
                 enviaDadosContrato(e, formData, numContrato)
             }}
         >
@@ -270,7 +269,7 @@ const BoxDadosContrato = (props) => {
                 fullWidth 
             />
             <CampoEmpresa
-                ref={empresa}
+                ref={empresaRef}
              />
         </Box>
     );

@@ -1,7 +1,7 @@
 import { Button, ButtonBase, Dialog, DialogContent, DialogTitle, IconButton, Paper, TextField, Typography } from "@mui/material";
 import { Box } from "@mui/system";
 import { useQuery } from "@tanstack/react-query";
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import { getFormData } from "../../commom/utils/api";
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -45,16 +45,18 @@ export function CardDotacao({dotacao, centered=false, displayOnly=false, onClick
 }
 
 const  CampoTipoDotacao = React.forwardRef(({ dotacao, setDotacao }, ref) => {
-    const [anchorEl, setAnchorEl] = useState(null)
-    // const [filter, setFilter] = useState("")
-    
     const dotacoesDados = useQuery({
         queryKey: ['dotacao_tipos'],
         queryFn: () => getFormData("dotacao_tipos"),
         onSuccess: (res) => {
         }
     })
+
+    const filter = useRef("")
+    const [anchorEl, setAnchorEl] = useState(null)
+    const [dotacoesFiltradas, setDotacoesFiltradas] = useState(dotacoesDados?.data?.data)
     const openAnchor = Boolean(anchorEl)
+    
     function handleBtnClick (e) {
         setAnchorEl(e.currentTarget)
     }
@@ -84,8 +86,11 @@ const  CampoTipoDotacao = React.forwardRef(({ dotacao, setDotacao }, ref) => {
             >
                 <DialogTitle>
                     <TextField 
-                        // value={filter} 
-                        // onChange={(e) => setFilter(e.target.value)} 
+                        defaultValue={filter.current} 
+                        onChange={(e) => {
+                            filter.current = e.target.value
+
+                        }} 
                         fullWidth
                         className="my-2" 
                         label="Dados da dotacao"/>
@@ -93,7 +98,7 @@ const  CampoTipoDotacao = React.forwardRef(({ dotacao, setDotacao }, ref) => {
                 <DialogContent>
                     {dotacoesDados.isLoading 
                         ? <Typography>Carregando...</Typography>
-                        :dotacoesDados?.data?.data?.map((entry, index) => {
+                        :dotacoesFiltradas?.map((entry, index) => {
                         return (
                             <ButtonBase
                                 key={`empresa-${index}`}
