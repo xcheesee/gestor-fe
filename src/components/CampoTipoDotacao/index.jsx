@@ -1,3 +1,4 @@
+import Fuse from 'fuse.js'
 import { Button, ButtonBase, Dialog, DialogContent, DialogTitle, IconButton, Paper, TextField, Typography } from "@mui/material";
 import { Box } from "@mui/system";
 import { useQuery } from "@tanstack/react-query";
@@ -45,18 +46,28 @@ export function CardDotacao({dotacao, centered=false, displayOnly=false, onClick
 }
 
 const  CampoTipoDotacao = React.forwardRef(({ dotacao, setDotacao }, ref) => {
+    
+    const filter = useRef("")
+    const [anchorEl, setAnchorEl] = useState(null)
+    const [dotacoesFiltradas, setDotacoesFiltradas] = useState([])
+    const openAnchor = Boolean(anchorEl)
+    
     const dotacoesDados = useQuery({
         queryKey: ['dotacao_tipos'],
         queryFn: () => getFormData("dotacao_tipos"),
         onSuccess: (res) => {
+            setDotacoesFiltradas(res.data)
         }
     })
 
-    const filter = useRef("")
-    const [anchorEl, setAnchorEl] = useState(null)
-    const [dotacoesFiltradas, setDotacoesFiltradas] = useState(dotacoesDados?.data?.data)
-    const openAnchor = Boolean(anchorEl)
-    
+    const fuse = new Fuse(dotacoesDados?.data?.data, {
+        keys: [
+            "numero_dotacao",
+            "descricao",
+            "tipo_despesa"
+        ],
+        ignoreLocation: true
+    })
     function handleBtnClick (e) {
         setAnchorEl(e.currentTarget)
     }
@@ -89,6 +100,12 @@ const  CampoTipoDotacao = React.forwardRef(({ dotacao, setDotacao }, ref) => {
                         defaultValue={filter.current} 
                         onChange={(e) => {
                             filter.current = e.target.value
+                            if(filter.current.length > 2) {
+                                setDotacoesFiltradas(fuse.search(filter.current))
+                                console.log(dotacoesFiltradas)
+                            } else {
+                                setDotacoesFiltradas(dotacoesDados?.data?.data)
+                            }
 
                         }} 
                         fullWidth
@@ -98,27 +115,54 @@ const  CampoTipoDotacao = React.forwardRef(({ dotacao, setDotacao }, ref) => {
                 <DialogContent>
                     {dotacoesDados.isLoading 
                         ? <Typography>Carregando...</Typography>
-                        :dotacoesFiltradas?.map((entry, index) => {
-                        return (
-                            <ButtonBase
-                                key={`empresa-${index}`}
-                                className='m-2 w-full'
-                                onClick={() => {
-                                    setAnchorEl(null)
-                                    setDotacao((prev) => ({
-                                        ...prev,
-                                        dotacao_tipo_id: entry.id, 
-                                        numero_dotacao: entry.numero_dotacao,
-                                        tipo_despesa: entry.tipo_despesa,
-                                        descricao: entry.descricao
-                                    }))
-                                }}>
-                                <CardDotacao 
-                                    dotacao={entry} 
-                                    displayOnly/>
-                            </ButtonBase>
-                        )
-                    })}
+                        :filter.current.length > 2 
+                            ?dotacoesFiltradas?.map((entry, index) => {
+                                return (
+                                    <ButtonBase
+                                        key={`empresa-${index}`}
+                                        className='m-2 w-full'
+                                        onClick={() => {
+                                            setAnchorEl(null)
+                                            setDotacao((prev) => ({
+                                                ...prev,
+                                                dotacao_tipo_id: entry.item.id,
+                                                numero_dotacao: entry.item.numero_dotacao,
+                                                tipo_despesa: entry.item.tipo_despesa,
+                                                descricao: entry.item.descricao
+                                            }))
+                                        }}>
+                                        <CardDotacao 
+                                            dotacao={{
+                                                numero_dotacao: entry.item.numero_dotacao,
+                                                tipo_despesa: entry.item.tipo_despesa,
+                                                descricao: entry.item.descricao
+                                            }} 
+                                            displayOnly/>
+                                    </ButtonBase>
+                                )
+                            })
+                            :dotacoesDados?.data?.data?.map((entry, index) => {
+                            return (
+                                <ButtonBase
+                                    key={`empresa-${index}`}
+                                    className='m-2 w-full'
+                                    onClick={() => {
+                                        setAnchorEl(null)
+                                        setDotacao((prev) => ({
+                                            ...prev,
+                                            dotacao_tipo_id: entry.id, 
+                                            numero_dotacao: entry.numero_dotacao,
+                                            tipo_despesa: entry.tipo_despesa,
+                                            descricao: entry.descricao
+                                        }))
+                                    }}>
+                                    <CardDotacao 
+                                        dotacao={entry} 
+                                        displayOnly/>
+                                </ButtonBase>
+                            )
+                        })
+                    }
                 </DialogContent>
             </Dialog>
         </>
