@@ -367,13 +367,6 @@ const DadosContrato = ({ snackbar, setSnackbar }) => {
 
                                     <TabPanel value={value} index={8}>
                                         <ListaDotacoes 
-                                            // dotacoes={dotacoes}
-                                            // setDotacoes={setDotacoes}
-                                            // mudancaDotacoes={mudancaDotacoes}
-                                            // setMudancaDotacoes={setMudancaDotacoes}
-                                            // carregandoDotacoes={carregandoDotacoes}
-                                            // setCarregandoDotacoes={setCarregandoDotacoes}
-                                            // estaCarregado={estaCarregado}
                                             retornaCampoValor={retornaCampoValor}
                                             numContrato={numContrato}
                                             origemRecursos={origemRecursos}

@@ -320,13 +320,9 @@ const ListaFiscalizacoes = (props) => {
                 <DialogContent>
                     <FormGestaoFiscalizacao 
                         formFiscalizacao={formFiscalizacao}
-                        // setFormFiscalizacao={setFormFiscalizacao}
                         enviaFiscalizacao={enviaFiscalizacao}
                         editaFiscalizacao={editaFiscalizacao}
-                        // carregando={carregando}
                         openFormFiscalizacao={openFormFiscalizacao}
-                        // setOpenFormFiscalizacao={setOpenFormFiscalizacao}
-                        // setOpenConfirmacao={setOpenConfirmacao}
                         errors={errors}
                         setErrors={setErrors}
                     />
