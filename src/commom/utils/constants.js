@@ -33,6 +33,15 @@ export const contratoLabels = {
     indice_reajuste: "Indice de Reajuste"
 }
 
+export const fiscLabels = {
+    nome_gestor: "Gestor",
+    email_gestor: "E-mail do Gestor",
+    nome_fiscal: "Fiscal",
+    email_fiscal: "E-mail do Fiscal",
+    nome_suplente: "Suplente",
+    email_suplente: "E-mail do Suplente",
+}
+
 export const contratoKeys = [
     "departamento_id",
     "processo_sei",

@@ -87,6 +87,7 @@ export default function NovoContratoDialog({novoDialog, setNovoDialog}) {
                     </Box>
                 </DialogContent>
             </Dialog>
+            
             <Dialog open={existeSEI}>
                 <DialogTitle>
                     <Typography className="text-3xl text-center pb-4 font-light text-red-600">Atencao!</Typography>

@@ -1,3 +1,4 @@
+import { Box, Typography } from '@mui/material';
 import { cpf, cnpj } from 'cpf-cnpj-validator';
 
 export function getDateDiff(date1, date2) {
@@ -76,4 +77,21 @@ export function saveLocalStorageInput(numeroContrato, campo, valor) {
 
 export function getLocalStorageInput(numeroContrato, campo) {
   return localStorage.getItem(`contrato-${numeroContrato}-${campo}`)
+}
+
+export function RetornaCampoValor ({campos, valores}) {
+  return (
+      <Box sx={{ margin: '0 1rem' }}>
+          {campos.map((campo, index) => {
+              return (
+                  <Typography sx={{ margin: '1rem 0' }} key={index} component="pre">
+                      <strong>{campo}</strong>
+                      <Typography sx={{ margin: '0.5rem' }}>
+                          {valores[index] === "" || valores[index] === null ? "---" : valores[index]}
+                      </Typography>
+                  </Typography>
+              );
+          })}
+      </Box>
+  );
 }

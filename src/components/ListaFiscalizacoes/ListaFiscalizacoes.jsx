@@ -3,14 +3,21 @@ import {
     Box,
     Divider,
     Paper,
-    CircularProgress,
-    Fade
+    Fade,
+    Dialog,
+    DialogTitle,
+    DialogContent,
+    DialogActions,
+    Button
 } from '@mui/material';
 import FormGestaoFiscalizacao from './FormGestaoFiscalizacao';
 import DialogConfirmacao from '../DialogConfirmacao';
 import BotoesTab from '../BotoesTab';
 import BotaoAdicionar from '../BotaoAdicionar';
 import { postFormData, putFormData, sendFiscalizacaoEdit, sendNewFiscalizacao } from '../../commom/utils/api';
+import CloseIcon from '@mui/icons-material/Close';
+import CheckIcon from '@mui/icons-material/Check';
+import CircularProgress from '@mui/material/CircularProgress';
 
 const TabFiscalizacao = (props) => {
     const campos = [
@@ -47,6 +54,17 @@ const ListaFiscalizacoes = (props) => {
         setSnackbar,
         numContrato
     } = props;
+
+    const handleClickConfirmar = () => {
+        if (openFormFiscalizacao.acao === 'adicionar') {
+            enviaFiscalizacao();
+        } else if (openFormFiscalizacao.acao === 'editar') {
+            setOpenConfirmacao({
+                open: true,
+                id: formFiscalizacao.id
+            });
+        }
+    }
     
     const [acao, setAcao] = useState('editar');
     const [carregando, setCarregando] = useState(false);
@@ -292,18 +310,53 @@ const ListaFiscalizacoes = (props) => {
                 );
             })}
 
-            <FormGestaoFiscalizacao 
-                formFiscalizacao={formFiscalizacao}
-                setFormFiscalizacao={setFormFiscalizacao}
-                enviaFiscalizacao={enviaFiscalizacao}
-                editaFiscalizacao={editaFiscalizacao}
-                carregando={carregando}
-                openFormFiscalizacao={openFormFiscalizacao}
-                setOpenFormFiscalizacao={setOpenFormFiscalizacao}
-                setOpenConfirmacao={setOpenConfirmacao}
-                errors={errors}
-                setErrors={setErrors}
-            />
+            <Dialog open={openFormFiscalizacao.open} fullWidth>
+                <DialogTitle>
+                    {openFormFiscalizacao.acao === 'adicionar'
+                        ? "Nova gestão/fiscalização"
+                        : "Editar gestão/fiscalização"
+                    }
+                </DialogTitle>
+                <DialogContent>
+                    <FormGestaoFiscalizacao 
+                        formFiscalizacao={formFiscalizacao}
+                        // setFormFiscalizacao={setFormFiscalizacao}
+                        enviaFiscalizacao={enviaFiscalizacao}
+                        editaFiscalizacao={editaFiscalizacao}
+                        // carregando={carregando}
+                        openFormFiscalizacao={openFormFiscalizacao}
+                        // setOpenFormFiscalizacao={setOpenFormFiscalizacao}
+                        // setOpenConfirmacao={setOpenConfirmacao}
+                        errors={errors}
+                        setErrors={setErrors}
+                    />
+                </DialogContent>
+                <DialogActions sx={{ margin: '1rem' }}>
+                    <Button
+                        onClick={() => { setOpenFormFiscalizacao({ ...openFormFiscalizacao, open: false }); }}
+                        sx={{ textTransform: 'none', mr: '1rem', color: '#821f1f' }}
+                    >
+                        <CloseIcon sx={{ mr: '0.2rem' }} fontSize="small" /> Cancelar
+                    </Button>
+                    <Button
+                        sx={{ textTransform: 'none' }}
+                        variant="contained"
+                        onClick={handleClickConfirmar}
+                        type={openFormFiscalizacao.acao === 'adicionar' ? "submit" : ""}
+                        form={openFormFiscalizacao.acao === 'adicionar' ? "fisc_form" : ""}
+                    >
+                        {carregando
+                            ? <CircularProgress size={16} sx={{ color: '#FFFFFF', mr: '0.7rem' }} />
+                            : <CheckIcon sx={{ mr: '0.2rem' }} fontSize="small" />
+                        }
+            
+                        {openFormFiscalizacao.acao === 'adicionar'
+                            ? "Enviar"
+                            : "Editar"
+                        }
+                    </Button>
+                </DialogActions>
+            </Dialog>
 
             {
                 carregandoFiscalizacoes

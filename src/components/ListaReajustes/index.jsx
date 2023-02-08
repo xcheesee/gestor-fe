@@ -33,7 +33,7 @@ export default function ListaReajustes ({ numContrato, setSnackbar }) {
                 text: 'Reajuste criado com sucesso!',
                 color: 'success'
             });
-            queryClient.invalidateQueries(['reajuste'])
+            queryClient.invalidateQueries(['reajuste', numContrato])
         }
     })
     const editReajuste = useMutation({

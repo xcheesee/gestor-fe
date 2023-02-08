@@ -58,7 +58,7 @@ const a11yProps = (index) => {
     };
 }
 
-const retornaCampoValor = (campos, valores, estaCarregado) => {
+const retornaCampoValor = (campos, valores, estaCarregado=true) => {
     return (
         <Box sx={{ margin: '0 1rem' }}>
             {campos.map((campo, index) => {
@@ -113,9 +113,9 @@ const DadosContrato = ({ snackbar, setSnackbar }) => {
     const [notasempenho, setNotasEmpenho] = useState([]);
     const [mudancaNotasEmpenho, setMudancaNotasEmpenho] = useState(false);
     const [carregandoNotasEmpenho, setCarregandoNotasEmpenho] = useState(true);
-    const [dotacoes, setDotacoes] = useState([]);
-    const [mudancaDotacoes, setMudancaDotacoes] = useState(false);
-    const [carregandoDotacoes, setCarregandoDotacoes] = useState(true);
+    // const [dotacoes, setDotacoes] = useState([]);
+    // const [mudancaDotacoes, setMudancaDotacoes] = useState(false);
+    // const [carregandoDotacoes, setCarregandoDotacoes] = useState(true);
     const [origemRecursos, setOrigemRecursos] = useState([]);
     const [totais, setTotais] = useState([]);
     const [estaCarregado, setEstaCarregado] = useState(false);
@@ -367,13 +367,13 @@ const DadosContrato = ({ snackbar, setSnackbar }) => {
 
                                     <TabPanel value={value} index={8}>
                                         <ListaDotacoes 
-                                            dotacoes={dotacoes}
-                                            setDotacoes={setDotacoes}
-                                            mudancaDotacoes={mudancaDotacoes}
-                                            setMudancaDotacoes={setMudancaDotacoes}
-                                            carregandoDotacoes={carregandoDotacoes}
-                                            setCarregandoDotacoes={setCarregandoDotacoes}
-                                            estaCarregado={estaCarregado}
+                                            // dotacoes={dotacoes}
+                                            // setDotacoes={setDotacoes}
+                                            // mudancaDotacoes={mudancaDotacoes}
+                                            // setMudancaDotacoes={setMudancaDotacoes}
+                                            // carregandoDotacoes={carregandoDotacoes}
+                                            // setCarregandoDotacoes={setCarregandoDotacoes}
+                                            // estaCarregado={estaCarregado}
                                             retornaCampoValor={retornaCampoValor}
                                             numContrato={numContrato}
                                             origemRecursos={origemRecursos}

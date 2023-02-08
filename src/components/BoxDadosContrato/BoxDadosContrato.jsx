@@ -252,6 +252,7 @@ const BoxDadosContrato = (props) => {
                 defaultValue={dados?.condicao_pagamento}
                 name="condicao_pagamento"
                 errors={errors}
+                helperText={"Ex: Em até 30 dias após o adimplemento."}
             />
 
             <MaxPrazoInput 

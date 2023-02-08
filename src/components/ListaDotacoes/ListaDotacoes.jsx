@@ -18,9 +18,11 @@ import BotaoAdicionar from '../BotaoAdicionar';
 import FormDotacoes from './FormDotacoes';
 import FormRecursos from './FormRecursos';
 import DialogConfirmacao from '../DialogConfirmacao';
-import { postFormData, putFormData } from '../../commom/utils/api';
+import { getFormData, postFormData, putFormData } from '../../commom/utils/api';
 import CloseIcon from '@mui/icons-material/Close';
 import CheckIcon from '@mui/icons-material/Check';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { RetornaCampoValor } from '../../commom/utils/utils';
 
 const retornaNumDotacao = (numero_dotacao, descricao) => {
     return [`${numero_dotacao}\n${descricao}`];
@@ -35,23 +37,29 @@ const TabDotacoes = (props) => {
         retornaNumDotacao(props.numero_dotacao, props.descricao),
     ];
 
-    return props.retornaCampoValor(campos, valores, props.estaCarregado);
+    return <RetornaCampoValor campos={campos} valores={valores} />
 }
 
 const ListaDotacoes = (props) => {
     const {
-        dotacoes,
-        setDotacoes,
-        mudancaDotacoes,
-        setMudancaDotacoes,
-        carregandoDotacoes,
-        setCarregandoDotacoes,
-        estaCarregado,
-        retornaCampoValor,
+        // dotacoes,
+        // setDotacoes,
+        // mudancaDotacoes,
+        // setMudancaDotacoes,
+        // carregandoDotacoes,
+        // setCarregandoDotacoes,
+        // estaCarregado,
+        // retornaCampoValor,
         numContrato,
         origemRecursos,
         setSnackbar
     } = props;
+
+    const queryClient = useQueryClient()
+    const dotacoes = useQuery(['dotacoes', numContrato], {
+        queryFn: () => getFormData(`dotacoes/${numContrato}`)
+    })
+
 
     const [acao, setAcao] = useState('editar');
     const [carregando, setCarregando] = useState(false);
@@ -80,25 +88,25 @@ const ListaDotacoes = (props) => {
         outros_descricao: ''
     });
     
-    useEffect(() => {
-        const url = `${process.env.REACT_APP_API_URL}/dotacoes/${numContrato}`;
-        const token = localStorage.getItem('access_token');
-        const options = {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-                'Accept': 'application/json',
-                'Authorization': `Bearer ${token}`
-            }
-        };
+    // useEffect(() => {
+    //     const url = `${process.env.REACT_APP_API_URL}/dotacoes/${numContrato}`;
+    //     const token = localStorage.getItem('access_token');
+    //     const options = {
+    //         method: 'GET',
+    //         headers: {
+    //             'Content-Type': 'application/json',
+    //             'Accept': 'application/json',
+    //             'Authorization': `Bearer ${token}`
+    //         }
+    //     };
 
-        fetch(url, options)
-            .then(res => res.json())
-            .then(data => {
-                setDotacoes(data.data);
-                setCarregandoDotacoes(false);
-            })
-    }, [mudancaDotacoes, numContrato, setDotacoes, setCarregandoDotacoes])
+    //     fetch(url, options)
+    //         .then(res => res.json())
+    //         .then(data => {
+    //             setDotacoes(data.data);
+    //             setCarregandoDotacoes(false);
+    //         })
+    // }, [mudancaDotacoes, numContrato, setDotacoes, setCarregandoDotacoes])
 
     // exclusão
     const handleClickExcluirDotacao = (id) => {
@@ -126,7 +134,7 @@ const ListaDotacoes = (props) => {
 
         fetch(url, options)
             .then(res => {
-                setMudancaDotacoes(!mudancaDotacoes);
+                // setMudancaDotacoes(!mudancaDotacoes);
                 if (res.ok) {
                     setOpenConfirmacao({ open: false, id: '', elemento: 'dotacao' });
                     setCarregando(false);
@@ -136,6 +144,7 @@ const ListaDotacoes = (props) => {
                         text: 'Dotação excluída com sucesso',
                         color: 'success'
                     });
+                    queryClient.invalidateQueries(['dotacoes', numContrato])
                     setErrors({})
                     return res.json();
                 } else {
@@ -175,7 +184,7 @@ const ListaDotacoes = (props) => {
 
         fetch(url, options)
             .then(res => {
-                setMudancaDotacoes(!mudancaDotacoes);
+                // setMudancaDotacoes(!mudancaDotacoes);
                 if (res.ok) {
                     setOpenConfirmacao({ open: false, id: '', elemento: 'dotacao' });
                     setCarregando(false);
@@ -186,6 +195,7 @@ const ListaDotacoes = (props) => {
                         color: 'success'
                     });
                     setErrors({})
+                    queryClient.invalidateQueries(['dotacoes', numContrato])
                     return res.json();
                 } else {
                     setCarregando(false);
@@ -248,7 +258,8 @@ const ListaDotacoes = (props) => {
             });
         }
         setCarregando(false);
-        setMudancaDotacoes(!mudancaDotacoes);
+        // setMudancaDotacoes(!mudancaDotacoes);
+        queryClient.invalidateQueries(['dotacoes', numContrato])
     }
 
     const handleClickEditarRecurso = (recurso) => {
@@ -297,14 +308,15 @@ const ListaDotacoes = (props) => {
             });
         }
         setCarregando(false);
-        setMudancaDotacoes(!mudancaDotacoes);
+        // setMudancaDotacoes(!mudancaDotacoes);
+        queryClient.invalidateQueries(['dotacoes', numContrato])
     }
     
     // adição
     const handleClickAdicionarDotacao = () => {
         setFormDotacao({
             dotacao_tipo_id: '',
-            contrato_id: numContrato,
+            // contrato_id: numContrato,
             origem_recurso_id: '',
             outros_descricao: '',
         })
@@ -354,7 +366,8 @@ const ListaDotacoes = (props) => {
             });
         }
         setCarregando(false);
-        setMudancaDotacoes(!mudancaDotacoes);
+        // setMudancaDotacoes(!mudancaDotacoes);
+        queryClient.invalidateQueries(['dotacoes', numContrato])
     }
 
     const handleClickAdicionarRecurso = (id) => {
@@ -407,12 +420,13 @@ const ListaDotacoes = (props) => {
             });
         }
         setCarregando(false);
-        setMudancaDotacoes(!mudancaDotacoes);
+        // setMudancaDotacoes(!mudancaDotacoes);
+        queryClient.invalidateQueries(['dotacoes', numContrato])
     }
 
     return (
         <Box>
-            {dotacoes.map((dotacao, index) => {
+            {dotacoes?.data?.data?.map((dotacao, index) => {
                 return (
                     <Fade in={true} timeout={400} key={index}>
                         <Box
@@ -432,9 +446,7 @@ const ListaDotacoes = (props) => {
 
                             <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
                                 <Box sx={{ width: '50%' }}>
-                                    <TabDotacoes 
-                                        retornaCampoValor={retornaCampoValor}
-                                        estaCarregado={estaCarregado}
+                                    <TabDotacoes
                                         numero_dotacao={dotacao.numero_dotacao}
                                         descricao={dotacao.descricao}
                                         recursos={dotacao.recursos}
@@ -594,7 +606,7 @@ const ListaDotacoes = (props) => {
             />
 
             {
-                carregandoDotacoes
+                dotacoes.isLoading
                 ? 
                     <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '38rem' }}>
                         <CircularProgress size={30} />
