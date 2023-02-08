@@ -15,7 +15,7 @@ export default function CampoTexto ({defaultValue, name, errors}) {
             sx={{margin: "1rem 0"}}
             error={errors.hasOwnProperty(name)}
             helperText={errors.hasOwnProperty(name) ? errors[name] : "Ex: Em até 30 dias após o adimplemento."}
-            fullWidth 
+            fullWidth
         />
     )
 }

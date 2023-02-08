@@ -148,12 +148,13 @@ export async function sendNovoFormData (form) {
         "departamento_id": form.get("departamento_id"),
         "processo_sei": form.get("processo_sei"),
     };
-    
-    return await (await fetch(url, {
+    const res = await fetch(url, {
         method: "POST",
         headers: headers,
         body: JSON.stringify(body),
-    })).json();
+    })
+    const json = res.json()
+    return {status: res.status, ...json}
 }
 
 export const editaDadosContrato = async (e, dados, formInterno, id) => {

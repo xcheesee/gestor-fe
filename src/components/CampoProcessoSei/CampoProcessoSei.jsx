@@ -1,8 +1,10 @@
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { TextField } from '@mui/material';
 import ReactInputMask from 'react-input-mask';
 
-const CampoProcessoSei = (props) => {
+const CampoProcessoSei = React.forwardRef((props, ref) => {
+    const localRef = useRef(null) // default ref para componentes que nao necessitam receber sinal externo de clear input
+    const clearSwitch = ref || localRef 
     const {
         defaultValue="",
         error,
@@ -14,6 +16,11 @@ const CampoProcessoSei = (props) => {
     } = props;
 
     const [processoSei, setProcessoSei] = useState(defaultValue);
+
+    useEffect(() => {
+        if(clearSwitch.current === null) return
+        setProcessoSei("")
+    },[clearSwitch.current])
 
     return (
         <ReactInputMask
@@ -36,6 +43,6 @@ const CampoProcessoSei = (props) => {
             }
         </ReactInputMask>
     );
-}
+})
 
 export default CampoProcessoSei;
