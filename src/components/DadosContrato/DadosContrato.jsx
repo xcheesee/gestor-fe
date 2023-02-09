@@ -113,9 +113,6 @@ const DadosContrato = ({ snackbar, setSnackbar }) => {
     const [notasempenho, setNotasEmpenho] = useState([]);
     const [mudancaNotasEmpenho, setMudancaNotasEmpenho] = useState(false);
     const [carregandoNotasEmpenho, setCarregandoNotasEmpenho] = useState(true);
-    // const [dotacoes, setDotacoes] = useState([]);
-    // const [mudancaDotacoes, setMudancaDotacoes] = useState(false);
-    // const [carregandoDotacoes, setCarregandoDotacoes] = useState(true);
     const [origemRecursos, setOrigemRecursos] = useState([]);
     const [totais, setTotais] = useState([]);
     const [estaCarregado, setEstaCarregado] = useState(false);

@@ -100,6 +100,7 @@ const FormProcessoContratacao = (props) => {
 
             <DialogContent>
                 <BoxProcessoContratacao 
+                    dados={dados}
                     errors={errors}
                     enviaDadosProcesso={enviaDadosProcesso}
                     numContrato={numContrato}

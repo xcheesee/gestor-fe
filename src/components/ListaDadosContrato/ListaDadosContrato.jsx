@@ -91,14 +91,14 @@ const ListaDadosContrato = (props) => {
             "Tipo de objeto",
             "Objeto",
             "Número do contrato",
-            "Data de assinatura",
+            // "Data de assinatura",
             "Valor do contrato",
             "Valor mensal estimativo",
-            "Data de início da vigência",
-            "Data de vencimento",
+            // "Data de início da vigência",
+            // "Data de vencimento",
             "Condição de pagamento",
-            "Prazo a partir de",
-            "Prazo máximo",
+            // "Prazo a partir de",
+            // "Prazo máximo",
             "Número nota reserva",
             "Valor reserva"
         ];
@@ -111,14 +111,14 @@ const ListaDadosContrato = (props) => {
             primeiraLetraMaiuscula(dados?.tipo_objeto),
             dados?.objeto,
             mascaraContrato(dados?.numero_contrato),
-            formataData(dados?.data_assinatura),
+            // formataData(dados?.data_assinatura),
             formataValores(dados?.valor_contrato),
             formataValores(dados?.valor_mensal_estimativo),
-            formataData(dados?.data_inicio_vigencia),
-            formataData(dados?.data_vencimento),
+            // formataData(dados?.data_inicio_vigencia),
+            // formataData(dados?.data_vencimento),
             dados?.condicao_pagamento,
-            dados?.prazo_a_partir_de,
-            formataData(dados?.data_prazo_maximo),
+            // dados?.prazo_a_partir_de,
+            // formataData(dados?.data_prazo_maximo),
             dados?.numero_nota_reserva,
             formataValores(dados?.valor_reserva),
         ];
@@ -132,7 +132,11 @@ const ListaDadosContrato = (props) => {
             "Envio de material técnico",
             "Minuta edital",
             "Abertura certame",
-            "Homologação"
+            "Homologação",
+            "Data de assinatura",
+            "Data de início da vigência",
+            "Data de vencimento",
+            "Prazo máximo",
         ];
 
         const valores = [
@@ -140,7 +144,11 @@ const ListaDadosContrato = (props) => {
             formataData(props.envio_material_tecnico),
             formataData(props.minuta_edital),
             formataData(props.abertura_certame),
-            formataData(props.homologacao)
+            formataData(props.homologacao),
+            formataData(dados?.data_assinatura),
+            formataData(dados?.data_inicio_vigencia),
+            formataData(dados?.data_vencimento),
+            formataData(dados?.data_prazo_maximo),
         ];
 
         return retornaCampoValor(campos, valores, props.estaCarregado);

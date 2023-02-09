@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
     Box, 
     Divider,
@@ -12,6 +12,8 @@ import {
 } from '@mui/material';
 import CampoData from '../CampoData';
 import { contratoLabels } from '../../commom/utils/constants';
+import CampoDataControlada from '../CampoDataControlada';
+import MaxPrazoInput from '../MaxPrazoInput';
 
 const BoxProcessoContratacao = (props) => {
     const {
@@ -24,8 +26,11 @@ const BoxProcessoContratacao = (props) => {
         modelosLicitacao,
         carregando,
         handleChange,
-        acao
+        acao,
+        dados
     } = props;
+
+    const [validade, setValidade] = useState(dados.data_vencimento ?? "")
 
     return (
         <Box
@@ -136,6 +141,48 @@ const BoxProcessoContratacao = (props) => {
                 error={errors.hasOwnProperty('homologacao')}
                 helperText={errors.hasOwnProperty('homologacao') ? errors.homologacao : " "}
                 fullWidth
+            />
+
+            <CampoData
+                className="form__campo"
+                label={contratoLabels.data_assinatura}
+                defaultValue={dados.data_assinatura ?? ""}
+                name="data_assinatura"
+                margin="1rem 0"
+                error={errors.hasOwnProperty('data_assinatura')}
+                helperText={errors.hasOwnProperty('data_assinatura') ? errors.data_assinatura : " "}
+                fullWidth
+            />
+
+            <CampoData
+                className="form__campo"
+                label={contratoLabels.data_inicio_vigencia}
+                defaultValue={dados.data_inicio_vigencia ?? ""}
+                name="data_inicio_vigencia"
+                margin="1rem 0"
+                error={errors.hasOwnProperty('data_inicio_vigencia')}
+                helperText={errors.hasOwnProperty('data_inicio_vigencia') ? errors.data_inicio_vigencia : " "}
+                fullWidth
+            />
+
+            <CampoDataControlada
+                className="form__campo"
+                label={contratoLabels.data_vencimento}
+                value={validade}
+                setValue={setValidade}
+                name="data_vencimento"
+                margin="1rem 0"
+                error={errors.hasOwnProperty('data_vencimento')}
+                helperText={errors.hasOwnProperty('data_vencimento') ? errors.data_vencimento : " "}
+                fullWidth
+            />
+
+            <MaxPrazoInput
+                helperText="A contar da data de vencimento..."
+                validade={validade}
+                defaultValue={dados.data_prazo_maximo ?? ""}
+                label={contratoLabels.prazo_a_partir_de}
+                disabled={validade === "" ?? true}
             />
         </Box>
     );
