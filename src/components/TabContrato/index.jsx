@@ -1,9 +1,8 @@
 import { Box, CircularProgress, Divider, Fade, IconButton, Paper, Typography } from "@mui/material";
-import { contratoLabels } from "../../commom/utils/constants";
 import ModeIcon from '@mui/icons-material/Mode';
 import DeleteIcon from '@mui/icons-material/Delete';
 
-export default function TabContrato({label, dados, handleEditPress, handleDeletePress, isLoading}) {
+export default function TabContrato({label, dados, handleEditPress, handleDeletePress, isLoading, labels}) {
     return(
         <>
             {
@@ -24,7 +23,7 @@ export default function TabContrato({label, dados, handleEditPress, handleDelete
                                                 {Object.entries(entry)?.filter((keyVal) => !(keyVal[0] === "id" || keyVal[0] === "contrato_id"))?.map((keyVal, index) => 
                                                     (
                                                         <Box className="m-4" key={`tab-${label}-${index}`}>
-                                                            <Typography className="font-bold pb-2">{contratoLabels[keyVal[0]]}</Typography>
+                                                            <Typography className="font-bold pb-2">{labels[keyVal[0]]}</Typography>
                                                             <Typography className="ml-4">{keyVal[1]}</Typography>
                                                         </Box>
                                                 ))}

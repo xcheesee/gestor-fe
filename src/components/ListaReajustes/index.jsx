@@ -3,6 +3,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useRef } from "react";
 import { useState } from "react";
 import { deleteReajuste, getFormData, postFormData, putFormData } from "../../commom/utils/api";
+import { reajusteLabels } from "../../commom/utils/constants";
 import { formataValores } from "../../commom/utils/utils";
 import BotaoAdicionar from "../BotaoAdicionar";
 import CampoValores from "../CampoValores";
@@ -94,7 +95,8 @@ export default function ListaReajustes ({ numContrato, setSnackbar }) {
                 handleDeletePress={handleDeletePress}
                 dados={dados ?? []}
                 isLoading={dadosReajuste.isLoading}
-                num="0"/>
+                num="0"
+                labels={reajusteLabels}/>
             <BotaoAdicionar
                 fnAdicionar={() => {
                     setAcao("adicionar")
@@ -123,7 +125,7 @@ export default function ListaReajustes ({ numContrato, setSnackbar }) {
                     <CampoValores
                         defaultValue={acao === "adicionar" ? "" : currDados.current.valor_reajuste}
                         name="valor_reajuste"
-                        label="Valor de Reajuste"
+                        label={reajusteLabels.valor_reajuste}
                         checaErros={() => {}}
                         error={errors.hasOwnProperty('valor_reajuste')}
                         helperText={errors.hasOwnProperty('valor_reajuste') ? errors : "Ex: "}
@@ -134,7 +136,7 @@ export default function ListaReajustes ({ numContrato, setSnackbar }) {
                         variant="outlined"
                         defaultValue={acao === "adicionar" ? "" : currDados.current.indice_reajuste}
                         name="indice_reajuste"
-                        label="Indice de Reajuste"
+                        label={reajusteLabels.indice_reajuste}
                         sx={{ margin: '1rem 0' }}
                         error={errors.hasOwnProperty('indice_reajuste')}
                         helperText={errors.hasOwnProperty('indice_reajuste') ? errors : "Ex: "}

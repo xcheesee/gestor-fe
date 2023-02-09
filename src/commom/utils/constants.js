@@ -5,32 +5,31 @@ export const contratoLabels = {
     departamento_id: "Unidade Requisitante",
     processo_sei: "Processo SEI",
     credor: "Credor",
+    cnpj_cpf: "CNPJ/CPF",
+    tipo_objeto: "Tipo de objeto",
+    objeto: "Objeto",
+    numero_contrato: "Nº Contrato / Nota de Empenho Inicial",
+    valor_contrato: "Valor",
+    valor_mensal_estimativo: "Valor mensal estimativo",
+    condicao_pagamento: "Condição de Pagamento",
+    numero_nota_reserva: "Número nota reserva",
+    valor_reserva: "Valor reserva",
     licitacao_modelo_id: "",
     licitacao_modelo: "Modalidade de licitação",
     envio_material_tecnico: "Envio material técnico",
     minuta_edital: "Minuta edital",
     abertura_certame: "Abertura certame",
     homologacao: "Homologação",
-    dotacao_orcamentaria: "",
-    cnpj_cpf: "CNPJ/CPF",
-    tipo_objeto: "Tipo de objeto",
-    objeto: "Objeto",
-    numero_contrato: "Nº Contrato / Nota de Empenho Inicial",
     data_assinatura: "Data de assinatura",
-    valor_contrato: "Valor",
-    valor_mensal_estimativo: "Valor mensal estimativo",
     data_inicio_vigencia: "Início da Vigência",
     data_vencimento: "Data de vencimento",
-    condicao_pagamento: "Condição de Pagamento",
-    prazo_a_partir_de: "Prazo a partir de",
-    numero_nota_reserva: "Número nota reserva",
-    valor_reserva: "Valor reserva",
-    nome_empresa: "Nome da empresa",
-    telefone_empresa: "Telefone da empresa",
-    email_empresa: "E-mail da empresa",
-    outras_informacoes: "Informações adicionais",
-    valor_reajuste: "Valor",
-    indice_reajuste: "Indice de Reajuste"
+    data_prazo_maximo: "Prazo Maximo"
+    // dotacao_orcamentaria: "",
+    // prazo_a_partir_de: "Prazo a partir de",
+    // nome_empresa: "Nome da empresa",
+    // telefone_empresa: "Telefone da empresa",
+    // email_empresa: "E-mail da empresa",
+    // outras_informacoes: "Informações adicionais",
 }
 
 export const fiscLabels = {
@@ -40,6 +39,11 @@ export const fiscLabels = {
     email_fiscal: "E-mail do Fiscal",
     nome_suplente: "Suplente",
     email_suplente: "E-mail do Suplente",
+}
+
+export const reajusteLabels = {
+    valor_reajuste: "Valor",
+    indice_reajuste: "Indice de Reajuste"
 }
 
 export const contratoKeys = [

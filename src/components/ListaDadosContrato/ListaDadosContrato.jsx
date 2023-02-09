@@ -10,10 +10,12 @@ import {
 import FormDadosContrato from './FormDadosContrato';
 import FormProcessoContratacao from './FormProcessoContratacao';
 import EditIcon from '@mui/icons-material/Edit';
-import { formataCpfCnpj, formataData, formataValores, mascaraContrato, mascaraProcessoSei, primeiraLetraMaiuscula } from '../../commom/utils/utils';
+import { formataCpfCnpj, formataData, formataValores, mascaraContrato, mascaraProcessoSei, primeiraLetraMaiuscula, TabValues } from '../../commom/utils/utils';
+import { contratoLabels } from '../../commom/utils/constants';
 
 const TabPanel = (props) => {
     const { children, value, index, ...other } = props;
+    let valores = {}
 
     return (
         <div
@@ -83,75 +85,65 @@ const ListaDadosContrato = (props) => {
     }
 
     const TabContrato = ({ dados , estaCarregado }) => {
-        const campos = [
-            "Departamento",
-            "Processo SEI",
-            "Credor",
-            "CPF/CNPJ",
-            "Tipo de objeto",
-            "Objeto",
-            "Número do contrato",
-            // "Data de assinatura",
-            "Valor do contrato",
-            "Valor mensal estimativo",
-            // "Data de início da vigência",
-            // "Data de vencimento",
-            "Condição de pagamento",
-            // "Prazo a partir de",
-            // "Prazo máximo",
-            "Número nota reserva",
-            "Valor reserva"
-        ];
+        // const campos = [
+        //     "Departamento",
+        //     "Processo SEI",
+        //     "Credor",
+        //     "CPF/CNPJ",
+        //     "Tipo de objeto",
+        //     "Objeto",
+        //     "Número do contrato",
+        //     "Valor do contrato",
+        //     "Valor mensal estimativo",
+        //     "Condição de pagamento",
+        //     "Número nota reserva",
+        //     "Valor reserva"
+        // ];
     
-        const valores = [
-            dados?.departamento,
-            mascaraProcessoSei(dados?.processo_sei),
-            dados?.credor,
-            formataCpfCnpj(dados?.cnpj_cpf),
-            primeiraLetraMaiuscula(dados?.tipo_objeto),
-            dados?.objeto,
-            mascaraContrato(dados?.numero_contrato),
-            // formataData(dados?.data_assinatura),
-            formataValores(dados?.valor_contrato),
-            formataValores(dados?.valor_mensal_estimativo),
-            // formataData(dados?.data_inicio_vigencia),
-            // formataData(dados?.data_vencimento),
-            dados?.condicao_pagamento,
-            // dados?.prazo_a_partir_de,
-            // formataData(dados?.data_prazo_maximo),
-            dados?.numero_nota_reserva,
-            formataValores(dados?.valor_reserva),
-        ];
+        const valores = {
+            departamento: dados?.departamento,
+            processo_sei: mascaraProcessoSei(dados?.processo_sei),
+            credor: dados?.credor,
+            cnpj_cpf: formataCpfCnpj(dados?.cnpj_cpf),
+            tipo_objeto: primeiraLetraMaiuscula(dados?.tipo_objeto),
+            objeto: dados?.objeto,
+            numero_contrato: mascaraContrato(dados?.numero_contrato),
+            valor_contrato: formataValores(dados?.valor_contrato),
+            valor_mensal_estimativo: formataValores(dados?.valor_mensal_estimativo),
+            condicao_pagamento: dados?.condicao_pagamento,
+            numero_nota_reserva: dados?.numero_nota_reserva,
+            valor_reserva: formataValores(dados?.valor_reserva),
+        };
     
-        return retornaCampoValor(campos, valores, estaCarregado);
+        return <TabValues entry={valores} labels={contratoLabels} label="contrato" />
     }
 
     const TabProcessoContratacao = (props) => {
-        const campos = [
-            "Modalidade de licitação",
-            "Envio de material técnico",
-            "Minuta edital",
-            "Abertura certame",
-            "Homologação",
-            "Data de assinatura",
-            "Data de início da vigência",
-            "Data de vencimento",
-            "Prazo máximo",
-        ];
+        // const campos = [
+        //     "Modalidade de licitação",
+        //     "Envio de material técnico",
+        //     "Minuta edital",
+        //     "Abertura certame",
+        //     "Homologação",
+        //     "Data de assinatura",
+        //     "Data de início da vigência",
+        //     "Data de vencimento",
+        //     "Prazo máximo",
+        // ];
 
-        const valores = [
-            props.licitacao_modelo,
-            formataData(props.envio_material_tecnico),
-            formataData(props.minuta_edital),
-            formataData(props.abertura_certame),
-            formataData(props.homologacao),
-            formataData(dados?.data_assinatura),
-            formataData(dados?.data_inicio_vigencia),
-            formataData(dados?.data_vencimento),
-            formataData(dados?.data_prazo_maximo),
-        ];
+        const valores = {
+            licitacao_modelo: props.licitacao_modelo,
+            envio_material_tecnico: formataData(props.envio_material_tecnico),
+            minuta_edital: formataData(props.minuta_edital),
+            abertura_certame: formataData(props.abertura_certame),
+            homologacao: formataData(props.homologacao),
+            data_assinatura: formataData(dados?.data_assinatura),
+            data_inicio_vigencia: formataData(dados?.data_inicio_vigencia),
+            data_vencimento: formataData(dados?.data_vencimento),
+            data_prazo_maximo: formataData(dados?.data_prazo_maximo),
+        };
 
-        return retornaCampoValor(campos, valores, props.estaCarregado);
+        return <TabValues entry={valores} labels={contratoLabels} label="processo_contratacao" />;
     }
 
     return (

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import {
     Box,
     Divider,
@@ -42,14 +42,6 @@ const TabDotacoes = (props) => {
 
 const ListaDotacoes = (props) => {
     const {
-        // dotacoes,
-        // setDotacoes,
-        // mudancaDotacoes,
-        // setMudancaDotacoes,
-        // carregandoDotacoes,
-        // setCarregandoDotacoes,
-        // estaCarregado,
-        // retornaCampoValor,
         numContrato,
         origemRecursos,
         setSnackbar
@@ -87,26 +79,6 @@ const ListaDotacoes = (props) => {
         origem_recurso_id: '',
         outros_descricao: ''
     });
-    
-    // useEffect(() => {
-    //     const url = `${process.env.REACT_APP_API_URL}/dotacoes/${numContrato}`;
-    //     const token = localStorage.getItem('access_token');
-    //     const options = {
-    //         method: 'GET',
-    //         headers: {
-    //             'Content-Type': 'application/json',
-    //             'Accept': 'application/json',
-    //             'Authorization': `Bearer ${token}`
-    //         }
-    //     };
-
-    //     fetch(url, options)
-    //         .then(res => res.json())
-    //         .then(data => {
-    //             setDotacoes(data.data);
-    //             setCarregandoDotacoes(false);
-    //         })
-    // }, [mudancaDotacoes, numContrato, setDotacoes, setCarregandoDotacoes])
 
     // exclusão
     const handleClickExcluirDotacao = (id) => {
@@ -134,7 +106,6 @@ const ListaDotacoes = (props) => {
 
         fetch(url, options)
             .then(res => {
-                // setMudancaDotacoes(!mudancaDotacoes);
                 if (res.ok) {
                     setOpenConfirmacao({ open: false, id: '', elemento: 'dotacao' });
                     setCarregando(false);
@@ -184,7 +155,6 @@ const ListaDotacoes = (props) => {
 
         fetch(url, options)
             .then(res => {
-                // setMudancaDotacoes(!mudancaDotacoes);
                 if (res.ok) {
                     setOpenConfirmacao({ open: false, id: '', elemento: 'dotacao' });
                     setCarregando(false);
@@ -239,7 +209,6 @@ const ListaDotacoes = (props) => {
             setFormDotacao({
                 ...formDotacao,
                 dotacao_tipo_id: '',
-                // contrato_id: numContrato,
                 origem_recurso_id: '',
                 outros_descricao: '',
             });
@@ -258,7 +227,6 @@ const ListaDotacoes = (props) => {
             });
         }
         setCarregando(false);
-        // setMudancaDotacoes(!mudancaDotacoes);
         queryClient.invalidateQueries(['dotacoes', numContrato])
     }
 
@@ -308,7 +276,6 @@ const ListaDotacoes = (props) => {
             });
         }
         setCarregando(false);
-        // setMudancaDotacoes(!mudancaDotacoes);
         queryClient.invalidateQueries(['dotacoes', numContrato])
     }
     
@@ -316,7 +283,6 @@ const ListaDotacoes = (props) => {
     const handleClickAdicionarDotacao = () => {
         setFormDotacao({
             dotacao_tipo_id: '',
-            // contrato_id: numContrato,
             origem_recurso_id: '',
             outros_descricao: '',
         })
@@ -344,7 +310,6 @@ const ListaDotacoes = (props) => {
             setFormDotacao({
                 ...formDotacao,
                 dotacao_tipo_id: '',
-                // contrato_id: numContrato,
                 origem_recurso_id: '',
                 outros_descricao: '',
             });
@@ -366,7 +331,6 @@ const ListaDotacoes = (props) => {
             });
         }
         setCarregando(false);
-        // setMudancaDotacoes(!mudancaDotacoes);
         queryClient.invalidateQueries(['dotacoes', numContrato])
     }
 
@@ -420,7 +384,6 @@ const ListaDotacoes = (props) => {
             });
         }
         setCarregando(false);
-        // setMudancaDotacoes(!mudancaDotacoes);
         queryClient.invalidateQueries(['dotacoes', numContrato])
     }
 
