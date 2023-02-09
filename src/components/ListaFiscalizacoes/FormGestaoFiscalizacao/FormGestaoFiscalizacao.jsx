@@ -39,65 +39,61 @@ const FormGestaoFiscalizacao = (props) => {
         setErrors({});
     }, [openFormFiscalizacao.open])
 
-    // function checkSameName () {
-    //     if(gestorRef.current === "" || fiscalRef.current === "" || suplenteRef.current === "") return {isSame: false, labels: []}
-    //     if(
-    //         fiscalRef.current === suplenteRef.current 
-    //         && suplenteRef.current === gestorRef.current
-    //     ) 
-    //         return {isSame: true, labels: [fiscLabels.nome_fiscal, fiscLabels.nome_suplente, fiscLabels.nome_gestor]}
-    //     else if(gestorRef.current === fiscalRef.current) 
-    //         return {isSame: true, labels: [fiscLabels.nome_fiscal, fiscLabels.nome_gestor]}
-    //     else if(gestorRef.current === suplenteRef.current) 
-    //         return {isSame: true, labels: [fiscLabels.nome_suplente, fiscLabels.nome_gestor]}
-    //     else if(fiscalRef.current === suplenteRef.current) 
-    //         return {isSame: true, labels: [fiscLabels.nome_fiscal, fiscLabels.nome_suplente]}
-    //     return {isSame: false, labels: []}
-    // }
-
-    function checkSameName (currRef) {
-        let sameCampo = []
+    function checkSameName (currRef, campo) {
+        let sameCampo = [campo]
         let isSame = false
-        if(currRef === gestorRef && !firstWarningRef.current.gestor) { // check de equalidade de referencia
-            firstWarningRef.current.gestor = true
-            sameCampo.push("Gestor")
-            if(currRef.current === fiscalRef.current && currRef.current !== "") {
+        // if(currRef === gestorRef && !firstWarningRef.current.gestor) { // check de equalidade de referencia
+            // firstWarningRef.current.gestor = true
+            if(currRef !== fiscalRef 
+                && !firstWarningRef.current.fiscal 
+                && currRef.current === fiscalRef.current 
+                && currRef.current !== ""
+            ) {
                 firstWarningRef.current.fiscal = true
                 sameCampo.push("Fiscal")
                 isSame = true
             }
-            if(currRef.current === suplenteRef.current && currRef.current !== "") {
+
+            if(currRef !== suplenteRef 
+                && !firstWarningRef.current.suplente 
+                && currRef.current === suplenteRef.current 
+                && currRef.current !== ""
+            ) {
                 firstWarningRef.current.suplente = true
                 sameCampo.push("Suplente")
                 isSame = true
             }
-        } else if (currRef === fiscalRef && !firstWarningRef.current.fiscal) {
-            firstWarningRef.current.fiscal = true
-            sameCampo.push("Fiscal")
-            if(currRef.current === gestorRef.current && currRef.current !== "") {
+        // } else if (currRef === fiscalRef && !firstWarningRef.current.fiscal) {
+            // firstWarningRef.current.fiscal = true
+            // sameCampo.push("Fiscal")
+            if(currRef !== gestorRef 
+                && !firstWarningRef.current.gestor 
+                && currRef.current === gestorRef.current 
+                && currRef.current !== ""
+            ) {
                 firstWarningRef.current.gestor = true
                 sameCampo.push("Gestor")
                 isSame = true
             }
-            if(currRef.current === suplenteRef.current && currRef.current !== "") {
-                firstWarningRef.current.suplente = true
-                sameCampo.push("Suplente")
-                isSame = true
-            }
-        } else if (currRef === suplenteRef && !firstWarningRef.current.suplente) {
-            firstWarningRef.current.suplente = true
-            sameCampo.push("Suplente")
-            if(currRef.current === gestorRef.current && currRef.current !== "") {
-                firstWarningRef.current.gestor = true
-                sameCampo.push("Gestor")
-                isSame = true
-            }
-            if(currRef.current === fiscalRef.current && currRef.current !== "") {
-                firstWarningRef.current.fiscal = true
-                sameCampo.push("Fiscal")
-                isSame = true
-            }
-        }
+            // if(currRef.current === suplenteRef.current && currRef.current !== "") {
+            //     firstWarningRef.current.suplente = true
+            //     sameCampo.push("Suplente")
+            //     isSame = true
+            // }
+        // } else if (currRef === suplenteRef && !firstWarningRef.current.suplente) {
+            // firstWarningRef.current.suplente = true
+            // sameCampo.push("Suplente")
+        //     if(currRef.current === gestorRef.current && currRef.current !== "") {
+        //         firstWarningRef.current.gestor = true
+        //         sameCampo.push("Gestor")
+        //         isSame = true
+        //     }
+        //     if(currRef.current === fiscalRef.current && currRef.current !== "") {
+        //         firstWarningRef.current.fiscal = true
+        //         sameCampo.push("Fiscal")
+        //         isSame = true
+        //     }
+        // }
         return {isSame: isSame, labels: sameCampo}
     }
     
@@ -116,12 +112,14 @@ const FormGestaoFiscalizacao = (props) => {
                     defaultValue={formFiscalizacao.nome_gestor}
                     name="nome_gestor"
                     changeFn={(e) => {
-                        firstWarningRef.current.gestor = false
+                        firstWarningRef.current.fiscal = false
+                        firstWarningRef.current.suplente = false
                     }}
                     onBlur={() => {
 
-                        const names = checkSameName(gestorRef)
+                        const names = checkSameName(gestorRef, "Gestor")
                         if(names.isSame) {
+                            firstWarningRef.current.gestor = true
                             setMesmoCargoDialog(true)
                             labelsRef.current = names.labels
                         }
@@ -142,11 +140,13 @@ const FormGestaoFiscalizacao = (props) => {
                     defaultValue={formFiscalizacao.nome_fiscal}
                     name="nome_fiscal"
                     changeFn={(e) => {
-                        firstWarningRef.current.fiscal = false
+                        firstWarningRef.current.gestor = false
+                        firstWarningRef.current.suplente = false
                     }}
                     onBlur={() => {
-                        const names = checkSameName(fiscalRef)
+                        const names = checkSameName(fiscalRef, "Fiscal")
                         if(names.isSame) {
+                            firstWarningRef.current.fiscal = true
                             setMesmoCargoDialog(true)
                             labelsRef.current = names.labels
                         }
@@ -169,12 +169,13 @@ const FormGestaoFiscalizacao = (props) => {
                     labels={fiscLabels}
                     errors={errors}
                     changeFn={(e) => {
-                        firstWarningRef.current.suplente = false
-                        // gestorRef.current = e.target.value
+                        firstWarningRef.current.fiscal = false
+                        firstWarningRef.current.gestor = false
                     }}
                     onBlur={() => {
-                        const names = checkSameName(suplenteRef)
+                        const names = checkSameName(suplenteRef, "Suplente")
                         if(names.isSame) {
+                            firstWarningRef.current.suplente = true
                             setMesmoCargoDialog(true)
                             labelsRef.current = names.labels
                         }
