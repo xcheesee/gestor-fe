@@ -1,18 +1,18 @@
 import { TextField } from "@mui/material";
-import React, { useEffect, useRef } from "react";
-import { contratoLabels } from "../../commom/utils/constants";
+import React, { useRef } from "react";
 
 const CampoTexto = React.forwardRef((props, ref) => {
     const defaultRef = useRef(null)
-    const inputRef = ref || defaultRef
+    const inputRef = ref || defaultRef //ref para a utilizacao do valor do textfield externamente
+
     const {
         defaultValue, 
         name, 
-        labels, 
+        labels, //labels da aba em que o componente se encontra
         errors, 
         helperText="", 
         required=false,
-        changeFn= () => {},
+        changeFn= () => {}, //funcao executada onChange
         ...other
     } = props
 
@@ -24,7 +24,7 @@ const CampoTexto = React.forwardRef((props, ref) => {
             label={labels[name]}
             onChange={e => {
                 inputRef.current = e.target.value
-                changeFn()
+                changeFn(e)
             }}
             className="form__campo"
             sx={{margin: "1rem 0"}}
