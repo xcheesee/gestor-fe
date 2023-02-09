@@ -29,27 +29,76 @@ const FormGestaoFiscalizacao = (props) => {
     const fiscalRef = useRef(formFiscalizacao.nome_fiscal)
     const suplenteRef = useRef(formFiscalizacao.nome_suplente)
     const labelsRef = useRef([])
-    const firstWarningRef = useRef(false)
+    const firstWarningRef = useRef({
+        fiscal: false,
+        gestor: false,
+        suplente: false
+    })
 
     useEffect(() => {
         setErrors({});
     }, [openFormFiscalizacao.open])
 
-    function checkSameName () {
-        console.log(gestorRef.current,fiscalRef.current, suplenteRef.current)
-        if(gestorRef.current === "" || fiscalRef.current === "" || suplenteRef.current === "") return {isSame: false, labels: []}
-        if(
-            fiscalRef.current === suplenteRef.current 
-            && suplenteRef.current === gestorRef.current
-        ) 
-            return {isSame: true, labels: [fiscLabels.nome_fiscal, fiscLabels.nome_suplente, fiscLabels.nome_gestor]}
-        else if(gestorRef.current === fiscalRef.current) 
-            return {isSame: true, labels: [fiscLabels.nome_fiscal, fiscLabels.nome_gestor]}
-        else if(gestorRef.current === suplenteRef.current) 
-            return {isSame: true, labels: [fiscLabels.nome_suplente, fiscLabels.nome_gestor]}
-        else if(fiscalRef.current === suplenteRef.current) 
-            return {isSame: true, labels: [fiscLabels.nome_fiscal, fiscLabels.nome_suplente]}
-        return {isSame: false, labels: []}
+    // function checkSameName () {
+    //     if(gestorRef.current === "" || fiscalRef.current === "" || suplenteRef.current === "") return {isSame: false, labels: []}
+    //     if(
+    //         fiscalRef.current === suplenteRef.current 
+    //         && suplenteRef.current === gestorRef.current
+    //     ) 
+    //         return {isSame: true, labels: [fiscLabels.nome_fiscal, fiscLabels.nome_suplente, fiscLabels.nome_gestor]}
+    //     else if(gestorRef.current === fiscalRef.current) 
+    //         return {isSame: true, labels: [fiscLabels.nome_fiscal, fiscLabels.nome_gestor]}
+    //     else if(gestorRef.current === suplenteRef.current) 
+    //         return {isSame: true, labels: [fiscLabels.nome_suplente, fiscLabels.nome_gestor]}
+    //     else if(fiscalRef.current === suplenteRef.current) 
+    //         return {isSame: true, labels: [fiscLabels.nome_fiscal, fiscLabels.nome_suplente]}
+    //     return {isSame: false, labels: []}
+    // }
+
+    function checkSameName (currRef) {
+        let sameCampo = []
+        let isSame = false
+        if(currRef === gestorRef && !firstWarningRef.current.gestor) { // check de equalidade de referencia
+            firstWarningRef.current.gestor = true
+            sameCampo.push("Gestor")
+            if(currRef.current === fiscalRef.current && currRef.current !== "") {
+                firstWarningRef.current.fiscal = true
+                sameCampo.push("Fiscal")
+                isSame = true
+            }
+            if(currRef.current === suplenteRef.current && currRef.current !== "") {
+                firstWarningRef.current.suplente = true
+                sameCampo.push("Suplente")
+                isSame = true
+            }
+        } else if (currRef === fiscalRef && !firstWarningRef.current.fiscal) {
+            firstWarningRef.current.fiscal = true
+            sameCampo.push("Fiscal")
+            if(currRef.current === gestorRef.current && currRef.current !== "") {
+                firstWarningRef.current.gestor = true
+                sameCampo.push("Gestor")
+                isSame = true
+            }
+            if(currRef.current === suplenteRef.current && currRef.current !== "") {
+                firstWarningRef.current.suplente = true
+                sameCampo.push("Suplente")
+                isSame = true
+            }
+        } else if (currRef === suplenteRef && !firstWarningRef.current.suplente) {
+            firstWarningRef.current.suplente = true
+            sameCampo.push("Suplente")
+            if(currRef.current === gestorRef.current && currRef.current !== "") {
+                firstWarningRef.current.gestor = true
+                sameCampo.push("Gestor")
+                isSame = true
+            }
+            if(currRef.current === fiscalRef.current && currRef.current !== "") {
+                firstWarningRef.current.fiscal = true
+                sameCampo.push("Fiscal")
+                isSame = true
+            }
+        }
+        return {isSame: isSame, labels: sameCampo}
     }
     
     return (
@@ -67,13 +116,11 @@ const FormGestaoFiscalizacao = (props) => {
                     defaultValue={formFiscalizacao.nome_gestor}
                     name="nome_gestor"
                     changeFn={(e) => {
-                        firstWarningRef.current = false
-                        // gestorRef.current = e.target.value
+                        firstWarningRef.current.gestor = false
                     }}
                     onBlur={() => {
-                        console.log(gestorRef.current)
-                        
-                        const names = checkSameName()
+
+                        const names = checkSameName(gestorRef)
                         if(names.isSame) {
                             setMesmoCargoDialog(true)
                             labelsRef.current = names.labels
@@ -95,11 +142,10 @@ const FormGestaoFiscalizacao = (props) => {
                     defaultValue={formFiscalizacao.nome_fiscal}
                     name="nome_fiscal"
                     changeFn={(e) => {
-                        firstWarningRef.current = false
-                        // gestorRef.current = e.target.value
+                        firstWarningRef.current.fiscal = false
                     }}
                     onBlur={() => {
-                        const names = checkSameName()
+                        const names = checkSameName(fiscalRef)
                         if(names.isSame) {
                             setMesmoCargoDialog(true)
                             labelsRef.current = names.labels
@@ -123,11 +169,11 @@ const FormGestaoFiscalizacao = (props) => {
                     labels={fiscLabels}
                     errors={errors}
                     changeFn={(e) => {
-                        firstWarningRef.current = false
+                        firstWarningRef.current.suplente = false
                         // gestorRef.current = e.target.value
                     }}
                     onBlur={() => {
-                        const names = checkSameName()
+                        const names = checkSameName(suplenteRef)
                         if(names.isSame) {
                             setMesmoCargoDialog(true)
                             labelsRef.current = names.labels
@@ -150,11 +196,11 @@ const FormGestaoFiscalizacao = (props) => {
                 </DialogTitle>
                 <DialogContent>
                     <Typography>
-                        O nome definido em {labelsRef?.current[0]} esta assumindo os seguintes cargos: { 
+                        O nome definido em {labelsRef?.current[0]} possui o mesmo nome que os seguintes cargos: { 
                         labelsRef?.current?.reduce( (acc, val, index, arr) => {
-                            if(index === arr.length - 1) return acc + ` e ${val}.`
-                            if(index === 0) return acc + ` ${val}`
-                            return acc + `, ${val}`
+                            if(index === arr.length - 1) return acc + `${val}.`
+                            if(index === 0) return acc
+                            return acc + `${val}, `
                         }, "") }
                     </Typography>
                 </DialogContent>
