@@ -22,22 +22,25 @@ import { getFormData, postFormData, putFormData } from '../../commom/utils/api';
 import CloseIcon from '@mui/icons-material/Close';
 import CheckIcon from '@mui/icons-material/Check';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
-import { RetornaCampoValor } from '../../commom/utils/utils';
+import { TabValues } from '../../commom/utils/utils';
+import { dotacoesLabels } from '../../commom/utils/constants';
 
 const retornaNumDotacao = (numero_dotacao, descricao) => {
-    return [`${numero_dotacao}\n${descricao}`];
+    return (
+        <>
+            {numero_dotacao}
+            <br/>
+            {descricao}
+        </>
+    )
 }
 
 const TabDotacoes = (props) => {
-    const campos = [
-        "Número dotação",
-    ];
+    const valores = {
+        numero_dotacao: retornaNumDotacao(props.numero_dotacao, props.descricao)
+    }
 
-    const valores = [
-        retornaNumDotacao(props.numero_dotacao, props.descricao),
-    ];
-
-    return <RetornaCampoValor campos={campos} valores={valores} />
+    return <TabValues entry={valores} labels={dotacoesLabels} label="dotacao"/>
 }
 
 const ListaDotacoes = (props) => {

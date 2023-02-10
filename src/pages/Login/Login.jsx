@@ -80,26 +80,22 @@ const Login = () => {
                         <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-around', padding: '1rem 1rem 0 1rem' }}>
                             <EmailIcon sx={{ mr: '1rem', color: 'action.active', fontSize: "1.5rem" }} />
                             <TextField
-                                // value={email}
                                 label="E-mail"
                                 sx={{ margin: '1rem 0'}}
                                 fullWidth
                                 name="email"
                                 type="email"
-                                // onChange={handleChange}
                                 error={error.error}
                             />
                         </Box>
                         <Box sx={{ display: 'flex', alignItems: 'center', padding: '0 1rem' }}>
                             <LockIcon sx={{ mr: '1rem', color: 'action.active', fontSize: "1.5rem" }} />
                             <TextField
-                                // value={senha}
                                 label="Senha"
                                 sx={{ margin: '1rem 0' }}
                                 fullWidth
                                 name="password"
                                 type={mostraSenha ? 'text' : 'password'}
-                                // onChange={handleChange}
                                 InputProps={{
                                     endAdornment:
                                         <InputAdornment position="start">
@@ -113,11 +109,6 @@ const Login = () => {
                                 }}
                                 error={error.error}
                                 helperText={error.helperText}
-                                onKeyDown={(e) => {
-                                    if (e.key === 'Enter' && e.target.type !== 'button') {
-                                        // handleClickEntrar();
-                                    }
-                                }}
                             />
                         </Box>
                         <Box sx={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', padding: '1rem' }}>
@@ -126,7 +117,6 @@ const Login = () => {
                                 variant="contained"
                                 type='submit'
                                 sx={{ color: 'white', textTransform: 'none', fontSize: '1rem' }}
-                                // onClick={handleClickEntrar}
                                 disabled={carregando}
                             >
                                 Entrar

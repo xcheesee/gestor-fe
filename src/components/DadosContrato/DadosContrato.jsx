@@ -147,19 +147,6 @@ const DadosContrato = ({ snackbar, setSnackbar }) => {
 
     return (
         <>
-            <Snackbar open={snackbar.open} autoHideDuration={6000} onClose={() => { setSnackbar({...snackbar, open: false}); }}>
-                <Alert 
-                    variant="filled"
-                    onClose={() => { setSnackbar({...snackbar, open: false}); }}
-                    severity={snackbar.severity}
-                    elevation={6} 
-                    sx={{ width: '100%' }}
-                    color={snackbar.color}
-                >
-                    {snackbar.text}
-                </Alert>
-            </Snackbar>
-
             <Backdrop 
                 open={!estaCarregado}
                 sx={{ zIndex: '200' }}
@@ -242,10 +229,8 @@ const DadosContrato = ({ snackbar, setSnackbar }) => {
 
                                 <Box sx={{ width: '100%' }}>
                                     <TabPanel value={value} index={0}>
-                                        <ListaDadosContrato 
-                                            retornaCampoValor={retornaCampoValor}
+                                        <ListaDadosContrato
                                             dados={dados}
-                                            estaCarregado={estaCarregado}
                                             numContrato={numContrato}
                                             setSnackbar={setSnackbar}
                                             mudancaContrato={mudancaContrato}
@@ -261,9 +246,6 @@ const DadosContrato = ({ snackbar, setSnackbar }) => {
                                             setMudancaCertidoes={setMudancaCertidoes}
                                             carregandoCertidoes={carregandoCertidoes}
                                             setCarregandoCertidoes={setCarregandoCertidoes}
-                                            estaCarregado={estaCarregado}
-                                            retornaCampoValor={retornaCampoValor} 
-                                            snackbar={snackbar}
                                             setSnackbar={setSnackbar}
                                             numContrato={numContrato}
                                         />
@@ -277,9 +259,6 @@ const DadosContrato = ({ snackbar, setSnackbar }) => {
                                             setMudancaGarantias={setMudancaGarantias}
                                             carregandoGarantias={carregandoGarantias}
                                             setCarregandoGarantias={setCarregandoGarantias}
-                                            estaCarregado={estaCarregado}
-                                            retornaCampoValor={retornaCampoValor}
-                                            snackbar={snackbar}
                                             setSnackbar={setSnackbar}
                                             numContrato={numContrato}
                                         />
@@ -293,9 +272,6 @@ const DadosContrato = ({ snackbar, setSnackbar }) => {
                                             setMudancaFiscalizacoes={setMudancaFiscalizacoes}
                                             carregandoFiscalizacoes={carregandoFicalizacoes}
                                             setCarregandoFiscalizacoes={setCarregandoFiscalizacoes}
-                                            estaCarregado={estaCarregado}
-                                            retornaCampoValor={retornaCampoValor}
-                                            snackbar={snackbar}
                                             setSnackbar={setSnackbar}
                                             numContrato={numContrato}
                                         />
@@ -309,8 +285,6 @@ const DadosContrato = ({ snackbar, setSnackbar }) => {
                                             setMudancaLocais={setMudancaLocais}
                                             carregandoLocais={carregandoLocais}
                                             setCarregandoLocais={setCarregandoLocais}
-                                            estaCarregado={estaCarregado}
-                                            retornaCampoValor={retornaCampoValor}
                                             numContrato={numContrato}
                                             setSnackbar={setSnackbar}
                                         />
@@ -324,8 +298,6 @@ const DadosContrato = ({ snackbar, setSnackbar }) => {
                                             setMudancaAditamentos_valor={setMudancaAditamentos_valor}
                                             carregandoAditamentos_valor={carregandoAditamentos_valor}
                                             setCarregandoAditamentos_valor={setCarregandoAditamentos_valor}
-                                            estaCarregado={estaCarregado}
-                                            retornaCampoValor={retornaCampoValor}
                                             numContrato={numContrato}
                                             setSnackbar={setSnackbar}
                                         />                                                                                                               
@@ -339,8 +311,6 @@ const DadosContrato = ({ snackbar, setSnackbar }) => {
                                             setMudancaAditamentos_prazo={setMudancaAditamentos_prazo}
                                             carregandoAditamentos_prazo={carregandoAditamentos_prazo}
                                             setCarregandoAditamentos_prazo={setCarregandoAditamentos_prazo}
-                                            estaCarregado={estaCarregado}
-                                            retornaCampoValor={retornaCampoValor}
                                             numContrato={numContrato}
                                             setSnackbar={setSnackbar}
                                         />
@@ -354,9 +324,6 @@ const DadosContrato = ({ snackbar, setSnackbar }) => {
                                             setMudancaNotasEmpenho={setMudancaNotasEmpenho}
                                             carregandoNotasEmpenho={carregandoNotasEmpenho}
                                             setCarregandoNotasEmpenho={setCarregandoNotasEmpenho}
-                                            estaCarregado={estaCarregado}
-                                            retornaCampoValor={retornaCampoValor} 
-                                            snackbar={snackbar}
                                             setSnackbar={setSnackbar}
                                             numContrato={numContrato}
                                         />
@@ -364,7 +331,6 @@ const DadosContrato = ({ snackbar, setSnackbar }) => {
 
                                     <TabPanel value={value} index={8}>
                                         <ListaDotacoes 
-                                            retornaCampoValor={retornaCampoValor}
                                             numContrato={numContrato}
                                             origemRecursos={origemRecursos}
                                             setSnackbar={setSnackbar}

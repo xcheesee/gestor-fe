@@ -5,7 +5,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 
 const BotoesTab = ({ editar, excluir }) => {
     return (
-        <Box>
+        <Box className='flex items-start m-4'>
             <Tooltip title="Editar" arrow>
                 <IconButton onClick={editar}>
                     <EditIcon />

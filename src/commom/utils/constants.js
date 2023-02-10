@@ -14,7 +14,7 @@ export const contratoLabels = {
     condicao_pagamento: "Condição de Pagamento",
     numero_nota_reserva: "Número nota reserva",
     valor_reserva: "Valor reserva",
-    licitacao_modelo_id: "",
+    // licitacao_modelo_id: "",
     licitacao_modelo: "Modalidade de licitação",
     envio_material_tecnico: "Envio material técnico",
     minuta_edital: "Minuta edital",
@@ -23,13 +23,19 @@ export const contratoLabels = {
     data_assinatura: "Data de assinatura",
     data_inicio_vigencia: "Início da Vigência",
     data_vencimento: "Data de vencimento",
-    data_prazo_maximo: "Prazo Maximo"
-    // dotacao_orcamentaria: "",
-    // prazo_a_partir_de: "Prazo a partir de",
-    // nome_empresa: "Nome da empresa",
-    // telefone_empresa: "Telefone da empresa",
-    // email_empresa: "E-mail da empresa",
-    // outras_informacoes: "Informações adicionais",
+    data_prazo_maximo: "Prazo Maximo",
+}
+
+export const certidaoLabels = {
+    certidoes: "Certidão",
+    validade_certidoes: "Validade",
+}
+
+export const garantiaLabels = {
+    instituicao_financeira: "Instituição financeira",
+    numero_documento: "Número do documento",
+    valor_garantia: "Valor",
+    data_validade_garantia: "Validade",
 }
 
 export const fiscLabels = {
@@ -41,9 +47,38 @@ export const fiscLabels = {
     email_suplente: "E-mail do Suplente",
 }
 
+export const locaisLabels = {
+    regiao: "Região",
+    subprefeitura: "Subprefeitura",
+    distrito: "Distrito",
+    unidade: "Unidade",
+}
+
+export const aditValorLabels = {
+    tipo_aditamento: "Tipo",
+    valor_aditamento: "Valor",
+    percentual: "Porcentagem",
+}
+
+export const aditPrazoLabels = {
+    tipo_aditamento: "Tipo",
+    dias_reajuste: "Dias Reajuste",
+}
+
+export const emprenhoLabels = {
+    tipo_empenho: "Tipo de Empenho",
+    data_emissao: "Data Emissão",
+    numero_nota: "Número da Nota de Empenho",
+    valor_empenho: "Valor de Empenho",
+}
+
+export const dotacoesLabels = {
+    numero_dotacao: "Número dotação",
+}
+
 export const reajusteLabels = {
     valor_reajuste: "Valor",
-    indice_reajuste: "Indice de Reajuste"
+    indice_reajuste: "Indice de Reajuste",
 }
 
 export const contratoKeys = [

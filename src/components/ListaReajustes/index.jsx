@@ -1,4 +1,4 @@
-import { Box, TextField } from "@mui/material";
+import { Box, CircularProgress, Fade, Paper, TextField } from "@mui/material";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useRef } from "react";
 import { useState } from "react";
@@ -6,6 +6,7 @@ import { deleteReajuste, getFormData, postFormData, putFormData } from "../../co
 import { reajusteLabels } from "../../commom/utils/constants";
 import { formataValores } from "../../commom/utils/utils";
 import BotaoAdicionar from "../BotaoAdicionar";
+import BotoesTab from "../BotoesTab";
 import CampoValores from "../CampoValores";
 import ContratoFormWrapper from "../ContratoFormWrapper";
 import DialogConfirmacao from "../DialogConfirmacao";
@@ -13,11 +14,12 @@ import TabContrato from "../TabContrato";
 
 export default function ListaReajustes ({ numContrato, setSnackbar }) {
     let dados = []
-
     const queryClient = useQueryClient()
-    const dadosReajuste = useQuery({queryKey: ['reajuste', numContrato], queryFn: () => getFormData(`reajustes/${numContrato}`)})
-
-    const currDados = useRef({id: 0, valor_reajuste: "300", indice_reajuste: "5"})
+    const dadosReajuste = useQuery({
+        queryKey: ['reajuste', numContrato], 
+        queryFn: () => getFormData(`reajustes/${numContrato}`)
+    })
+    const currDados = useRef({id: 0, valor_reajuste: "", indice_reajuste: ""})
     const [formDialog, setFormDialog] = useState(false)
     const [acao, setAcao] = useState("")
     const [openConfirmacao, setOpenConfirmacao] = useState({open: false, id: ""})
@@ -65,17 +67,21 @@ export default function ListaReajustes ({ numContrato, setSnackbar }) {
             queryClient.invalidateQueries(['reajuste'])
         }
     })
-    async function handleEditPress (id) {
+    async function handleEditPress (entry) {
         setAcao("editar")
-        const res = await getFormData(`reajuste/${id}`)
-        currDados.current = {id: res.data.id, valor_reajuste: res.data.valor_reajuste, indice_reajuste: res.data.indice_reajuste}
+        // const res = await getFormData(`reajuste/${entry.id}`)
+        currDados.current = {
+            id: entry.id, 
+            valor_reajuste: entry.valor_reajuste, 
+            indice_reajuste: entry.indice_reajuste
+        }
         setFormDialog(true)
     }
-    async function handleDeletePress (id) {
+    async function handleDeletePress (entry) {
         setAcao("excluir")
-        const res = await getFormData(`reajuste/${id}`)
-        currDados.current = { id: res.data.id }
-        setOpenConfirmacao({open: true, id: res.data.id})
+        // const res = await getFormData(`reajuste/${entry.id}`)
+        currDados.current = { id: entry.id }
+        setOpenConfirmacao({open: true, id: entry.id})
     }
     
     dados = dadosReajuste?.data?.data?.map((entry) => {
@@ -89,20 +95,37 @@ export default function ListaReajustes ({ numContrato, setSnackbar }) {
 
     return(
         <>
-            <TabContrato
-                label="Reajuste"
-                handleEditPress={handleEditPress}
-                handleDeletePress={handleDeletePress}
-                dados={dados ?? []}
-                isLoading={dadosReajuste.isLoading}
-                num="0"
-                labels={reajusteLabels}/>
+            {
+                dadosReajuste.isLoading
+                    ?<Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '38rem' }}>
+                        <CircularProgress size={30} />
+                    </Box>
+                    :dados?.map((entry, index) => {
+                        return(
+                            <Fade in={true} timeout={400} key={`reajuste-${index}`}>
+                                <Paper elevation={3} className="mb-8">
+                                    <TabContrato 
+                                        label="Reajuste" 
+                                        dados={entry ?? []}
+                                        labels={reajusteLabels}
+                                    >
+                                        <BotoesTab
+                                            editar={() => handleEditPress(entry)}
+                                            excluir={() => handleDeletePress(entry)}
+                                        />
+                                    </TabContrato>
+                                </Paper>
+                            </Fade>
+                        )
+                    })
+            }
             <BotaoAdicionar
                 fnAdicionar={() => {
                     setAcao("adicionar")
                     setFormDialog(true)
                 }}
-                texto={`Adicionar Reajuste`}/>
+                texto={`Adicionar Reajuste`}
+            />
             <ContratoFormWrapper
                 open={formDialog}
                 setFormDialog={setFormDialog}
@@ -111,7 +134,8 @@ export default function ListaReajustes ({ numContrato, setSnackbar }) {
                 acao={acao}
                 currId={currDados.current.id}
                 title="Reajuste"
-                form="reajuste_form">
+                form="reajuste_form"
+            >
                 <Box
                     component='form'
                     id='reajuste_form'

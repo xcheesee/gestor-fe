@@ -10,25 +10,18 @@ import FormNotaEmpenho from './FormNotaEmpenho';
 import DialogConfirmacao from '../DialogConfirmacao';
 import BotoesTab from '../BotoesTab';
 import BotaoAdicionar from '../BotaoAdicionar';
-import { formataData, formataValores } from '../../commom/utils/utils';
+import { formataData, formataValores, TabValues } from '../../commom/utils/utils';
 import { postFormData, putFormData } from '../../commom/utils/api';
+import { emprenhoLabels } from '../../commom/utils/constants';
 
 const TabNotasEmpenho = (props) => {
-    const campos = [
-        "Tipo de Empenho",
-        "Data Emissão",
-        "Número da Nota de Empenho",
-        "Valor de Empenho"
-    ];
+    const valores = {
+        ...props,
+        data_emissao: formataData(props.data_emissao),
+        valor_empenho: formataValores(props.valor_empenho)
+    }
 
-    const valores = [
-        props.tipo_empenho,
-        formataData(props.data_emissao),
-        props.numero_nota,
-        formataValores(props.valor_empenho)
-    ];
-
-    return props.retornaCampoValor(campos, valores, props.estaCarregado);
+    return <TabValues entry={valores} labels={emprenhoLabels} label="empenho" />
 }
 
 const ListaNotasEmpenho = (props) => {
@@ -39,8 +32,6 @@ const ListaNotasEmpenho = (props) => {
         setMudancaNotasEmpenho,
         carregandoNotasEmpenho,
         setCarregandoNotasEmpenho,
-        estaCarregado,  
-        retornaCampoValor,
         numContrato, 
         setSnackbar
     } = props;
@@ -255,8 +246,6 @@ const ListaNotasEmpenho = (props) => {
                                     data_emissao={notaempenho.data_emissao}
                                     numero_nota={notaempenho.numero_nota}
                                     valor_empenho={notaempenho.valor_empenho}
-                                    estaCarregado={estaCarregado}
-                                    retornaCampoValor={retornaCampoValor}
                                 />
 
                                 <BotoesTab 

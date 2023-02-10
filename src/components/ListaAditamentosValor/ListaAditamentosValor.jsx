@@ -10,22 +10,18 @@ import DialogConfirmacao from "../DialogConfirmacao";
 import BotoesTab from "../BotoesTab";
 import BotaoAdicionar from "../BotaoAdicionar";
 import FormAditamentoValor from "./FomAditamentoValor/FormAditamentoValor";
-import { formataValores } from "../../commom/utils/utils";
-import { postFormData, putFormData, sendNewAditamentoVal } from "../../commom/utils/api";
+import { formataValores, TabValues } from "../../commom/utils/utils";
+import { postFormData, putFormData } from "../../commom/utils/api";
+import { aditValorLabels } from "../../commom/utils/constants";
 
 const TabAditamentosValor = (props) => {
-  const campos = [
-      "Tipo",
-      "Valor",
-      "Porcentagem"
-  ];
-  const valores = [
-    props.tipo_aditamento,
-    formataValores(props.valor_aditamento),
-    props.percentual
-];
+    const valores = {
+        ...props,
+        valor_aditamento: formataValores(props.valor_aditamento),
+    }
 
-  return props.retornaCampoValor(campos, valores, props.estaCarregado);}
+    return <TabValues entry={valores} labels={aditValorLabels} label='aditamento_val' />
+}
 
   const ListaAditamentosValor = (props) => {
     const {
@@ -35,8 +31,6 @@ const TabAditamentosValor = (props) => {
         setMudancaAditamentos_valor,
         carregandoAditamentos_valor,
         setCarregandoAditamentos_valor,
-        estaCarregado,
-        retornaCampoValor,
         numContrato,
         setSnackbar
     } = props;
@@ -251,8 +245,6 @@ const enviaAditamento = async (form) => {
                                     tipo_aditamento={aditamento.tipo_aditamento}
                                     valor_aditamento={aditamento.valor_aditamento}
                                     percentual={aditamento.percentual}
-                                    estaCarregado={estaCarregado}
-                                    retornaCampoValor={retornaCampoValor}
                                 />
 
                                 <BotoesTab 

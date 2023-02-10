@@ -11,6 +11,8 @@ import BotoesTab from '../BotoesTab';
 import BotaoAdicionar from '../BotaoAdicionar';
 import FormLocais from './FormLocais';
 import { postFormData, putFormData, sendLocalEdit, sendNewLocal } from '../../commom/utils/api';
+import { TabValues } from '../../commom/utils/utils';
+import { locaisLabels } from '../../commom/utils/constants';
 
 const dicionarioRegioes = {
     "CO": "Centro-Oeste",
@@ -27,14 +29,12 @@ const TabLocaisServico = (props) => {
         "Unidade"
     ];
 
-    const valores = [
-        dicionarioRegioes[props.regiao],
-        props.subprefeitura,
-        props.distrito,
-        props.unidade
-    ];
+    const valores = {
+        ...props,
+        regiao: dicionarioRegioes[props.regiao],
+    }
 
-    return props.retornaCampoValor(campos, valores, props.estaCarregado);
+    return <TabValues entry={valores} labels={locaisLabels} label='locais' />
 }
 
 const ListaLocais = (props) => {
@@ -45,8 +45,6 @@ const ListaLocais = (props) => {
         setMudancaLocais,
         carregandoLocais,
         setCarregandoLocais,
-        estaCarregado,
-        retornaCampoValor,
         numContrato,
         setSnackbar
     } = props;
@@ -263,8 +261,6 @@ const ListaLocais = (props) => {
                                     subprefeitura={local.subprefeitura}
                                     distrito={local.distrito}
                                     unidade={local.unidade}
-                                    estaCarregado={estaCarregado}
-                                    retornaCampoValor={retornaCampoValor}
                                 />
 
                                 <BotoesTab 

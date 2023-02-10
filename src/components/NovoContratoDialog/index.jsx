@@ -18,7 +18,7 @@ import { irParaTopo } from "../../commom/utils/utils";
 import CampoProcessoSei from "../CampoProcessoSei";
 import VoltarArrowBtn from "../VoltarArrowBtn";
 
-export default function NovoContratoDialog({novoDialog, setNovoDialog}) {
+export default function NovoContratoDialog({novoDialog, setNovoDialog, setSnackbar}) {
     const [sendingForm, setSendingForm] = useState(false)
     const [existeSEI, setExisteSEI] = useState(false)
     const clearSwitch= useRef(true) //"switch" utilizado para resetar o valor do campo sei caso
@@ -36,16 +36,25 @@ export default function NovoContratoDialog({novoDialog, setNovoDialog}) {
                         className="flex flex-col gap-4 my-4"
                         onSubmit={async (e) => {
                             e.preventDefault()
-                            const formData = new FormData(e.target)
-                            if(true) {
-                                numContrato.current = 1
-                                return setExisteSEI(true)
-                            }
                             setSendingForm(true)
+                            const formData = new FormData(e.target)
                             const res = await sendNovoFormData(formData)
+                            if(res.status === 200) {
+                                numContrato.current = res.data.id
+                                setSendingForm(false)
+                                return setExisteSEI(true)
+                            } else if(res.status === 404) {
+                                irParaTopo()
+                                setSendingForm(false)
+                                return navigate(`../contrato/${res.data.id}`)
+                            }
+                            setSnackbar(prev => ({
+                                ...prev,
+                                severity: "error",
+                                text: `Nao foi possivel criar o Contrato no momento. Erro: ${res.status}`,
+                                open: true
+                            }))
                             setSendingForm(false)
-                            irParaTopo()
-                            navigate(`../contrato/${res.data.id}`)
             
                         }}>
                             <FormControl fullWidth required>

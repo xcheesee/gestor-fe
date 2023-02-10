@@ -10,29 +10,18 @@ import DialogConfirmacao from '../DialogConfirmacao';
 import BotoesTab from '../BotoesTab';
 import BotaoAdicionar from '../BotaoAdicionar';
 import FormGarantia from './FormGarantia';
-import { formataData, formataValores } from '../../commom/utils/utils';
-import { postFormData, putFormData, sendGarantiaEdit, sendNewGarantia } from '../../commom/utils/api';
+import { formataData, formataValores, TabValues } from '../../commom/utils/utils';
+import { postFormData, putFormData } from '../../commom/utils/api';
+import { garantiaLabels } from '../../commom/utils/constants';
 
 const TabGarantias = (props) => {
-    const {
-        retornaCampoValor
-    } = props;
+    const valores = {
+        ...props,
+        valor_garantia: formataValores(props.valor_garantia),
+        data_validade_garantia: formataData(props.data_validade_garantia)
+    };
 
-    const campos = [
-        "Instituição financeira",
-        "Número do documento",
-        "Valor",
-        "Validade"
-    ];
-
-    const valores = [
-        props.instituicao_financeira,
-        props.numero_documento,
-        formataValores(props.valor_garantia),
-        formataData(props.data_validade_garantia)
-    ];
-
-    return retornaCampoValor(campos, valores, props.estaCarregado);
+    return <TabValues entry={valores} labels={garantiaLabels} label="garantia" />
 }
 
 const ListaGarantias = (props) => {
@@ -43,9 +32,6 @@ const ListaGarantias = (props) => {
         setMudancaGarantias,
         carregandoGarantias,
         setCarregandoGarantias,
-        estaCarregado,
-        formataValores,
-        retornaCampoValor,
         setSnackbar,
         numContrato
     } = props;
@@ -258,9 +244,6 @@ const ListaGarantias = (props) => {
                                     numero_documento={garantia.numero_documento}
                                     valor_garantia={garantia.valor_garantia}
                                     data_validade_garantia={garantia.data_validade_garantia}
-                                    estaCarregado={estaCarregado}
-                                    retornaCampoValor={retornaCampoValor}
-                                    formataValores={formataValores}
                                 />
 
                                 <BotoesTab 

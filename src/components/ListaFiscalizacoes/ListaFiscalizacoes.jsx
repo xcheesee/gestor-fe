@@ -18,27 +18,11 @@ import { postFormData, putFormData, sendFiscalizacaoEdit, sendNewFiscalizacao } 
 import CloseIcon from '@mui/icons-material/Close';
 import CheckIcon from '@mui/icons-material/Check';
 import CircularProgress from '@mui/material/CircularProgress';
+import { TabValues } from '../../commom/utils/utils';
+import { fiscLabels } from '../../commom/utils/constants';
 
 const TabFiscalizacao = (props) => {
-    const campos = [
-        "Gestor",
-        "E-mail Gestor",
-        "Fiscal",
-        "E-mail Fiscal",
-        "Suplente",
-        "E-mail Suplente"
-    ];
-
-    const valores = [
-        props.nome_gestor,
-        props.email_gestor,
-        props.nome_fiscal,
-        props.email_fiscal,
-        props.nome_suplente,
-        props.email_suplente
-    ];
-
-    return props.retornaCampoValor(campos, valores, props.estaCarregado);
+    return <TabValues entry={props} labels={fiscLabels} label="fiscalizacao "/>;
 }
 
 const ListaFiscalizacoes = (props) => {
@@ -49,8 +33,6 @@ const ListaFiscalizacoes = (props) => {
         setMudancaFiscalizacoes,
         carregandoFiscalizacoes,
         setCarregandoFiscalizacoes,
-        estaCarregado,
-        retornaCampoValor,
         setSnackbar,
         numContrato
     } = props;
@@ -296,8 +278,6 @@ const ListaFiscalizacoes = (props) => {
                                     email_fiscal={fiscalizacao.email_fiscal}
                                     nome_suplente={fiscalizacao.nome_suplente}
                                     email_suplente={fiscalizacao.email_suplente}
-                                    retornaCampoValor={retornaCampoValor}
-                                    estaCarregado={estaCarregado}
                                 />
 
                                 <BotoesTab 

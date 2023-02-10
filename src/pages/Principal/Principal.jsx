@@ -111,7 +111,6 @@ const Principal = ({ snackbar, setSnackbar }) => {
                                 variant="contained"
                                 sx={{ color: (theme) => theme.palette.color.main, margin: '2rem 0', textTransform: 'none' }}
                                 onClick={() => {
-                                    // irParaTopo()
                                     setNovoDialog(true)
                                 }}
                             >
@@ -129,7 +128,7 @@ const Principal = ({ snackbar, setSnackbar }) => {
                     </Box>
                 </Fade>
             </Box>
-            <NovoContratoDialog novoDialog={novoDialog} setNovoDialog={setNovoDialog} />
+            <NovoContratoDialog novoDialog={novoDialog} setNovoDialog={setNovoDialog} setSnackbar={setSnackbar}/>
         </>
     );
 };

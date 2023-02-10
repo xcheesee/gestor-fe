@@ -15,7 +15,6 @@ import { contratoLabels } from '../../commom/utils/constants';
 
 const TabPanel = (props) => {
     const { children, value, index, ...other } = props;
-    let valores = {}
 
     return (
         <div
@@ -43,9 +42,7 @@ const a11yProps = (index) => {
 
 const ListaDadosContrato = (props) => {
     const {
-        retornaCampoValor,
         dados,
-        estaCarregado,
         numContrato,
         setSnackbar,
         mudancaContrato,
@@ -84,22 +81,7 @@ const ListaDadosContrato = (props) => {
         setValue(newValue);
     }
 
-    const TabContrato = ({ dados , estaCarregado }) => {
-        // const campos = [
-        //     "Departamento",
-        //     "Processo SEI",
-        //     "Credor",
-        //     "CPF/CNPJ",
-        //     "Tipo de objeto",
-        //     "Objeto",
-        //     "Número do contrato",
-        //     "Valor do contrato",
-        //     "Valor mensal estimativo",
-        //     "Condição de pagamento",
-        //     "Número nota reserva",
-        //     "Valor reserva"
-        // ];
-    
+    const TabContrato = ({ dados }) => {
         const valores = {
             departamento: dados?.departamento,
             processo_sei: mascaraProcessoSei(dados?.processo_sei),
@@ -119,18 +101,6 @@ const ListaDadosContrato = (props) => {
     }
 
     const TabProcessoContratacao = (props) => {
-        // const campos = [
-        //     "Modalidade de licitação",
-        //     "Envio de material técnico",
-        //     "Minuta edital",
-        //     "Abertura certame",
-        //     "Homologação",
-        //     "Data de assinatura",
-        //     "Data de início da vigência",
-        //     "Data de vencimento",
-        //     "Prazo máximo",
-        // ];
-
         const valores = {
             licitacao_modelo: props.licitacao_modelo,
             envio_material_tecnico: formataData(props.envio_material_tecnico),
@@ -159,7 +129,6 @@ const ListaDadosContrato = (props) => {
                 <TabPanel value={value} index={0}>
                     <TabContrato 
                         dados={dados}
-                        estaCarregado={estaCarregado}
                     />
 
                     <Fab 
@@ -197,7 +166,6 @@ const ListaDadosContrato = (props) => {
                         minuta_edital={dados?.minuta_edital}
                         abertura_certame={dados?.abertura_certame}
                         homologacao={dados?.homologacao}
-                        estaCarregado={estaCarregado}
                     />
 
                     <Fab 

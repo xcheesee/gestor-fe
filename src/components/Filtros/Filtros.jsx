@@ -7,12 +7,9 @@ import {
     IconButton,
     Collapse,
     Badge,
-    Divider
 } from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';
-import TuneIcon from '@mui/icons-material/Tune';
-import CampoData from '../CampoData';
 import NumberFormat from 'react-number-format';
 import PropTypes from 'prop-types';
 import CampoDataRange from '../CampoDataRange';
@@ -188,42 +185,7 @@ const Filtros = (props) => {
                             size="small"
                             fullWidth
                         />
-                    
-                        {/* <CampoData 
-                            label="Início depois de"
-                            name="inicio_depois_de"
-                            helperText=" "
-                            size="small"
-                            value={filtros.inicio_depois_de}
-                            onChange={handleChange}
-                        />
 
-                        <CampoData 
-                            label="Início antes de"
-                            name="inicio_antes_de"
-                            helperText=" "
-                            size="small"
-                            value={filtros.inicio_antes_de}
-                            onChange={handleChange}
-                        /> */}
-
-                        {/* <CampoData 
-                            label="Vencimento depois de"
-                            name="vencimento_depois_de"
-                            helperText=" "
-                            size="small"
-                            value={filtros.vencimento_depois_de}
-                            onChange={handleChange}
-                        />
-
-                        <CampoData 
-                            label="Vencimento antes de"
-                            name="vencimento_antes_de"
-                            helperText=" "
-                            size="small"
-                            value={filtros.vencimento_antes_de}
-                            onChange={handleChange}
-                        /> */}
                         <CampoDataRange
                             label={'Inicio - faixa de pesquisa'}
                             intervalo={{inicio: 'inicio_depois_de', fim: 'inicio_antes_de'}}
@@ -257,7 +219,6 @@ const Filtros = (props) => {
                             </Button>
                         </Box>
                     </Box>
-
             </Collapse>
         </>
 

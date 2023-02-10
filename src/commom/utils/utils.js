@@ -99,9 +99,11 @@ export function RetornaCampoValor ({campos, valores}) {
 export function TabValues ({ entry, labels, label}) {
   return(
     <Box>
-        {Object.entries(entry)?.filter((keyVal) => !(keyVal[0] === "id" || keyVal[0] === "contrato_id"))?.map((keyVal, index) => 
+        {Object.entries(entry)
+            ?.filter((keyVal) => !(keyVal[0] === "id" || keyVal[0] === "contrato_id"))
+            ?.map((keyVal, index) => 
             (
-                <Box className="m-8" key={`tab-${label}-${index}`}>
+                <Box className="mx-4 my-8" key={`tab-${label}-${index}`}>
                     <Typography className="font-bold pb-2">{labels[keyVal[0]]}</Typography>
                     <Typography className="ml-4">{keyVal[1] || "- - -"}</Typography>
                 </Box>

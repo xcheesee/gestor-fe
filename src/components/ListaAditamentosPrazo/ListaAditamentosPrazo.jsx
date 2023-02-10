@@ -11,15 +11,10 @@ import BotoesTab from "../BotoesTab";
 import BotaoAdicionar from "../BotaoAdicionar";
 import FormAditamentoPrazo from "./FormAditamentos/FormAditamentoPrazo";
 import { postFormData, putFormData } from "../../commom/utils/api";
+import { TabValues } from "../../commom/utils/utils";
+import { aditPrazoLabels } from "../../commom/utils/constants";
 
-const TabAditamentosPrazo = (props) => {
-
-  const campos = ["Tipo", "Dias Reajuste"];
-
-  const valores = [props.tipo_aditamento, props.dias_reajuste];
-
-  return props.retornaCampoValor(campos, valores, props.estaCarregado);
-};
+const TabAditamentosPrazo = (props) => <TabValues entry={props} labels={aditPrazoLabels} label="aditamento_prazo" />
 
 const ListaAditamentosPrazo = (props) => {
   const {
@@ -29,8 +24,6 @@ const ListaAditamentosPrazo = (props) => {
     setMudancaAditamentos_prazo,
     carregandoAditamentos_prazo,
     setCarregandoAditamentos_prazo,
-    estaCarregado,
-    retornaCampoValor,
     setSnackbar,
     numContrato,
   } = props;
@@ -239,8 +232,6 @@ const ListaAditamentosPrazo = (props) => {
                 <TabAditamentosPrazo
                   tipo_aditamento={aditamento.tipo_aditamento}
                   dias_reajuste={aditamento.dias_reajuste}
-                  retornaCampoValor={retornaCampoValor}
-                  estaCarregado={estaCarregado}
                 />
 
                 <BotoesTab

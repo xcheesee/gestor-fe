@@ -11,6 +11,7 @@ import Auth from './components/Auth';
 import Footer from './components/Footer';
 import { Routes, Route } from 'react-router-dom';
 import MenuInicial from './pages/MenuInicial';
+import { Alert, Snackbar } from '@mui/material';
 
 function App() {
   const [snackbar, setSnackbar] = useState({
@@ -71,6 +72,19 @@ function App() {
           </Auth>
         } />
       </Routes>
+      
+      <Snackbar open={snackbar.open} autoHideDuration={3000} onClose={() => { setSnackbar({...snackbar, open: false}); }}>
+        <Alert 
+            variant="filled"
+            onClose={() => { setSnackbar({...snackbar, open: false}); }}
+            severity={snackbar.severity}
+            elevation={6} 
+            sx={{ width: '100%' }}
+            color={snackbar.color}
+        >
+          {snackbar.text}
+        </Alert>
+      </Snackbar>
       <Footer />
     </>
   );

@@ -10,21 +10,17 @@ import FormCertidao from './FormCertidao';
 import DialogConfirmacao from '../DialogConfirmacao';
 import BotoesTab from '../BotoesTab';
 import BotaoAdicionar from '../BotaoAdicionar';
-import { formataData } from '../../commom/utils/utils';
-import { postFormData, putFormData, sendCertidaoEdit, sendNewCertidao } from '../../commom/utils/api';
+import { formataData, TabValues } from '../../commom/utils/utils';
+import { postFormData, putFormData } from '../../commom/utils/api';
+import { certidaoLabels } from '../../commom/utils/constants';
 
 const TabCertidoes = (props) => {
-    const campos = [
-        "Certidão",
-        "Validade"
-    ];
+    const valores = {
+        ...props,
+        validade_certidoes: formataData(props.validade_certidoes)
+    }
 
-    const valores = [
-        props.certidoes,
-        formataData(props.validade_certidoes)
-    ];
-
-    return props.retornaCampoValor(campos, valores, props.estaCarregado);
+    return <TabValues entry={valores} labels={certidaoLabels} label="certidao" />
 }
 
 const ListaCertidoes = (props) => {
@@ -35,8 +31,6 @@ const ListaCertidoes = (props) => {
         setMudancaCertidoes,
         carregandoCertidoes,
         setCarregandoCertidoes,
-        estaCarregado, 
-        retornaCampoValor,
         numContrato, 
         setSnackbar
     } = props;
@@ -238,8 +232,6 @@ const ListaCertidoes = (props) => {
                                 <TabCertidoes 
                                     certidoes={certidao.certidoes}
                                     validade_certidoes={certidao.validade_certidoes}
-                                    estaCarregado={estaCarregado}
-                                    retornaCampoValor={retornaCampoValor}
                                 />
 
                                 <BotoesTab 
