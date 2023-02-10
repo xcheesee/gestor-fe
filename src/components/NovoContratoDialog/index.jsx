@@ -12,7 +12,7 @@ import {
 } from "@mui/material";
 import { useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { getFormattedFormData, sendNovoFormData } from "../../commom/utils/api";
+import { checkSeiStatus, getFormattedFormData, sendNovoFormData } from "../../commom/utils/api";
 import { contratoLabels } from "../../commom/utils/constants";
 import { irParaTopo } from "../../commom/utils/utils";
 import CampoProcessoSei from "../CampoProcessoSei";
@@ -43,13 +43,7 @@ export default function NovoContratoDialog({novoDialog, setNovoDialog, setSnackb
                             e.preventDefault()
                             setSendingForm(true)
                             contrato.current = getFormattedFormData(new FormData(e.target))
-                            const seiCheck = await fetch(`${process.env.REACT_APP_API_URL}/contratos_sei?processo_sei=${contrato.current.processo_sei}`, {
-                                Method: 'GET',
-                                mode: 'cors',
-                                headers: {
-                                    'Authorization': `Bearer ${token}`
-                                }
-                            })
+                            const seiCheck = await checkSeiStatus(contrato.current.processo_sei)
                             if(seiCheck.status === 200) {
                                 setSendingForm(false)
                                 return setExisteSEI(true)
