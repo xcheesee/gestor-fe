@@ -1,4 +1,4 @@
-function getFormattedFormData(form, initialValue={}) {
+export function getFormattedFormData(form, initialValue={}) {
     let data = {...initialValue};
     for(const objArray of form.entries()) {
         data[objArray[0]] = objArray[1]
@@ -143,17 +143,12 @@ export async function sendNovoFormData (form) {
         "Accept": "application/json",
         "Authorization": `Bearer ${token}`,
     };
-    
-    let body = {
-        "departamento_id": form.get("departamento_id"),
-        "processo_sei": form.get("processo_sei"),
-    };
     const res = await fetch(url, {
         method: "POST",
         headers: headers,
-        body: JSON.stringify(body),
+        body: JSON.stringify(form),
     })
-    const json = res.json()
+    const json = await res.json()
     return {status: res.status, ...json}
 }
 
@@ -250,4 +245,22 @@ export async function deleteReajuste(id) {
     } else {
         throw ({'message': 'Nao foi possivel deletar o reajuste'})
     }
+}
+
+export async function checkSeiStatus (processo_sei) {
+    const token = localStorage.getItem('access_token');
+    const url = `${process.env.REACT_APP_API_URL}/contratos_sei?processo_sei=${processo_sei}`;
+    const options = {
+        method: 'GET',
+        mode: 'cors',
+        headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+            'Authorization': `Bearer ${token}`
+        },
+    };
+    const res = await fetch(url, options)
+    const json = await res.json()
+
+    return {status: res.status, ...json}
 }

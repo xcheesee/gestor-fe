@@ -12,7 +12,7 @@ import {
 } from "@mui/material";
 import { useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { sendNovoFormData } from "../../commom/utils/api";
+import { getFormattedFormData, sendNovoFormData } from "../../commom/utils/api";
 import { contratoLabels } from "../../commom/utils/constants";
 import { irParaTopo } from "../../commom/utils/utils";
 import CampoProcessoSei from "../CampoProcessoSei";
@@ -23,6 +23,10 @@ export default function NovoContratoDialog({novoDialog, setNovoDialog, setSnackb
     const [existeSEI, setExisteSEI] = useState(false)
     const clearSwitch= useRef(true) //"switch" utilizado para resetar o valor do campo sei caso
     const numContrato = useRef("")
+    const contrato = useRef({
+        departamento_id: "",
+        processo_sei: "",
+    })
 
     const navigate = useNavigate()
     const departamentos = JSON.parse(localStorage.getItem('departamentos'))
@@ -35,27 +39,34 @@ export default function NovoContratoDialog({novoDialog, setNovoDialog, setSnackb
                         component="form"
                         className="flex flex-col gap-4 my-4"
                         onSubmit={async (e) => {
+                            const token = localStorage.getItem('access_token');
                             e.preventDefault()
                             setSendingForm(true)
-                            const formData = new FormData(e.target)
-                            const res = await sendNovoFormData(formData)
-                            if(res.status === 200) {
-                                numContrato.current = res.data.id
+                            contrato.current = getFormattedFormData(new FormData(e.target))
+                            const seiCheck = await fetch(`${process.env.REACT_APP_API_URL}/contratos_sei?processo_sei=${contrato.current.processo_sei}`, {
+                                Method: 'GET',
+                                mode: 'cors',
+                                headers: {
+                                    'Authorization': `Bearer ${token}`
+                                }
+                            })
+                            if(seiCheck.status === 200) {
                                 setSendingForm(false)
                                 return setExisteSEI(true)
-                            } else if(res.status === 404) {
+                            } else if(seiCheck.status === 404) {
+                                const res = await sendNovoFormData(contrato.current)
+                                if(res.status !== 201) {
+                                    setSnackbar(prev => ({
+                                        ...prev,
+                                        severity: "error",
+                                        text: `Nao foi possivel criar o Contrato no momento. Erro: ${res.status}`,
+                                        open: true
+                                    }))
+                                }
                                 irParaTopo()
                                 setSendingForm(false)
                                 return navigate(`../contrato/${res.data.id}`)
                             }
-                            setSnackbar(prev => ({
-                                ...prev,
-                                severity: "error",
-                                text: `Nao foi possivel criar o Contrato no momento. Erro: ${res.status}`,
-                                open: true
-                            }))
-                            setSendingForm(false)
-            
                         }}>
                             <FormControl fullWidth required>
                                 <InputLabel id="departamento">{contratoLabels.departamento_id}</InputLabel>
@@ -107,15 +118,30 @@ export default function NovoContratoDialog({novoDialog, setNovoDialog, setSnackb
                 <DialogActions className="pb-4 pr-4 flex gap-4">
                     <Button 
                         color="success" 
-                        onClick={() => {
+                        onClick={async () => {
+                            setSendingForm(true)
+                            setExisteSEI(false)
+                            const res = await sendNovoFormData(contrato.current)
+                            if(res.status !== 201) {
+                                setSendingForm(false)
+                                return setSnackbar(prev => ({
+                                    ...prev,
+                                    severity: "error",
+                                    text: `Nao foi possivel criar o Contrato no momento. Erro: ${res.status}`,
+                                    color: 'error',
+                                    open: true
+                                }))
+                            }
                             irParaTopo()
-                            navigate(`../contrato/${numContrato.current}`)
+                            setSendingForm(false)
+                            return navigate(`../contrato/${res.data.id}`)
                         }}
                     >Continuar</Button>
                     <Button 
                         variant="contained" 
                         className="bg-red-500"
                         onClick={() => {
+                            
                             setExisteSEI(false)
                             clearSwitch.current = !clearSwitch.current
                         }}
