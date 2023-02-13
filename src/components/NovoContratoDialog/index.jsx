@@ -22,7 +22,6 @@ export default function NovoContratoDialog({novoDialog, setNovoDialog, setSnackb
     const [sendingForm, setSendingForm] = useState(false)
     const [existeSEI, setExisteSEI] = useState(false)
     const clearSwitch= useRef(true) //"switch" utilizado para resetar o valor do campo sei caso
-    const numContrato = useRef("")
     const contrato = useRef({
         departamento_id: "",
         processo_sei: "",
@@ -39,7 +38,6 @@ export default function NovoContratoDialog({novoDialog, setNovoDialog, setSnackb
                         component="form"
                         className="flex flex-col gap-4 my-4"
                         onSubmit={async (e) => {
-                            const token = localStorage.getItem('access_token');
                             e.preventDefault()
                             setSendingForm(true)
                             contrato.current = getFormattedFormData(new FormData(e.target))
@@ -50,13 +48,13 @@ export default function NovoContratoDialog({novoDialog, setNovoDialog, setSnackb
                             } else if(seiCheck.status === 404) {
                                 const res = await sendNovoFormData(contrato.current)
                                 if(res.status !== 201) {
-                                    setSnackbar(prev => ({
+                                    return setSnackbar(prev => ({
                                         ...prev,
                                         severity: "error",
                                         text: `Nao foi possivel criar o Contrato no momento. Erro: ${res.status}`,
                                         open: true
                                     }))
-                                }
+                                } 
                                 irParaTopo()
                                 setSendingForm(false)
                                 return navigate(`../contrato/${res.data.id}`)
