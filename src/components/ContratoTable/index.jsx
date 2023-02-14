@@ -6,7 +6,6 @@ import ManageSearchIcon from '@mui/icons-material/ManageSearch';
 
 const ContratoTable = ({dados, url, ordena, carregandoSort, isLoading}) => {
     const navigate = useNavigate()
-    const rows = [];
 
     const StyledTableHeadCell = ({ onClick, children}) => (
         <TableCell 
@@ -33,23 +32,6 @@ const ContratoTable = ({dados, url, ordena, carregandoSort, isLoading}) => {
             </Box>
         </TableCell>
     )
-    
-    if(dados) {
-        Object.values(dados).map((contrato) => {
-            return rows.push(
-                {
-                    id: contrato.id, 
-                    processo_sei: mascaraProcessoSei(contrato.processo_sei),
-                    credor: contrato.credor,
-                    nome_empresa: contrato.empresa,
-                    numero_contrato: mascaraContrato(contrato.numero_contrato),
-                    data_inicio_vigencia: contrato.data_inicio_vigencia,
-                    data_vencimento: contrato.data_vencimento,
-                    diferenca_vigencia_vencimento: contrato.diferenca_vigencia_vencimento
-                }
-            );
-        });
-    }
 
     return (
         <Fade in={true} timeout={800}>
@@ -84,6 +66,7 @@ const ContratoTable = ({dados, url, ordena, carregandoSort, isLoading}) => {
                                         : ''
                                     }
                                 </StyledTableHeadCell>
+                                {/* TODO: CORRIGIR BUG DE SORT POR NOME_EMPRESA */}
                                 <StyledTableHeadCell onClick={() => ordena('nome_empresa')}>
                                     Empresa
                                     {
@@ -131,10 +114,10 @@ const ContratoTable = ({dados, url, ordena, carregandoSort, isLoading}) => {
                                             sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                                         >
                                             <TableCell align="center" sx={background}>{row.id || "- - -"}</TableCell>
-                                            <TableCell align="center" sx={background}>{row.processo_sei || "- - -"}</TableCell>
+                                            <TableCell align="center" sx={background}>{mascaraProcessoSei(row.processo_sei) || "- - -"}</TableCell>
                                             <TableCell align="center" sx={background}>{row.credor || "- - -"}</TableCell>
-                                            <TableCell align="center" sx={background}>{row.nome_empresa || "- - -"}</TableCell>
-                                            <TableCell align="center" sx={background}>{row.numero_contrato || "- - -"}</TableCell>
+                                            <TableCell align="center" sx={background}>{row.empresa || "- - -"}</TableCell>
+                                            <TableCell align="center" sx={background}>{mascaraContrato(row.numero_contrato) || "- - -"}</TableCell>
                                             <TableCell align="center" sx={background}>{row.data_inicio_vigencia || "- - -"}</TableCell>
                                             <TableCell align="center" sx={background}>
                                                 <Box>

@@ -20,7 +20,7 @@ import { useQuery } from '@tanstack/react-query';
 
 const Principal = ({ snackbar, setSnackbar }) => {
     const [novoDialog, setNovoDialog] = useState(false)
-    const [sort, setSort] = useState(false);
+    // const [sort, setSort] = useState(false);
     const [carregandoSort, setCarregandoSort] = useState(true);
     const [url, setUrl] = useState({
         url: `${process.env.REACT_APP_API_URL}/contratos?`,
@@ -44,7 +44,6 @@ const Principal = ({ snackbar, setSnackbar }) => {
     }
 
     const ordena = (value) => {
-        setSort(true);
         setCarregandoSort(true);
         if (url.sort === value)
             setUrl({ ...url, sort: `-${value}` });
@@ -53,7 +52,6 @@ const Principal = ({ snackbar, setSnackbar }) => {
     }
 
     useEffect(() => {
-        setSort(false);
         setCarregandoSort(false);
         setSnackbar({...snackbar, open: false});
     }, [url])
