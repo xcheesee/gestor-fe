@@ -41,7 +41,7 @@ const ContratoTable = ({dados, url, ordena, carregandoSort, estaCarregado}) => {
                     id: contrato.id, 
                     processo_sei: mascaraProcessoSei(contrato.processo_sei),
                     credor: contrato.credor,
-                    nome_empresa: contrato.nome_empresa,
+                    nome_empresa: contrato.empresa,
                     numero_contrato: mascaraContrato(contrato.numero_contrato),
                     data_inicio_vigencia: contrato.data_inicio_vigencia,
                     data_vencimento: contrato.data_vencimento

@@ -10,8 +10,6 @@ import {
     Tabs,
     Tab,
     Fade,
-    Snackbar,
-    Alert,
 } from '@mui/material';
 import ExecucaoFinanceira from './ExecucaoFinanceira';
 import OutrasInformacoes from './OutrasInformacoes';
@@ -27,7 +25,7 @@ import ListaAditamentosPrazo from '../ListaAditamentosPrazo';
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import ListaReajustes from '../ListaReajustes';
-import { getContrato, getContrTot, getDotacao, getRecursos } from '../../commom/utils/api';
+import { getContrato, getContrTot, getRecursos } from '../../commom/utils/api';
 import { formataCpfCnpj } from '../../commom/utils/utils';
 import { CardEmpresa } from '../CampoEmpresa';
 
@@ -58,23 +56,6 @@ const a11yProps = (index) => {
     };
 }
 
-const retornaCampoValor = (campos, valores, estaCarregado=true) => {
-    return (
-        <Box sx={{ margin: '0 1rem' }}>
-            {campos.map((campo, index) => {
-                return (
-                    <Typography sx={{ margin: '1rem 0' }} key={index} component="pre">
-                        <strong>{campo}</strong>
-                        <Typography sx={{ margin: '0.5rem' }}>
-                            {valores[index] === "" || valores[index] === null || !estaCarregado ? "---" : valores[index]}
-                        </Typography>
-                    </Typography>
-                );
-            })}
-        </Box>
-    );
-}
-
 const ListaTabs = [
     'Contrato',
     'Certidões',
@@ -88,7 +69,7 @@ const ListaTabs = [
     'Reajuste'
 ];
 
-const DadosContrato = ({ snackbar, setSnackbar }) => {
+const DadosContrato = ({ setSnackbar }) => {
     const [value, setValue] = useState(0);
     const [dados, setDados] = useState({});
     const [mudancaContrato, setMudancaContrato] = useState(false);
