@@ -16,12 +16,10 @@ import { getContratos } from '../../commom/utils/api';
 import ContratoTable from '../../components/ContratoTable';
 import VoltarArrowBtn from '../../components/VoltarArrowBtn';
 import NovoContratoDialog from '../../components/NovoContratoDialog';
+import { useQuery } from '@tanstack/react-query';
 
 const Principal = ({ snackbar, setSnackbar }) => {
-    const [dados, setDados] = useState({});
     const [novoDialog, setNovoDialog] = useState(false)
-    const [metaDados, setMetaDados] = useState({});
-    const [estaCarregado, setEstaCarregado] = useState(false);
     const [sort, setSort] = useState(false);
     const [carregandoSort, setCarregandoSort] = useState(true);
     const [url, setUrl] = useState({
@@ -31,10 +29,12 @@ const Principal = ({ snackbar, setSnackbar }) => {
         sort: ''
     });
     const navigate = useNavigate()
+    const dados = useQuery(['contratos', url], {
+        queryFn: () => getContratos(url)
+    })
     
     const mudaPagina = (event, value) => {
         if (url.page !== value) {
-            setEstaCarregado(false);
             irParaTopo();
             setUrl({
                 ...url,
@@ -53,19 +53,9 @@ const Principal = ({ snackbar, setSnackbar }) => {
     }
 
     useEffect(() => {
-        (async () => {
-            if (!sort) 
-                setEstaCarregado(false);
-            const data = await getContratos(url)
-            setEstaCarregado(true);
-            setDados(data.data);
-            setMetaDados(data.meta);
-            setSort(false);
-            setCarregandoSort(false);
-        })();
-
+        setSort(false);
+        setCarregandoSort(false);
         setSnackbar({...snackbar, open: false});
-        
     }, [url])
 
     return (
@@ -83,7 +73,7 @@ const Principal = ({ snackbar, setSnackbar }) => {
                         </Typography>
                         <Box sx={{ display: 'flex', flexDirection: 'column', margin: '1rem' }}>
                             <Filtros url={url} setUrl={setUrl} />
-                            {!estaCarregado
+                            {dados.isLoading
                                 ?<Box
                                     sx={{
                                         display: 'flex',
@@ -100,8 +90,8 @@ const Principal = ({ snackbar, setSnackbar }) => {
                                     <CircularProgress size={40} sx={{ margin: '10rem' }} />
                                 </Box>
                                 :<ContratoTable
-                                    dados={dados}
-                                    estaCarregado={estaCarregado}
+                                    dados={dados?.data?.data}
+                                    isLoading={dados.isLoading}
                                     url={url}
                                     ordena={ordena}
                                     carregandoSort={carregandoSort}/>
@@ -118,7 +108,7 @@ const Principal = ({ snackbar, setSnackbar }) => {
                             </Button>
                             <Pagination
                                 className="self-center m-[1rem]"
-                                count={metaDados?.last_page ?? 1}
+                                count={dados?.data?.meta?.last_page || 1}
                                 size="large"
                                 color="primary"
                                 page={url.page}
