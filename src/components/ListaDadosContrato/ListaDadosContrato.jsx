@@ -107,24 +107,25 @@ const ListaDadosContrato = (props) => {
         }
 
         function VencimentoEle () {
+            console.log(dados)
             return(
-                <Typography>
+                <>
                     <Box className='mb-2 inline-block'>{formataData(dados?.data_vencimento)}</Box>
                     <Box className='ml-4'>
                         <Box style={{color: 'rgba(0,0,0,0.4)'}}><span className='font-medium'>Envio material técnico</span>: ( +{dados.diferenca_envio_vencimento} dia(s) )</Box>
                         <Box style={{color: 'rgba(0,0,0,0.4)'}}><span className='font-medium'>Homologacao</span>: ( +{dados.diferenca_homologacao_vencimento} dia(s) )</Box>
                         <Box style={{color: 'rgba(0,0,0,0.4)'}}><span className='font-medium'>Vigencia</span>: ( +{dados.diferenca_vigencia_vencimento} dia(s) )</Box>
                     </Box>
-                </Typography>
+                </>
             )
         }
         const valores = {
             licitacao_modelo: props.licitacao_modelo,
+            data_assinatura: formataData(dados?.data_assinatura),
             envio_material_tecnico: `${formataData(props.envio_material_tecnico)}`,
             minuta_edital: dateDisplay(formataData(props.minuta_edital), dados.diferenca_envio_minuta),
             abertura_certame: dateDisplay(formataData(props.abertura_certame), dados.diferenca_minuta_abertura),
             homologacao: dateDisplay(formataData(props.homologacao), dados.diferenca_abertura_homologacao),
-            data_assinatura: formataData(dados?.data_assinatura),
             data_inicio_vigencia: dateDisplay(formataData(dados?.data_inicio_vigencia), dados.diferenca_homologacao_vigencia),
             data_vencimento: <VencimentoEle/>,
             data_prazo_maximo: dateDisplay(formataData(dados?.data_prazo_maximo), dados.diferenca_vencimento_prazo_maximo),

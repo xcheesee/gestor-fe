@@ -1,7 +1,7 @@
 import { Box, Fade, IconButton, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import SortArrow from "../SortArrow";
-import { getDateDiff, irParaTopo, mascaraContrato, mascaraProcessoSei } from "../../commom/utils/utils";
+import { irParaTopo, mascaraContrato, mascaraProcessoSei } from "../../commom/utils/utils";
 import ManageSearchIcon from '@mui/icons-material/ManageSearch';
 
 const ContratoTable = ({dados, url, ordena, carregandoSort, isLoading}) => {

@@ -13,6 +13,7 @@ import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 import NumberFormat from 'react-number-format';
 import PropTypes from 'prop-types';
 import CampoDataRange from '../CampoDataRange';
+import ReactInputMask from 'react-input-mask';
 
 const NumberFormatCustom = forwardRef(function NumberFormatCustom(props, ref) {
     const { onChange, ...other } = props;
@@ -52,10 +53,11 @@ const Filtros = (props) => {
     const [filtrosAtivos, setFiltrosAtivos] = useState(0);
 
     const handleChange = (e) => {
-        setFiltros({
-            ...filtros,
+        console.log(e)
+        setFiltros((prev) => ({
+            ...prev,
             [e.target.name]: e.target.value
-        })
+        }))
     }
 
     const handleCalendarioChange = (keyAntes, keyDepois, valArray) => {
@@ -89,7 +91,8 @@ const Filtros = (props) => {
 
         Object.entries(filtros).forEach((filtro, index) => {
             if (filtro[1] !== '') {
-                arrFiltros.push(`filter[${filtro[0]}]=${filtro[1]}`);
+                const normalized = filtro[1].replace(/[-\/.]/g, "")
+                arrFiltros.push(`filter[${filtro[0]}]=${normalized}`);
             }
         });
 
@@ -163,62 +166,65 @@ const Filtros = (props) => {
                         width: '80%'
                     }}
                 >
-                        <TextField
+                    <ReactInputMask
+                        mask="9999.9999/9999999-9"
+                        maskChar=""
+                        value={filtros.processo_sei}
+                        name="processo_sei"
+                        onChange={handleChange}
+                    >
+                    {() => (<TextField
                             variant="outlined"
                             label="Processo SEI"
-                            value={filtros.processo_sei}
-                            onChange={handleChange}
-                            sx={{ mb: '0' }}
-                            InputProps={{
-                                inputComponent: NumberFormatCustom
-                            }}
-                            helperText=" "
                             name="processo_sei"
-                            size="small"
-                        />
-
-                        <TextField 
-                            label="Empresa"
-                            value={filtros.nome_empresa}
-                            name="nome_empresa"
-                            onChange={handleChange}
-                            size="small"
+                            size='small'
                             fullWidth
-                        />
+                        />)
+                    }
+                    </ReactInputMask>
 
-                        <CampoDataRange
-                            label={'Inicio - faixa de pesquisa'}
-                            intervalo={{inicio: 'inicio_depois_de', fim: 'inicio_antes_de'}}
-                            filtro={filtros}
-                            onChange={handleCalendarioChange}
-                            placeholder={'dd/mm/aaaa - dd/mm/aaaa'}
-                            separador={' / '}
-                            size={'lg'}
-                        />
+                    <TextField 
+                        label="Empresa"
+                        value={filtros.nome_empresa}
+                        name="nome_empresa"
+                        onChange={handleChange}
+                        size="small"
+                        fullWidth
+                    />
 
-                        <CampoDataRange
-                            label={'Vencimento - faixa de pesquisa'}
-                            intervalo={{inicio: 'vencimento_depois_de', fim: 'vencimento_antes_de'}}
-                            filtro={filtros}
-                            onChange={handleCalendarioChange}
-                            placeholder={'dd/mm/aaaa - dd/mm/aaaa'}
-                            separador={' / '}
-                            size={'lg'}
-                        />
-                        
-                        <Box sx={{ gridColumnStart: 2, justifySelf: 'end' }}>
-                            <Button sx={{ textTransform: 'none', mr: '1rem' }} onClick={limpaFiltros}>
-                                Limpar
-                            </Button>
-                            <Button
-                                sx={{ color: (theme) => theme.palette.color.main, textTransform: 'none' }}
-                                variant="contained"
-                                onClick={salvaFiltros}
-                            >
-                                Salvar
-                            </Button>
-                        </Box>
+                    <CampoDataRange
+                        label={'Inicio - faixa de pesquisa'}
+                        intervalo={{inicio: 'inicio_depois_de', fim: 'inicio_antes_de'}}
+                        filtro={filtros}
+                        onChange={handleCalendarioChange}
+                        placeholder={'dd/mm/aaaa - dd/mm/aaaa'}
+                        separador={' / '}
+                        size={'lg'}
+                    />
+
+                    <CampoDataRange
+                        label={'Vencimento - faixa de pesquisa'}
+                        intervalo={{inicio: 'vencimento_depois_de', fim: 'vencimento_antes_de'}}
+                        filtro={filtros}
+                        onChange={handleCalendarioChange}
+                        placeholder={'dd/mm/aaaa - dd/mm/aaaa'}
+                        separador={' / '}
+                        size={'lg'}
+                    />
+                    
+                    <Box sx={{ gridColumnStart: 2, justifySelf: 'end' }}>
+                        <Button sx={{ textTransform: 'none', mr: '1rem' }} onClick={limpaFiltros}>
+                            Limpar
+                        </Button>
+                        <Button
+                            sx={{ color: (theme) => theme.palette.color.main, textTransform: 'none' }}
+                            variant="contained"
+                            onClick={salvaFiltros}
+                        >
+                            Salvar
+                        </Button>
                     </Box>
+                </Box>
             </Collapse>
         </>
 
