@@ -53,7 +53,6 @@ const Filtros = (props) => {
     const [filtrosAtivos, setFiltrosAtivos] = useState(0);
 
     const handleChange = (e) => {
-        console.log(e)
         setFiltros((prev) => ({
             ...prev,
             [e.target.name]: e.target.value
@@ -91,7 +90,7 @@ const Filtros = (props) => {
 
         Object.entries(filtros).forEach((filtro, index) => {
             if (filtro[1] !== '') {
-                const normalized = filtro[1].replace(/[-\/.]/g, "")
+                const normalized = filtro[0] === "processo_sei" ? filtro[1].replace(/[-\/.]/g, "") : filtro[1]
                 arrFiltros.push(`filter[${filtro[0]}]=${normalized}`);
             }
         });
