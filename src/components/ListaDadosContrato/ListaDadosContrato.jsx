@@ -6,7 +6,6 @@ import {
     Tabs,
     Tab,
     Fade,
-    Typography
 } from '@mui/material';
 import FormDadosContrato from './FormDadosContrato';
 import FormProcessoContratacao from './FormProcessoContratacao';
@@ -102,33 +101,40 @@ const ListaDadosContrato = (props) => {
     }
 
     const TabProcessoContratacao = (props) => {
-        function dateDisplay(date, diff) {
-            return `${date} ( +${diff} dia(s) )`
+        function DateDisplay(date, diff) {
+            return (
+                <>
+                <Box className='mb-2 inline-block font-bold' sx={{color: 'hsl(201, 0%, 20%)'}}>{date}</Box>
+                <Box className='ml-4'>
+                    <Box style={{color: 'hsl(201, 0%, 60%)'}}><span className='font-medium'></span> +{diff} dia(s) </Box>
+                </Box>
+            </>
+                // `${date} ( +${diff} dia(s) )`
+                )
         }
 
         function VencimentoEle () {
-            console.log(dados)
             return(
                 <>
-                    <Box className='mb-2 inline-block'>{formataData(dados?.data_vencimento)}</Box>
+                    <Box className='mb-2 inline-block font-bold' sx={{color: 'hsl(201, 0%, 20%)'}}>{formataData(dados?.data_vencimento)}</Box>
                     <Box className='ml-4'>
-                        <Box style={{color: 'rgba(0,0,0,0.4)'}}><span className='font-medium'>Envio material técnico</span>: ( +{dados.diferenca_envio_vencimento} dia(s) )</Box>
-                        <Box style={{color: 'rgba(0,0,0,0.4)'}}><span className='font-medium'>Homologacao</span>: ( +{dados.diferenca_homologacao_vencimento} dia(s) )</Box>
-                        <Box style={{color: 'rgba(0,0,0,0.4)'}}><span className='font-medium'>Vigencia</span>: ( +{dados.diferenca_vigencia_vencimento} dia(s) )</Box>
+                        <Box style={{color: 'hsl(201, 0%, 60%)'}}><span className='font-medium'>Envio material técnico</span>:  +{dados.diferenca_envio_vencimento} dia(s) </Box>
+                        <Box style={{color: 'hsl(201, 0%, 60%)'}}><span className='font-medium'>Homologacao</span>:  +{dados.diferenca_homologacao_vencimento} dia(s) </Box>
+                        <Box style={{color: 'hsl(201, 0%, 60%)'}}><span className='font-medium'>Vigencia</span>:  +{dados.diferenca_vigencia_vencimento} dia(s) </Box>
                     </Box>
                 </>
             )
         }
         const valores = {
             licitacao_modelo: props.licitacao_modelo,
-            data_assinatura: formataData(dados?.data_assinatura),
-            envio_material_tecnico: `${formataData(props.envio_material_tecnico)}`,
-            minuta_edital: dateDisplay(formataData(props.minuta_edital), dados.diferenca_envio_minuta),
-            abertura_certame: dateDisplay(formataData(props.abertura_certame), dados.diferenca_minuta_abertura),
-            homologacao: dateDisplay(formataData(props.homologacao), dados.diferenca_abertura_homologacao),
-            data_inicio_vigencia: dateDisplay(formataData(dados?.data_inicio_vigencia), dados.diferenca_homologacao_vigencia),
+            data_assinatura: <Box className='mb-2 inline-block font-bold' sx={{color: 'hsl(201, 0%, 20%)'}}>{formataData(dados?.data_assinatura)}</Box>,
+            envio_material_tecnico: <Box className='mb-2 inline-block font-bold' sx={{color: 'hsl(201, 0%, 20%)'}}>{formataData(props.envio_material_tecnico)}</Box>,
+            minuta_edital: DateDisplay(formataData(props.minuta_edital), dados.diferenca_envio_minuta),
+            abertura_certame: DateDisplay(formataData(props.abertura_certame), dados.diferenca_minuta_abertura),
+            homologacao: DateDisplay(formataData(props.homologacao), dados.diferenca_abertura_homologacao),
+            data_inicio_vigencia: DateDisplay(formataData(dados?.data_inicio_vigencia), dados.diferenca_homologacao_vigencia),
             data_vencimento: <VencimentoEle/>,
-            data_prazo_maximo: dateDisplay(formataData(dados?.data_prazo_maximo), dados.diferenca_vencimento_prazo_maximo),
+            data_prazo_maximo: DateDisplay(formataData(dados?.data_prazo_maximo), dados.diferenca_vencimento_prazo_maximo),
         };
 
         return <TabValues entry={valores} labels={contratoLabels} label="processo_contratacao" />;

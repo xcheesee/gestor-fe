@@ -1,7 +1,7 @@
 import { Box, Fade, IconButton, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import SortArrow from "../SortArrow";
-import { irParaTopo, mascaraContrato, mascaraProcessoSei } from "../../commom/utils/utils";
+import { formataData, irParaTopo, mascaraContrato, mascaraProcessoSei } from "../../commom/utils/utils";
 import ManageSearchIcon from '@mui/icons-material/ManageSearch';
 
 const ContratoTable = ({dados, url, ordena, carregandoSort, isLoading}) => {
@@ -118,10 +118,10 @@ const ContratoTable = ({dados, url, ordena, carregandoSort, isLoading}) => {
                                             <TableCell align="center" sx={background}>{row.credor || "- - -"}</TableCell>
                                             <TableCell align="center" sx={background}>{row.empresa || "- - -"}</TableCell>
                                             <TableCell align="center" sx={background}>{mascaraContrato(row.numero_contrato) || "- - -"}</TableCell>
-                                            <TableCell align="center" sx={background}>{row.data_inicio_vigencia || "- - -"}</TableCell>
+                                            <TableCell align="center" sx={background}>{formataData(row.data_inicio_vigencia) || "- - -"}</TableCell>
                                             <TableCell align="center" sx={background}>
                                                 <Box>
-                                                    {row.data_vencimento || "- - -"}
+                                                    {formataData(row.data_vencimento) || "- - -"}
                                                 </Box>
                                                 {row.diferenca_vigencia_vencimento !== null 
                                                     ? <Typography className='text-sm text-green-500'><b>Vigencia:</b>{row.diferenca_vigencia_vencimento} Dia(s)</Typography>
