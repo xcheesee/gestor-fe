@@ -102,7 +102,7 @@ export default function NovoContratoDialog({novoDialog, setNovoDialog, setSnackb
             
             <Dialog open={existeSEI}>
                 <DialogTitle>
-                    <Typography className="text-3xl text-center pb-4 font-light text-red-600">Atencao!</Typography>
+                    <Typography className="text-3xl text-center pb-4 font-light text-red-600">Atenção!</Typography>
                 </DialogTitle>
                 <DialogContent>
                     <Typography>Já existe um ou mais contratos com esse número de processo SEI.</Typography>

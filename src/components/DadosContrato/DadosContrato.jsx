@@ -61,7 +61,7 @@ const ListaTabs = [
     'Certidões',
     'Garantias',
     'Fiscalização',
-    'Locais de serviço',
+    'Regionalização',
     'Aditamentos de valor',
     'Aditamentos de prazo',
     'Notas de empenho',

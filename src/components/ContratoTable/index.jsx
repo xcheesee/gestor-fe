@@ -99,6 +99,14 @@ const ContratoTable = ({dados, url, ordena, carregandoSort, isLoading}) => {
                                         : ''
                                     }
                                 </StyledTableHeadCell>
+                                <StyledTableHeadCell onClick={() => ordena('dias_vigente')}>
+                                    Dias Vigente
+                                    {
+                                        url.sort === 'dias_vigente' || url.sort === '-dias_vigente'
+                                        ? <SortArrow url={url} loading={carregandoSort} />
+                                        : ''
+                                    }
+                                </StyledTableHeadCell>
                                 <StyledTableHeadCell onClick={() => {}}>
                                     Visualizar
                                 </StyledTableHeadCell>
@@ -123,11 +131,12 @@ const ContratoTable = ({dados, url, ordena, carregandoSort, isLoading}) => {
                                                 <Box>
                                                     {formataData(row.data_vencimento) || "- - -"}
                                                 </Box>
-                                                {row.diferenca_vigencia_vencimento !== null 
-                                                    ? <Typography className='text-sm text-green-500'><b>Vigencia:</b>{row.diferenca_vigencia_vencimento} Dia(s)</Typography>
+                                            </TableCell>
+                                            <TableCell align="center" sx={background}>
+                                                {row.dias_vigente !== null 
+                                                    ? <Typography className='text-sm text-green-500'>{row.dias_vigente} Dia(s)</Typography>
                                                     : ""
                                                 }
-                                                
                                             </TableCell>
                                             <TableCell align="center" sx={background}>
                                                 <IconButton onClick={() => {

@@ -16,6 +16,7 @@ export const contratoLabels = {
     valor_reserva: "Valor reserva",
     // licitacao_modelo_id: "",
     licitacao_modelo: "Modalidade de licitação",
+    estado: "Status do Contrato",
     envio_material_tecnico: "Envio material técnico",
     minuta_edital: "Minuta edital",
     abertura_certame: "Abertura certame",

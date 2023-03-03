@@ -193,7 +193,7 @@ const FormGestaoFiscalizacao = (props) => {
             </Box>
             <Dialog open={mesmoCargoDialog}>
                 <DialogTitle>
-                    <Typography className='text-3xl font-light text-center'>Atencao!</Typography>
+                    <Typography className='text-3xl font-light text-center'>Atenção!</Typography>
                 </DialogTitle>
                 <DialogContent>
                     <Typography>

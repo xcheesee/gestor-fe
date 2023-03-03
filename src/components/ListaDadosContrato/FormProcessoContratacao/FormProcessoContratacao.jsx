@@ -17,6 +17,7 @@ const FormProcessoContratacao = (props) => {
     const {
         dados,
         modelosLicitacao,
+        estados,
         openProcCon,
         setOpenProcCon,
         numContrato,
@@ -30,6 +31,8 @@ const FormProcessoContratacao = (props) => {
     const [processoContratacao, setProcessoContratacao] = useState({
         licitacao_modelo_id: dados?.licitacao_modelo_id,
         licitacao_modelo: dados?.licitacao_modelo,
+        estado_id: dados?.estado_id,
+        estado: dados?.estado,
         envio_material_tecnico: dados?.envio_material_tecnico,
         minuta_edital: dados?.minuta_edital,
         abertura_certame: dados?.abertura_certame,
@@ -61,6 +64,25 @@ const FormProcessoContratacao = (props) => {
                     ...form,
                     licitacao_modelo_id: "",
                     licitacao_modelo: ""
+                })
+            }
+        });
+    }
+
+    const handleChangeEstado = (event, form, setForm) => {
+        estados.forEach((status, index) => {
+            if (status.id === event.target.value) {
+                console.log(estados[index].valor);
+                setForm({
+                    ...form,
+                    estado_id: event.target.value,
+                    estado: estados[index].valor
+                });
+            } else if (event.target.value === "") {
+                setForm({
+                    ...form,
+                    estado_id: "",
+                    estado: ""
                 })
             }
         });
@@ -108,6 +130,8 @@ const FormProcessoContratacao = (props) => {
                     setProcessoContratacao={setProcessoContratacao}
                     handleChangeModeloLicitacao={handleChangeModeloLicitacao}
                     modelosLicitacao={modelosLicitacao}
+                    handleChangeEstado={handleChangeEstado}
+                    estados={estados}
                     carregando={carregando}
                     handleChange={handleChange}
                     acao="editar"

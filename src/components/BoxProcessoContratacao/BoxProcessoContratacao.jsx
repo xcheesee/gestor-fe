@@ -21,9 +21,11 @@ const BoxProcessoContratacao = (props) => {
         processoContratacao,
         setProcessoContratacao,
         handleChangeModeloLicitacao,
+        handleChangeEstado,
         numContrato,
         enviaDadosProcesso,
         modelosLicitacao,
+        estados,
         carregando,
         handleChange,
         acao,
@@ -78,6 +80,48 @@ const BoxProcessoContratacao = (props) => {
                 </Select>
                 <FormHelperText>
                     {errors.hasOwnProperty('licitacao_modelo_id') ? errors.licitacao_modelo_id : " "}
+                </FormHelperText>
+
+                {carregando === true
+                    ? 
+                    <CircularProgress 
+                        size={20} 
+                        sx={{ 
+                            margin: '1rem auto',
+                            position: 'absolute',
+                            left: '50%',
+                            top: '3%'
+                        }} 
+                    />
+                    : ""
+                }
+            </FormControl>
+
+            <FormControl 
+                sx={{ margin: '1rem 0' }}
+                error={errors.hasOwnProperty('estado_id')}    
+                fullWidth 
+            >
+                <InputLabel id="estado-label">Status do Contrato</InputLabel>
+                <Select
+                    labelId="estado-label"
+                    id="Status"
+                    label={contratoLabels.estado}
+                    value={processoContratacao.estado_id === undefined ? "" : processoContratacao.estado_id}
+                    name="estado_id"
+                    onChange={(e) => { handleChangeEstado(e, processoContratacao, setProcessoContratacao) }}
+                    disabled={estados?.length === 0}
+                    fullWidth
+                >
+                    <MenuItem value={""}>---</MenuItem>
+                    {estados?.map((estado, index) => {
+                        return (
+                            <MenuItem key={index} value={estado.id}>{estado.valor}</MenuItem>
+                        );
+                    })}
+                </Select>
+                <FormHelperText>
+                    {errors.hasOwnProperty('estado_id') ? errors.estado_id : " "}
                 </FormHelperText>
 
                 {carregando === true

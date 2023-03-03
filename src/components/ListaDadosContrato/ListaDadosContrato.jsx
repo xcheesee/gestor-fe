@@ -51,6 +51,7 @@ const ListaDadosContrato = (props) => {
 
     const [value, setValue] = useState(0);
     const [modelosLicitacao, setModelosLicitacao] = useState([]);
+    const [estados, setEstados] = useState([]);
     const [openProcCon, setOpenProcCon] = useState(false);
     const [openDadosCon, setOpenDadosCon] = useState(false);
     const [carregando, setCarregando] = useState(false);
@@ -73,6 +74,28 @@ const ListaDadosContrato = (props) => {
             .then(res => res.json())
             .then(data => { 
                 setModelosLicitacao(data.data);
+                setCarregando(false);
+            });
+    }, [])
+
+    useEffect(() => {
+        const url = `${process.env.REACT_APP_API_URL}/estados`;
+        const token = localStorage.getItem('access_token');
+        const options = {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+                'Authorization': `Bearer ${token}`
+            }
+        };
+
+        setCarregando(true);
+
+        fetch(url, options)
+            .then(res => res.json())
+            .then(data => { 
+                setEstados(data.data);
                 setCarregando(false);
             });
     }, [])
@@ -127,6 +150,7 @@ const ListaDadosContrato = (props) => {
         }
         const valores = {
             licitacao_modelo: props.licitacao_modelo,
+            estado: props.estado,
             data_assinatura: <Box className='mb-2 inline-block font-bold' sx={{color: 'hsl(201, 0%, 20%)'}}>{formataData(dados?.data_assinatura)}</Box>,
             envio_material_tecnico: <Box className='mb-2 inline-block font-bold' sx={{color: 'hsl(201, 0%, 20%)'}}>{formataData(props.envio_material_tecnico)}</Box>,
             minuta_edital: DateDisplay(formataData(props.minuta_edital), dados.diferenca_envio_minuta),
@@ -186,6 +210,7 @@ const ListaDadosContrato = (props) => {
                 <TabPanel value={value} index={1}>
                     <TabProcessoContratacao 
                         licitacao_modelo={dados?.licitacao_modelo}
+                        estado={dados?.estado}
                         envio_material_tecnico={dados?.envio_material_tecnico}
                         minuta_edital={dados?.minuta_edital}
                         abertura_certame={dados?.abertura_certame}
@@ -211,6 +236,7 @@ const ListaDadosContrato = (props) => {
                     <FormProcessoContratacao 
                         dados={dados}
                         modelosLicitacao={modelosLicitacao}
+                        estados={estados}
                         openProcCon={openProcCon}
                         setOpenProcCon={setOpenProcCon}
                         numContrato={numContrato}

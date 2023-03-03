@@ -119,7 +119,7 @@ const ListaLocais = (props) => {
                     setSnackbar({
                         open: true,
                         severity: 'success',
-                        text: 'Local de serviço excluído com sucesso!',
+                        text: 'Regionalização excluída com sucesso!',
                         color: 'success'
                     });
                     return res.json();
@@ -159,7 +159,7 @@ const ListaLocais = (props) => {
             setSnackbar({
                 open: true,
                 severity: 'success',
-                text: 'Local de serviço editado com sucesso!',
+                text: 'Regionalização editado com sucesso!',
                 color: 'success'
             });
             setOpenFormLocal({
@@ -200,7 +200,7 @@ const ListaLocais = (props) => {
             setSnackbar({
                 open: true,
                 severity: 'success',
-                text: 'Local de serviço enviado com sucesso!',
+                text: 'Regionalização enviado com sucesso!',
                 color: 'success'
             });
             setOpenFormLocal({
@@ -252,7 +252,7 @@ const ListaLocais = (props) => {
                                     fontSize: '1.25rem'
                                 }}
                             >
-                                Local de serviço # {local.id}
+                                Regionalização # {local.id}
                             </Divider>
 
                             <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
@@ -311,7 +311,7 @@ const ListaLocais = (props) => {
                 fnEditar={editaLocal}
                 formInterno={formLocal}
                 carregando={carregando}
-                texto="local de serviço"
+                texto="regionalização"
             />
         </Box>
     );

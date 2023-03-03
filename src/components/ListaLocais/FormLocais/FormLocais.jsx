@@ -225,8 +225,8 @@ const FormLocais = (props) => {
         <Dialog open={openFormLocal.open} fullWidth>
             <DialogTitle>
                 {openFormLocal.acao === 'adicionar'
-                    ? "Novo local de serviço"
-                    : "Editar local de serviço"
+                    ? "Nova regionalização"
+                    : "Editar regionalização"
                 }
             </DialogTitle>
 
