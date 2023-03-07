@@ -113,7 +113,7 @@ const ContratoTable = ({dados, url, ordena, carregandoSort, isLoading}) => {
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            { dados.length !== 0 
+                            { dados?.length !== 0 
                                 ?dados?.map((row, index) => {
                                     const background = { background: index % 2 === 0 ? '#FFFFFF' : '#f3f6f3', borderBottom: 0 };
                                     return (

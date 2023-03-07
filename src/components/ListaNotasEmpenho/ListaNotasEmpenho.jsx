@@ -10,7 +10,7 @@ import FormNotaEmpenho from './FormNotaEmpenho';
 import DialogConfirmacao from '../DialogConfirmacao';
 import BotoesTab from '../BotoesTab';
 import BotaoAdicionar from '../BotaoAdicionar';
-import { formataData, formataValores, TabValues } from '../../commom/utils/utils';
+import { formataData, formataValores, TabValues, primeiraLetraMaiuscula } from '../../commom/utils/utils';
 import { postFormData, putFormData } from '../../commom/utils/api';
 import { emprenhoLabels } from '../../commom/utils/constants';
 
@@ -242,7 +242,7 @@ const ListaNotasEmpenho = (props) => {
                             
                             <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
                                 <TabNotasEmpenho 
-                                    tipo_empenho={notaempenho.tipo_empenho}
+                                    tipo_empenho={(notaempenho?.tipo_empenho?.split("_"))?.reduce((acc, val) => acc + ` ${primeiraLetraMaiuscula(val)}`, "") }
                                     data_emissao={notaempenho.data_emissao}
                                     numero_nota={notaempenho.numero_nota}
                                     valor_empenho={notaempenho.valor_empenho}
