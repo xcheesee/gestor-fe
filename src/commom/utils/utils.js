@@ -54,7 +54,7 @@ export const formataData = (data) => {
           return `${dia}/${mes}/${ano}`;
       };
   } else {
-      return "---"
+      return "- - -"
   }
 }
 

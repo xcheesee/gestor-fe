@@ -125,29 +125,35 @@ const ListaDadosContrato = (props) => {
 
     const TabProcessoContratacao = (props) => {
         function DateDisplay(date, diff) {
+            const formattedDate = formataData(date)
             return (
                 <>
-                <Box className='mb-2 inline-block font-bold' sx={{color: 'hsl(201, 0%, 20%)'}}>{date}</Box>
-                {
-                    diff
-                        ?<Box className='ml-4'>
-                            <Box style={{color: 'hsl(201, 0%, 60%)'}}><span className='font-medium'></span> +{diff} dia(s) </Box>
-                        </Box>
-                        : <></>    
-                }
-            </>
+                    <Box className='mb-2 inline-block' sx={{color: 'hsl(201, 0%, 20%)'}}>{formattedDate}</Box>
+                    {
+                        diff
+                            ?<Box className='ml-4'>
+                                <Box style={{color: 'hsl(201, 0%, 60%)'}}><span className='font-medium'></span> +{diff} dia(s) </Box>
+                            </Box>
+                            : <></>    
+                    }
+                </>
                 // `${date} ( +${diff} dia(s) )`0
-                )
+            )
         }
 
-        function VencimentoEle () {
+        function VencimentoEle ({ dados }) {
+            const { 
+                diferenca_envio_vencimento,
+                diferenca_homologacao_vencimento,
+                diferenca_vigencia_vencimento,
+            } = dados
             return(
                 <>
-                    <Box className='mb-2 inline-block font-bold' sx={{color: 'hsl(201, 0%, 20%)'}}>{formataData(dados?.data_vencimento)}</Box>
+                    <Box className='mb-2 inline-block' sx={{color: 'hsl(201, 0%, 20%)'}}>{formataData(dados?.data_vencimento)}</Box>
                     <Box className='ml-4'>
-                        {dados.diferenca_envio_vencimento ? <Box style={{color: 'hsl(201, 0%, 60%)'}}><span className='font-medium'>Envio material técnico</span>:  +{dados.diferenca_envio_vencimento} dia(s) </Box> : <></>}
-                        {dados.diferenca_homologacao_vencimento ?<Box style={{color: 'hsl(201, 0%, 60%)'}}><span className='font-medium'>Homologacao</span>:  +{dados.diferenca_homologacao_vencimento} dia(s) </Box> : <></>}
-                        {dados.diferenca_vigencia_vencimento ? <Box style={{color: 'hsl(201, 0%, 60%)'}}><span className='font-medium'>Vigencia</span>:  +{dados.diferenca_vigencia_vencimento} dia(s) </Box> : <></>}
+                        {diferenca_envio_vencimento ? <Box style={{color: 'hsl(201, 0%, 60%)'}}><span className='font-medium'>Envio material técnico</span>:  +{diferenca_envio_vencimento} dia(s) </Box> : <></>}
+                        {diferenca_homologacao_vencimento ?<Box style={{color: 'hsl(201, 0%, 60%)'}}><span className='font-medium'>Homologacao</span>:  +{diferenca_homologacao_vencimento} dia(s) </Box> : <></>}
+                        {diferenca_vigencia_vencimento ? <Box style={{color: 'hsl(201, 0%, 60%)'}}><span className='font-medium'>Vigencia</span>:  +{diferenca_vigencia_vencimento} dia(s) </Box> : <></>}
                     </Box>
                 </>
             )
@@ -155,14 +161,14 @@ const ListaDadosContrato = (props) => {
         const valores = {
             licitacao_modelo: props.licitacao_modelo,
             estado: props.estado,
-            data_assinatura: <Box className='mb-2 inline-block font-bold' sx={{color: 'hsl(201, 0%, 20%)'}}>{formataData(dados?.data_assinatura)}</Box>,
-            envio_material_tecnico: <Box className='mb-2 inline-block font-bold' sx={{color: 'hsl(201, 0%, 20%)'}}>{formataData(props.envio_material_tecnico)}</Box>,
-            minuta_edital: DateDisplay(formataData(props.minuta_edital), dados.diferenca_envio_minuta),
-            abertura_certame: DateDisplay(formataData(props.abertura_certame), dados.diferenca_minuta_abertura),
-            homologacao: DateDisplay(formataData(props.homologacao), dados.diferenca_abertura_homologacao),
-            data_inicio_vigencia: DateDisplay(formataData(dados?.data_inicio_vigencia), dados.diferenca_homologacao_vigencia),
-            data_vencimento: <VencimentoEle/>,
-            data_prazo_maximo: DateDisplay(formataData(dados?.data_prazo_maximo), dados.diferenca_vencimento_prazo_maximo),
+            data_assinatura: <Box className='mb-2 inline-block' sx={{color: 'hsl(201, 0%, 20%)'}}>{formataData(dados?.data_assinatura)}</Box>,
+            envio_material_tecnico: <Box className='mb-2 inline-block' sx={{color: 'hsl(201, 0%, 20%)'}}>{formataData(props.envio_material_tecnico)}</Box>,
+            minuta_edital: DateDisplay(props.minuta_edital, dados.diferenca_envio_minuta),
+            abertura_certame: DateDisplay(props.abertura_certame, dados.diferenca_minuta_abertura),
+            homologacao: DateDisplay(props.homologacao, dados.diferenca_abertura_homologacao),
+            data_inicio_vigencia: DateDisplay(dados?.data_inicio_vigencia, dados.diferenca_homologacao_vigencia),
+            data_vencimento: <VencimentoEle dados={dados} />,
+            data_prazo_maximo: DateDisplay(dados?.data_prazo_maximo, dados.diferenca_vencimento_prazo_maximo),
         };
 
         return <TabValues entry={valores} labels={contratoLabels} label="processo_contratacao" />;
