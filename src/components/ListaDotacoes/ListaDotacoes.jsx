@@ -28,7 +28,7 @@ import { dotacoesLabels } from '../../commom/utils/constants';
 const retornaNumDotacao = (numero_dotacao, descricao) => {
     return (
         <>
-            {numero_dotacao || <p className='text-red-600 font-bold'>Não se Aplica</p>}
+            {numero_dotacao || <p className='text-neutral-500'>Não se Aplica</p>}
             <br/>
             {descricao || ""}
         </>
