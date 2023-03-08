@@ -15,6 +15,7 @@ const FormDotacoes = (props) => {
     const {
         openFormDotacao,
         errors,
+        setErrors,
         formDotacao,
         setFormDotacao,
         numContrato,
@@ -61,7 +62,7 @@ const FormDotacoes = (props) => {
                                 );
                             })}
                         </Select>
-                        <FormHelperText> </FormHelperText>
+                        <FormHelperText className='text-red-600'>{errors?.dotacao_recurso?.message} </FormHelperText>
                     </FormControl>
                     
                     {
@@ -97,6 +98,14 @@ const FormDotacoes = (props) => {
                 const formData = new FormData(e.target)
                 formData.append("contrato_id", numContrato)
                 formData.append("dotacao_tipo_id", formDotacao.dotacao_tipo_id)
+                console.log(formData)
+                if(formData.get("origem_recurso_id") === "" && formData.get("dotacao_tipo_id") === "") {
+                    return setErrors({
+                        dotacao_recurso: {
+                            message: "Defina ao menos um tipo de dotação ou uma fonte de recurso"
+                    }})
+                }
+                setErrors({})
                 openFormDotacao.acao === 'adicionar' ?  enviaDotacao(formData) : editaDotacao(formDotacao.id, formData)
                 
             }}>

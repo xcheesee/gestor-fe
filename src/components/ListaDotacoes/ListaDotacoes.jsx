@@ -28,9 +28,9 @@ import { dotacoesLabels } from '../../commom/utils/constants';
 const retornaNumDotacao = (numero_dotacao, descricao) => {
     return (
         <>
-            {numero_dotacao}
+            {numero_dotacao || <p className='text-red-600 font-bold'>Não se Aplica</p>}
             <br/>
-            {descricao}
+            {descricao || ""}
         </>
     )
 }
@@ -510,6 +510,7 @@ const ListaDotacoes = (props) => {
                     <FormDotacoes 
                         openFormDotacao={openFormDotacao}
                         errors={errors}
+                        setErrors={setErrors}
                         formDotacao={formDotacao}
                         setFormDotacao={setFormDotacao}
                         numContrato={numContrato}
