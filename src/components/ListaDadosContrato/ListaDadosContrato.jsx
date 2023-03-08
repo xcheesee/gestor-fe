@@ -128,11 +128,15 @@ const ListaDadosContrato = (props) => {
             return (
                 <>
                 <Box className='mb-2 inline-block font-bold' sx={{color: 'hsl(201, 0%, 20%)'}}>{date}</Box>
-                <Box className='ml-4'>
-                    <Box style={{color: 'hsl(201, 0%, 60%)'}}><span className='font-medium'></span> +{diff} dia(s) </Box>
-                </Box>
+                {
+                    diff
+                        ?<Box className='ml-4'>
+                            <Box style={{color: 'hsl(201, 0%, 60%)'}}><span className='font-medium'></span> +{diff} dia(s) </Box>
+                        </Box>
+                        : <></>    
+                }
             </>
-                // `${date} ( +${diff} dia(s) )`
+                // `${date} ( +${diff} dia(s) )`0
                 )
         }
 
@@ -141,9 +145,9 @@ const ListaDadosContrato = (props) => {
                 <>
                     <Box className='mb-2 inline-block font-bold' sx={{color: 'hsl(201, 0%, 20%)'}}>{formataData(dados?.data_vencimento)}</Box>
                     <Box className='ml-4'>
-                        <Box style={{color: 'hsl(201, 0%, 60%)'}}><span className='font-medium'>Envio material técnico</span>:  +{dados.diferenca_envio_vencimento} dia(s) </Box>
-                        <Box style={{color: 'hsl(201, 0%, 60%)'}}><span className='font-medium'>Homologacao</span>:  +{dados.diferenca_homologacao_vencimento} dia(s) </Box>
-                        <Box style={{color: 'hsl(201, 0%, 60%)'}}><span className='font-medium'>Vigencia</span>:  +{dados.diferenca_vigencia_vencimento} dia(s) </Box>
+                        {dados.diferenca_envio_vencimento ? <Box style={{color: 'hsl(201, 0%, 60%)'}}><span className='font-medium'>Envio material técnico</span>:  +{dados.diferenca_envio_vencimento} dia(s) </Box> : <></>}
+                        {dados.diferenca_homologacao_vencimento ?<Box style={{color: 'hsl(201, 0%, 60%)'}}><span className='font-medium'>Homologacao</span>:  +{dados.diferenca_homologacao_vencimento} dia(s) </Box> : <></>}
+                        {dados.diferenca_vigencia_vencimento ? <Box style={{color: 'hsl(201, 0%, 60%)'}}><span className='font-medium'>Vigencia</span>:  +{dados.diferenca_vigencia_vencimento} dia(s) </Box> : <></>}
                     </Box>
                 </>
             )
