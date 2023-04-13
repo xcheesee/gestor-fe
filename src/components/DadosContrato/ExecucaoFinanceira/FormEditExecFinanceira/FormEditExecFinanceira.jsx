@@ -98,6 +98,15 @@ const FormEditExecFinanceira = (props) => {
             })
     }, [execucaoEditado.contrato_id, execucaoEditado.id, openEditExecFinanceira])
 
+    const handleChange = (e) => {
+        console.log(e.target.name)
+        console.log(e.target.value)
+        setExecucaoEditado({
+            ...execucaoEditado,
+            [e.target.name]: e.target.value
+        });
+    }
+
     const cancelar = () => {
         setOpenEditExecFinanceira(false);
         setErrors({});
@@ -390,7 +399,7 @@ const FormEditExecFinanceira = (props) => {
                 <Box sx={{ display: 'flex', justifyContent: 'space-between', gap: '1rem', margin: '1rem 0', mb: 0 }}>
                     <CampoValores 
                         label="Valor reajuste" 
-                        value={execucaoEditado.valor_reajuste ? execucaoEditado.valor_reajuste : 0}
+                        defaultValue={execucaoEditado.valor_reajuste ? execucaoEditado.valor_reajuste : 0}
                         name="valor_reajuste"
                         state={execucaoEditado}
                         setState={setExecucaoEditado}
@@ -398,11 +407,12 @@ const FormEditExecFinanceira = (props) => {
                         helperText={errors.hasOwnProperty('valor_reajuste') ? errors.valor_reajuste : " "}
                         error={errors.hasOwnProperty('valor_reajuste')}
                         fullWidth
+                        onBlur={handleChange}
                     />
 
                     <CampoValores 
                         label="Valor aditivo" 
-                        value={execucaoEditado.valor_aditivo ? execucaoEditado.valor_aditivo : 0}
+                        defaultValue={execucaoEditado.valor_aditivo ? execucaoEditado.valor_aditivo : 0}
                         name="valor_aditivo"
                         state={execucaoEditado}
                         setState={setExecucaoEditado}
@@ -410,6 +420,7 @@ const FormEditExecFinanceira = (props) => {
                         helperText={errors.hasOwnProperty('valor_aditivo') ? errors.valor_aditivo : " "}
                         error={errors.hasOwnProperty('valor_aditivo')}
                         fullWidth
+                        onBlur={handleChange}
                     />
 
                     <TextField 
@@ -417,7 +428,7 @@ const FormEditExecFinanceira = (props) => {
                         value={
                             parseFloat(execucaoEditado.empenhado) - parseFloat(execucaoEditado.executado) > 0
                             ? (parseFloat(execucaoEditado.empenhado) - parseFloat(execucaoEditado.executado))
-                            : 0
+                            : execucaoEditado.empenhado
                         }
                         helperText={
                             errors.hasOwnProperty('valor_cancelamento') 
@@ -438,7 +449,7 @@ const FormEditExecFinanceira = (props) => {
                 <Box sx={{ display: 'flex', justifyContent: 'space-between', gap: '1rem', margin: '1rem 0', mt: 0 }}>
                     <CampoValores 
                         label="Empenhado" 
-                        value={execucaoEditado.empenhado ? execucaoEditado.empenhado : 0}
+                        defaultValue={execucaoEditado.empenhado ? execucaoEditado.empenhado : 0}
                         name="empenhado"
                         state={execucaoEditado}
                         setState={setExecucaoEditado}
@@ -446,11 +457,12 @@ const FormEditExecFinanceira = (props) => {
                         helperText={errors.hasOwnProperty('empenhado') ? errors.empenhado : " "}
                         error={errors.hasOwnProperty('empenhado')}
                         fullWidth
+                        onBlur={handleChange}
                     />
 
                     <CampoValores 
                         label="Executado" 
-                        value={execucaoEditado.executado ? execucaoEditado.executado : '0'}
+                        defaultValue={execucaoEditado.executado ? execucaoEditado.executado : '0'}
                         name="executado"
                         state={execucaoEditado}
                         setState={setExecucaoEditado}
@@ -458,6 +470,7 @@ const FormEditExecFinanceira = (props) => {
                         helperText={errors.hasOwnProperty('executado') ? errors.executado : " "}
                         error={errors.hasOwnProperty('executado')}
                         fullWidth
+                        onBlur={handleChange}
                     />
                 </Box>
 

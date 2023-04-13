@@ -18,6 +18,7 @@ import CheckIcon from '@mui/icons-material/Check';
 import CampoAno from '../../../CampoAno';
 import CampoValores from '../../../CampoValores';
 import RefExecucaoFinanceira from '../RefExecucaoFinanceira';
+import { TextField, InputAdornment } from '@mui/material';
 
 const FormExecFinanceira = (props) => {
     const {
@@ -38,6 +39,8 @@ const FormExecFinanceira = (props) => {
     }, [openFormExecFinanceira.open, setErrors]);
 
     const handleChange = (e) => {
+        console.log(e.target.name)
+        console.log(e.target.value)
         setFormExecFinanceira({
             ...formExecFinanceira,
             [e.target.name]: e.target.value
@@ -117,7 +120,7 @@ const FormExecFinanceira = (props) => {
 
                 <CampoValores 
                     label="Planejado inicial" 
-                    value={formExecFinanceira.planejado_inicial}
+                    //value={formExecFinanceira.planejado_inicial}
                     name="planejado_inicial"
                     required
                     state={formExecFinanceira}
@@ -126,11 +129,12 @@ const FormExecFinanceira = (props) => {
                     helperText={errors.hasOwnProperty('planejado_inicial') ? errors.planejado_inicial : " "}
                     error={errors.hasOwnProperty('planejado_inicial')}
                     fullWidth 
+                    onBlur={handleChange}
                 />
 
                 <CampoValores 
                     label="Contratado inicial" 
-                    value={formExecFinanceira.contratado_inicial}
+                    //value={formExecFinanceira.contratado_inicial}
                     name="contratado_inicial"
                     required
                     state={formExecFinanceira}
@@ -139,6 +143,7 @@ const FormExecFinanceira = (props) => {
                     helperText={errors.hasOwnProperty('contratado_inicial' ? errors.contratado_inicial : " ")}
                     error={errors.hasOwnProperty('contratado_inicial')}
                     fullWidth 
+                    onBlur={handleChange}
                 />
             </DialogContent>
 

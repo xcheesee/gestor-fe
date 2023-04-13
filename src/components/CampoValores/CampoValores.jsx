@@ -14,6 +14,7 @@ const NumberFormatCustom = forwardRef(function NumberFormatCustom(props, ref) {
           onChange({
             target: {
               value: values.value,
+              name: values.name
             },
           });
         }}
