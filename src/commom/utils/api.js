@@ -6,6 +6,111 @@ export function getFormattedFormData(form, initialValue={}) {
     return data
 } 
 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///                                                                                                                                 // 
+///                                               CREATE                                                                            //                                            
+///                                                                                                                                 //
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+export async function sendPWData(formSubmit) {
+    const formData = new FormData(formSubmit.target);
+    const inputObject = Object.fromEntries(formData);
+    const url = `${process.env.REACT_APP_API_URL}/login`;
+    const options = {
+        method: 'POST',
+        headers: {
+            "Content-Type": "application/json",
+            "Accept": "application/json"
+        },
+        body: JSON.stringify({
+            "email": inputObject.email,
+            "password": inputObject.password
+        }),
+    };
+    
+    const data = await (await fetch(url, options)).json()
+    return {...data, userMail: inputObject.email}
+}
+
+export async function sendNovoFormData (form) {
+    const token = localStorage.getItem('access_token');
+    const url = new URL(
+        `${process.env.REACT_APP_API_URL}/contrato`
+    );
+    
+    const headers = {
+        "Content-Type": "application/json",
+        "Accept": "application/json",
+        "Authorization": `Bearer ${token}`,
+    };
+    const res = await fetch(url, {
+        method: "POST",
+        headers: headers,
+        body: JSON.stringify(form),
+    })
+    const json = await res.json()
+    return {status: res.status, ...json}
+}
+
+export async function postFormData (form, path) {
+    const token = localStorage.getItem('access_token');
+    let data = getFormattedFormData(form)
+    const url = `${process.env.REACT_APP_API_URL}/${path}`;
+    const options = {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+            'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify(data)
+    };
+
+    const res = await fetch(url, options)
+    const json = await res.json()
+    return {status: res.status, ...json}
+}
+
+export async function postAnoExecFin(formData) {
+    const url = `${process.env.REACT_APP_API_URL}/execucao_financeira`;
+    const token = sessionStorage.getItem('access_token');
+    const options = {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+            'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify(formData)
+    }
+
+    const res = await fetch(url, options)
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///                                                                                                                                 // 
+///                                               READ                                                                              //                                             
+///                                                                                                                                 //
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+export async function checkSeiStatus (processo_sei) {
+    const token = localStorage.getItem('access_token');
+    const url = `${process.env.REACT_APP_API_URL}/contratos_sei?processo_sei=${processo_sei}`;
+    const options = {
+        method: 'GET',
+        mode: 'cors',
+        headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+            'Authorization': `Bearer ${token}`
+        },
+    };
+    const res = await fetch(url, options)
+    const json = await res.json()
+
+    return {status: res.status, ...json}
+}
+
 export async function getContratos (url) {
     const token = localStorage.getItem('access_token');
     const options = {
@@ -89,25 +194,46 @@ export async function getContrTot (numContrato) {
     return fetch(`${url}/contrato_totais/${numContrato}`, options)
 }
 
-export async function sendPWData(formSubmit) {
-    const formData = new FormData(formSubmit.target);
-    const inputObject = Object.fromEntries(formData);
-    const url = `${process.env.REACT_APP_API_URL}/login`;
+export async function getFormData (path) {
+    const token = localStorage.getItem('access_token');
+    const url = `${process.env.REACT_APP_API_URL}`
     const options = {
-        method: 'POST',
         headers: {
-            "Content-Type": "application/json",
-            "Accept": "application/json"
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+            'Authorization': `Bearer ${token}`
         },
-        body: JSON.stringify({
-            "email": inputObject.email,
-            "password": inputObject.password
-        }),
+        method: 'GET'
+    }
+    return await (await fetch(`${url}/${path}`, options)).json()
+} 
+
+export async function getExecucaoFinanceira(id) {
+
+    const url = `${process.env.REACT_APP_API_URL}/execucao_financeira/${id}`;
+    const token = localStorage.getItem('access_token');
+    const options = {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+            'Authorization': `Bearer ${token}`
+        }
     };
-    
-    const data = await (await fetch(url, options)).json()
-    return {...data, userMail: inputObject.email}
+
+    const res = await fetch(url, options)
+    const json = await res.json()
+    if(!res.ok) {
+        throw Error("bruh")
+    }
+    return json.data
 }
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///                                                                                                                                 // 
+///                                               UPDATE                                                                            //                                             
+///                                                                                                                                 //
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 export const newPwRequest = async (formData) => {
     const token = localStorage.getItem('access_token');
@@ -130,26 +256,6 @@ export const newPwRequest = async (formData) => {
     })
 
     return await res.json()
-}
-
-export async function sendNovoFormData (form) {
-    const token = localStorage.getItem('access_token');
-    const url = new URL(
-        `${process.env.REACT_APP_API_URL}/contrato`
-    );
-    
-    const headers = {
-        "Content-Type": "application/json",
-        "Accept": "application/json",
-        "Authorization": `Bearer ${token}`,
-    };
-    const res = await fetch(url, {
-        method: "POST",
-        headers: headers,
-        body: JSON.stringify(form),
-    })
-    const json = await res.json()
-    return {status: res.status, ...json}
 }
 
 export const editaDadosContrato = async (e, dados, formInterno, id) => {
@@ -175,39 +281,6 @@ export const editaDadosContrato = async (e, dados, formInterno, id) => {
     return {status: res.status, ...json}
 }
 
-export async function getFormData (path) {{
-    const token = localStorage.getItem('access_token');
-    const url = `${process.env.REACT_APP_API_URL}`
-    const options = {
-        headers: {
-            'Content-Type': 'application/json',
-            'Accept': 'application/json',
-            'Authorization': `Bearer ${token}`
-        },
-        method: 'GET'
-    }
-    return await (await fetch(`${url}/${path}`, options)).json()
-}} 
-
-export async function postFormData (form, path) {
-    const token = localStorage.getItem('access_token');
-    let data = getFormattedFormData(form)
-    const url = `${process.env.REACT_APP_API_URL}/${path}`;
-    const options = {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'Accept': 'application/json',
-            'Authorization': `Bearer ${token}`
-        },
-        body: JSON.stringify(data)
-    };
-
-    const res = await fetch(url, options)
-    const json = await res.json()
-    return {status: res.status, ...json}
-}
-
 export async function putFormData (id, form, path) {
     const token = localStorage.getItem('access_token');
     let data = getFormattedFormData(form)
@@ -225,6 +298,12 @@ export async function putFormData (id, form, path) {
     const json = await res.json()
     return {status: res.status, ...json}
 }
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///                                                                                                                                 // 
+///                                               DELETE                                                                            //                                             
+///                                                                                                                                 //
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 export async function deleteReajuste(id) {
     const token = localStorage.getItem('access_token');
@@ -245,22 +324,4 @@ export async function deleteReajuste(id) {
     } else {
         throw ({'message': 'Nao foi possivel deletar o reajuste'})
     }
-}
-
-export async function checkSeiStatus (processo_sei) {
-    const token = localStorage.getItem('access_token');
-    const url = `${process.env.REACT_APP_API_URL}/contratos_sei?processo_sei=${processo_sei}`;
-    const options = {
-        method: 'GET',
-        mode: 'cors',
-        headers: {
-            'Content-Type': 'application/json',
-            'Accept': 'application/json',
-            'Authorization': `Bearer ${token}`
-        },
-    };
-    const res = await fetch(url, options)
-    const json = await res.json()
-
-    return {status: res.status, ...json}
 }
