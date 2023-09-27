@@ -1,30 +1,9 @@
-import React, { forwardRef, useState } from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import NumberFormat from 'react-number-format';
 import { TextField, InputAdornment } from '@mui/material';
+import { NumberFormatCustom } from '../../commom/utils/utils';
+import { NumericFormat } from 'react-number-format'
 
-const NumberFormatCustom = forwardRef(function NumberFormatCustom(props, ref) {
-    const { onChange, ...other } = props;
-  
-    return (
-      <NumberFormat
-        {...other}
-        getInputRef={ref}
-        onValueChange={(values) => {
-          onChange({
-            target: {
-              value: values.value,
-              name: values.name
-            },
-          });
-        }}
-        isNumericString
-        thousandSeparator="."
-        decimalSeparator=","
-        decimalScale={2}
-      />
-    );
-});
 
 NumberFormatCustom.propTypes = {
     onChange: PropTypes.func.isRequired,
@@ -33,7 +12,7 @@ NumberFormatCustom.propTypes = {
 const CampoValores = (props) => {
   const { 
     label, 
-    defaultValue, 
+    defaultValue=null, 
     name, 
     required, 
     checaErros, 
@@ -43,8 +22,6 @@ const CampoValores = (props) => {
     ...other
   } = props;  
   
-  // const [valor, setValor] = useState(value);
-
   // const handleChange = (event) => {
   //   setValor(event.target.value);
   // }
@@ -57,21 +34,38 @@ const CampoValores = (props) => {
   // }
 
   return (
-      <TextField
-          label={label}
-          defaultValue={defaultValue}
+      <NumericFormat
+          //label={label}
+          //defaultValue={defaultValue}
           name={name}
-          onBlur={(e) => { checaErros(e);}}
-          InputProps={{
-              startAdornment: <InputAdornment position="start">R$</InputAdornment>,
-              inputComponent: NumberFormatCustom,
-          }}
+          //value={valorInterno}
+          customInput={TextField}
+          label={label} 
+          //defaultValue={defaultValue}
+          //name={name}
+          //onValueChange={(values, _) =>  {
+          //  setValorInterno(values.floatValue)
+          //  console.log(values)
+          //} }
+          //onChange={(e) => setValor(e.target.value)}
+          //onBlur={() => {}}
+          //onChange={(e) => setValorInterno(e.target.value)}
           helperText={helperText}
           error={error}
           required={required}
           sx={{ margin: '1rem 0' }}
           fullWidth={fullWidth}
-          {...other}
+          //{...other}
+          thousandSeparator="."
+          decimalSeparator=","
+          fixedDecimalScale
+          decimalScale={2}
+          //NumberisNumericString
+          //onBlur={(e) => { checaErros(e);}}
+          //InputProps={{
+          //    startAdornment: <InputAdornment position="start">R$</InputAdornment>,
+          //    inputComponent: NumberFormatCustom,
+          //}}
       />
   );
 };

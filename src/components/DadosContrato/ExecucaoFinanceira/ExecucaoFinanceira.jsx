@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { 
     Box, 
     Typography, 
@@ -14,10 +14,11 @@ import FormExecFinanceira from './FormExecFinanceira';
 import FormEditExecFinanceira from './FormEditExecFinanceira';
 import DialogConfirmacao from '../../DialogConfirmacao';
 import ExecucaoFinanceiraCard from './ExecucaoFinanceiraCard';
-import { getExecucaoFinanceira, postAnoExecFin } from '../../../commom/utils/api';
+import { getExecucaoFinanceira, getExecucoesFinanceiras, postAnoExecFin } from '../../../commom/utils/api';
 
 const ExecucaoFinanceira = (props) => {
-    const execucao_financeira = typeof props.execucao_financeira != 'undefined' ? props.execucao_financeira : [];
+    //const execucao_financeira = typeof props.execucao_financeira != 'undefined' ? props.execucao_financeira : [];
+    const [execucoes_financeiras, setExecucoesFinanceiras] = useState({})
     const [carregando, setCarregando] = useState(false);
     const [detalheExecFin, setDetalheExecFin] = useState({});
     const [openDetalhes, setOpenDetalhes] = useState(false);
@@ -44,21 +45,17 @@ const ExecucaoFinanceira = (props) => {
         executado: ''
     });
     const [errors, setErrors] = useState({});
+    const formId = "exec-form"
 
-    const meses = [
-        "Janeiro",
-        "Fevereiro",
-        "Março",
-        "Abril",
-        "Maio",
-        "Junho",
-        "Julho",
-        "Agosto",
-        "Setembro",
-        "Outubro",
-        "Novembro",
-        "Dezembro"
-    ];
+    useEffect(() => {
+        (async () => {
+            const execFin = await getExecucoesFinanceiras(props.numContrato)
+            console.log(execFin)
+            setExecucoesFinanceiras(execFin)
+        })();
+
+    }, [])
+
 
 
     const handleClickAdicionarAno = () => {
@@ -66,18 +63,18 @@ const ExecucaoFinanceira = (props) => {
             open: true,
             acao: 'adicionar'
         });
-        setFormExecFinanceira({
-            contrato_id: props.numContrato,
-            mes: '',
-            ano: '',
-            planejado_inicial: '',
-            contratado_inicial: '',
-            valor_reajuste: '',
-            valor_aditivo: '',
-            valor_cancelamento: '',
-            empenhado: '',
-            executado: ''
-        });
+        //setFormExecFinanceira({
+        //    contrato_id: props.numContrato,
+        //    mes: '',
+        //    ano: '',
+        //    planejado_inicial: '',
+        //    contratado_inicial: '',
+        //    valor_reajuste: '',
+        //    valor_aditivo: '',
+        //    valor_cancelamento: '',
+        //    empenhado: '',
+        //    executado: ''
+        //});
         setAcao('adicionarExecFin');
     }
 
@@ -98,18 +95,18 @@ const ExecucaoFinanceira = (props) => {
                 open: false,
                 acao: 'adicionar'
             });
-            setFormExecFinanceira({
-                ...formExecFinanceira,
-                mes: '',
-                ano: '',
-                planejado_inicial: '',
-                contratado_inicial: '',
-                valor_reajuste: '',
-                valor_aditivo: '',
-                valor_cancelamento: '',
-                empenhado: '',
-                executado: ''
-            });
+            //setFormExecFinanceira({
+            //    ...formExecFinanceira,
+            //    mes: '',
+            //    ano: '',
+            //    planejado_inicial: '',
+            //    contratado_inicial: '',
+            //    valor_reajuste: '',
+            //    valor_aditivo: '',
+            //    valor_cancelamento: '',
+            //    empenhado: '',
+            //    executado: ''
+            //});
             return res.json();
         } else if (res.status === 422) {
             props.setSnackbar({
@@ -162,9 +159,9 @@ const ExecucaoFinanceira = (props) => {
                     mb: '1rem'
                 }} 
             >
-                {Object.keys(execucao_financeira).length > 0
-                    ?<ExecucaoFinanceiraCard 
-                        execucao_financeira={execucao_financeira} 
+                {execucoes_financeiras.length  > 0
+                    ? <ExecucaoFinanceiraCard 
+                        execucao_financeira={execucoes_financeiras} 
                         carregando={carregando}
                         setCarregando={setCarregando}
                         setDetalheExecFin={setDetalheExecFin}
@@ -212,11 +209,13 @@ const ExecucaoFinanceira = (props) => {
             />
 
             <FormExecFinanceira 
-                meses={meses}
+                //meses={meses}
+                formId={formId}
+                contratoId={props.numContrato}
                 openFormExecFinanceira={openFormExecFinanceira}
                 setOpenFormExecFinanceira={setOpenFormExecFinanceira}
-                formExecFinanceira={formExecFinanceira}
-                setFormExecFinanceira={setFormExecFinanceira}
+                //formExecFinanceira={formExecFinanceira}
+                //setFormExecFinanceira={setFormExecFinanceira}
                 errors={errors}
                 setErrors={setErrors}
                 carregando={carregando}
@@ -225,11 +224,12 @@ const ExecucaoFinanceira = (props) => {
             />
 
             <FormEditExecFinanceira 
-                meses={meses}
+                //meses={meses}
                 openEditExecFinanceira={openEditExecFinanceira}
+                formId={formId}
                 setOpenEditExecFinanceira={setOpenEditExecFinanceira}
                 formExecFinanceira={formExecFinanceira}
-                setFormExecFinanceira={setFormExecFinanceira}
+                //setFormExecFinanceira={setFormExecFinanceira}
                 errors={errors}
                 setErrors={setErrors}
                 carregando={carregando}
@@ -246,10 +246,10 @@ const ExecucaoFinanceira = (props) => {
                 fnExcluir={() => {}}
                 fnEditar={() => {}}
                 fnAdicionar={enviaAno}
-                formInterno={formExecFinanceira}
+                //formInterno={formExecFinanceira}
                 carregando={carregando}
                 texto="ano de execução financeira"
-                meses={meses}
+                formId={formId}
             />
         </Box>
     );

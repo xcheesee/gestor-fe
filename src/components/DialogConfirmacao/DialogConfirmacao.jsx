@@ -15,10 +15,11 @@ const DialogConfirmacao = (props) => {
         setOpenConfirmacao,
         acao,
         fnExcluir,
-        formInterno,
+        //formInterno,
         carregando,
         texto,
-        form,
+        formId,
+        //form,
         ...other
     } = props;
 
@@ -66,16 +67,16 @@ const DialogConfirmacao = (props) => {
                 <DialogContent>
                     <DialogContentText>
                         Confirma a adição do {texto}
-                            {
+                            {/*
                                 formInterno.mes !== '' && formInterno.ano !== ''
                                 ? <strong> {other.meses[formInterno.mes - 1].toLowerCase()} de {formInterno.ano}</strong>
                                 : ''
-                            }
+                            */}
                         ?
                         <br/> 
                         <br />
-                        Não será possível editar os dados dos campos <strong>planejado inicial </strong> 
-                        e <strong>contratado incial</strong> posteriormente.
+                        Não será possível editar os dados dos campos <strong>planejado(LOA) inicial</strong>,  
+                        <strong>Reservado inicial</strong> e <strong>contratado incial</strong> posteriormente.
                     </DialogContentText>
                 </DialogContent>
                 <DialogActions>
@@ -87,8 +88,10 @@ const DialogConfirmacao = (props) => {
                     </Button>
                     <Button 
                         sx={{ textTransform: 'none' }}  
+                        type='submit'
+                        form={formId}
                         onClick={(e) => { 
-                            other.fnAdicionar();
+                            //other.fnAdicionar();
                             setOpenConfirmacao({ open: false, id: '' }); 
                         }}
                     >
@@ -119,7 +122,7 @@ const DialogConfirmacao = (props) => {
                     <Button 
                         sx={{ textTransform: 'none' }}  
                         type="submit"
-                        form={form}
+                        form={formId}
                         onClick={(e) => { 
                             setOpenConfirmacao({ open: false, id: '' }); 
                         }}

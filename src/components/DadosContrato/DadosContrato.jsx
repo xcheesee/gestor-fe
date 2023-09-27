@@ -326,7 +326,7 @@ const DadosContrato = ({ setSnackbar }) => {
                             </Box>
 
                             <ExecucaoFinanceira 
-                                execucao_financeira={dados?.execucao_financeira}
+                                //execucao_financeira={dados?.execucao_financeira}
                                 numContrato={numContrato}
                                 setSnackbar={setSnackbar}
                                 mudancaContrato={mudancaContrato}

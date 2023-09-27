@@ -26,37 +26,61 @@ import CampoValores from '../../../CampoValores';
 import RefExecucaoFinanceira from '../RefExecucaoFinanceira';
 import NumberFormat from 'react-number-format';
 import PropTypes from 'prop-types';
-import { formataValores } from '../../../../commom/utils/utils';
+import { formataValores, NumberFormatCustom } from '../../../../commom/utils/utils';
+import { meses } from '../../../../commom/utils/constants';
+import { HotTable } from '@handsontable/react'
+import Handsontable from 'handsontable';
 
-const NumberFormatCustom = forwardRef(function NumberFormatCustom(props, ref) {
-    const { onChange, ...other } = props;
-  
-    return (
-      <NumberFormat
-        {...other}
-        getInputRef={ref}
-        onValueChange={(values) => {
-          onChange({
-            target: {
-              value: values.value,
-            },
-          });
-        }}
-        isNumericString
-        thousandSeparator="."
-        decimalSeparator=","
-        decimalScale={2}
-      />
-    );
-});
 
 NumberFormatCustom.propTypes = {
     onChange: PropTypes.func.isRequired,
 };
+function DialogEditar ({openEditar, setOpenEditar, formId, carregando}) {
+    return (
+        <Dialog open={openEditar}>
+            <DialogTitle>
+                Confirmação de edição
+            </DialogTitle>
+
+            <DialogContent>
+                <DialogContentText>
+                    Confirma a edição do ano de execução financeira 
+                    <strong> {/*meses[execucaoEditado.mes - 1]} de {execucaoEditado.ano*/}</strong>?
+                </DialogContentText>
+            </DialogContent>
+
+            <DialogActions>
+                <Button 
+                    sx={{ 
+                        textTransform: 'none', 
+                        color: (theme) => theme.palette.error.main 
+                    }}
+                    onClick={() => setOpenEditar(false)}
+                >
+                    Cancelar
+                </Button>
+
+                <Button 
+                    sx={{ textTransform: 'none' }} 
+                    type='submit'
+                    onClick={() => setOpenEditar(false)}
+                    form={formId}
+                >
+                    {
+                        carregando
+                        ? <CircularProgress sx={{ mr: '0.3rem' }} size="0.7rem" />
+                        : ""
+                    }
+                    Editar
+                </Button>
+            </DialogActions>
+        </Dialog>
+    );
+}
 
 const FormEditExecFinanceira = (props) => {
     const {
-        meses,
+        //meses,
         openEditExecFinanceira,
         setOpenEditExecFinanceira,
         formExecFinanceira,
@@ -66,36 +90,32 @@ const FormEditExecFinanceira = (props) => {
         setCarregando,
         setSnackbar,
         mudancaContrato,
-        setMudancaContrato
+        setMudancaContrato,
+        formId
     } = props;
 
-    const [execucaoEditado, setExecucaoEditado] = useState({ ...formExecFinanceira });
+    const [execucaoEditado, setExecucaoEditado] = useState({});
     const [openExcluir, setOpenExcluir] = useState(false);
     const [openEditar, setOpenEditar] = useState(false);
-    const [totais, setTotais] = useState([]);
     const [formEnvio, setFormEnvio] = useState({});
 
     useEffect(() => {
-        setExecucaoEditado({ ...formExecFinanceira });
-    }, [setExecucaoEditado, formExecFinanceira])
+        //const url = `${process.env.REACT_APP_API_URL}/contrato_totais/${execucaoEditado.contrato_id}?execucao_id=${execucaoEditado.id}`;
+        //const token = localStorage.getItem('access_token');
+        //const options = {
+        //    headers: {
+        //        'Content-Type': 'application/json',
+        //        'Accept': 'application/json',
+        //        'Authorization': `Bearer ${token}`
+        //    },
+        //    method: 'GET'
+        //};
 
-    useEffect(() => {
-        const url = `${process.env.REACT_APP_API_URL}/contrato_totais/${execucaoEditado.contrato_id}?execucao_id=${execucaoEditado.id}`;
-        const token = localStorage.getItem('access_token');
-        const options = {
-            headers: {
-                'Content-Type': 'application/json',
-                'Accept': 'application/json',
-                'Authorization': `Bearer ${token}`
-            },
-            method: 'GET'
-        };
-
-        fetch(url, options)
-            .then(res => res.json())
-            .then(data => {
-                setTotais(data.data);
-            })
+        //fetch(url, options)
+        //    .then(res => res.json())
+        //    .then(data => {
+        //        setTotais(data.data);
+        //    })
     }, [execucaoEditado.contrato_id, execucaoEditado.id, openEditExecFinanceira])
 
     const handleChange = (e) => {
@@ -125,83 +145,83 @@ const FormEditExecFinanceira = (props) => {
     }
 
     const confirmar = () => {
-        let cancelamento = 
-            parseFloat(execucaoEditado.empenhado) - parseFloat(execucaoEditado.executado) > 0
-            ? (parseFloat(execucaoEditado.empenhado) - parseFloat(execucaoEditado.executado))
-            : parseFloat(0)
+        //let cancelamento = 
+        //    parseFloat(execucaoEditado.empenhado) - parseFloat(execucaoEditado.executado) > 0
+        //    ? (parseFloat(execucaoEditado.empenhado) - parseFloat(execucaoEditado.executado))
+        //    : parseFloat(0)
         
         setOpenEditar(true);
-        setFormEnvio({
-            contrato_id: execucaoEditado.contrato_id,
-            mes: execucaoEditado.mes,
-            ano: execucaoEditado.ano,
-            planejado_inicial: execucaoEditado.planejado_inicial,
-            contratado_inicial: execucaoEditado.contratado_inicial,
-            valor_reajuste: execucaoEditado.valor_reajuste,
-            valor_aditivo: execucaoEditado.valor_aditivo,
-            empenhado: execucaoEditado.empenhado,
-            executado: execucaoEditado.executado,
-            valor_cancelamento: cancelamento
-        });
+        //setFormEnvio({
+        //    contrato_id: execucaoEditado.contrato_id,
+        //    mes: execucaoEditado.mes,
+        //    ano: execucaoEditado.ano,
+        //    planejado_inicial: execucaoEditado.planejado_inicial,
+        //    contratado_inicial: execucaoEditado.contratado_inicial,
+        //    valor_reajuste: execucaoEditado.valor_reajuste,
+        //    valor_aditivo: execucaoEditado.valor_aditivo,
+        //    empenhado: execucaoEditado.empenhado,
+        //    executado: execucaoEditado.executado,
+        //    valor_cancelamento: cancelamento
+        //});
     }
 
-    const editaMes = () => {
-        const url = `${process.env.REACT_APP_API_URL}/execucao_financeira/${execucaoEditado.id}`;
-        const token = localStorage.getItem('access_token');
-        const options = {
-            method: 'put',
-            headers: {
-                'Content-Type': 'application/json',
-                'Accept': 'application/json',
-                'Authorization': `Bearer ${token}`
-            },
-            body: JSON.stringify(formEnvio)
-        };
+    //const editaMes = () => {
+    //    const url = `${process.env.REACT_APP_API_URL}/execucao_financeira/${formExecFinanceira.id}`;
+    //    const token = localStorage.getItem('access_token');
+    //    const options = {
+    //        method: 'put',
+    //        headers: {
+    //            'Content-Type': 'application/json',
+    //            'Accept': 'application/json',
+    //            'Authorization': `Bearer ${token}`
+    //        },
+    //        body: JSON.stringify(formEnvio)
+    //    };
 
-        setCarregando(true);
-        setOpenEditar(false);
+    //    setCarregando(true);
+    //    setOpenEditar(false);
 
-        fetch(url, options)
-            .then(res => {
-                if (res.ok) {
-                    setCarregando(false);
-                    setSnackbar({
-                        open: true,
-                        severity: 'success',
-                        text: 'Mês de execução financeira editado com sucesso!',
-                        color: 'success'
-                    });
-                    cancelar();
-                    setMudancaContrato(!mudancaContrato);
-                    return res.json();
-                } else if (res.status === 422) {
-                    setCarregando(false);
-                    setSnackbar({
-                        open: true,
-                        severity: 'error',
-                        text: `Error ${res.status} - Não foi possível editar o mês de execução`,
-                        color: 'error'
-                    });
-                    return res.json()
-                        .then(data => setErrors(data.errors));
-                } else {
-                    setCarregando(false);
-                    setSnackbar({
-                        open: true,
-                        severity: 'error',
-                        text: `Erro ${res.status} - Não foi possível editar o mês de exeucação`,
-                        color: 'error'
-                    });
-                }
-            })
-    }
+    //    fetch(url, options)
+    //        .then(res => {
+    //            if (res.ok) {
+    //                setCarregando(false);
+    //                setSnackbar({
+    //                    open: true,
+    //                    severity: 'success',
+    //                    text: 'Mês de execução financeira editado com sucesso!',
+    //                    color: 'success'
+    //                });
+    //                cancelar();
+    //                setMudancaContrato(!mudancaContrato);
+    //                return res.json();
+    //            } else if (res.status === 422) {
+    //                setCarregando(false);
+    //                setSnackbar({
+    //                    open: true,
+    //                    severity: 'error',
+    //                    text: `Error ${res.status} - Não foi possível editar o mês de execução`,
+    //                    color: 'error'
+    //                });
+    //                return res.json()
+    //                    .then(data => setErrors(data.errors));
+    //            } else {
+    //                setCarregando(false);
+    //                setSnackbar({
+    //                    open: true,
+    //                    severity: 'error',
+    //                    text: `Erro ${res.status} - Não foi possível editar o mês de exeucação`,
+    //                    color: 'error'
+    //                });
+    //            }
+    //        })
+    //}
 
     const handleClickExcluir = () => {
         setOpenExcluir(true);
     }
 
     const excluiMes = () => {
-        const url = `${process.env.REACT_APP_API_URL}/execucao_financeira/${execucaoEditado.id}`;
+        const url = `${process.env.REACT_APP_API_URL}/execucao_financeira/${formExecFinanceira.id}`;
         const token = localStorage.getItem('access_token');
         const options = {
             method: 'DELETE',
@@ -251,7 +271,7 @@ const FormEditExecFinanceira = (props) => {
 
                 <DialogContent>
                     <DialogContentText>
-                        Confirma a exclusão do mês de execucao financeira 
+                        Confirma a exclusão do ano de execucao financeira 
                         <strong> {meses[execucaoEditado.mes - 1]} de {execucaoEditado.ano}</strong>?
                     </DialogContentText>
                 </DialogContent>
@@ -283,59 +303,84 @@ const FormEditExecFinanceira = (props) => {
         );
     }
 
-    const DialogEditar = () => {
-        return (
-            <Dialog open={openEditar}>
-                <DialogTitle>
-                    Confirmação de edição
-                </DialogTitle>
-
-                <DialogContent>
-                    <DialogContentText>
-                        Confirma a edição do mês de execução financeira 
-                        <strong> {meses[execucaoEditado.mes - 1]} de {execucaoEditado.ano}</strong>?
-                    </DialogContentText>
-                </DialogContent>
-
-                <DialogActions>
-                    <Button 
-                        sx={{ 
-                            textTransform: 'none', 
-                            color: (theme) => theme.palette.error.main 
-                        }}
-                        onClick={() => setOpenEditar(false)}
-                    >
-                        Cancelar
-                    </Button>
-
-                    <Button 
-                        sx={{ textTransform: 'none' }} 
-                        onClick={editaMes}
-                    >
-                        {
-                            carregando
-                            ? <CircularProgress sx={{ mr: '0.3rem' }} size="0.7rem" />
-                            : ""
-                        }
-                        Editar
-                    </Button>
-                </DialogActions>
-            </Dialog>
-        );
-    }
 
     return (
         <Box>
         <DialogExcluir />
-        <DialogEditar />
+        <DialogEditar 
+            openEditar={openEditar} 
+            setOpenEditar={setOpenEditar} 
+            carregando={carregando} 
+            formId={formId} 
+        />
         <Dialog open={openEditExecFinanceira} fullWidth maxWidth="md">
             <DialogTitle>
-                Editar mês de execução financeira
+                Editar ano de execução financeira
             </DialogTitle>
 
             <DialogContent>
-                <Box sx={{ display: 'flex', width: '50%', alignItems: 'center' }}>
-                    <FormControl sx={{ margin: '1rem 0', mr: '1rem' }} fullWidth>
+                <Box className="grid grid-cols-2 gap-8 px-4">
+                    <Typography className="text-lg font-light">
+                        Planejado(LOA)
+                        <Typography className='text-xl font-medium pl-4'>
+                            {formataValores(formExecFinanceira.planejado_inicial)}
+                        </Typography>
+                    </Typography>
+                    
+
+                    <Typography className="text-lg font-light">
+                        Reservado
+                        <Typography className='text-xl font-medium pl-4'>
+                            {formataValores(formExecFinanceira.planejado_inicial)}
+                        </Typography>
+                    </Typography>
+
+
+                    <Typography className="text-lg font-light">
+                        Contratado
+                        <Typography className='text-xl font-medium pl-4'>
+                            {formataValores(formExecFinanceira.contratado_inicial)}
+                        </Typography>
+                    </Typography>
+                </Box>
+                <Box 
+                    sx={{  alignItems: 'center'}}
+                    className='pt-8 px-8'
+                    component={'form'}
+                    id={formId}
+                    onSubmit={async (e) => {
+                        e.preventDefault()
+                        console.log('pog')
+                        //setOpenEditar(false)
+                    }}
+                >
+                    <HotTable 
+                        data={[
+                           ['Tesla', 'Volvo', 'Toyota', 'Ford'],
+                           [10, 11, 12, 13],
+                           [20, 11, 14, 13],
+                           [30, 15, 12, 13],
+                           [30, 15, 12, 13]
+                        ]}
+                        rowHeaders={['Notas Empenho', 'Aditamentos', 'Reajustes', 'Empenhado', 'Executado']}
+                        rowHeaderWidth={120}
+                        afterGetRowHeader={(_, TH) => {
+                            Handsontable.dom.addClass(TH, "grid")
+                            Handsontable.dom.addClass(TH, "content-center")
+                        }}
+                        rowHeights={50}
+                        colHeaders={meses}
+                        cells={(row, _, __) => {
+                            if(row < 3) return { readOnly: true }
+
+                        }}  
+                        colWidths={100}
+                        minCols={12}
+                        height="auto"
+                        className='htMiddle'
+                        licenseKey="non-commercial-and-evaluation"
+                    />
+                    {/*<FormControl sx={{ margin: '1rem 0', mr: '1rem' }} fullWidth>
                         <InputLabel id="mes-label" disabled>Mês</InputLabel>
                         <Select
                             labelId="mes-label"
@@ -559,7 +604,7 @@ const FormEditExecFinanceira = (props) => {
                                 - parseFloat(execucaoEditado.executado ? execucaoEditado.executado : 0)
                             )}
                         </Typography>
-                    </Typography>
+                    </Typography>*/}
                 </Box>
             </DialogContent>
 

@@ -59,7 +59,7 @@ export async function postFormData (form, path) {
     const options = {
         method: 'POST',
         headers: {
-            'Content-Type': 'application/json',
+            //'Content-Type': 'application/json',
             'Accept': 'application/json',
             'Authorization': `Bearer ${token}`
         },
@@ -72,19 +72,19 @@ export async function postFormData (form, path) {
 }
 
 export async function postAnoExecFin(formData) {
-    const url = `${process.env.REACT_APP_API_URL}/execucao_financeira`;
+    const url = `${process.env.REACT_APP_API_URL}/exec_financeira`;
     const token = sessionStorage.getItem('access_token');
     const options = {
         method: 'POST',
         headers: {
-            'Content-Type': 'application/json',
             'Accept': 'application/json',
             'Authorization': `Bearer ${token}`
         },
-        body: JSON.stringify(formData)
+        body: formData
     }
 
     const res = await fetch(url, options)
+    return res
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -207,6 +207,26 @@ export async function getFormData (path) {
     }
     return await (await fetch(`${url}/${path}`, options)).json()
 } 
+
+export async function getExecucoesFinanceiras(contratoId) {
+    const url = `${process.env.REACT_APP_API_URL}/exec_financeira/${contratoId}`;
+    const token = localStorage.getItem('access_token');
+    const options = {
+        method: 'GET',
+        headers: {
+            //'Content-Type': 'application/json',
+            'Accept': 'application/json',
+            'Authorization': `Bearer ${token}`
+        }
+    };
+
+    const res = await fetch(url, options)
+    const json = await res.json()
+    if(!res.ok) {
+        throw Error('blud')
+    }
+    return json.data
+}
 
 export async function getExecucaoFinanceira(id) {
 

@@ -1,5 +1,7 @@
 import { Box, Typography } from '@mui/material';
 import { cpf, cnpj } from 'cpf-cnpj-validator';
+import { forwardRef } from 'react';
+import { NumericFormat } from 'react-number-format';
 
 // export function getDateDiff(date1, date2) {
 //     if(date1 === null || date2 === null) return 0
@@ -64,11 +66,15 @@ export const formataValores = (valor) => {
       currency: "BRL"
   });
 
-  if (valor === "" || valor === undefined || valor === null || isNaN(valor)) {
-      return valores.format(0);
-  } else {
-      return valores.format(valor);
+  if(valor === "" || valor === undefined || valor === null) {
+    return valores.format(0);
   }
+  else if (isNaN(valor)) {
+    let formatado = valor.replace(/\./g, "")
+    formatado = formatado.replace(/,/g, ".")
+    return valores.format(formatado);
+  }
+  return valores.format(valor);
 }
 
 export function saveLocalStorageInput(numeroContrato, campo, valor) {
@@ -111,3 +117,27 @@ export function TabValues ({ entry, labels, label}) {
     </Box>
   )
 }
+
+ export const NumberFormatCustom = forwardRef(function NumberFormatCustom(props, ref) {
+    const { onChange, ...other } = props;
+  
+    return (
+      <NumericFormat
+        {...other}
+        getInputRef={ref}
+        onValueChange={(values) => {
+          onChange({
+            target: {
+              value: values.value,
+              name: values.name
+            },
+          });
+        }}
+        //isNumericString
+        thousandSeparator="."
+        decimalSeparator=","
+        fixedDecimalScale
+        decimalScale={2}
+      />
+    );
+});

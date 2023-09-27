@@ -24,7 +24,7 @@ export default function ExecucaoFinanceiraCard({
     }
 
     return(
-        Object?.keys(execucao_financeira)?.map((execucao, index) => {
+        execucao_financeira?.map((execucao, index) => {
             return (
                 <Box
                     elevation={3}
@@ -39,34 +39,34 @@ export default function ExecucaoFinanceiraCard({
                     <Divider
                         textAlign='right'
                         sx={{
-                            fontWeight: 'light',
+                            fontWeight: 'bold',
                             fontSize: '1rem',
                             mb: '1rem'
                         }}
                     >
-                        {execucao_financeira[execucao].mes}
+                        {execucao.ano}
                     </Divider>
                     
                     <Box sx={{ display: 'flex' }}>
                         <Box>
-                            <Typography sx={{ fontWeight: 'medium' }} component="span">
+                            <Typography component="span" className="font-medium">
                                 Planejado(LOA)
                                 <Typography sx={{ padding: '0 1rem', mb: '0.5rem' }}>
-                                    {formataValores(execucao_financeira[execucao].planejado)}
+                                    {formataValores(execucao.planejado)}
                                 </Typography>
                             </Typography>
 
-                            <Typography sx={{ fontWeight: 'medium' }} component="span">
+                            <Typography component="span" className="font-medium">
                                 Reservado
-                                <Typography sx={{ padding: '0 1rem', mb: '0.5rem' }}>
-                                    {formataValores(execucao_financeira[execucao].planejado)}
+                                <Typography sx={{ padding: '0 1rem', mb: '0.5rem'}}>
+                                    {formataValores(execucao.reservado)}
                                 </Typography>
                             </Typography>
         
-                            <Typography sx={{ fontWeight: 'medium' }} component="span">
+                            <Typography component="span" className="font-medium">
                                 Contratado
-                                <Typography sx={{ padding: '0 1rem', mb: '0.5rem' }}>
-                                    {formataValores(execucao_financeira[execucao].contratado)}
+                                <Typography sx={{ padding: '0 1rem', mb: '0.5rem'}}>
+                                    {formataValores(execucao.contratado)}
                                 </Typography>
                             </Typography>
         
@@ -103,7 +103,7 @@ export default function ExecucaoFinanceiraCard({
                             <Tooltip title="Detalhes" arrow>
                                 <Box>
                                     <IconButton
-                                        onClick={() => detalhaExecucaoFinanceira(execucao_financeira[execucao].id)}
+                                        onClick={() => detalhaExecucaoFinanceira(execucao?.id)}
                                         disabled={carregando}
                                     >
                                         <ManageSearchIcon />
@@ -114,7 +114,7 @@ export default function ExecucaoFinanceiraCard({
                             <Tooltip title="Editar" arrow>
                                 <Box>
                                     <IconButton
-                                        onClick={() => handleClickEditarAno(execucao_financeira[execucao].id)}
+                                        onClick={() => handleClickEditarAno(execucao?.id)}
                                         disabled={carregando}
                                     >
                                         <EditIcon fontSize="small" />

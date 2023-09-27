@@ -10,7 +10,7 @@ import {
 } from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';
-import NumberFormat from 'react-number-format';
+import { NumericFormat } from 'react-number-format';
 import PropTypes from 'prop-types';
 import CampoDataRange from '../CampoDataRange';
 import ReactInputMask from 'react-input-mask';
@@ -19,7 +19,7 @@ const NumberFormatCustom = forwardRef(function NumberFormatCustom(props, ref) {
     const { onChange, ...other } = props;
 
     return (
-        <NumberFormat
+        <NumericFormat
             {...other}
             getInputRef={ref}
             onValueChange={(values) => {
