@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { 
     Box, 
     Typography, 
@@ -18,45 +18,47 @@ import { getExecucaoFinanceira, getExecucoesFinanceiras, postAnoExecFin } from '
 
 const ExecucaoFinanceira = (props) => {
     //const execucao_financeira = typeof props.execucao_financeira != 'undefined' ? props.execucao_financeira : [];
+    //const [openDetalhes, setOpenDetalhes] = useState(false);
+    //const [detalheExecFin, setDetalheExecFin] = useState({});
     const [execucoes_financeiras, setExecucoesFinanceiras] = useState({})
+    const [errors, setErrors] = useState({});
     const [carregando, setCarregando] = useState(false);
-    const [detalheExecFin, setDetalheExecFin] = useState({});
-    const [openDetalhes, setOpenDetalhes] = useState(false);
-    const [openFormExecFinanceira, setOpenFormExecFinanceira] = useState({
-        open: false,
-        acao: 'adicionar'
-    });
     const [openEditExecFinanceira, setOpenEditExecFinanceira] = useState(false);
+    const [currExecucao, setCurrExecucao] = useState({})
+    const [acao, setAcao] = useState('adicionarExecFin');
     const [openConfirmacao, setOpenConfirmacao] = useState({
         open: false,
         id: ''
     });
-    const [acao, setAcao] = useState('adicionarExecFin');
-    const [formExecFinanceira, setFormExecFinanceira] = useState({
-        contrato_id: props.numContrato,
-        mes: '',
-        ano: '',
-        planejado_inicial: '',
-        contratado_inicial: '',
-        valor_reajuste: '',
-        valor_aditivo: '',
-        valor_cancelamento: '',
-        empenhado: '',
-        executado: ''
+    const [openFormExecFinanceira, setOpenFormExecFinanceira] = useState({
+        open: false,
+        acao: 'adicionar'
     });
-    const [errors, setErrors] = useState({});
-    const formId = "exec-form"
+
+    //const [formExecFinanceira, setFormExecFinanceira] = useState({
+    //    contrato_id: props.numContrato,
+    //    mes: '',
+    //    ano: '',
+    //    planejado_inicial: '',
+    //    contratado_inicial: '',
+    //    valor_reajuste: '',
+    //    valor_aditivo: '',
+    //    valor_cancelamento: '',
+    //    empenhado: '',
+    //    executado: ''
+    //});
+
+    //const execucaoId = useRef()
 
     useEffect(() => {
         (async () => {
             const execFin = await getExecucoesFinanceiras(props.numContrato)
-            console.log(execFin)
             setExecucoesFinanceiras(execFin)
         })();
 
     }, [])
 
-
+    const formId = "exec-form"
 
     const handleClickAdicionarAno = () => {
         setOpenFormExecFinanceira({
@@ -78,76 +80,79 @@ const ExecucaoFinanceira = (props) => {
         setAcao('adicionarExecFin');
     }
 
-    async function enviaAno (formExecFinanceira) {
+    //async function enviaAno (formExecFinanceira) {
 
-        setCarregando(true);
-        const res = await postAnoExecFin(formExecFinanceira)
-        props.setMudancaContrato(!props.mudancaContrato);
+    //    setCarregando(true);
+    //    const res = await postAnoExecFin(formExecFinanceira)
+    //    props.setMudancaContrato(!props.mudancaContrato);
 
-        if (res.ok) {
-            props.setSnackbar({
-                open: true,
-                severity: 'success',
-                text: 'Mês de execução financeira enviado com sucesso!',
-                color: 'success'
-            });
-            setOpenFormExecFinanceira({
-                open: false,
-                acao: 'adicionar'
-            });
-            //setFormExecFinanceira({
-            //    ...formExecFinanceira,
-            //    mes: '',
-            //    ano: '',
-            //    planejado_inicial: '',
-            //    contratado_inicial: '',
-            //    valor_reajuste: '',
-            //    valor_aditivo: '',
-            //    valor_cancelamento: '',
-            //    empenhado: '',
-            //    executado: ''
-            //});
-            return res.json();
-        } else if (res.status === 422) {
-            props.setSnackbar({
-                open: true,
-                severity: 'error',
-                text: `Erro ${res.status} - Não foi possível enviar o mês de execução`,
-                color: 'error'
-            });
-            const json = await res.json()
-            setErrors(json.errors)
-        } else {
-            props.setSnackbar({
-                open: true,
-                severity: 'error',
-                text: `Erro ${res.status} - Não foi possível enviar o mês de execução`,
-                color: 'error'
-            });
-        }
+    //    if (res.ok) {
+    //        props.setSnackbar({
+    //            open: true,
+    //            severity: 'success',
+    //            text: 'Mês de execução financeira enviado com sucesso!',
+    //            color: 'success'
+    //        });
+    //        setOpenFormExecFinanceira({
+    //            open: false,
+    //            acao: 'adicionar'
+    //        });
+    //        //setFormExecFinanceira({
+    //        //    ...formExecFinanceira,
+    //        //    mes: '',
+    //        //    ano: '',
+    //        //    planejado_inicial: '',
+    //        //    contratado_inicial: '',
+    //        //    valor_reajuste: '',
+    //        //    valor_aditivo: '',
+    //        //    valor_cancelamento: '',
+    //        //    empenhado: '',
+    //        //    executado: ''
+    //        //});
+    //        return res.json();
+    //    } else if (res.status === 422) {
+    //        props.setSnackbar({
+    //            open: true,
+    //            severity: 'error',
+    //            text: `Erro ${res.status} - Não foi possível enviar o mês de execução`,
+    //            color: 'error'
+    //        });
+    //        const json = await res.json()
+    //        setErrors(json.errors)
+    //    } else {
+    //        props.setSnackbar({
+    //            open: true,
+    //            severity: 'error',
+    //            text: `Erro ${res.status} - Não foi possível enviar o mês de execução`,
+    //            color: 'error'
+    //        });
+    //    }
 
-        setCarregando(false);
-    }
+    //    setCarregando(false);
+    //}
 
-    async function handleClickEditarAno (id) {
+    async function handleClickEditarAno (execucao) {
 
-        setCarregando(true);
+        //setCarregando(true);
 
-        const data = await getExecucaoFinanceira(id)
-        setFormExecFinanceira(data);
+        //const data = await getExecucaoFinanceira(id)
+        //execucaoId.current = id
+        setCurrExecucao(execucao)
+        //console.log(execucao)
+        //setFormExecFinanceira(data);
         setOpenEditExecFinanceira(true);
 
-        setCarregando(false);
+        //setCarregando(false);
     }
 
     const Conteudo = () => ( 
         <Box
-            component={Paper} 
-            elevation={5}
+            //component={Paper} 
+            //elevation={5}
             sx={{
                 display: 'flex',
                 flexDirection: 'column',
-                background: '#F8FAF8',
+                //background: '#F8FAF8',
                 margin: '2rem 0', 
             }}
         >
@@ -160,14 +165,17 @@ const ExecucaoFinanceira = (props) => {
                 }} 
             >
                 {execucoes_financeiras.length  > 0
-                    ? <ExecucaoFinanceiraCard 
-                        execucao_financeira={execucoes_financeiras} 
-                        carregando={carregando}
-                        setCarregando={setCarregando}
-                        setDetalheExecFin={setDetalheExecFin}
-                        setOpenDetalhes={setOpenDetalhes}
-                        handleClickEditarAno={handleClickEditarAno}
-                    />
+                    ? execucoes_financeiras?.map( (execucao, i) => 
+                        <ExecucaoFinanceiraCard 
+                            key={`ex_card${i}`}
+                            execucao={execucao} 
+                            carregando={carregando}
+                            setCarregando={setCarregando}
+                            //setDetalheExecFin={setCurrExecucao}
+                            //setOpenDetalhes={setOpenDetalhes}
+                            handleClickEditarAno={handleClickEditarAno}
+                        />
+                    )
                     :<Typography sx={{ margin: '1rem' }}>
                         Nenhum dado de execução financeira disponível para este contrato
                     </Typography>
@@ -202,11 +210,11 @@ const ExecucaoFinanceira = (props) => {
 
             <Conteudo />
 
-            <DialogDetalhes 
+            {/*<DialogDetalhes 
                 detalhes={detalheExecFin}
                 openDetalhes={openDetalhes}
                 setOpenDetalhes={setOpenDetalhes}
-            />
+            />*/}
 
             <FormExecFinanceira 
                 //meses={meses}
@@ -227,16 +235,18 @@ const ExecucaoFinanceira = (props) => {
                 //meses={meses}
                 openEditExecFinanceira={openEditExecFinanceira}
                 formId={formId}
+                execucao={currExecucao}
+                setExecucao={setCurrExecucao}
                 setOpenEditExecFinanceira={setOpenEditExecFinanceira}
-                formExecFinanceira={formExecFinanceira}
+                //formExecFinanceira={formExecFinanceira}
                 //setFormExecFinanceira={setFormExecFinanceira}
                 errors={errors}
                 setErrors={setErrors}
                 carregando={carregando}
                 setCarregando={setCarregando}
-                setSnackbar={props.setSnackbar}
-                mudancaContrato={props.mudancaContrato}
-                setMudancaContrato={props.setMudancaContrato}
+                //setSnackbar={props.setSnackbar}
+                //mudancaContrato={props.mudancaContrato}
+                //setMudancaContrato={props.setMudancaContrato}
             />
 
             <DialogConfirmacao 
@@ -245,7 +255,7 @@ const ExecucaoFinanceira = (props) => {
                 acao={acao}
                 fnExcluir={() => {}}
                 fnEditar={() => {}}
-                fnAdicionar={enviaAno}
+                //fnAdicionar={enviaAno}
                 //formInterno={formExecFinanceira}
                 carregando={carregando}
                 texto="ano de execução financeira"

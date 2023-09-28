@@ -1,4 +1,4 @@
-import React, { useState, useEffect, forwardRef } from 'react';
+import React, { useState } from 'react';
 import { 
     Dialog,
     DialogTitle,
@@ -6,35 +6,25 @@ import {
     DialogContentText,
     DialogActions,
     Button,
-    FormControl,
-    FormHelperText,
-    InputLabel,
-    Select,
-    MenuItem,
     Box,
     CircularProgress,
     Typography,
     Tooltip,
-    TextField,
-    InputAdornment
 } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import CheckIcon from '@mui/icons-material/Check';
 import DeleteIcon from '@mui/icons-material/Delete';
-import CampoAno from '../../../CampoAno';
-import CampoValores from '../../../CampoValores';
-import RefExecucaoFinanceira from '../RefExecucaoFinanceira';
-import NumberFormat from 'react-number-format';
-import PropTypes from 'prop-types';
-import { formataValores, NumberFormatCustom } from '../../../../commom/utils/utils';
+import { buildExcelDataArray, formataValores, NumberFormatCustom } from '../../../../commom/utils/utils';
 import { meses } from '../../../../commom/utils/constants';
 import { HotTable } from '@handsontable/react'
 import Handsontable from 'handsontable';
+import { HyperFormula } from 'hyperformula'
+import { registerAllModules } from 'handsontable/registry'
+import { useExcelTableRef } from '../../../../commom/utils/hooks';
+import { useQuery } from '@tanstack/react-query';
 
+registerAllModules();
 
-NumberFormatCustom.propTypes = {
-    onChange: PropTypes.func.isRequired,
-};
 function DialogEditar ({openEditar, setOpenEditar, formId, carregando}) {
     return (
         <Dialog open={openEditar}>
@@ -78,108 +68,109 @@ function DialogEditar ({openEditar, setOpenEditar, formId, carregando}) {
     );
 }
 
-const FormEditExecFinanceira = (props) => {
-    const {
-        //meses,
-        openEditExecFinanceira,
-        setOpenEditExecFinanceira,
-        formExecFinanceira,
-        errors,
-        setErrors,
-        carregando,
-        setCarregando,
-        setSnackbar,
-        mudancaContrato,
-        setMudancaContrato,
-        formId
-    } = props;
+function DialogExcluir({openExcluir, setOpenExcluir, carregando}) {
+    return(
+        <Dialog open={openExcluir}>
+            <DialogTitle>
+                Excluir mês de execução financeira
+            </DialogTitle>
 
-    const [execucaoEditado, setExecucaoEditado] = useState({});
+            <DialogContent>
+                <DialogContentText>
+                    Confirma a exclusão do ano de execucao financeira 
+                    <strong> {}</strong>?
+                </DialogContentText>
+            </DialogContent>
+
+            <DialogActions>
+                <Button 
+                    sx={{ 
+                        textTransform: 'none', 
+                        color: (theme) => theme.palette.error.main 
+                    }}
+                    onClick={() => setOpenExcluir(false)}
+                >
+                    Cancelar
+                </Button>
+
+                <Button 
+                    sx={{ textTransform: 'none' }} 
+                    //onClick={excluiMes}
+                >
+                    {
+                        carregando
+                        ? <CircularProgress sx={{ mr: '0.3rem' }} size="0.7rem" />
+                        : ""
+                    }
+                    Excluir
+                </Button>
+            </DialogActions>
+        </Dialog>
+    )
+}
+
+const FormEditExecFinanceira = ({
+    openEditExecFinanceira,
+    setOpenEditExecFinanceira,
+    execucao,
+    //setExecucao,
+    errors,
+    setErrors,
+    carregando,
+    //setCarregando,
+    //setSnackbar,
+    //mudancaContrato,
+    //setMudancaContrato,
+    formId
+}) => {
+
+    const hyperformulaInstance = HyperFormula.buildEmpty({
+        licenseKey: 'internal-use-in-handsontable'
+    })
+
     const [openExcluir, setOpenExcluir] = useState(false);
     const [openEditar, setOpenEditar] = useState(false);
-    const [formEnvio, setFormEnvio] = useState({});
 
-    useEffect(() => {
-        //const url = `${process.env.REACT_APP_API_URL}/contrato_totais/${execucaoEditado.contrato_id}?execucao_id=${execucaoEditado.id}`;
-        //const token = localStorage.getItem('access_token');
-        //const options = {
-        //    headers: {
-        //        'Content-Type': 'application/json',
-        //        'Accept': 'application/json',
-        //        'Authorization': `Bearer ${token}`
-        //    },
-        //    method: 'GET'
-        //};
+    //const execucao = useQuery({
+    //    queryKey: ['execucao', execucaoId],
+    //    queryFn: () => getExecucaoFinanceira(execucaoId),
+    //    enabled: !!execucaoId
+    //})
 
-        //fetch(url, options)
-        //    .then(res => res.json())
-        //    .then(data => {
-        //        setTotais(data.data);
-        //    })
-    }, [execucaoEditado.contrato_id, execucaoEditado.id, openEditExecFinanceira])
+    const [hot, ref] = useExcelTableRef({
+        dadosIniciais: buildExcelDataArray({valorContratado: execucao.contratado}), 
+        execucao: execucao 
+    })
 
-    const handleChange = (e) => {
-        console.log(e.target.name)
-        console.log(e.target.value)
-        setExecucaoEditado({
-            ...execucaoEditado,
-            [e.target.name]: e.target.value
-        });
-    }
 
     const cancelar = () => {
         setOpenEditExecFinanceira(false);
         setErrors({});
-        setExecucaoEditado({
-            ...execucaoEditado,
-            mes: '',
-            ano: '',
-            planejado_inicial: '',
-            contratado_inicial: '',
-            valor_reajuste: 0,
-            valor_aditivo: 0,
-            valor_cancelamento: 0,
-            empenhado: 0,
-            executado: 0
-        });
+        //setExecucao({})
     }
 
     const confirmar = () => {
-        //let cancelamento = 
-        //    parseFloat(execucaoEditado.empenhado) - parseFloat(execucaoEditado.executado) > 0
-        //    ? (parseFloat(execucaoEditado.empenhado) - parseFloat(execucaoEditado.executado))
-        //    : parseFloat(0)
-        
         setOpenEditar(true);
-        //setFormEnvio({
-        //    contrato_id: execucaoEditado.contrato_id,
-        //    mes: execucaoEditado.mes,
-        //    ano: execucaoEditado.ano,
-        //    planejado_inicial: execucaoEditado.planejado_inicial,
-        //    contratado_inicial: execucaoEditado.contratado_inicial,
-        //    valor_reajuste: execucaoEditado.valor_reajuste,
-        //    valor_aditivo: execucaoEditado.valor_aditivo,
-        //    empenhado: execucaoEditado.empenhado,
-        //    executado: execucaoEditado.executado,
-        //    valor_cancelamento: cancelamento
-        //});
     }
 
-    //const editaMes = () => {
+    const handleClickExcluir = () => {
+        setOpenExcluir(true);
+    }
+
+    //const excluiMes = () => {
     //    const url = `${process.env.REACT_APP_API_URL}/execucao_financeira/${formExecFinanceira.id}`;
     //    const token = localStorage.getItem('access_token');
     //    const options = {
-    //        method: 'put',
+    //        method: 'DELETE',
     //        headers: {
     //            'Content-Type': 'application/json',
     //            'Accept': 'application/json',
     //            'Authorization': `Bearer ${token}`
-    //        },
-    //        body: JSON.stringify(formEnvio)
+    //        }
     //    };
 
     //    setCarregando(true);
-    //    setOpenEditar(false);
+    //    setOpenExcluir(false);
 
     //    fetch(url, options)
     //        .then(res => {
@@ -188,131 +179,49 @@ const FormEditExecFinanceira = (props) => {
     //                setSnackbar({
     //                    open: true,
     //                    severity: 'success',
-    //                    text: 'Mês de execução financeira editado com sucesso!',
+    //                    text: 'Mês de execução excluído com sucesso!',
     //                    color: 'success'
     //                });
-    //                cancelar();
     //                setMudancaContrato(!mudancaContrato);
+    //                setOpenEditExecFinanceira(false);
     //                return res.json();
-    //            } else if (res.status === 422) {
-    //                setCarregando(false);
-    //                setSnackbar({
-    //                    open: true,
-    //                    severity: 'error',
-    //                    text: `Error ${res.status} - Não foi possível editar o mês de execução`,
-    //                    color: 'error'
-    //                });
-    //                return res.json()
-    //                    .then(data => setErrors(data.errors));
     //            } else {
     //                setCarregando(false);
     //                setSnackbar({
     //                    open: true,
     //                    severity: 'error',
-    //                    text: `Erro ${res.status} - Não foi possível editar o mês de exeucação`,
+    //                    text: `Erro ${res.status} - Não foi possível excluir o mês de execução`,
     //                    color: 'error'
     //                });
+    //                setOpenEditExecFinanceira(false);
     //            }
     //        })
+    //        .catch(err => console.log(err));
     //}
 
-    const handleClickExcluir = () => {
-        setOpenExcluir(true);
-    }
-
-    const excluiMes = () => {
-        const url = `${process.env.REACT_APP_API_URL}/execucao_financeira/${formExecFinanceira.id}`;
-        const token = localStorage.getItem('access_token');
-        const options = {
-            method: 'DELETE',
-            headers: {
-                'Content-Type': 'application/json',
-                'Accept': 'application/json',
-                'Authorization': `Bearer ${token}`
-            }
-        };
-
-        setCarregando(true);
-        setOpenExcluir(false);
-
-        fetch(url, options)
-            .then(res => {
-                if (res.ok) {
-                    setCarregando(false);
-                    setSnackbar({
-                        open: true,
-                        severity: 'success',
-                        text: 'Mês de execução excluído com sucesso!',
-                        color: 'success'
-                    });
-                    setMudancaContrato(!mudancaContrato);
-                    setOpenEditExecFinanceira(false);
-                    return res.json();
-                } else {
-                    setCarregando(false);
-                    setSnackbar({
-                        open: true,
-                        severity: 'error',
-                        text: `Erro ${res.status} - Não foi possível excluir o mês de execução`,
-                        color: 'error'
-                    });
-                    setOpenEditExecFinanceira(false);
-                }
-            })
-            .catch(err => console.log(err));
-    }
-
-    const DialogExcluir = () => {
-        return (
-            <Dialog open={openExcluir}>
-                <DialogTitle>
-                    Excluir mês de execução financeira
-                </DialogTitle>
-
-                <DialogContent>
-                    <DialogContentText>
-                        Confirma a exclusão do ano de execucao financeira 
-                        <strong> {meses[execucaoEditado.mes - 1]} de {execucaoEditado.ano}</strong>?
-                    </DialogContentText>
-                </DialogContent>
-
-                <DialogActions>
-                    <Button 
-                        sx={{ 
-                            textTransform: 'none', 
-                            color: (theme) => theme.palette.error.main 
-                        }}
-                        onClick={() => setOpenExcluir(false)}
-                    >
-                        Cancelar
-                    </Button>
-
-                    <Button 
-                        sx={{ textTransform: 'none' }} 
-                        onClick={excluiMes}
-                    >
-                        {
-                            carregando
-                            ? <CircularProgress sx={{ mr: '0.3rem' }} size="0.7rem" />
-                            : ""
-                        }
-                        Excluir
-                    </Button>
-                </DialogActions>
-            </Dialog>
-        );
-    }
+    //if(execucao.isLoading) 
+    //    return (
+    //        <Box>
+    //            <CircularProgress size={16} sx={{ color: (theme) => theme.palette.color.main, mr: '0.7rem' }} />
+    //        </Box>
+    //    )
 
 
     return (
-        <Box>
-        <DialogExcluir />
+        <>
+        <DialogExcluir 
+            openExcluir={openExcluir}
+            setOpenExcluir={setOpenExcluir}
+            carregando={carregando}
+        />
+
         <DialogEditar 
             openEditar={openEditar} 
             setOpenEditar={setOpenEditar} 
             carregando={carregando} 
             formId={formId} 
         />
+
         <Dialog open={openEditExecFinanceira} fullWidth maxWidth="md">
             <DialogTitle>
                 Editar ano de execução financeira
@@ -320,299 +229,95 @@ const FormEditExecFinanceira = (props) => {
 
             <DialogContent>
                 <Box className="grid grid-cols-2 gap-8 px-4">
-                    <Typography className="text-lg font-light">
+                    <Typography className="text-lg font-medium" component={'div'}>
                         Planejado(LOA)
-                        <Typography className='text-xl font-medium pl-4'>
-                            {formataValores(formExecFinanceira.planejado_inicial)}
+                        <Typography className='text-xl font-light pl-4'>
+                            {formataValores(execucao?.planejado)}
                         </Typography>
                     </Typography>
                     
 
-                    <Typography className="text-lg font-light">
+                    <Typography className="text-lg font-medium" component={'div'}>
                         Reservado
-                        <Typography className='text-xl font-medium pl-4'>
-                            {formataValores(formExecFinanceira.planejado_inicial)}
+                        <Typography className='text-xl font-light pl-4'>
+                            {formataValores(execucao?.reservado)}
                         </Typography>
                     </Typography>
 
 
-                    <Typography className="text-lg font-light">
+                    <Typography className="text-lg font-medium" component={'div'}>
                         Contratado
-                        <Typography className='text-xl font-medium pl-4'>
-                            {formataValores(formExecFinanceira.contratado_inicial)}
+                        <Typography className='text-xl font-light pl-4'>
+                            {formataValores(execucao?.contratado)}
+                        </Typography>
+                    </Typography>
+
+                    <Typography className="text-lg font-medium" component={'div'}>
+                        Mes Inicial
+                        <Typography className='text-xl font-light pl-4'>
+                            { meses[execucao?.mes_inicial] }
                         </Typography>
                     </Typography>
                 </Box>
-                <Box 
-                    sx={{  alignItems: 'center'}}
-                    className='pt-8 px-8'
-                    component={'form'}
-                    id={formId}
-                    onSubmit={async (e) => {
-                        e.preventDefault()
-                        console.log('pog')
-                        //setOpenEditar(false)
-                    }}
-                >
-                    <HotTable 
-                        data={[
-                           ['Tesla', 'Volvo', 'Toyota', 'Ford'],
-                           [10, 11, 12, 13],
-                           [20, 11, 14, 13],
-                           [30, 15, 12, 13],
-                           [30, 15, 12, 13]
-                        ]}
-                        rowHeaders={['Notas Empenho', 'Aditamentos', 'Reajustes', 'Empenhado', 'Executado']}
-                        rowHeaderWidth={120}
-                        afterGetRowHeader={(_, TH) => {
-                            Handsontable.dom.addClass(TH, "grid")
-                            Handsontable.dom.addClass(TH, "content-center")
+
+                    <Box 
+                        sx={{  alignItems: 'center'}}
+                        className='pt-8 px-8'
+                        component={'form'}
+                        id={formId}
+                        onSubmit={async (e) => {
+                            e.preventDefault()
+
+                            const data = hot.getDataAtRow(4)
+                            console.log(data)
+                            //setOpenEditar(false)
                         }}
-                        rowHeights={50}
-                        colHeaders={meses}
-                        cells={(row, _, __) => {
-                            if(row < 3) return { readOnly: true }
-
-                        }}  
-                        colWidths={100}
-                        minCols={12}
-                        height="auto"
-                        className='htMiddle'
-                        licenseKey="non-commercial-and-evaluation"
-                    />
-                    {/*<FormControl sx={{ margin: '1rem 0', mr: '1rem' }} fullWidth>
-                        <InputLabel id="mes-label" disabled>Mês</InputLabel>
-                        <Select
-                            labelId="mes-label"
-                            id="mes"
-                            label="Mês"
-                            name="mes"
-                            value={execucaoEditado.mes}
-                            error={errors.hasOwnProperty('mes')}
-                            disabled
-                        >
-                            {meses.map((mes, index) => {
-                                return (
-                                    <MenuItem key={index} value={index + 1}>{mes}</MenuItem>
-                                );
-                            })}
-                        </Select>
-
-                        <FormHelperText>{errors.hasOwnProperty('mes') ? errors.mes : " "}</FormHelperText>
-                    </FormControl>
-
-                    <CampoAno 
-                        label="Ano"
-                        name="ano"
-                        value={execucaoEditado.ano}
-                        error={errors.hasOwnProperty('ano')}
-                        helperText={errors.hasOwnProperty('ano') ? errors.ano : " "}
-                        disabled
-                    />
-                </Box>
-
-                <RefExecucaoFinanceira 
-                    totais={totais}
-                />
-
-                <CampoValores 
-                    label="Planejado inicial" 
-                    value={execucaoEditado.planejado_inicial}
-                    name="planejado_inicial"
-                    state={execucaoEditado}
-                    setState={setExecucaoEditado}
-                    checaErros={() => {}}
-                    helperText={errors.hasOwnProperty('planejado_inicial') ? errors.planejado_inicial : " "}
-                    error={errors.hasOwnProperty('planejado_inicial')}
-                    fullWidth 
-                    disabled
-                />
-
-                <CampoValores 
-                    label="Contratado inicial" 
-                    value={execucaoEditado.contratado_inicial}
-                    name="contratado_inicial"
-                    state={execucaoEditado}
-                    setState={setExecucaoEditado}
-                    checaErros={() => {}}
-                    helperText={errors.hasOwnProperty('contratado_inicial' ? errors.contratado_inicial : " ")}
-                    error={errors.hasOwnProperty('contratado_inicial')}
-                    fullWidth 
-                    disabled
-                />
-
-                <Box sx={{ display: 'flex', justifyContent: 'space-between', gap: '1rem', margin: '1rem 0', mb: 0 }}>
-                    <CampoValores 
-                        label="Valor reajuste" 
-                        defaultValue={execucaoEditado.valor_reajuste ? execucaoEditado.valor_reajuste : 0}
-                        name="valor_reajuste"
-                        state={execucaoEditado}
-                        setState={setExecucaoEditado}
-                        checaErros={() => {}}
-                        helperText={errors.hasOwnProperty('valor_reajuste') ? errors.valor_reajuste : " "}
-                        error={errors.hasOwnProperty('valor_reajuste')}
-                        fullWidth
-                        onBlur={handleChange}
-                    />
-
-                    <CampoValores 
-                        label="Valor aditivo" 
-                        defaultValue={execucaoEditado.valor_aditivo ? execucaoEditado.valor_aditivo : 0}
-                        name="valor_aditivo"
-                        state={execucaoEditado}
-                        setState={setExecucaoEditado}
-                        checaErros={() => {}}
-                        helperText={errors.hasOwnProperty('valor_aditivo') ? errors.valor_aditivo : " "}
-                        error={errors.hasOwnProperty('valor_aditivo')}
-                        fullWidth
-                        onBlur={handleChange}
-                    />
-
-                    <TextField 
-                        label="Reprogramação/cancelamento" 
-                        value={
-                            parseFloat(execucaoEditado.empenhado) - parseFloat(execucaoEditado.executado) > 0
-                            ? (parseFloat(execucaoEditado.empenhado) - parseFloat(execucaoEditado.executado))
-                            : execucaoEditado.empenhado
-                        }
-                        helperText={
-                            errors.hasOwnProperty('valor_cancelamento') 
-                            ? errors.valor_cancelamento 
-                            : " "
-                        }
-                        error={errors.hasOwnProperty('valor_cancelamento')}
-                        sx={{ margin: '1rem 0' }}
-                        InputProps={{
-                            startAdornment: <InputAdornment position="start">R$</InputAdornment>,
-                            inputComponent: NumberFormatCustom,
-                        }}
-                        fullWidth
-                        disabled
-                    />
-                </Box>
-
-                <Box sx={{ display: 'flex', justifyContent: 'space-between', gap: '1rem', margin: '1rem 0', mt: 0 }}>
-                    <CampoValores 
-                        label="Empenhado" 
-                        defaultValue={execucaoEditado.empenhado ? execucaoEditado.empenhado : 0}
-                        name="empenhado"
-                        state={execucaoEditado}
-                        setState={setExecucaoEditado}
-                        checaErros={() => {}}
-                        helperText={errors.hasOwnProperty('empenhado') ? errors.empenhado : " "}
-                        error={errors.hasOwnProperty('empenhado')}
-                        fullWidth
-                        onBlur={handleChange}
-                    />
-
-                    <CampoValores 
-                        label="Executado" 
-                        defaultValue={execucaoEditado.executado ? execucaoEditado.executado : '0'}
-                        name="executado"
-                        state={execucaoEditado}
-                        setState={setExecucaoEditado}
-                        checaErros={() => {}}
-                        helperText={errors.hasOwnProperty('executado') ? errors.executado : " "}
-                        error={errors.hasOwnProperty('executado')}
-                        fullWidth
-                        onBlur={handleChange}
-                    />
-                </Box>
-
-                <Box 
-                    sx={{
-                        border: '1px solid #cdcdcd', 
-                        borderRadius: '3px',
-                        padding: '1rem',
-                        display: 'grid',
-                        gridTemplateColumns: '1fr 1fr 1fr 1fr',
-                        columnGap: '2rem',
-                        rowGap: '2rem',
-                        mb: '2rem'
-                    }}
-                >
-                    <Typography 
-                        sx={{ 
-                            fontWeight: 'medium', 
-                            color:
-                                parseFloat(totais.valor_empenhos) + parseFloat(execucaoEditado.empenhado) < 0
-                                ? (theme) => theme.palette.error.main
-                                : ''
-                        }} 
-                        component="span"
                     >
-                        Total empenhado
-                        <Typography 
-                            sx={{ 
-                                padding: '0 1rem', 
-                                mb: '0.5rem'    
-                            }}>
-                            {
-                                execucaoEditado.empenhado 
-                                ? formataValores(parseFloat(totais.total_empenhado) + parseFloat(execucaoEditado.empenhado))
-                                : formataValores(parseFloat(totais.total_empenhado))
-                            }
-                        </Typography>
-                    </Typography>
-                    
-                    <Typography sx={{ fontWeight: 'medium' }} component="span">
-                        Total executado
-                        <Typography sx={{ padding: '0 1rem', mb: '0.5rem' }}>
-                            {
-                                execucaoEditado.executado 
-                                ? formataValores(parseFloat(totais.total_executado) + parseFloat(execucaoEditado.executado))
-                                : formataValores(parseFloat(totais.total_executado))
-                            }
-                        </Typography>
-                    </Typography>
-                    
-                    <Typography sx={{ fontWeight: 'medium' }} component="span">
-                        Contratado atualizado
-                        <Typography sx={{ padding: '0 1rem', mb: '0.5rem' }}>
-                            {formataValores(
-                                parseFloat(execucaoEditado.contratado_inicial) 
-                                + parseFloat(execucaoEditado.valor_aditivo ? execucaoEditado.valor_aditivo : 0)
-                                + parseFloat(execucaoEditado.valor_reajuste ? execucaoEditado.valor_reajuste : 0)
-                                - (parseFloat(execucaoEditado.empenhado ? execucaoEditado.empenhado : 0) 
-                                - parseFloat(execucaoEditado.executado ? execucaoEditado.executado : 0) < 0 
-                                    ? 0 
-                                    : parseFloat(execucaoEditado.empenhado ? execucaoEditado.empenhado : 0) 
-                                      - parseFloat(execucaoEditado.executado ? execucaoEditado.executado : 0)
-                                )
-                            )}
-                        </Typography>
-                    </Typography>
+                        <HotTable 
+                            ref={ref}
+                            id="hotExec"
+                            formulas={{ engine: hyperformulaInstance}}
+                            rowHeaders={['Notas Empenho', 'Aditamentos', 'Reajustes', 'Empenhado', 'Executado']}
+                            rowHeaderWidth={120}
+                            numericFormat={{
+                                pattern: 'R$ 0.0,00',
+                                //culture: 'pt-BR'
+                            }}
+                            type='numeric'
+                            afterGetRowHeader={(_, TH) => {
+                                Handsontable.dom.addClass(TH, "grid content-center bg-paradiso-200 border-1 border-neutral-200")
+                            }}
+                            afterGetColHeader={(_, TH) => {
+                                Handsontable.dom.addClass(TH, "bg-paradiso-200 border-1 border-neutral-200")
+                            }}
+                            rowHeights={50}
+                            colHeaders={meses}
+                            cells={(row, col, __) => {
+                                if(row != 4) {return { 
+                                    readOnly: true,
+                                    className: "hover:cursor-not-allowed bg-neutral-100 border-1 border-neutral-300"
+                                }}
+                                else if(row === 4 && col < execucao.mes_inicial) {return { 
+                                    readOnly: true, 
+                                    className: "bg-neutral-100 border-1 border-neutral-300 hover:cursor-not-allowed"
+                                }} else {return {
+                                    className: "rounded-none"
+                                }}
 
-                    <Typography 
-                        sx={{ 
-                            fontWeight: 'medium', 
-                            color:
-                                parseFloat(execucaoEditado.empenhado) - parseFloat(execucaoEditado.executado) < 0
-                                ? (theme) => theme.palette.error.main
-                                : ''
-                        }} 
-                        component="span"
-                    >
-                        Saldo empenho
-                        <Typography 
-                            sx={{ 
-                                padding: '0 1rem', 
-                                mb: '0.5rem'
-                            }}>
-                            {formataValores(
-                                parseFloat(execucaoEditado.empenhado ? execucaoEditado.empenhado : 0) 
-                                - parseFloat(execucaoEditado.executado ? execucaoEditado.executado : 0)
-                            )}
-                        </Typography>
-                    </Typography>*/}
-                </Box>
+                            }}  
+                            colWidths={100}
+                            minCols={12}
+                            height="auto"
+                            className='htMiddle rounded-xl'
+                            licenseKey="non-commercial-and-evaluation"
+                        />
+                    </Box>
             </DialogContent>
 
             <DialogActions 
                 sx={{ 
                     margin: '1rem', 
                     display: 'flex', 
-                    alignItems: 'center', 
                     justifyContent: 'space-between' 
                 }}
             >
@@ -650,7 +355,7 @@ const FormEditExecFinanceira = (props) => {
                 </Box>
             </DialogActions>
         </Dialog>
-        </Box>
+        </>
     );
 }
 

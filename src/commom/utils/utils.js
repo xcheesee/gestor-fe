@@ -141,3 +141,28 @@ export function TabValues ({ entry, labels, label}) {
       />
     );
 });
+
+export function buildExcelDataArray(options={}) {
+  let data = [];
+  //console.log(options.valorContratado)
+  for(let i=0; i < 4; i++) {
+    if(i != 3) {
+      data.push( [...Array(12)].map(() => {
+
+        const val = Math.floor(Math.random() * 100)
+        if(val < 30) return null
+        return val
+      }))
+    } else {
+      data.push( [...Array(12)].map((v, ind) => {
+        if(ind === 0) {
+          return `=SUM(${String.fromCharCode(ind+65)}1:${String.fromCharCode(ind+65)}3)+${options.valorContratado ?? 0}`
+        } else{
+          return `=SUM(${String.fromCharCode(ind+65)}1:${String.fromCharCode(ind+65)}3)+${String.fromCharCode(ind+64)}4-${String.fromCharCode(ind+64)}5`
+        }
+    }) )
+    }
+  }
+  data.push([...Array(12)])
+  return data
+}
