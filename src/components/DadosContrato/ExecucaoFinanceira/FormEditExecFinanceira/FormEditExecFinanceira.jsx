@@ -14,9 +14,8 @@ import {
 import CloseIcon from '@mui/icons-material/Close';
 import CheckIcon from '@mui/icons-material/Check';
 import DeleteIcon from '@mui/icons-material/Delete';
-import { buildExcelDataArray, formataValores } from '../../../../commom/utils/utils';
+import { formataValores } from '../../../../commom/utils/utils';
 import { meses } from '../../../../commom/utils/constants';
-import { useExcelTableRef } from '../../../../commom/utils/hooks';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import TabelaExecFin from '../TabelaExecFin';
 import { getMesesExecutados, postMesesExecFin } from '../../../../commom/utils/api';
@@ -140,6 +139,11 @@ const FormEditExecFinanceira = ({
         mutationFn: ({execucao}) => postMesesExecFin({ execucao }),
         onSuccess: () => {
             queryClient.invalidateQueries(['mesesExecutados', execucao.id])
+            setSnackbar(prev => ({...prev, open: true, severity: "success", message: "Meses de execucao enviados."}))
+            setOpenEditExecFinanceira(false)
+        },
+        onError: (e) => {
+            setSnackbar(prev => ({...prev, open: true, severity: "error", message: `Meses de execucao nao enviados.${e}`}))
         }
     })
 
@@ -273,13 +277,7 @@ const FormEditExecFinanceira = ({
                                 data: execData,
                                 id_ano_execucao: execucao.id
                             }
-                            try{
-                                await addMesExec.mutate({execucao: postExec}) 
-                                setSnackbar(prev => ({...prev, open: true, severity: "success", message: "Meses de execucao enviados."}))
-                                setOpenEditExecFinanceira(false)
-                            } catch(e) {
-                                setSnackbar(prev => ({...prev, open: true, severity: "error", message: `Meses de execucao nao enviados.${e}`}))
-                            }
+                            addMesExec.mutate({execucao: postExec}) 
                             //console.log(data)
                             //setOpenEditar(false)
                         }}
@@ -330,7 +328,7 @@ const FormEditExecFinanceira = ({
                         variant="contained"
                         onClick={confirmar}
                     >
-                        {carregando
+                        {addMesExec.isLoading
                             ? <CircularProgress size={16} sx={{ color: (theme) => theme.palette.color.main, mr: '0.7rem' }} />
                             : <CheckIcon sx={{ mr: '0.2rem' }} fontSize="small" /> 
                         }
