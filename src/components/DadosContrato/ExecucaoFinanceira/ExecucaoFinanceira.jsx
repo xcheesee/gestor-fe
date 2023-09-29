@@ -184,7 +184,7 @@ const ExecucaoFinanceira = (props) => {
             
             <Box
                 sx={{
-                    alignSelf: 'flex-end',
+                    alignSelf: 'flex-start',
                     padding: '1rem',
                     pt: 0,
                 }}
