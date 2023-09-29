@@ -14,16 +14,15 @@ import {
 import CloseIcon from '@mui/icons-material/Close';
 import CheckIcon from '@mui/icons-material/Check';
 import DeleteIcon from '@mui/icons-material/Delete';
-import { buildExcelDataArray, formataValores, NumberFormatCustom } from '../../../../commom/utils/utils';
+import { buildExcelDataArray, formataValores } from '../../../../commom/utils/utils';
 import { meses } from '../../../../commom/utils/constants';
-import { HotTable } from '@handsontable/react'
-import Handsontable from 'handsontable';
-import { HyperFormula } from 'hyperformula'
-import { registerAllModules } from 'handsontable/registry'
 import { useExcelTableRef } from '../../../../commom/utils/hooks';
-import { useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import TabelaExecFin from '../TabelaExecFin';
+import { getMesesExecutados, postMesesExecFin } from '../../../../commom/utils/api';
+import { useSetAtom } from 'jotai';
+import { snackbarAtom } from '../../../../atomStore';
 
-registerAllModules();
 
 function DialogEditar ({openEditar, setOpenEditar, formId, carregando}) {
     return (
@@ -123,25 +122,26 @@ const FormEditExecFinanceira = ({
     //setMudancaContrato,
     formId
 }) => {
+    const queryClient = useQueryClient()
 
-    const hyperformulaInstance = HyperFormula.buildEmpty({
-        licenseKey: 'internal-use-in-handsontable'
-    })
+    const setSnackbar = useSetAtom(snackbarAtom)
 
     const [openExcluir, setOpenExcluir] = useState(false);
     const [openEditar, setOpenEditar] = useState(false);
+    const [tabelaRef, setTabelaRef] = useState()
 
-    //const execucao = useQuery({
-    //    queryKey: ['execucao', execucaoId],
-    //    queryFn: () => getExecucaoFinanceira(execucaoId),
-    //    enabled: !!execucaoId
-    //})
-
-    const [hot, ref] = useExcelTableRef({
-        dadosIniciais: buildExcelDataArray({valorContratado: execucao.contratado}), 
-        execucao: execucao 
+    const mesesExecutados = useQuery({
+        queryKey: ['mesesExecutados', execucao.id],
+        queryFn: () => getMesesExecutados(execucao.id),
+        enabled: !!execucao.id
     })
 
+    const addMesExec = useMutation({
+        mutationFn: ({execucao}) => postMesesExecFin({ execucao }),
+        onSuccess: () => {
+            queryClient.invalidateQueries(['mesesExecutados', execucao.id])
+        }
+    })
 
     const cancelar = () => {
         setOpenEditExecFinanceira(false);
@@ -268,49 +268,34 @@ const FormEditExecFinanceira = ({
                         onSubmit={async (e) => {
                             e.preventDefault()
 
-                            const data = hot.getDataAtRow(4)
-                            console.log(data)
+                            const execData = tabelaRef.getDataAtRow(4)
+                            const postExec = {
+                                data: execData,
+                                id_ano_execucao: execucao.id
+                            }
+                            try{
+                                await addMesExec.mutate({execucao: postExec}) 
+                                setSnackbar(prev => ({...prev, open: true, severity: "success", message: "Meses de execucao enviados."}))
+                                setOpenEditExecFinanceira(false)
+                            } catch(e) {
+                                setSnackbar(prev => ({...prev, open: true, severity: "error", message: `Meses de execucao nao enviados.${e}`}))
+                            }
+                            //console.log(data)
                             //setOpenEditar(false)
                         }}
                     >
-                        <HotTable 
-                            ref={ref}
-                            id="hotExec"
-                            formulas={{ engine: hyperformulaInstance}}
-                            rowHeaders={['Notas Empenho', 'Aditamentos', 'Reajustes', 'Empenhado', 'Executado']}
-                            rowHeaderWidth={120}
-                            numericFormat={{
-                                pattern: 'R$ 0.0,00',
-                                //culture: 'pt-BR'
-                            }}
-                            type='numeric'
-                            afterGetRowHeader={(_, TH) => {
-                                Handsontable.dom.addClass(TH, "grid content-center bg-paradiso-200 border-1 border-neutral-200")
-                            }}
-                            afterGetColHeader={(_, TH) => {
-                                Handsontable.dom.addClass(TH, "bg-paradiso-200 border-1 border-neutral-200")
-                            }}
-                            rowHeights={50}
-                            colHeaders={meses}
-                            cells={(row, col, __) => {
-                                if(row != 4) {return { 
-                                    readOnly: true,
-                                    className: "hover:cursor-not-allowed bg-neutral-100 border-1 border-neutral-300"
-                                }}
-                                else if(row === 4 && col < execucao.mes_inicial) {return { 
-                                    readOnly: true, 
-                                    className: "bg-neutral-100 border-1 border-neutral-300 hover:cursor-not-allowed"
-                                }} else {return {
-                                    className: "rounded-none"
-                                }}
-
-                            }}  
-                            colWidths={100}
-                            minCols={12}
-                            height="auto"
-                            className='htMiddle rounded-xl'
-                            licenseKey="non-commercial-and-evaluation"
-                        />
+                        {mesesExecutados.isLoading
+                            ?<Box className="w-full h-52 flex justify-center items-center">
+                                <CircularProgress size={32} sx={{ color: 'gray' }} />
+                            </Box>
+                            :<TabelaExecFin 
+                                //ref={ref} 
+                                id="hotExec" 
+                                execucao={execucao}
+                                setTabelaRef={setTabelaRef}
+                                mesesExecutados={mesesExecutados?.data}
+                            />
+                        }
                     </Box>
             </DialogContent>
 

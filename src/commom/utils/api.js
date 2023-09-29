@@ -89,6 +89,26 @@ export async function postAnoExecFin(formData) {
     return res
 }
 
+export async function postMesesExecFin({execucao}) {
+    const url = `${process.env.REACT_APP_API_URL}/exec_mes`;
+    const token = sessionStorage.getItem('access_token');
+    const options = {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+            'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify(execucao)
+    }
+
+    const res = await fetch(url, options)
+    if(!res.ok) {
+        throw Error("bruh")
+    }
+    return res
+} 
+
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ///                                                                                                                                 // 
 ///                                               READ                                                                              //                                             
@@ -230,26 +250,26 @@ export async function getExecucoesFinanceiras(contratoId) {
     return json.data
 }
 
-//export async function getExecucaoFinanceira(id) {
-//
-//    const url = `${process.env.REACT_APP_API_URL}/exec_financeira/${id}`;
-//    const token = localStorage.getItem('access_token');
-//    const options = {
-//        method: 'GET',
-//        headers: {
-//            //'Content-Type': 'application/json',
-//            'Accept': 'application/json',
-//            'Authorization': `Bearer ${token}`
-//        }
-//    };
-//
-//    const res = await fetch(url, options)
-//    const json = await res.json()
-//    if(!res.ok) {
-//        throw Error("bruh")
-//    }
-//    return json.data
-//}
+export async function getMesesExecutados(id) {
+
+    const url = `${process.env.REACT_APP_API_URL}/exec_mes/${id}`;
+    const token = localStorage.getItem('access_token');
+    const options = {
+        method: 'GET',
+        headers: {
+            //'Content-Type': 'application/json',
+            'Accept': 'application/json',
+            'Authorization': `Bearer ${token}`
+        }
+    };
+
+    const res = await fetch(url, options)
+    const json = await res.json()
+    if(!res.ok) {
+        throw Error("bruh")
+    }
+    return json.data
+}
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ///                                                                                                                                 // 
