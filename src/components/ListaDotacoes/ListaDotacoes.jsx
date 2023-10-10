@@ -24,6 +24,8 @@ import CheckIcon from '@mui/icons-material/Check';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { TabValues } from '../../commom/utils/utils';
 import { dotacoesLabels } from '../../commom/utils/constants';
+import { useSetAtom } from 'jotai';
+import { snackbarAtom } from '../../atomStore';
 
 const retornaNumDotacao = (numero_dotacao, descricao) => {
     return (
@@ -47,8 +49,10 @@ const ListaDotacoes = (props) => {
     const {
         numContrato,
         origemRecursos,
-        setSnackbar
+        //setSnackbar
     } = props;
+
+    const setSnackbar = useSetAtom(snackbarAtom)
 
     const queryClient = useQueryClient()
     const dotacoes = useQuery(['dotacoes', numContrato], {
@@ -115,7 +119,7 @@ const ListaDotacoes = (props) => {
                     setSnackbar({
                         open: true,
                         severity: 'success',
-                        text: 'Dotação excluída com sucesso',
+                        message: 'Dotação excluída com sucesso',
                         color: 'success'
                     });
                     queryClient.invalidateQueries(['dotacoes', numContrato])
@@ -126,7 +130,7 @@ const ListaDotacoes = (props) => {
                     setSnackbar({
                         open: true,
                         severity: 'error',
-                        text: `Erro ${res.status} - Não foi possível excluir a dotação`,
+                        message: <div>Não foi possível excluir a dotação<br/>Erro {res.message}</div>,
                         color: 'error'
                     });
                 }
@@ -164,7 +168,7 @@ const ListaDotacoes = (props) => {
                     setSnackbar({
                         open: true,
                         severity: 'success',
-                        text: 'Fonte de recurso excluída com sucesso',
+                        message: 'Fonte de recurso excluída com sucesso',
                         color: 'success'
                     });
                     setErrors({})
@@ -175,7 +179,7 @@ const ListaDotacoes = (props) => {
                     setSnackbar({
                         open: true,
                         severity: 'error',
-                        text: `Erro ${res.status} - Não foi possível excluir a fonte de recurso`,
+                        message: <div>Não foi possível excluir a fonte de recurso<br/>Erro {res.message}</div>,
                         color: 'error'
                     });
                 }
@@ -206,7 +210,7 @@ const ListaDotacoes = (props) => {
             setSnackbar({
                 open: true,
                 severity: 'success',
-                text: 'Dotação editada com sucesso!',
+                message: 'Dotação editada com sucesso!',
                 color: 'success'
             });
             setFormDotacao({
@@ -225,7 +229,7 @@ const ListaDotacoes = (props) => {
             setSnackbar({
                 open: true,
                 severity: 'error',
-                text: `Erro ${res.status} - Não foi possível editar a dotação`,
+                message: <div>Não foi possível editar a dotação<br/>Erro {res.message}</div>,
                 color: 'error'
             });
         }
@@ -255,7 +259,7 @@ const ListaDotacoes = (props) => {
             setSnackbar({
                 open: true,
                 severity: 'success',
-                text: 'Fonte de recurso editada com sucesso!',
+                message: 'Fonte de recurso editada com sucesso!',
                 color: 'success'
             });
             setFormRecurso({
@@ -274,7 +278,7 @@ const ListaDotacoes = (props) => {
             setSnackbar({
                 open: true,
                 severity: 'error',
-                text: `Erro ${res.status} - Não foi possível editar a fonte de recurso`,
+                message: <div>Não foi possível editar a fonte de recurso<br/>Erro {res.message}</div>,
                 color: 'error'
             });
         }
@@ -303,7 +307,7 @@ const ListaDotacoes = (props) => {
             setSnackbar({
                 open: true,
                 severity: 'success',
-                text: 'Dotação enviada com sucesso!',
+                message: 'Dotação enviada com sucesso!',
                 color: 'success'
             });
             setOpenFormDotacao({
@@ -321,7 +325,7 @@ const ListaDotacoes = (props) => {
             setSnackbar({
                 open: true,
                 severity: 'error',
-                text: `Erro ${res.status} - Não foi possível enviar a dotação`,
+                message: <div>Não foi possível enviar a dotação<br/>Erro {res.message}</div>,
                 color: 'error'
             });
             setErrors(res.errors)
@@ -329,7 +333,7 @@ const ListaDotacoes = (props) => {
             setSnackbar({
                 open: true,
                 severity: 'error',
-                text: `Erro ${res.status} - Não foi possível enviar a dotação`,
+                message: <div>Não foi possível enviar a dotação<br/>Erro {res.message}</div>,
                 color: 'error'
             });
         }
@@ -356,7 +360,7 @@ const ListaDotacoes = (props) => {
             setSnackbar({
                 open: true,
                 severity: 'success',
-                text: 'Fonte de recurso enviada com sucesso!',
+                message: 'Fonte de recurso enviada com sucesso!',
                 color: 'success'
             });
             setOpenFormRecurso({
@@ -374,7 +378,7 @@ const ListaDotacoes = (props) => {
             setSnackbar({
                 open: true,
                 severity: 'error',
-                text: `Erro ${res.status} - Não foi possível enviar a fonte de recurso`,
+                message: <div>Não foi possível enviar a fonte de recurso<br/>Erro {res.message}</div>,
                 color: 'error'
             });
             setErrors(res.errors)
@@ -382,7 +386,7 @@ const ListaDotacoes = (props) => {
             setSnackbar({
                 open: true,
                 severity: 'error',
-                text: `Erro ${res.status} - Não foi possível enviar a fonte de recurso`,
+                message: <div>Não foi possível enviar a fonte de recurso<br/>Erro {res.message}</div>,
                 color: 'error'
             });
         }

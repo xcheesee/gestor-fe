@@ -13,6 +13,8 @@ import BotaoAdicionar from '../BotaoAdicionar';
 import { formataData, TabValues } from '../../commom/utils/utils';
 import { postFormData, putFormData } from '../../commom/utils/api';
 import { certidaoLabels } from '../../commom/utils/constants';
+import { useSetAtom } from 'jotai';
+import { snackbarAtom } from '../../atomStore';
 
 const TabCertidoes = (props) => {
     const valores = {
@@ -32,8 +34,11 @@ const ListaCertidoes = (props) => {
         carregandoCertidoes,
         setCarregandoCertidoes,
         numContrato, 
-        setSnackbar
+        //setSnackbar
     } = props;
+    const formCertidaoId = "certidao_form"
+
+    const setSnackbar = useSetAtom(snackbarAtom)
 
     const [acao, setAcao] = useState('editar');
     const [carregando, setCarregando] = useState(false);
@@ -103,7 +108,7 @@ const ListaCertidoes = (props) => {
                 setSnackbar({
                     open: true,
                     severity: 'success',
-                    text: 'Certidão excluída com sucesso!',
+                    message: 'Certidão excluída com sucesso!',
                     color: 'success'
                 });
                 return res.json();
@@ -112,7 +117,7 @@ const ListaCertidoes = (props) => {
                 setSnackbar({
                     open: true,
                     severity: 'error',
-                    text: `Erro ${res.status} - Não foi possível excluir a certidão`,
+                    message: <div>Não foi possível excluir a certidão <br/> Erro {res.message}</div>,
                     color: 'error'
                 });
             }
@@ -142,7 +147,7 @@ const ListaCertidoes = (props) => {
             setSnackbar({
                 open: true,
                 severity: 'success',
-                text: 'Certidão editada com sucesso!',
+                message: 'Certidão editada com sucesso!',
                 color: 'success'
             });
             setOpenFormCertidao({ 
@@ -158,7 +163,7 @@ const ListaCertidoes = (props) => {
             setSnackbar({
                 open: true,
                 severity: 'error',
-                text: `Erro ${res.status} - Não foi possível editar a certidão`,
+                message: <div>Não foi possível editar a certidão<br/>Erro ${res.message}</div>,
                 color: 'error'
             });
         }
@@ -185,7 +190,7 @@ const ListaCertidoes = (props) => {
             setSnackbar({
                 open: true,
                 severity: 'success',
-                text: 'Certidão enviada com sucesso!',
+                message: 'Certidão enviada com sucesso!',
                 color: 'success'
             });
             setOpenFormCertidao({ 
@@ -201,7 +206,7 @@ const ListaCertidoes = (props) => {
             setSnackbar({
                 open: true,
                 severity: 'error',
-                text: `Erro ${res.status} - Não foi possível enviar a certidão`,
+                message: <div>Não foi possível enviar a certidão <br/> Erro {res.message}</div>,
                 color: 'error'
             });
         }
@@ -252,6 +257,7 @@ const ListaCertidoes = (props) => {
                 editaCertidao={editaCertidao}
                 enviaCertidao={enviaCertidao}
                 carregando={carregando}
+                formId={formCertidaoId}
                 setOpenConfirmacao={setOpenConfirmacao}
                 errors={errors}
                 setErrors={setErrors}
@@ -275,7 +281,7 @@ const ListaCertidoes = (props) => {
             <DialogConfirmacao
                 openConfirmacao={openConfirmacao} 
                 setOpenConfirmacao={setOpenConfirmacao}
-                form="certidao_form"
+                formId={formCertidaoId}
                 acao={acao} 
                 fnExcluir={excluiCertidao}
                 fnEditar={editaCertidao}

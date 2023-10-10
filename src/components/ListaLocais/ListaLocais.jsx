@@ -13,6 +13,8 @@ import FormLocais from './FormLocais';
 import { postFormData, putFormData, sendLocalEdit, sendNewLocal } from '../../commom/utils/api';
 import { TabValues } from '../../commom/utils/utils';
 import { locaisLabels } from '../../commom/utils/constants';
+import { useSetAtom } from 'jotai';
+import { snackbarAtom } from '../../atomStore';
 
 const dicionarioRegioes = {
     "CO": "Centro-Oeste",
@@ -46,8 +48,9 @@ const ListaLocais = (props) => {
         carregandoLocais,
         setCarregandoLocais,
         numContrato,
-        setSnackbar
     } = props;
+
+    const setSnackbar = useSetAtom(snackbarAtom)
 
     const [acao, setAcao] = useState('editar');
     const [carregando, setCarregando] = useState(false);
@@ -119,7 +122,7 @@ const ListaLocais = (props) => {
                     setSnackbar({
                         open: true,
                         severity: 'success',
-                        text: 'Regionalização excluída com sucesso!',
+                        message: 'Regionalização excluída com sucesso!',
                         color: 'success'
                     });
                     return res.json();
@@ -128,7 +131,7 @@ const ListaLocais = (props) => {
                     setSnackbar({
                         open: true,
                         severity: 'error',
-                        text: `Erro ${res.status} - Não foi possível excluir o local`,
+                        message: <div>Não foi possível excluir o local <br/>Erro ${res.message}</div>,
                         color: 'error'
                     });
                 }
@@ -159,7 +162,7 @@ const ListaLocais = (props) => {
             setSnackbar({
                 open: true,
                 severity: 'success',
-                text: 'Regionalização editado com sucesso!',
+                message: 'Regionalização editado com sucesso!',
                 color: 'success'
             });
             setOpenFormLocal({
@@ -177,7 +180,7 @@ const ListaLocais = (props) => {
             setSnackbar({
                 open: true,
                 severity: 'error',
-                text: `Erro ${res.status} - Não foi possível editar o local`,
+                message: <div>Não foi possível editar o local <br/>Erro {res.message}</div>,
                 color: 'error'
             });
         }
@@ -200,7 +203,7 @@ const ListaLocais = (props) => {
             setSnackbar({
                 open: true,
                 severity: 'success',
-                text: 'Regionalização enviado com sucesso!',
+                message: 'Regionalização enviado com sucesso!',
                 color: 'success'
             });
             setOpenFormLocal({
@@ -218,7 +221,7 @@ const ListaLocais = (props) => {
             setSnackbar({
                 open: true,
                 severity: 'error',
-                text: `Erro ${res.status} - Não foi possível enviar o local`,
+                message: <div>Não foi possível enviar o local <br/>Erro {res.message}</div>,
                 color: 'error'
             });
             setErrors(res.errors);
@@ -227,7 +230,7 @@ const ListaLocais = (props) => {
             setSnackbar({
                 open: true,
                 severity: 'error',
-                text: `Erro ${res.status} - Não foi possível enviar o local`,
+                message: <div>Não foi possível enviar o local <br/>Erro {res.message}</div>,
                 color: 'error'
             });
         }

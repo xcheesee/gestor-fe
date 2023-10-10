@@ -20,6 +20,8 @@ import CheckIcon from '@mui/icons-material/Check';
 import CircularProgress from '@mui/material/CircularProgress';
 import { TabValues } from '../../commom/utils/utils';
 import { fiscLabels } from '../../commom/utils/constants';
+import { useSetAtom } from 'jotai';
+import { snackbarAtom } from '../../atomStore';
 
 const TabFiscalizacao = (props) => {
     return <TabValues entry={props} labels={fiscLabels} label="fiscalizacao "/>;
@@ -33,9 +35,11 @@ const ListaFiscalizacoes = (props) => {
         setMudancaFiscalizacoes,
         carregandoFiscalizacoes,
         setCarregandoFiscalizacoes,
-        setSnackbar,
+        //setSnackbar,
         numContrato
     } = props;
+
+    const setSnackbar = useSetAtom(snackbarAtom)
 
     const handleClickConfirmar = () => {
         if (openFormFiscalizacao.acao === 'adicionar') {
@@ -120,7 +124,7 @@ const ListaFiscalizacoes = (props) => {
                     setSnackbar({
                         open: true,
                         severity: 'success',
-                        text: 'Gestão/fiscalização excluída com sucesso!',
+                        message: 'Gestão/fiscalização excluída com sucesso!',
                         color: 'success'
                     });
                     return res.json();
@@ -129,7 +133,7 @@ const ListaFiscalizacoes = (props) => {
                     setSnackbar({
                         open: true,
                         severity: 'error',
-                        text: `Erro ${res.status} - Não foi possível excluir`,
+                        message: <div>Não foi possível excluir<br/>Erro {res.message}</div>,
                         color: 'error'
                     });
                 }
@@ -161,7 +165,7 @@ const ListaFiscalizacoes = (props) => {
             setSnackbar({
                 open: true,
                 severity: 'success',
-                text: 'Gestão/fiscalização editada com sucesso!',
+                message: 'Gestão/fiscalização editada com sucesso!',
                 color: 'success'
             });
             setOpenFormFiscalizacao({
@@ -181,7 +185,7 @@ const ListaFiscalizacoes = (props) => {
             setSnackbar({
                 open: true,
                 severity: 'error',
-                text: `Erro ${res.status} - Não foi possível editar a gestão/fiscalização`,
+                message: <div>Não foi possível editar a gestão/fiscalização<br/>Erro {res.message}</div>,
                 color: 'error'
             });
         }
@@ -212,7 +216,7 @@ const ListaFiscalizacoes = (props) => {
             setSnackbar({
                 open: true,
                 severity: 'success',
-                text: 'Gestão/fiscalização enviada com sucesso!',
+                message: 'Gestão/fiscalização enviada com sucesso!',
                 color: 'success'
             });
             setOpenFormFiscalizacao({
@@ -233,7 +237,7 @@ const ListaFiscalizacoes = (props) => {
             setSnackbar({
                 open: true,
                 severity: 'error',
-                text: `Erro ${res.status} - Não foi possível enviar a gestão/fiscalização`,
+                message: <div>Não foi possível enviar a gestão/fiscalização<br/>Erro {res.message}</div>,
                 color: 'error'
             });
             setErrors(res.errors);
@@ -242,7 +246,7 @@ const ListaFiscalizacoes = (props) => {
             setSnackbar({
                 open: true,
                 severity: 'error',
-                text: `Erro ${res.status} - Não foi possível enviar a gestão/fiscalização`,
+                message: <div>Não foi possível enviar a gestão/fiscalização<br/>Erro {res.message}</div>,
                 color: 'error'
             });
         }

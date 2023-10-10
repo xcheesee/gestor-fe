@@ -227,7 +227,7 @@ const DadosContrato = ({ setSnackbar }) => {
                                             setMudancaCertidoes={setMudancaCertidoes}
                                             carregandoCertidoes={carregandoCertidoes}
                                             setCarregandoCertidoes={setCarregandoCertidoes}
-                                            setSnackbar={setSnackbar}
+                                            //setSnackbar={setSnackbar}
                                             numContrato={numContrato}
                                         />
                                     </TabPanel>
@@ -240,7 +240,7 @@ const DadosContrato = ({ setSnackbar }) => {
                                             setMudancaGarantias={setMudancaGarantias}
                                             carregandoGarantias={carregandoGarantias}
                                             setCarregandoGarantias={setCarregandoGarantias}
-                                            setSnackbar={setSnackbar}
+                                            //setSnackbar={setSnackbar}
                                             numContrato={numContrato}
                                         />
                                     </TabPanel>
@@ -253,7 +253,7 @@ const DadosContrato = ({ setSnackbar }) => {
                                             setMudancaFiscalizacoes={setMudancaFiscalizacoes}
                                             carregandoFiscalizacoes={carregandoFicalizacoes}
                                             setCarregandoFiscalizacoes={setCarregandoFiscalizacoes}
-                                            setSnackbar={setSnackbar}
+                                            //setSnackbar={setSnackbar}
                                             numContrato={numContrato}
                                         />
                                     </TabPanel>
@@ -267,7 +267,7 @@ const DadosContrato = ({ setSnackbar }) => {
                                             carregandoLocais={carregandoLocais}
                                             setCarregandoLocais={setCarregandoLocais}
                                             numContrato={numContrato}
-                                            setSnackbar={setSnackbar}
+                                            //setSnackbar={setSnackbar}
                                         />
                                     </TabPanel>
                                     
@@ -280,7 +280,7 @@ const DadosContrato = ({ setSnackbar }) => {
                                             carregandoAditamentos_valor={carregandoAditamentos_valor}
                                             setCarregandoAditamentos_valor={setCarregandoAditamentos_valor}
                                             numContrato={numContrato}
-                                            setSnackbar={setSnackbar}
+                                            //setSnackbar={setSnackbar}
                                         />                                                                                                               
                                     </TabPanel>
 
@@ -293,7 +293,7 @@ const DadosContrato = ({ setSnackbar }) => {
                                             carregandoAditamentos_prazo={carregandoAditamentos_prazo}
                                             setCarregandoAditamentos_prazo={setCarregandoAditamentos_prazo}
                                             numContrato={numContrato}
-                                            setSnackbar={setSnackbar}
+                                            //setSnackbar={setSnackbar}
                                         />
                                     </TabPanel>
 
@@ -305,7 +305,7 @@ const DadosContrato = ({ setSnackbar }) => {
                                             setMudancaNotasEmpenho={setMudancaNotasEmpenho}
                                             carregandoNotasEmpenho={carregandoNotasEmpenho}
                                             setCarregandoNotasEmpenho={setCarregandoNotasEmpenho}
-                                            setSnackbar={setSnackbar}
+                                            //setSnackbar={setSnackbar}
                                             numContrato={numContrato}
                                         />
                                     </TabPanel>
@@ -314,13 +314,14 @@ const DadosContrato = ({ setSnackbar }) => {
                                         <ListaDotacoes 
                                             numContrato={numContrato}
                                             origemRecursos={origemRecursos}
-                                            setSnackbar={setSnackbar}
+                                            //setSnackbar={setSnackbar}
                                         />
                                     </TabPanel>
                                     <TabPanel value={value} index={9}>
                                         <ListaReajustes 
                                             numContrato={numContrato} 
-                                            setSnackbar={setSnackbar}/>
+                                            //setSnackbar={setSnackbar}
+                                        />
                                     </TabPanel>
                                 </Box>
                             </Box>

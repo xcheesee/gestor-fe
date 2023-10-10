@@ -13,6 +13,8 @@ import FormAditamentoPrazo from "./FormAditamentos/FormAditamentoPrazo";
 import { postFormData, putFormData } from "../../commom/utils/api";
 import { TabValues } from "../../commom/utils/utils";
 import { aditPrazoLabels } from "../../commom/utils/constants";
+import { useSetAtom } from "jotai";
+import { snackbarAtom } from "../../atomStore";
 
 const TabAditamentosPrazo = (props) => <TabValues entry={props} labels={aditPrazoLabels} label="aditamento_prazo" />
 
@@ -24,9 +26,11 @@ const ListaAditamentosPrazo = (props) => {
     setMudancaAditamentos_prazo,
     carregandoAditamentos_prazo,
     setCarregandoAditamentos_prazo,
-    setSnackbar,
+    //setSnackbar,
     numContrato,
   } = props;
+
+  const setSnackbar = useSetAtom(snackbarAtom)
 
   const [acao, setAcao] = useState("editar");
   const [carregando, setCarregando] = useState(false);
@@ -95,7 +99,7 @@ const ListaAditamentosPrazo = (props) => {
         setSnackbar({
           open: true,
           severity: "success",
-          text: "Aditamento excluído com sucesso!",
+          message: "Aditamento excluído com sucesso!",
           color: "success"
         });
         return res.json();
@@ -104,7 +108,7 @@ const ListaAditamentosPrazo = (props) => {
         setSnackbar({
           open: true,
           severity: "error",
-          text: `Erro ${res.status} - Não foi possível excluir o aditamento`,
+          message: <div>Não foi possível excluir o aditamento<br/>Erro {res.message}</div>,
           color: "error"
         });
       }
@@ -133,7 +137,7 @@ const ListaAditamentosPrazo = (props) => {
       setSnackbar({
         open: true,
         severity: "success",
-        text: "Aditamento editada com sucesso!",
+        message: "Aditamento editada com sucesso!",
         color: "success"
       });
       setOpenFormAditamentos({
@@ -150,7 +154,7 @@ const ListaAditamentosPrazo = (props) => {
       setSnackbar({
         open: true,
         severity: "error",
-        text: `Erro ${res.status} - Não foi possível editar o aditamento`,
+        message: <div>Não foi possível editar o aditamento<br/>Erro {res.message}</div>,
         color: "error"
       });
     }
@@ -176,7 +180,7 @@ const ListaAditamentosPrazo = (props) => {
       setSnackbar({
         open: true,
         severity: "success",
-        text: "Aditamento enviado com sucesso!",
+        message: "Aditamento enviado com sucesso!",
         color: "success"
       });
       setOpenFormAditamentos({
@@ -192,7 +196,7 @@ const ListaAditamentosPrazo = (props) => {
       setSnackbar({
         open: true,
         severity: "error",
-        text: `Erro ${res.status} - Não foi possível enviar o aditamento`,
+        message: <div>Não foi possível enviar o aditamento<br/>Erro {res.message}</div>,
         color: "error"
       });
       setErrors(res.errors);
@@ -200,7 +204,7 @@ const ListaAditamentosPrazo = (props) => {
       setSnackbar({
         open: true,
         severity: "error",
-        text: `Erro ${res.status} - Não foi possível enviar o aditamento`,
+        message: <div>Não foi possível enviar o aditamento<br/>Erro {res.message}</div>,
         color: "error"
       });
     }

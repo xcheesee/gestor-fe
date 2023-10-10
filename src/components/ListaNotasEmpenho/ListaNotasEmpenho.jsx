@@ -13,6 +13,8 @@ import BotaoAdicionar from '../BotaoAdicionar';
 import { formataData, formataValores, TabValues, primeiraLetraMaiuscula } from '../../commom/utils/utils';
 import { postFormData, putFormData } from '../../commom/utils/api';
 import { emprenhoLabels } from '../../commom/utils/constants';
+import { useSetAtom } from 'jotai';
+import { snackbarAtom } from '../../atomStore';
 
 const TabNotasEmpenho = (props) => {
     const valores = {
@@ -33,8 +35,10 @@ const ListaNotasEmpenho = (props) => {
         carregandoNotasEmpenho,
         setCarregandoNotasEmpenho,
         numContrato, 
-        setSnackbar
+        //setSnackbar
     } = props;
+
+    const setSnackbar = useSetAtom(snackbarAtom)
 
     const [acao, setAcao] = useState('editar');
     const [carregando, setCarregando] = useState(false);
@@ -106,7 +110,7 @@ const ListaNotasEmpenho = (props) => {
                 setSnackbar({
                     open: true,
                     severity: 'success',
-                    text: 'Nota de Empenho excluída com sucesso!',
+                    message: 'Nota de Empenho excluída com sucesso!',
                     color: 'success'
                 });
                 return res.json();
@@ -115,7 +119,7 @@ const ListaNotasEmpenho = (props) => {
                 setSnackbar({
                     open: true,
                     severity: 'error',
-                    text: `Erro ${res.status} - Não foi possível excluir a nota de empenho`,
+                    message: <div>Não foi possível excluir a nota de empenho<br/>Erro {res.message}</div>,
                     color: 'error'
                 });
             }
@@ -145,7 +149,7 @@ const ListaNotasEmpenho = (props) => {
             setSnackbar({
                 open: true,
                 severity: 'success',
-                text: 'Nota de Empenho editada com sucesso!',
+                message: 'Nota de Empenho editada com sucesso!',
                 color: 'success'
             });
             setOpenFormNotaEmpenho({ 
@@ -164,7 +168,7 @@ const ListaNotasEmpenho = (props) => {
             setSnackbar({
                 open: true,
                 severity: 'error',
-                text: `Erro ${res.status} - Não foi possível editar a nota de empenho`,
+                message: <div>Não foi possível editar a nota de empenho<br/>Erro {res.message}</div>,
                 color: 'error'
             });
         }
@@ -193,7 +197,7 @@ const ListaNotasEmpenho = (props) => {
             setSnackbar({
                 open: true,
                 severity: 'success',
-                text: 'Nota de Empenho enviada com sucesso!',
+                message: 'Nota de Empenho enviada com sucesso!',
                 color: 'success'
             });
             setOpenFormNotaEmpenho({ 
@@ -211,7 +215,7 @@ const ListaNotasEmpenho = (props) => {
             setSnackbar({
                 open: true,
                 severity: 'error',
-                text: `Erro ${res.status} - Não foi possível enviar a nota de empenho`,
+                message: <div>Não foi possível enviar a nota de empenho<br/>Erro {res.message}</div>,
                 color: 'error'
             });
         }

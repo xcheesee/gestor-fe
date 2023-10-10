@@ -13,6 +13,8 @@ import FormGarantia from './FormGarantia';
 import { formataData, formataValores, TabValues } from '../../commom/utils/utils';
 import { postFormData, putFormData } from '../../commom/utils/api';
 import { garantiaLabels } from '../../commom/utils/constants';
+import { useSetAtom } from 'jotai';
+import { snackbarAtom } from '../../atomStore';
 
 const TabGarantias = (props) => {
     const valores = {
@@ -32,9 +34,10 @@ const ListaGarantias = (props) => {
         setMudancaGarantias,
         carregandoGarantias,
         setCarregandoGarantias,
-        setSnackbar,
         numContrato
     } = props;
+
+    const setSnackbar = useSetAtom(snackbarAtom)
 
     const [acao, setAcao] = useState('editar');
     const [carregando, setCarregando] = useState(false);
@@ -106,7 +109,7 @@ const ListaGarantias = (props) => {
                     setSnackbar({
                         open: true,
                         severity: 'success',
-                        text: 'Garantia excluída com sucesso!',
+                        message: 'Garantia excluída com sucesso!',
                         color: 'success'
                     });
                     return res.json();
@@ -115,7 +118,7 @@ const ListaGarantias = (props) => {
                     setSnackbar({
                         open: true,
                         severity: 'error',
-                        text: `Erro ${res.status} - Não foi possível excluir`,
+                        message: <div>Não foi possível excluir.<br/>Erro {res.message}</div>,
                         color: 'error'
                     });
                 }
@@ -145,7 +148,7 @@ const ListaGarantias = (props) => {
             setSnackbar({
                 open: true,
                 severity: 'success',
-                text: 'Garantia editada com sucesso!',
+                message: 'Garantia editada com sucesso!',
                 color: 'success'
             });
             setOpenFormGarantia({
@@ -163,7 +166,7 @@ const ListaGarantias = (props) => {
             setSnackbar({
                 open: true,
                 severity: 'error',
-                text: `Erro ${res.status} - Não foi possível editar a garantia`,
+                message: <div>Não foi possível editar a garantia<br/>Erro {res.message}</div>,
                 color: 'error'
             });
         }
@@ -192,7 +195,7 @@ const ListaGarantias = (props) => {
             setSnackbar({
                 open: true,
                 severity: 'success',
-                text: 'Garantia enviada com sucesso!',
+                message: 'Garantia enviada com sucesso!',
                 color: 'success'
             });
             setOpenFormGarantia({
@@ -210,7 +213,7 @@ const ListaGarantias = (props) => {
             setSnackbar({
                 open: true,
                 severity: 'error',
-                text: `Erro ${res.status} - Não foi possível enviar a garantia`,
+                message: `Erro ${res.status} - Não foi possível enviar a garantia`,
                 color: 'error'
             });
         }

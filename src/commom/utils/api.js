@@ -103,11 +103,34 @@ export async function postMesesExecFin({execucao}) {
     }
 
     const res = await fetch(url, options)
+    const json = await res.json()
     if(!res.ok) {
-        throw Error("bruh")
+        throw ({status: res.status, ...json})
     }
     return res
 } 
+
+export async function postReajusteContrato({formData}) {
+    const token = localStorage.getItem('access_token');
+    let data = getFormattedFormData(formData)
+    const url = `${process.env.REACT_APP_API_URL}/reajuste`;
+    const options = {
+        method: 'POST',
+        headers: {
+            'Accept': 'application/json',
+            'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify(data)
+    };
+
+    const res = await fetch(url, options)
+    const json = await res.json()
+    if(!res.ok) {
+        throw ({status: res.status, ...json})
+    }
+    return {status: res.status, ...json}
+
+}
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ///                                                                                                                                 // 
@@ -296,8 +319,9 @@ export const newPwRequest = async (formData) => {
         headers: headers,
         body: JSON.stringify(data),
     })
+    const json = await res.json()
 
-    return await res.json()
+    return {status: res.status, ...json}
 }
 
 export const editaDadosContrato = async (e, dados, formInterno, id) => {
@@ -341,6 +365,28 @@ export async function putFormData (id, form, path) {
     return {status: res.status, ...json}
 }
 
+export async function editReajusteContrato(id, form) {
+    const token = localStorage.getItem('access_token');
+    let data = getFormattedFormData(form)
+    const url = `${process.env.REACT_APP_API_URL}/reajuste/${id}`;
+    const options = {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+            'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify(data)
+    };
+    const res = await fetch(url, options)
+    const json = await res.json()
+
+    if(!res.ok) {
+        throw ({status: res.status, ...json})
+    }
+    return {status: res.status, ...json}
+}
+
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ///                                                                                                                                 // 
 ///                                               DELETE                                                                            //                                             
@@ -364,6 +410,6 @@ export async function deleteReajuste(id) {
     if(res.ok) {
         return {status: res.status, ...json}
     } else {
-        throw ({'message': 'Nao foi possivel deletar o reajuste'})
+        throw ({status: res.status, ...json})
     }
 }

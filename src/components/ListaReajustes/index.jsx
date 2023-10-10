@@ -2,7 +2,7 @@ import { Box, CircularProgress, Fade, Paper, TextField } from "@mui/material";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useRef } from "react";
 import { useState } from "react";
-import { deleteReajuste, getFormData, postFormData, putFormData } from "../../commom/utils/api";
+import { deleteReajuste, editReajusteContrato, getFormData, postFormData, postReajusteContrato, putFormData } from "../../commom/utils/api";
 import { reajusteLabels } from "../../commom/utils/constants";
 import { formataValores } from "../../commom/utils/utils";
 import BotaoAdicionar from "../BotaoAdicionar";
@@ -11,15 +11,22 @@ import CampoValores from "../CampoValores";
 import ContratoFormWrapper from "../ContratoFormWrapper";
 import DialogConfirmacao from "../DialogConfirmacao";
 import TabContrato from "../TabContrato";
+import { useSetAtom } from "jotai";
+import { snackbarAtom } from "../../atomStore";
 
-export default function ListaReajustes ({ numContrato, setSnackbar }) {
+export default function ListaReajustes ({ numContrato, /*setSnackbar*/ }) {
     let dados = []
+
+    const setSnackbar = useSetAtom(snackbarAtom)
+
     const queryClient = useQueryClient()
     const dadosReajuste = useQuery({
         queryKey: ['reajuste', numContrato], 
         queryFn: () => getFormData(`reajustes/${numContrato}`)
     })
+
     const currDados = useRef({id: 0, valor_reajuste: "", indice_reajuste: ""})
+
     const [formDialog, setFormDialog] = useState(false)
     const [acao, setAcao] = useState("")
     const [openConfirmacao, setOpenConfirmacao] = useState({open: false, id: ""})
@@ -27,44 +34,82 @@ export default function ListaReajustes ({ numContrato, setSnackbar }) {
 
     const addReajuste = useMutation({
         mutationFn: async (formData) => {
-                return await postFormData(formData, "reajuste")
-        }, onSuccess: async (res) => {
+                return await postReajusteContrato({formData})
+        }, 
+        onSuccess: async (res) => {
             setFormDialog(false)
             setSnackbar({
                 open: true,
                 severity: 'success',
-                text: 'Reajuste criado com sucesso!',
+                message: 'Reajuste criado com sucesso!',
                 color: 'success'
             });
             queryClient.invalidateQueries(['reajuste', numContrato])
+        },
+        onError: async (res) => {
+            setFormDialog(false)
+            setSnackbar({
+                open: true,
+                severity: 'error',
+                message: 
+                    <div>
+                        Não foi possível enviar o Reajuste.
+                        <br/>
+                        Erro: {res.message}
+                        <br />
+                        {res.errors != null
+                            ?Object.values(res.errors).map((error, i) => (<div key={`error-${i}`}>{i}. {error}<br/></div>))
+                            :<></>
+                        }
+                    </div>,
+                color: 'error'
+            });
         }
     })
     const editReajuste = useMutation({
-        mutationFn: async ({id, formData}) => {
-                return await putFormData(id, formData, "reajuste")
-        }, onSuccess: async (res) => {
+        mutationFn: async ({id, formData}) => await editReajusteContrato(id, formData), 
+        onSuccess: async (res) => {
             setFormDialog(false)
             setSnackbar({
                 open: true,
                 severity: 'success',
-                text: 'Reajuste editado com sucesso!',
+                message: 'Reajuste editado com sucesso!',
                 color: 'success'
             });
             queryClient.invalidateQueries(['reajuste'])
+        },
+        onError: async (res) => {
+            setOpenConfirmacao({open: false, id: ""})
+            setSnackbar({
+                open: true,
+                severity: 'error',
+                message: <div>Não foi possível editar o Reajuste<br/>Erro {res.message}</div>,
+                color: 'error'
+            });
         }
     })
     const deleteReajusteFn = useMutation({
         mutationFn: async (id) => {
             return await deleteReajuste(id)
-        }, onSuccess: async (res) => {
+        }, 
+        onSuccess: async (res) => {
             setOpenConfirmacao({open: false, id: ""})
             setSnackbar({
                 open: true,
                 severity: 'success',
-                text: 'Reajuste excluido com sucesso!',
+                message: 'Reajuste excluido com sucesso!',
                 color: 'success'
             });
             queryClient.invalidateQueries(['reajuste'])
+        },
+        onError: async (res) => {
+            setOpenConfirmacao({open: false, id: ""})
+            setSnackbar({
+                open: true,
+                severity: 'error',
+                message: <div>Não foi possível excluir o Reajuste<br/>Erro {res.message}</div>,
+                color: 'error'
+            });
         }
     })
     async function handleEditPress (entry) {
