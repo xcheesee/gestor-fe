@@ -23,7 +23,6 @@ const FormProcessoContratacao = (props) => {
         openProcCon,
         setOpenProcCon,
         numContrato,
-        //setSnackbar,
         carregando,
         mudancaContrato,
         setMudancaContrato

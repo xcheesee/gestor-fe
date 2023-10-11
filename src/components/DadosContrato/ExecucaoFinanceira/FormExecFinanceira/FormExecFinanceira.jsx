@@ -17,8 +17,6 @@ import CloseIcon from '@mui/icons-material/Close';
 import CheckIcon from '@mui/icons-material/Check';
 import CampoAno from '../../../CampoAno';
 import CampoValores from '../../../CampoValores';
-import RefExecucaoFinanceira from '../RefExecucaoFinanceira';
-import { TextField, InputAdornment } from '@mui/material';
 import { meses } from '../../../../commom/utils/constants';
 import { postAnoExecFin } from '../../../../commom/utils/api';
 import { useSetAtom } from 'jotai';
@@ -99,7 +97,22 @@ const FormExecFinanceira = (props) => {
                             setOpenFormExecFinanceira(false)
                             setSnackbar(prev => ({...prev, open: true, severity:"success", message: "Ano de execucao enviado."}))
                         } catch(e) {
-
+                            setSnackbar(prev => ({
+                                ...prev, 
+                                open: true, 
+                                severity: 'error', 
+                                message: 
+                                <div>
+                                    Nao foi possivel enviar o ano de execucao
+                                    <br/>
+                                    Error: {e.message}
+                                    <br/>
+                                    {e.errors
+                                        ?Object.values(e.errors).map( (error, i) => (<div key={`error-${i}`}>{error}</div>))
+                                        :<></>
+                                    }
+                                </div>
+                            }))
                         }
 
                     }}

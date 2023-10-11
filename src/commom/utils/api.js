@@ -70,6 +70,26 @@ export async function postFormData (form, path) {
     return {status: res.status, ...json}
 }
 
+export async function throwablePostForm({form, path}) {
+    const token = localStorage.getItem('access_token');
+    const url = `${process.env.REACT_APP_API_URL}/${path}`;
+    const options = {
+        method: 'POST',
+        headers: {
+            'Accept': 'application/json',
+            'Authorization': `Bearer ${token}`
+        },
+        body: form
+    };
+
+    const res = await fetch(url, options)
+    const json = await res.json()
+    if(!res.ok) {
+        throw {status: res.status, ...json}
+    }
+    return {status: res.status, ...json}
+}
+
 export async function postAnoExecFin(formData) {
     const url = `${process.env.REACT_APP_API_URL}/exec_financeira`;
     const token = sessionStorage.getItem('access_token');
@@ -83,8 +103,9 @@ export async function postAnoExecFin(formData) {
     }
 
     const res = await fetch(url, options)
+    const json = await res.json()
     if(!res.ok) {
-        throw Error("bruh")
+        throw ({status: res.status, ...json})
     }
     return res
 }
@@ -130,6 +151,27 @@ export async function postReajusteContrato({formData}) {
     }
     return {status: res.status, ...json}
 
+}
+
+export async function postCertidao({formData}) {
+    const token = localStorage.getItem('access_token');
+    let data = getFormattedFormData(formData)
+    const url = `${process.env.REACT_APP_API_URL}/certidao`;
+    const options = {
+        method: 'POST',
+        headers: {
+            'Accept': 'application/json',
+            'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify(data)
+    };
+
+    const res = await fetch(url, options)
+    const json = await res.json()
+    if(!res.ok) {
+        throw ({status: res.status, ...json})
+    }
+    return {status: res.status, ...json}
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -253,13 +295,31 @@ export async function getFormData (path) {
     return await (await fetch(`${url}/${path}`, options)).json()
 } 
 
+export async function throwableGetData({path, contratoId=""}) {
+    const token = localStorage.getItem('access_token');
+    const url = `${process.env.REACT_APP_API_URL}/${path}/${contratoId}`
+    const options = {
+        headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+            'Authorization': `Bearer ${token}`
+        },
+        method: 'GET'
+    }
+    const res = await fetch(url, options)
+    const json = await res.json()
+    if(!res.ok) {
+        throw ({status: res.status, ...json})
+    }
+    return {status: res.status, ...json}
+}
+
 export async function getExecucoesFinanceiras(contratoId) {
     const url = `${process.env.REACT_APP_API_URL}/exec_financeira/${contratoId}`;
     const token = localStorage.getItem('access_token');
     const options = {
         method: 'GET',
         headers: {
-            //'Content-Type': 'application/json',
             'Accept': 'application/json',
             'Authorization': `Bearer ${token}`
         }
@@ -292,6 +352,46 @@ export async function getMesesExecutados(id) {
         throw Error("bruh")
     }
     return json.data
+}
+
+export async function getCertidoes({numContrato}) {
+    const url = `${process.env.REACT_APP_API_URL}/certidoes/${numContrato}`;
+    const token = localStorage.getItem('access_token');
+    const options = {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+            'Authorization': `Bearer ${token}`
+        }
+    };
+    
+    const res = await fetch(url, options)
+    const json = await res.json()
+    if(!res.ok) {
+        throw ({status: res.status, ...json})
+    }
+    return json
+}
+
+export async function getGarantias({numContrato}) {
+    const url = `${process.env.REACT_APP_API_URL}/garantias/${numContrato}`;
+    const token = localStorage.getItem('access_token');
+    const options = {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+            'Authorization': `Bearer ${token}`
+        },
+    }
+
+    const res = await fetch(url, options)
+    const json = await res.json()
+    if(!res.ok) {
+        throw ({status: res.status, ...json})
+    }
+    return ({status: res.status, ...json})
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -365,10 +465,10 @@ export async function putFormData (id, form, path) {
     return {status: res.status, ...json}
 }
 
-export async function editReajusteContrato(id, form) {
+export async function throwablePutForm({id, form, path}) {
     const token = localStorage.getItem('access_token');
     let data = getFormattedFormData(form)
-    const url = `${process.env.REACT_APP_API_URL}/reajuste/${id}`;
+    const url = `${process.env.REACT_APP_API_URL}/${path}/${id}`;
     const options = {
         method: 'PUT',
         headers: {
@@ -385,7 +485,77 @@ export async function editReajusteContrato(id, form) {
         throw ({status: res.status, ...json})
     }
     return {status: res.status, ...json}
+
 }
+
+//export async function editReajusteContrato(id, form) {
+//    const token = localStorage.getItem('access_token');
+//    let data = getFormattedFormData(form)
+//    const url = `${process.env.REACT_APP_API_URL}/reajuste/${id}`;
+//    const options = {
+//        method: 'PUT',
+//        headers: {
+//            'Content-Type': 'application/json',
+//            'Accept': 'application/json',
+//            'Authorization': `Bearer ${token}`
+//        },
+//        body: JSON.stringify(data)
+//    };
+//    const res = await fetch(url, options)
+//    const json = await res.json()
+//
+//    if(!res.ok) {
+//        throw ({status: res.status, ...json})
+//    }
+//    return {status: res.status, ...json}
+//}
+
+//export async function putCertidao({id, form}) {
+//    const token = localStorage.getItem('access_token');
+//    let data = getFormattedFormData(form)
+//    const url = `${process.env.REACT_APP_API_URL}/certidao/${id}`;
+//    const options = {
+//        method: 'PUT',
+//        headers: {
+//            'Content-Type': 'application/json',
+//            'Accept': 'application/json',
+//            'Authorization': `Bearer ${token}`
+//        },
+//        body: JSON.stringify(data)
+//    };
+//    const res = await fetch(url, options)
+//    const json = await res.json()
+//
+//    if(!res.ok) {
+//        throw {status: res.status, ...json}
+//    }
+//
+//    return {status: res.status, ...json}
+//}
+
+//export async function putGarantia({form, id}) {
+//    const token = localStorage.getItem('access_token');
+//    let data = getFormattedFormData(form)
+//    const url = `${process.env.REACT_APP_API_URL}/garantia/${id}`;
+//    const options = {
+//        method: 'PUT',
+//        headers: {
+//            'Content-Type': 'application/json',
+//            'Accept': 'application/json',
+//            'Authorization': `Bearer ${token}`
+//        },
+//        body: JSON.stringify(data)
+//    };
+//    const res = await fetch(url, options)
+//    const json = await res.json()
+//
+//    if(!res.ok) {
+//        throw {status: res.status, ...json}
+//    }
+//
+//    return {status: res.status, ...json}
+//}
+
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ///                                                                                                                                 // 
@@ -412,4 +582,63 @@ export async function deleteReajuste(id) {
     } else {
         throw ({status: res.status, ...json})
     }
+}
+
+export async function deleteCertidao({id}) {
+    const url = `${process.env.REACT_APP_API_URL}/certidao/${id}`;
+    const token = localStorage.getItem('access_token');
+    const options = {
+        method: 'DELETE',
+        headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+            'Authorization': `Bearer ${token}`
+        }
+    }
+    const res = await fetch(url, options)
+    const json = await res.json()
+    if(!res.ok) {
+        throw ({status: res.status, ...json})
+    }
+    return res
+}
+
+export async function deleteGarantia({id}) {
+    const url = `${process.env.REACT_APP_API_URL}/garantia/${id}`;
+    const token = localStorage.getItem('access_token');
+    const options = {
+        method: 'DELETE',
+        headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+            'Authorization': `Bearer ${token}`
+        }
+    }
+
+    const res = await fetch(url, options)
+    const json = await res.json()
+    if(!res.ok) {
+        throw ({status: res.status})
+    }
+    return ({status: res.status})
+}
+
+export async function throwableDeleteForm({id, path}) {
+    const url = `${process.env.REACT_APP_API_URL}/${path}/${id}`;
+    const token = localStorage.getItem('access_token');
+    const options = {
+        method: 'DELETE',
+        headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+            'Authorization': `Bearer ${token}`
+        }
+    }
+
+    const res = await fetch(url, options)
+    const json = await res.json()
+    if(!res.ok) {
+        throw ({status: res.status, ...json})
+    }
+    return ({status: res.status, ...json})
 }

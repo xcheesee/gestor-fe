@@ -73,27 +73,6 @@ const DadosContrato = ({ setSnackbar }) => {
     const [value, setValue] = useState(0);
     const [dados, setDados] = useState({});
     const [mudancaContrato, setMudancaContrato] = useState(false);
-    const [certidoes, setCertidoes] = useState([]);
-    const [mudancaCertidoes, setMudancaCertidoes] = useState(false);
-    const [carregandoCertidoes, setCarregandoCertidoes] = useState(true);
-    const [garantias, setGarantias] = useState([]);
-    const [mudancaGarantias, setMudancaGarantias] = useState(false);
-    const [carregandoGarantias, setCarregandoGarantias] = useState(true);
-    const [fiscalizacoes, setFiscalizacoes] = useState([]);
-    const [mudancaFiscalizacoes, setMudancaFiscalizacoes] = useState(false);
-    const [carregandoFicalizacoes, setCarregandoFiscalizacoes] = useState(true);
-    const [locais, setLocais] = useState([]);
-    const [mudancaLocais, setMudancaLocais] = useState(false);
-    const [carregandoLocais, setCarregandoLocais] = useState(true);
-    const [aditamentos_valor, setaditamentos_valor] = useState([]);
-    const [mudancaAditamentos_valor, setMudancaAditamentos_valor] = useState(false);
-    const [carregandoAditamentos_valor, setCarregandoAditamentos_valor] = useState(true);
-    const [aditamentos_prazo, setaditamentos_prazo] = useState([]);
-    const [mudancaAditamentos_prazo, setMudancaAditamentos_prazo] = useState(false);
-    const [carregandoAditamentos_prazo, setCarregandoAditamentos_prazo] = useState(true);
-    const [notasempenho, setNotasEmpenho] = useState([]);
-    const [mudancaNotasEmpenho, setMudancaNotasEmpenho] = useState(false);
-    const [carregandoNotasEmpenho, setCarregandoNotasEmpenho] = useState(true);
     const [origemRecursos, setOrigemRecursos] = useState([]);
     const [totais, setTotais] = useState([]);
     const [estaCarregado, setEstaCarregado] = useState(false);
@@ -112,11 +91,11 @@ const DadosContrato = ({ setSnackbar }) => {
                 navigate("../contrato", { replace: true });
             }
             setDados(contrato?.data)
-            const [recOri, totRec] = await Promise.all([
-                getRecursos(),
+            const [ totRec] = await Promise.all([
+                //getRecursos(),
                 getContrTot(numContrato),
             ])
-            setOrigemRecursos(recOri.data)
+            //setOrigemRecursos(recOri.data)
             setTotais(totRec.data)
             setEstaCarregado(true)
         })();
@@ -213,114 +192,45 @@ const DadosContrato = ({ setSnackbar }) => {
                                         <ListaDadosContrato
                                             dados={dados}
                                             numContrato={numContrato}
-                                            setSnackbar={setSnackbar}
                                             mudancaContrato={mudancaContrato}
                                             setMudancaContrato={setMudancaContrato}
                                         />
                                     </TabPanel>
 
                                     <TabPanel value={value} index={1}>
-                                        <ListaCertidoes 
-                                            certidoes={certidoes}
-                                            setCertidoes={setCertidoes}
-                                            mudancaCertidoes={mudancaCertidoes}
-                                            setMudancaCertidoes={setMudancaCertidoes}
-                                            carregandoCertidoes={carregandoCertidoes}
-                                            setCarregandoCertidoes={setCarregandoCertidoes}
-                                            //setSnackbar={setSnackbar}
-                                            numContrato={numContrato}
-                                        />
+                                        <ListaCertidoes numContrato={numContrato}/>
                                     </TabPanel>
 
                                     <TabPanel value={value} index={2}>
-                                        <ListaGarantias 
-                                            garantias={garantias}
-                                            setGarantias={setGarantias}
-                                            mudancaGarantias={mudancaGarantias}
-                                            setMudancaGarantias={setMudancaGarantias}
-                                            carregandoGarantias={carregandoGarantias}
-                                            setCarregandoGarantias={setCarregandoGarantias}
-                                            //setSnackbar={setSnackbar}
-                                            numContrato={numContrato}
-                                        />
+                                        <ListaGarantias numContrato={numContrato} />
                                     </TabPanel>
 
                                     <TabPanel value={value} index={3}>
-                                        <ListaFiscalizacao 
-                                            fiscalizacoes={fiscalizacoes}
-                                            setFiscalizacoes={setFiscalizacoes}
-                                            mudancaFiscalizacoes={mudancaFiscalizacoes}
-                                            setMudancaFiscalizacoes={setMudancaFiscalizacoes}
-                                            carregandoFiscalizacoes={carregandoFicalizacoes}
-                                            setCarregandoFiscalizacoes={setCarregandoFiscalizacoes}
-                                            //setSnackbar={setSnackbar}
-                                            numContrato={numContrato}
-                                        />
+                                        <ListaFiscalizacao numContrato={numContrato} />
                                     </TabPanel>
 
                                     <TabPanel value={value} index={4}>
-                                        <ListaLocais 
-                                            locais={locais}
-                                            setLocais={setLocais}
-                                            mudancaLocais={mudancaLocais}
-                                            setMudancaLocais={setMudancaLocais}
-                                            carregandoLocais={carregandoLocais}
-                                            setCarregandoLocais={setCarregandoLocais}
-                                            numContrato={numContrato}
-                                            //setSnackbar={setSnackbar}
-                                        />
+                                        <ListaLocais numContrato={numContrato} />
                                     </TabPanel>
                                     
                                     <TabPanel value={value} index={5}>
-                                        <ListaAditamentosValor
-                                            aditamentos_valor={aditamentos_valor}
-                                            setaditamentos_valor={setaditamentos_valor}
-                                            mudancaAditamentos_valor={mudancaAditamentos_valor}
-                                            setMudancaAditamentos_valor={setMudancaAditamentos_valor}
-                                            carregandoAditamentos_valor={carregandoAditamentos_valor}
-                                            setCarregandoAditamentos_valor={setCarregandoAditamentos_valor}
-                                            numContrato={numContrato}
-                                            //setSnackbar={setSnackbar}
-                                        />                                                                                                               
+                                        <ListaAditamentosValor numContrato={numContrato} />                                                                                                               
                                     </TabPanel>
 
                                     <TabPanel value={value} index={6}>
-                                        <ListaAditamentosPrazo
-                                            aditamentos_prazo={aditamentos_prazo}
-                                            setaditamentos_prazo={setaditamentos_prazo}
-                                            mudancaAditamentos_prazo={mudancaAditamentos_prazo}
-                                            setMudancaAditamentos_prazo={setMudancaAditamentos_prazo}
-                                            carregandoAditamentos_prazo={carregandoAditamentos_prazo}
-                                            setCarregandoAditamentos_prazo={setCarregandoAditamentos_prazo}
-                                            numContrato={numContrato}
-                                            //setSnackbar={setSnackbar}
-                                        />
+                                        <ListaAditamentosPrazo numContrato={numContrato} />
                                     </TabPanel>
 
                                     <TabPanel value={value} index={7}>
-                                        <ListaNotasEmpenho
-                                            notasempenho={notasempenho}
-                                            setNotasEmpenho={setNotasEmpenho}
-                                            mudancaNotasEmpenho={mudancaNotasEmpenho}
-                                            setMudancaNotasEmpenho={setMudancaNotasEmpenho}
-                                            carregandoNotasEmpenho={carregandoNotasEmpenho}
-                                            setCarregandoNotasEmpenho={setCarregandoNotasEmpenho}
-                                            //setSnackbar={setSnackbar}
-                                            numContrato={numContrato}
-                                        />
+                                        <ListaNotasEmpenho numContrato={numContrato} />
                                     </TabPanel>
 
                                     <TabPanel value={value} index={8}>
-                                        <ListaDotacoes 
-                                            numContrato={numContrato}
-                                            origemRecursos={origemRecursos}
-                                            //setSnackbar={setSnackbar}
-                                        />
+                                        <ListaDotacoes numContrato={numContrato} />
                                     </TabPanel>
                                     <TabPanel value={value} index={9}>
                                         <ListaReajustes 
                                             numContrato={numContrato} 
-                                            //setSnackbar={setSnackbar}
                                         />
                                     </TabPanel>
                                 </Box>
@@ -329,7 +239,6 @@ const DadosContrato = ({ setSnackbar }) => {
                             <ExecucaoFinanceira 
                                 //execucao_financeira={dados?.execucao_financeira}
                                 numContrato={numContrato}
-                                setSnackbar={setSnackbar}
                                 mudancaContrato={mudancaContrato}
                                 setMudancaContrato={setMudancaContrato}
                                 totais={totais}

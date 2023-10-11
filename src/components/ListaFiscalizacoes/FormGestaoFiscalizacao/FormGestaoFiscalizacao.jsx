@@ -20,7 +20,8 @@ const FormGestaoFiscalizacao = (props) => {
         editaFiscalizacao,
         openFormFiscalizacao,
         errors,
-        setErrors
+        setErrors,
+        formId
     } = props;
 
     const [mesmoCargoDialog, setMesmoCargoDialog] = useState(false)
@@ -101,7 +102,7 @@ const FormGestaoFiscalizacao = (props) => {
         <>
             <Box
                 component="form"
-                id="fisc_form"
+                id={formId}
                 onSubmit={(e) => {
                     e.preventDefault()
                     const formData = new FormData(e.target)

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { 
     Box,
     Divider,
@@ -10,11 +10,23 @@ import FormNotaEmpenho from './FormNotaEmpenho';
 import DialogConfirmacao from '../DialogConfirmacao';
 import BotoesTab from '../BotoesTab';
 import BotaoAdicionar from '../BotaoAdicionar';
-import { formataData, formataValores, TabValues, primeiraLetraMaiuscula } from '../../commom/utils/utils';
-import { postFormData, putFormData } from '../../commom/utils/api';
+import { 
+    formataData, 
+    formataValores,  
+    TabValues, 
+    primeiraLetraMaiuscula 
+} from '../../commom/utils/utils';
+import { 
+    throwableDeleteForm, 
+    throwableGetData, 
+    throwablePostForm, 
+    throwablePutForm 
+} from '../../commom/utils/api';
 import { emprenhoLabels } from '../../commom/utils/constants';
 import { useSetAtom } from 'jotai';
 import { snackbarAtom } from '../../atomStore';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { useErrorSnackbar } from '../ErrorSnackbar';
 
 const TabNotasEmpenho = (props) => {
     const valores = {
@@ -26,19 +38,12 @@ const TabNotasEmpenho = (props) => {
     return <TabValues entry={valores} labels={emprenhoLabels} label="empenho" />
 }
 
-const ListaNotasEmpenho = (props) => {
-    const { 
-        notasempenho,
-        setNotasEmpenho,
-        mudancaNotasEmpenho,
-        setMudancaNotasEmpenho,
-        carregandoNotasEmpenho,
-        setCarregandoNotasEmpenho,
-        numContrato, 
-        //setSnackbar
-    } = props;
+const ListaNotasEmpenho = ({numContrato}) => {
+    const empenhoFormId = 'empenho_form'
+    const queryClient = useQueryClient()
 
     const setSnackbar = useSetAtom(snackbarAtom)
+    const errorSnackbar = useErrorSnackbar()
 
     const [acao, setAcao] = useState('editar');
     const [carregando, setCarregando] = useState(false);
@@ -59,25 +64,10 @@ const ListaNotasEmpenho = (props) => {
     });
     const [errors, setErrors] = useState({});
 
-    useEffect(() => {
-        const url = `${process.env.REACT_APP_API_URL}/empenho_notas/${numContrato}`;
-        const token = localStorage.getItem('access_token');
-        const options = {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-                'Accept': 'application/json',
-                'Authorization': `Bearer ${token}`
-            }
-        };
-
-        fetch(url, options)
-            .then(res => res.json())
-            .then(data => {
-                setNotasEmpenho(data.data);
-                setCarregandoNotasEmpenho(false);
-            })
-    }, [mudancaNotasEmpenho, numContrato, setNotasEmpenho, setCarregandoNotasEmpenho])
+    const notasEmpenho = useQuery({
+        queryKey: ['notasEmpenho', numContrato],
+        queryFn: async () => await throwableGetData({path: 'empenho_notas', contratoId: numContrato})
+    })
 
     const handleClickExcluir = (id) => {
         setOpenConfirmacao({ 
@@ -87,43 +77,22 @@ const ListaNotasEmpenho = (props) => {
         setAcao('excluir');
     }
 
-    const excluiNotaEmpenho = (id) => {
-        const url = `${process.env.REACT_APP_API_URL}/empenho_nota/${id}`;
-        const token = localStorage.getItem('access_token');
-        const options = {
-            method: 'DELETE',
-            headers: {
-                'Content-Type': 'application/json',
-                'Accept': 'application/json',
-                'Authorization': `Bearer ${token}`
-            }
-        }
-        
+    const excluiNotaEmpenho = async (id) => {
         setCarregando(true);
-
-        fetch(url, options)
-        .then(res => {
-            setMudancaNotasEmpenho(!mudancaNotasEmpenho);
-            if (res.ok) {
-                setOpenConfirmacao({ open: false, id: ''});
-                setCarregando(false);
-                setSnackbar({
-                    open: true,
-                    severity: 'success',
-                    message: 'Nota de Empenho excluída com sucesso!',
-                    color: 'success'
-                });
-                return res.json();
-            } else {
-                setCarregando(false);
-                setSnackbar({
-                    open: true,
-                    severity: 'error',
-                    message: <div>Não foi possível excluir a nota de empenho<br/>Erro {res.message}</div>,
-                    color: 'error'
-                });
-            }
-        })
+        try{
+            await throwableDeleteForm({id, path: 'empenho_nota'})
+            setOpenConfirmacao({ open: false, id: ''});
+            setSnackbar({
+                open: true,
+                severity: 'success',
+                message: 'Nota de Empenho excluída com sucesso!',
+                color: 'success'
+            });
+            queryClient.invalidateQueries({queryKey: ['notasEmpenho', numContrato]})
+        } catch(e) {
+            errorSnackbar.Delete(e)
+        }
+        setCarregando(false);
     }
 
     const handleClickEditar = (e, notaempenho) => {
@@ -144,8 +113,8 @@ const ListaNotasEmpenho = (props) => {
 
     const editaNotaEmpenho = async (id, formNotaEmpenhoEdit) => {
         setCarregando(true);
-        const res = await putFormData(id, formNotaEmpenhoEdit, "empenho_nota")
-        if (res.status === 200) {
+        try {
+            await throwablePutForm({ id, form: formNotaEmpenhoEdit, path: 'empenho_nota'})
             setSnackbar({
                 open: true,
                 severity: 'success',
@@ -163,17 +132,11 @@ const ListaNotasEmpenho = (props) => {
                 numero_nota: '',
                 valor_empenho: ''
             });
-        } else {
-            setCarregando(false);
-            setSnackbar({
-                open: true,
-                severity: 'error',
-                message: <div>Não foi possível editar a nota de empenho<br/>Erro {res.message}</div>,
-                color: 'error'
-            });
+            queryClient.invalidateQueries({queryKey: ['notasEmpenho', numContrato]})
+        } catch(e) {
+            errorSnackbar.Put(e)
         }
         setCarregando(false);
-        setMudancaNotasEmpenho(!mudancaNotasEmpenho);
     }
 
     const handleClickAdicionar = () => {
@@ -192,8 +155,8 @@ const ListaNotasEmpenho = (props) => {
 
     const enviaNotaEmpenho = async (form) => {
         setCarregando(true);
-        const res = await postFormData(form, "empenho_nota")
-        if (res.status === 201) {
+        try {
+            await throwablePostForm({form, path: 'empenho_nota'})
             setSnackbar({
                 open: true,
                 severity: 'success',
@@ -211,56 +174,56 @@ const ListaNotasEmpenho = (props) => {
                 numero_nota: '',
                 valor_empenho: ''
             });
-        } else {
-            setSnackbar({
-                open: true,
-                severity: 'error',
-                message: <div>Não foi possível enviar a nota de empenho<br/>Erro {res.message}</div>,
-                color: 'error'
-            });
+            queryClient.invalidateQueries({queryKey: ['notasEmpenho', numContrato]})
+        } catch(e) {
+            errorSnackbar.Post(e)
         }
         setCarregando(false);
-        setMudancaNotasEmpenho(!mudancaNotasEmpenho);
     }
     
     return (
         <Box>
-            {notasempenho.map((notaempenho, index) => {
-                return (
-                    <Fade in={true} timeout={400} key={index}>
-                        <Box 
-                            key={index} 
-                            elevation={3} 
-                            component={Paper} 
-                            sx={{ padding: '1rem', mb: '2rem' }}
-                        >
-                            <Divider 
-                                textAlign='right' 
-                                sx={{ 
-                                    fontWeight: 'light', 
-                                    fontSize: '1.25rem' 
-                                }}
+            {notasEmpenho.isLoading
+                ?<Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '38rem' }}>
+                    <CircularProgress size={30} />
+                </Box>
+                :notasEmpenho?.data?.data?.map((notaempenho, index) => {
+                    return (
+                        <Fade in={true} timeout={400} key={index}>
+                            <Box 
+                                key={index} 
+                                elevation={3} 
+                                component={Paper} 
+                                sx={{ padding: '1rem', mb: '2rem' }}
                             >
-                                Nota de Empenho # {notaempenho.id}
-                            </Divider>
-                            
-                            <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-                                <TabNotasEmpenho 
-                                    tipo_empenho={(notaempenho?.tipo_empenho?.split("_"))?.reduce((acc, val) => acc + ` ${primeiraLetraMaiuscula(val)}`, "") }
-                                    data_emissao={notaempenho.data_emissao}
-                                    numero_nota={notaempenho.numero_nota}
-                                    valor_empenho={notaempenho.valor_empenho}
-                                />
+                                <Divider 
+                                    textAlign='right' 
+                                    sx={{ 
+                                        fontWeight: 'light', 
+                                        fontSize: '1.25rem' 
+                                    }}
+                                >
+                                    Nota de Empenho # {notaempenho.id}
+                                </Divider>
+                                
+                                <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+                                    <TabNotasEmpenho 
+                                        tipo_empenho={(notaempenho?.tipo_empenho?.split("_"))?.reduce((acc, val) => acc + ` ${primeiraLetraMaiuscula(val)}`, "") }
+                                        data_emissao={notaempenho.data_emissao}
+                                        numero_nota={notaempenho.numero_nota}
+                                        valor_empenho={notaempenho.valor_empenho}
+                                    />
 
-                                <BotoesTab 
-                                    editar={(e) => { handleClickEditar(e, notaempenho, notaempenho.id); }}
-                                    excluir={() => { handleClickExcluir(notaempenho.id); }}
-                                />
+                                    <BotoesTab 
+                                        editar={(e) => { handleClickEditar(e, notaempenho, notaempenho.id); }}
+                                        excluir={() => { handleClickExcluir(notaempenho.id); }}
+                                    />
+                                </Box>
                             </Box>
-                        </Box>
-                    </Fade>
-                );
-            })}
+                        </Fade>
+                    );
+                })
+            }
 
             <FormNotaEmpenho 
                 formNotaEmpenho={formNotaEmpenho} 
@@ -273,17 +236,8 @@ const ListaNotasEmpenho = (props) => {
                 setOpenConfirmacao={setOpenConfirmacao}
                 errors={errors}
                 setErrors={setErrors}
+                formId={empenhoFormId}
             />
-
-            {
-                carregandoNotasEmpenho
-                ? 
-                    <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '38rem' }}>
-                        <CircularProgress size={30} />
-                    </Box>
-                : 
-                    ""
-            } 
 
             <BotaoAdicionar 
                 fnAdicionar={handleClickAdicionar}
@@ -294,7 +248,7 @@ const ListaNotasEmpenho = (props) => {
                 openConfirmacao={openConfirmacao} 
                 setOpenConfirmacao={setOpenConfirmacao}
                 acao={acao} 
-                form="empenho_form"
+                formId={empenhoFormId}
                 fnExcluir={excluiNotaEmpenho}
                 fnEditar={editaNotaEmpenho}
                 formInterno={formNotaEmpenho}

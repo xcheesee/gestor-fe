@@ -28,7 +28,8 @@ const FormAditamentoPrazo = (props) => {
     carregando,
     setOpenConfirmacao,
     errors,
-    setErrors
+    setErrors,
+    formId
   } = props;
 
   useEffect(() => {
@@ -63,7 +64,7 @@ const FormAditamentoPrazo = (props) => {
       <DialogContent>
         <Box
           component="form"
-          id="aditamento_prazo_form"
+          id={formId}
           onSubmit={(e) => {
             e.preventDefault()
             const formData = new FormData(e.target)

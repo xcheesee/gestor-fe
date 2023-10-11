@@ -44,7 +44,6 @@ const ListaDadosContrato = (props) => {
     const {
         dados,
         numContrato,
-        setSnackbar,
         mudancaContrato,
         setMudancaContrato,
     } = props;
@@ -185,9 +184,7 @@ const ListaDadosContrato = (props) => {
                 </Box>
                 
                 <TabPanel value={value} index={0}>
-                    <TabContrato 
-                        dados={dados}
-                    />
+                    <TabContrato dados={dados} />
 
                     <Fab 
                         sx={{ 
@@ -210,7 +207,6 @@ const ListaDadosContrato = (props) => {
                         numContrato={numContrato}
                         openDadosCon={openDadosCon}
                         setOpenDadosCon={setOpenDadosCon}
-                        setSnackbar={setSnackbar}
                         carregando={carregando}
                         mudancaContrato={mudancaContrato}
                         setMudancaContrato={setMudancaContrato}
@@ -250,7 +246,6 @@ const ListaDadosContrato = (props) => {
                         openProcCon={openProcCon}
                         setOpenProcCon={setOpenProcCon}
                         numContrato={numContrato}
-                        setSnackbar={setSnackbar}
                         carregando={carregando}
                         mudancaContrato={mudancaContrato}
                         setMudancaContrato={setMudancaContrato}

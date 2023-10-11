@@ -2,7 +2,7 @@ import { Box, CircularProgress, Fade, Paper, TextField } from "@mui/material";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useRef } from "react";
 import { useState } from "react";
-import { deleteReajuste, editReajusteContrato, getFormData, postFormData, postReajusteContrato, putFormData } from "../../commom/utils/api";
+import { deleteReajuste, editReajusteContrato, getFormData, postFormData, postReajusteContrato, putFormData, throwablePutForm } from "../../commom/utils/api";
 import { reajusteLabels } from "../../commom/utils/constants";
 import { formataValores } from "../../commom/utils/utils";
 import BotaoAdicionar from "../BotaoAdicionar";
@@ -14,8 +14,9 @@ import TabContrato from "../TabContrato";
 import { useSetAtom } from "jotai";
 import { snackbarAtom } from "../../atomStore";
 
-export default function ListaReajustes ({ numContrato, /*setSnackbar*/ }) {
+export default function ListaReajustes ({ numContrato }) {
     let dados = []
+    const reajusteFormId = 'reajuste-form'
 
     const setSnackbar = useSetAtom(snackbarAtom)
 
@@ -66,8 +67,9 @@ export default function ListaReajustes ({ numContrato, /*setSnackbar*/ }) {
             });
         }
     })
+
     const editReajuste = useMutation({
-        mutationFn: async ({id, formData}) => await editReajusteContrato(id, formData), 
+        mutationFn: async ({id, formData}) => await throwablePutForm({id, form:formData, path:"reajuste"}), 
         onSuccess: async (res) => {
             setFormDialog(false)
             setSnackbar({
@@ -88,6 +90,7 @@ export default function ListaReajustes ({ numContrato, /*setSnackbar*/ }) {
             });
         }
     })
+
     const deleteReajusteFn = useMutation({
         mutationFn: async (id) => {
             return await deleteReajuste(id)
@@ -112,6 +115,7 @@ export default function ListaReajustes ({ numContrato, /*setSnackbar*/ }) {
             });
         }
     })
+
     async function handleEditPress (entry) {
         setAcao("editar")
         // const res = await getFormData(`reajuste/${entry.id}`)
@@ -122,6 +126,7 @@ export default function ListaReajustes ({ numContrato, /*setSnackbar*/ }) {
         }
         setFormDialog(true)
     }
+
     async function handleDeletePress (entry) {
         setAcao("excluir")
         // const res = await getFormData(`reajuste/${entry.id}`)
@@ -183,12 +188,14 @@ export default function ListaReajustes ({ numContrato, /*setSnackbar*/ }) {
             >
                 <Box
                     component='form'
-                    id='reajuste_form'
+                    id={reajusteFormId}
                     onSubmit={async (e) => {
                         e.preventDefault()
                         const formData = new FormData(e.target)
                         formData.append("contrato_id", numContrato)
-                        acao === "adicionar" ? addReajuste.mutate(formData) : editReajuste.mutate({id: currDados.current.id, formData: formData})
+                        acao === "adicionar" 
+                            ? addReajuste.mutate(formData) 
+                            : editReajuste.mutate({id: currDados.current.id, formData: formData})
                     }}
                 >
                     <CampoValores
@@ -227,7 +234,7 @@ export default function ListaReajustes ({ numContrato, /*setSnackbar*/ }) {
                         ? deleteReajusteFn.isLoading 
                         : false
                 }
-                form="reajuste_form"
+                formId={reajusteFormId}
             />
         </>
     )

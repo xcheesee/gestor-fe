@@ -29,7 +29,8 @@ const FormLocais = (props) => {
         setOpenConfirmacao,
         acao,
         errors,
-        setErrors
+        setErrors,
+        formId
     } = props;
 
     const [regiao, setRegiao] = useState(formLocal.regiao);
@@ -200,13 +201,13 @@ const FormLocais = (props) => {
         setErrors({});
 
         if (openFormLocal.acao === 'adicionar') {
-            const form = {
-                ...formLocal,
-                subprefeitura_id: subprefeitura.value,
-                distrito_id: distrito.value,
-                unidade: unidade
-            };
-            enviaLocal(form);
+            //const form = {
+            //    ...formLocal,
+            //    subprefeitura_id: subprefeitura.value,
+            //    distrito_id: distrito.value,
+            //    unidade: unidade
+            //};
+            //enviaLocal(form);
         } else if (openFormLocal.acao === 'editar') {
             setFormLocal({
                 ...formLocal,
@@ -233,7 +234,7 @@ const FormLocais = (props) => {
             <DialogContent>
                 <Box
                     component="form"
-                    id="local_form"
+                    id={formId}
                     onSubmit={(e) => {
                         e.preventDefault()
                         const formData = new FormData(e.target)
