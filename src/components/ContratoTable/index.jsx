@@ -58,7 +58,7 @@ const ContratoTable = ({dados, url, ordena, carregandoSort, isLoading}) => {
                                         : ''
                                     }
                                 </StyledTableHeadCell>
-                                <StyledTableHeadCell onClick={() => ordena('credor')}>
+                                <StyledTableHeadCell onClick={() => ordena('nome_departamento')}>
                                     Unidade Req.
                                     {
                                         url.sort === 'nome_departamento' || url.sort === '-nome_departamento'
