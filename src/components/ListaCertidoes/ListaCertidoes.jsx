@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { 
     Box,
     Divider,
@@ -11,8 +11,17 @@ import DialogConfirmacao from '../DialogConfirmacao';
 import BotoesTab from '../BotoesTab';
 import BotaoAdicionar from '../BotaoAdicionar';
 import { formataData, TabValues } from '../../commom/utils/utils';
-import { postFormData, putFormData } from '../../commom/utils/api';
+import { 
+    getCertidoes, 
+    throwableDeleteForm, 
+    throwablePostForm, 
+    throwablePutForm
+} from '../../commom/utils/api';
 import { certidaoLabels } from '../../commom/utils/constants';
+import { useSetAtom } from 'jotai';
+import { snackbarAtom } from '../../atomStore';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { useErrorSnackbar } from '../../commom/utils/hooks';
 
 const TabCertidoes = (props) => {
     const valores = {
@@ -23,17 +32,12 @@ const TabCertidoes = (props) => {
     return <TabValues entry={valores} labels={certidaoLabels} label="certidao" />
 }
 
-const ListaCertidoes = (props) => {
-    const { 
-        certidoes,
-        setCertidoes,
-        mudancaCertidoes,
-        setMudancaCertidoes,
-        carregandoCertidoes,
-        setCarregandoCertidoes,
-        numContrato, 
-        setSnackbar
-    } = props;
+const ListaCertidoes = ({ numContrato }) => {
+    const formCertidaoId = "certidao_form"
+    const queryClient = useQueryClient()
+
+    const setSnackbar = useSetAtom(snackbarAtom)
+    const errorSnackbar = useErrorSnackbar()
 
     const [acao, setAcao] = useState('editar');
     const [carregando, setCarregando] = useState(false);
@@ -52,25 +56,10 @@ const ListaCertidoes = (props) => {
     });
     const [errors, setErrors] = useState({});
 
-    useEffect(() => {
-        const url = `${process.env.REACT_APP_API_URL}/certidoes/${numContrato}`;
-        const token = localStorage.getItem('access_token');
-        const options = {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-                'Accept': 'application/json',
-                'Authorization': `Bearer ${token}`
-            }
-        };
-
-        fetch(url, options)
-            .then(res => res.json())
-            .then(data => {
-                setCertidoes(data.data);
-                setCarregandoCertidoes(false);
-            })
-    }, [mudancaCertidoes, numContrato, setCertidoes, setCarregandoCertidoes]);
+    const certidoes = useQuery({
+        queryKey: ['certidoes', numContrato],
+        queryFn: () => getCertidoes({numContrato})
+    })
 
     const handleClickExcluir = (id) => {
         setOpenConfirmacao({ 
@@ -80,43 +69,22 @@ const ListaCertidoes = (props) => {
         setAcao('excluir');
     }
 
-    const excluiCertidao = (id) => {
-        const url = `${process.env.REACT_APP_API_URL}/certidao/${id}`;
-        const token = localStorage.getItem('access_token');
-        const options = {
-            method: 'DELETE',
-            headers: {
-                'Content-Type': 'application/json',
-                'Accept': 'application/json',
-                'Authorization': `Bearer ${token}`
-            }
-        }
-        
+    const excluiCertidao = async (id) => {
         setCarregando(true);
-
-        fetch(url, options)
-        .then(res => {
-            setMudancaCertidoes(!mudancaCertidoes);
-            if (res.ok) {
-                setOpenConfirmacao({ open: false, id: ''});
-                setCarregando(false);
-                setSnackbar({
-                    open: true,
-                    severity: 'success',
-                    text: 'Certidão excluída com sucesso!',
-                    color: 'success'
-                });
-                return res.json();
-            } else {
-                setCarregando(false);
-                setSnackbar({
-                    open: true,
-                    severity: 'error',
-                    text: `Erro ${res.status} - Não foi possível excluir a certidão`,
-                    color: 'error'
-                });
-            }
-        })
+        try{
+            await throwableDeleteForm({id, path: 'certidao'})
+            setOpenConfirmacao({ open: false, id: ''});
+            setSnackbar({
+                open: true,
+                severity: 'success',
+                message: 'Certidão excluída com sucesso!',
+                color: 'success'
+            });
+            queryClient.invalidateQueries({queryKey: ['certidoes', numContrato]})
+        } catch(e) {
+            errorSnackbar.Delete(e)
+        }
+        setCarregando(false);
     }
 
     const handleClickEditar = (e, certidao) => {
@@ -136,13 +104,12 @@ const ListaCertidoes = (props) => {
     const editaCertidao = async (e, formCertidaoEdit, id) => {
 
         setCarregando(true);
-        setMudancaCertidoes(!mudancaCertidoes);
-        const res = await putFormData(id, formCertidaoEdit, "certidao")
-        if (res.status === 200) {
+        try{
+            const res = await throwablePutForm({id:id, form:formCertidaoEdit, path:'certidao'})
             setSnackbar({
                 open: true,
                 severity: 'success',
-                text: 'Certidão editada com sucesso!',
+                message: 'Certidão editada com sucesso!',
                 color: 'success'
             });
             setOpenFormCertidao({ 
@@ -154,13 +121,9 @@ const ListaCertidoes = (props) => {
                 certidoes: '',
                 validade_certidoes: '',
             });
-        } else {
-            setSnackbar({
-                open: true,
-                severity: 'error',
-                text: `Erro ${res.status} - Não foi possível editar a certidão`,
-                color: 'error'
-            });
+            queryClient.invalidateQueries({queryKey: ['certidoes', numContrato]})
+        } catch(e) {
+            errorSnackbar.Put(e)
         }
         setCarregando(false);
     }
@@ -178,14 +141,13 @@ const ListaCertidoes = (props) => {
     }
 
     const enviaCertidao = async (formData) => {
-        setMudancaCertidoes(!mudancaCertidoes);
         setCarregando(true)
-        const res = await postFormData(formData, "certidao")
-        if (res.status === 201) {
+        try{
+            await throwablePostForm({form:formData, path: 'certidao'})
             setSnackbar({
                 open: true,
                 severity: 'success',
-                text: 'Certidão enviada com sucesso!',
+                message: 'Certidão enviada com sucesso!',
                 color: 'success'
             });
             setOpenFormCertidao({ 
@@ -197,52 +159,52 @@ const ListaCertidoes = (props) => {
                 certidoes: '',
                 validade_certidoes: '',
             });
-        } else {
-            setSnackbar({
-                open: true,
-                severity: 'error',
-                text: `Erro ${res.status} - Não foi possível enviar a certidão`,
-                color: 'error'
-            });
+            queryClient.invalidateQueries({queryKey: ['certidoes', numContrato]})
+        } catch(e) {
+            errorSnackbar.Post(e)
         }
         setCarregando(false);
     }
     
     return (
         <Box>
-            {certidoes.map((certidao, index) => {
-                return (
-                    <Fade in={true} timeout={400} key={index}>
-                        <Box 
-                            elevation={3} 
-                            component={Paper} 
-                            sx={{ padding: '1rem', mb: '2rem' }}
-                        >
-                            <Divider 
-                                textAlign='right' 
-                                sx={{ 
-                                    fontWeight: 'light', 
-                                    fontSize: '1.25rem' 
-                                }}
+            {certidoes.isLoading
+                ?<Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '38rem' }}>
+                    <CircularProgress size={30} />
+                </Box>
+                :certidoes?.data?.data?.map((certidao, index) => {
+                    return (
+                        <Fade in={true} timeout={400} key={index}>
+                            <Box 
+                                elevation={3} 
+                                component={Paper} 
+                                sx={{ padding: '1rem', mb: '2rem' }}
                             >
-                                Certidão # {certidao.id}
-                            </Divider>
-                            
-                            <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-                                <TabCertidoes 
-                                    certidoes={certidao.certidoes}
-                                    validade_certidoes={certidao.validade_certidoes}
-                                />
+                                <Divider 
+                                    textAlign='right' 
+                                    sx={{ 
+                                        fontWeight: 'light', 
+                                        fontSize: '1.25rem' 
+                                    }}
+                                >
+                                    Certidão # {certidao.id}
+                                </Divider>
+                                
+                                <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+                                    <TabCertidoes 
+                                        certidoes={certidao.certidoes}
+                                        validade_certidoes={certidao.validade_certidoes}
+                                    />
 
-                                <BotoesTab 
-                                    editar={(e) => { handleClickEditar(e, certidao, certidao.id); }}
-                                    excluir={() => { handleClickExcluir(certidao.id); }}
-                                />
+                                    <BotoesTab 
+                                        editar={(e) => { handleClickEditar(e, certidao, certidao.id); }}
+                                        excluir={() => { handleClickExcluir(certidao.id); }}
+                                    />
+                                </Box>
                             </Box>
-                        </Box>
-                    </Fade>
-                );
-            })}
+                        </Fade>
+                    );
+                })}
 
             <FormCertidao 
                 formCertidao={formCertidao} 
@@ -252,21 +214,12 @@ const ListaCertidoes = (props) => {
                 editaCertidao={editaCertidao}
                 enviaCertidao={enviaCertidao}
                 carregando={carregando}
+                formId={formCertidaoId}
                 setOpenConfirmacao={setOpenConfirmacao}
                 errors={errors}
                 setErrors={setErrors}
             />
 
-            {
-                carregandoCertidoes
-                ? 
-                    <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '38rem' }}>
-                        <CircularProgress size={30} />
-                    </Box>
-                : 
-                    ""
-            }   
-            
             <BotaoAdicionar 
                 fnAdicionar={handleClickAdicionar}
                 texto="Adicionar certidão"
@@ -275,7 +228,7 @@ const ListaCertidoes = (props) => {
             <DialogConfirmacao
                 openConfirmacao={openConfirmacao} 
                 setOpenConfirmacao={setOpenConfirmacao}
-                form="certidao_form"
+                formId={formCertidaoId}
                 acao={acao} 
                 fnExcluir={excluiCertidao}
                 fnEditar={editaCertidao}

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, forwardRef } from 'react';
+import React, { useState } from 'react';
 import { 
     Dialog,
     DialogTitle,
@@ -6,568 +6,298 @@ import {
     DialogContentText,
     DialogActions,
     Button,
-    FormControl,
-    FormHelperText,
-    InputLabel,
-    Select,
-    MenuItem,
     Box,
     CircularProgress,
     Typography,
     Tooltip,
-    TextField,
-    InputAdornment
 } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import CheckIcon from '@mui/icons-material/Check';
 import DeleteIcon from '@mui/icons-material/Delete';
-import CampoAno from '../../../CampoAno';
-import CampoValores from '../../../CampoValores';
-import RefExecucaoFinanceira from '../RefExecucaoFinanceira';
-import NumberFormat from 'react-number-format';
-import PropTypes from 'prop-types';
 import { formataValores } from '../../../../commom/utils/utils';
+import { meses } from '../../../../commom/utils/constants';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import TabelaExecFin from '../TabelaExecFin';
+import { getMesesExecutados, postMesesExecFin } from '../../../../commom/utils/api';
+import { useSetAtom } from 'jotai';
+import { snackbarAtom } from '../../../../atomStore';
+import { useErrorSnackbar } from '../../../../commom/utils/hooks';
 
-const NumberFormatCustom = forwardRef(function NumberFormatCustom(props, ref) {
-    const { onChange, ...other } = props;
-  
+
+function DialogEditar ({openEditar, setOpenEditar, formId, carregando}) {
     return (
-      <NumberFormat
-        {...other}
-        getInputRef={ref}
-        onValueChange={(values) => {
-          onChange({
-            target: {
-              value: values.value,
-            },
-          });
-        }}
-        isNumericString
-        thousandSeparator="."
-        decimalSeparator=","
-        decimalScale={2}
-      />
+        <Dialog open={openEditar}>
+            <DialogTitle>
+                Confirmação de edição
+            </DialogTitle>
+
+            <DialogContent>
+                <DialogContentText>
+                    Confirma a edição do ano de execução financeira 
+                    <strong> {/*meses[execucaoEditado.mes - 1]} de {execucaoEditado.ano*/}</strong>?
+                </DialogContentText>
+            </DialogContent>
+
+            <DialogActions>
+                <Button 
+                    sx={{ 
+                        textTransform: 'none', 
+                        color: (theme) => theme.palette.error.main 
+                    }}
+                    onClick={() => setOpenEditar(false)}
+                >
+                    Cancelar
+                </Button>
+
+                <Button 
+                    sx={{ textTransform: 'none' }} 
+                    type='submit'
+                    onClick={() => setOpenEditar(false)}
+                    form={formId}
+                >
+                    {
+                        carregando
+                        ? <CircularProgress sx={{ mr: '0.3rem' }} size="0.7rem" />
+                        : ""
+                    }
+                    Editar
+                </Button>
+            </DialogActions>
+        </Dialog>
     );
-});
+}
 
-NumberFormatCustom.propTypes = {
-    onChange: PropTypes.func.isRequired,
-};
+function DialogExcluir({openExcluir, setOpenExcluir, carregando}) {
+    return(
+        <Dialog open={openExcluir}>
+            <DialogTitle>
+                Excluir mês de execução financeira
+            </DialogTitle>
 
-const FormEditExecFinanceira = (props) => {
-    const {
-        meses,
-        openEditExecFinanceira,
-        setOpenEditExecFinanceira,
-        formExecFinanceira,
-        errors,
-        setErrors,
-        carregando,
-        setCarregando,
-        setSnackbar,
-        mudancaContrato,
-        setMudancaContrato
-    } = props;
+            <DialogContent>
+                <DialogContentText>
+                    Confirma a exclusão do ano de execucao financeira 
+                    <strong> {}</strong>?
+                </DialogContentText>
+            </DialogContent>
 
-    const [execucaoEditado, setExecucaoEditado] = useState({ ...formExecFinanceira });
+            <DialogActions>
+                <Button 
+                    sx={{ 
+                        textTransform: 'none', 
+                        color: (theme) => theme.palette.error.main 
+                    }}
+                    onClick={() => setOpenExcluir(false)}
+                >
+                    Cancelar
+                </Button>
+
+                <Button 
+                    sx={{ textTransform: 'none' }} 
+                    //onClick={excluiMes}
+                >
+                    {
+                        carregando
+                        ? <CircularProgress sx={{ mr: '0.3rem' }} size="0.7rem" />
+                        : ""
+                    }
+                    Excluir
+                </Button>
+            </DialogActions>
+        </Dialog>
+    )
+}
+
+const FormEditExecFinanceira = ({
+    openEditExecFinanceira,
+    setOpenEditExecFinanceira,
+    execucao,
+    //setExecucao,
+    errors,
+    setErrors,
+    carregando,
+    formId
+}) => {
+    const queryClient = useQueryClient()
+
+    const setSnackbar = useSetAtom(snackbarAtom)
+    const errorSnackbar = useErrorSnackbar()
+
     const [openExcluir, setOpenExcluir] = useState(false);
     const [openEditar, setOpenEditar] = useState(false);
-    const [totais, setTotais] = useState([]);
-    const [formEnvio, setFormEnvio] = useState({});
+    const [tabelaRef, setTabelaRef] = useState()
 
-    useEffect(() => {
-        setExecucaoEditado({ ...formExecFinanceira });
-    }, [setExecucaoEditado, formExecFinanceira])
+    const mesesExecutados = useQuery({
+        queryKey: ['mesesExecutados', execucao.id],
+        queryFn: () => getMesesExecutados(execucao.id),
+        enabled: !!execucao.id
+    })
 
-    useEffect(() => {
-        const url = `${process.env.REACT_APP_API_URL}/contrato_totais/${execucaoEditado.contrato_id}?execucao_id=${execucaoEditado.id}`;
-        const token = localStorage.getItem('access_token');
-        const options = {
-            headers: {
-                'Content-Type': 'application/json',
-                'Accept': 'application/json',
-                'Authorization': `Bearer ${token}`
-            },
-            method: 'GET'
-        };
-
-        fetch(url, options)
-            .then(res => res.json())
-            .then(data => {
-                setTotais(data.data);
-            })
-    }, [execucaoEditado.contrato_id, execucaoEditado.id, openEditExecFinanceira])
-
-    const handleChange = (e) => {
-        console.log(e.target.name)
-        console.log(e.target.value)
-        setExecucaoEditado({
-            ...execucaoEditado,
-            [e.target.name]: e.target.value
-        });
-    }
+    const addMesExec = useMutation({
+        mutationFn: ({execucao}) => postMesesExecFin({ execucao }),
+        onSuccess: () => {
+            queryClient.invalidateQueries(['mesesExecutados', execucao.id])
+            setSnackbar(prev => ({...prev, open: true, severity: "success", message: "Meses de execucao enviados."}))
+            setOpenEditExecFinanceira(false)
+        },
+        onError: (e) => {
+            errorSnackbar.Post(e)
+            //setSnackbar(prev => ({...prev, open: true, severity: "error", message: `Meses de execucao nao enviados.${e.message}`}))
+        }
+    })
 
     const cancelar = () => {
         setOpenEditExecFinanceira(false);
         setErrors({});
-        setExecucaoEditado({
-            ...execucaoEditado,
-            mes: '',
-            ano: '',
-            planejado_inicial: '',
-            contratado_inicial: '',
-            valor_reajuste: 0,
-            valor_aditivo: 0,
-            valor_cancelamento: 0,
-            empenhado: 0,
-            executado: 0
-        });
+        //setExecucao({})
     }
 
     const confirmar = () => {
-        let cancelamento = 
-            parseFloat(execucaoEditado.empenhado) - parseFloat(execucaoEditado.executado) > 0
-            ? (parseFloat(execucaoEditado.empenhado) - parseFloat(execucaoEditado.executado))
-            : parseFloat(0)
-        
         setOpenEditar(true);
-        setFormEnvio({
-            contrato_id: execucaoEditado.contrato_id,
-            mes: execucaoEditado.mes,
-            ano: execucaoEditado.ano,
-            planejado_inicial: execucaoEditado.planejado_inicial,
-            contratado_inicial: execucaoEditado.contratado_inicial,
-            valor_reajuste: execucaoEditado.valor_reajuste,
-            valor_aditivo: execucaoEditado.valor_aditivo,
-            empenhado: execucaoEditado.empenhado,
-            executado: execucaoEditado.executado,
-            valor_cancelamento: cancelamento
-        });
-    }
-
-    const editaMes = () => {
-        const url = `${process.env.REACT_APP_API_URL}/execucao_financeira/${execucaoEditado.id}`;
-        const token = localStorage.getItem('access_token');
-        const options = {
-            method: 'put',
-            headers: {
-                'Content-Type': 'application/json',
-                'Accept': 'application/json',
-                'Authorization': `Bearer ${token}`
-            },
-            body: JSON.stringify(formEnvio)
-        };
-
-        setCarregando(true);
-        setOpenEditar(false);
-
-        fetch(url, options)
-            .then(res => {
-                if (res.ok) {
-                    setCarregando(false);
-                    setSnackbar({
-                        open: true,
-                        severity: 'success',
-                        text: 'Mês de execução financeira editado com sucesso!',
-                        color: 'success'
-                    });
-                    cancelar();
-                    setMudancaContrato(!mudancaContrato);
-                    return res.json();
-                } else if (res.status === 422) {
-                    setCarregando(false);
-                    setSnackbar({
-                        open: true,
-                        severity: 'error',
-                        text: `Error ${res.status} - Não foi possível editar o mês de execução`,
-                        color: 'error'
-                    });
-                    return res.json()
-                        .then(data => setErrors(data.errors));
-                } else {
-                    setCarregando(false);
-                    setSnackbar({
-                        open: true,
-                        severity: 'error',
-                        text: `Erro ${res.status} - Não foi possível editar o mês de exeucação`,
-                        color: 'error'
-                    });
-                }
-            })
     }
 
     const handleClickExcluir = () => {
         setOpenExcluir(true);
     }
 
-    const excluiMes = () => {
-        const url = `${process.env.REACT_APP_API_URL}/execucao_financeira/${execucaoEditado.id}`;
-        const token = localStorage.getItem('access_token');
-        const options = {
-            method: 'DELETE',
-            headers: {
-                'Content-Type': 'application/json',
-                'Accept': 'application/json',
-                'Authorization': `Bearer ${token}`
-            }
-        };
+    //const excluiMes = () => {
+    //    const url = `${process.env.REACT_APP_API_URL}/execucao_financeira/${formExecFinanceira.id}`;
+    //    const token = localStorage.getItem('access_token');
+    //    const options = {
+    //        method: 'DELETE',
+    //        headers: {
+    //            'Content-Type': 'application/json',
+    //            'Accept': 'application/json',
+    //            'Authorization': `Bearer ${token}`
+    //        }
+    //    };
 
-        setCarregando(true);
-        setOpenExcluir(false);
+    //    setCarregando(true);
+    //    setOpenExcluir(false);
 
-        fetch(url, options)
-            .then(res => {
-                if (res.ok) {
-                    setCarregando(false);
-                    setSnackbar({
-                        open: true,
-                        severity: 'success',
-                        text: 'Mês de execução excluído com sucesso!',
-                        color: 'success'
-                    });
-                    setMudancaContrato(!mudancaContrato);
-                    setOpenEditExecFinanceira(false);
-                    return res.json();
-                } else {
-                    setCarregando(false);
-                    setSnackbar({
-                        open: true,
-                        severity: 'error',
-                        text: `Erro ${res.status} - Não foi possível excluir o mês de execução`,
-                        color: 'error'
-                    });
-                    setOpenEditExecFinanceira(false);
-                }
-            })
-            .catch(err => console.log(err));
-    }
+    //    fetch(url, options)
+    //        .then(res => {
+    //            if (res.ok) {
+    //                setCarregando(false);
+    //                setSnackbar({
+    //                    open: true,
+    //                    severity: 'success',
+    //                    text: 'Mês de execução excluído com sucesso!',
+    //                    color: 'success'
+    //                });
+    //                setMudancaContrato(!mudancaContrato);
+    //                setOpenEditExecFinanceira(false);
+    //                return res.json();
+    //            } else {
+    //                setCarregando(false);
+    //                setSnackbar({
+    //                    open: true,
+    //                    severity: 'error',
+    //                    text: `Erro ${res.status} - Não foi possível excluir o mês de execução`,
+    //                    color: 'error'
+    //                });
+    //                setOpenEditExecFinanceira(false);
+    //            }
+    //        })
+    //        .catch(err => console.log(err));
+    //}
 
-    const DialogExcluir = () => {
-        return (
-            <Dialog open={openExcluir}>
-                <DialogTitle>
-                    Excluir mês de execução financeira
-                </DialogTitle>
+    //if(execucao.isLoading) 
+    //    return (
+    //        <Box>
+    //            <CircularProgress size={16} sx={{ color: (theme) => theme.palette.color.main, mr: '0.7rem' }} />
+    //        </Box>
+    //    )
 
-                <DialogContent>
-                    <DialogContentText>
-                        Confirma a exclusão do mês de execucao financeira 
-                        <strong> {meses[execucaoEditado.mes - 1]} de {execucaoEditado.ano}</strong>?
-                    </DialogContentText>
-                </DialogContent>
-
-                <DialogActions>
-                    <Button 
-                        sx={{ 
-                            textTransform: 'none', 
-                            color: (theme) => theme.palette.error.main 
-                        }}
-                        onClick={() => setOpenExcluir(false)}
-                    >
-                        Cancelar
-                    </Button>
-
-                    <Button 
-                        sx={{ textTransform: 'none' }} 
-                        onClick={excluiMes}
-                    >
-                        {
-                            carregando
-                            ? <CircularProgress sx={{ mr: '0.3rem' }} size="0.7rem" />
-                            : ""
-                        }
-                        Excluir
-                    </Button>
-                </DialogActions>
-            </Dialog>
-        );
-    }
-
-    const DialogEditar = () => {
-        return (
-            <Dialog open={openEditar}>
-                <DialogTitle>
-                    Confirmação de edição
-                </DialogTitle>
-
-                <DialogContent>
-                    <DialogContentText>
-                        Confirma a edição do mês de execução financeira 
-                        <strong> {meses[execucaoEditado.mes - 1]} de {execucaoEditado.ano}</strong>?
-                    </DialogContentText>
-                </DialogContent>
-
-                <DialogActions>
-                    <Button 
-                        sx={{ 
-                            textTransform: 'none', 
-                            color: (theme) => theme.palette.error.main 
-                        }}
-                        onClick={() => setOpenEditar(false)}
-                    >
-                        Cancelar
-                    </Button>
-
-                    <Button 
-                        sx={{ textTransform: 'none' }} 
-                        onClick={editaMes}
-                    >
-                        {
-                            carregando
-                            ? <CircularProgress sx={{ mr: '0.3rem' }} size="0.7rem" />
-                            : ""
-                        }
-                        Editar
-                    </Button>
-                </DialogActions>
-            </Dialog>
-        );
-    }
 
     return (
-        <Box>
-        <DialogExcluir />
-        <DialogEditar />
+        <>
+        <DialogExcluir 
+            openExcluir={openExcluir}
+            setOpenExcluir={setOpenExcluir}
+            carregando={carregando}
+        />
+
+        <DialogEditar 
+            openEditar={openEditar} 
+            setOpenEditar={setOpenEditar} 
+            carregando={carregando} 
+            formId={formId} 
+        />
+
         <Dialog open={openEditExecFinanceira} fullWidth maxWidth="md">
             <DialogTitle>
-                Editar mês de execução financeira
+                Editar ano de execução financeira
             </DialogTitle>
 
             <DialogContent>
-                <Box sx={{ display: 'flex', width: '50%', alignItems: 'center' }}>
-                    <FormControl sx={{ margin: '1rem 0', mr: '1rem' }} fullWidth>
-                        <InputLabel id="mes-label" disabled>Mês</InputLabel>
-                        <Select
-                            labelId="mes-label"
-                            id="mes"
-                            label="Mês"
-                            name="mes"
-                            value={execucaoEditado.mes}
-                            error={errors.hasOwnProperty('mes')}
-                            disabled
-                        >
-                            {meses.map((mes, index) => {
-                                return (
-                                    <MenuItem key={index} value={index + 1}>{mes}</MenuItem>
-                                );
-                            })}
-                        </Select>
+                <Box className="grid grid-cols-2 gap-8 px-4">
+                    <Typography className="text-lg font-medium" component={'div'}>
+                        Planejado(LOA)
+                        <Typography className='text-xl font-light pl-4'>
+                            {formataValores(execucao?.planejado)}
+                        </Typography>
+                    </Typography>
+                    
 
-                        <FormHelperText>{errors.hasOwnProperty('mes') ? errors.mes : " "}</FormHelperText>
-                    </FormControl>
+                    <Typography className="text-lg font-medium" component={'div'}>
+                        Reservado
+                        <Typography className='text-xl font-light pl-4'>
+                            {formataValores(execucao?.reservado)}
+                        </Typography>
+                    </Typography>
 
-                    <CampoAno 
-                        label="Ano"
-                        name="ano"
-                        value={execucaoEditado.ano}
-                        error={errors.hasOwnProperty('ano')}
-                        helperText={errors.hasOwnProperty('ano') ? errors.ano : " "}
-                        disabled
-                    />
+
+                    <Typography className="text-lg font-medium" component={'div'}>
+                        Contratado
+                        <Typography className='text-xl font-light pl-4'>
+                            {formataValores(execucao?.contratado)}
+                        </Typography>
+                    </Typography>
+
+                    <Typography className="text-lg font-medium" component={'div'}>
+                        Mes Inicial
+                        <Typography className='text-xl font-light pl-4'>
+                            { meses[execucao?.mes_inicial] }
+                        </Typography>
+                    </Typography>
                 </Box>
 
-                <RefExecucaoFinanceira 
-                    totais={totais}
-                />
+                    <Box 
+                        sx={{  alignItems: 'center'}}
+                        className='pt-8 px-8'
+                        component={'form'}
+                        id={formId}
+                        onSubmit={async (e) => {
+                            e.preventDefault()
 
-                <CampoValores 
-                    label="Planejado inicial" 
-                    value={execucaoEditado.planejado_inicial}
-                    name="planejado_inicial"
-                    state={execucaoEditado}
-                    setState={setExecucaoEditado}
-                    checaErros={() => {}}
-                    helperText={errors.hasOwnProperty('planejado_inicial') ? errors.planejado_inicial : " "}
-                    error={errors.hasOwnProperty('planejado_inicial')}
-                    fullWidth 
-                    disabled
-                />
-
-                <CampoValores 
-                    label="Contratado inicial" 
-                    value={execucaoEditado.contratado_inicial}
-                    name="contratado_inicial"
-                    state={execucaoEditado}
-                    setState={setExecucaoEditado}
-                    checaErros={() => {}}
-                    helperText={errors.hasOwnProperty('contratado_inicial' ? errors.contratado_inicial : " ")}
-                    error={errors.hasOwnProperty('contratado_inicial')}
-                    fullWidth 
-                    disabled
-                />
-
-                <Box sx={{ display: 'flex', justifyContent: 'space-between', gap: '1rem', margin: '1rem 0', mb: 0 }}>
-                    <CampoValores 
-                        label="Valor reajuste" 
-                        defaultValue={execucaoEditado.valor_reajuste ? execucaoEditado.valor_reajuste : 0}
-                        name="valor_reajuste"
-                        state={execucaoEditado}
-                        setState={setExecucaoEditado}
-                        checaErros={() => {}}
-                        helperText={errors.hasOwnProperty('valor_reajuste') ? errors.valor_reajuste : " "}
-                        error={errors.hasOwnProperty('valor_reajuste')}
-                        fullWidth
-                        onBlur={handleChange}
-                    />
-
-                    <CampoValores 
-                        label="Valor aditivo" 
-                        defaultValue={execucaoEditado.valor_aditivo ? execucaoEditado.valor_aditivo : 0}
-                        name="valor_aditivo"
-                        state={execucaoEditado}
-                        setState={setExecucaoEditado}
-                        checaErros={() => {}}
-                        helperText={errors.hasOwnProperty('valor_aditivo') ? errors.valor_aditivo : " "}
-                        error={errors.hasOwnProperty('valor_aditivo')}
-                        fullWidth
-                        onBlur={handleChange}
-                    />
-
-                    <TextField 
-                        label="Reprogramação/cancelamento" 
-                        value={
-                            parseFloat(execucaoEditado.empenhado) - parseFloat(execucaoEditado.executado) > 0
-                            ? (parseFloat(execucaoEditado.empenhado) - parseFloat(execucaoEditado.executado))
-                            : execucaoEditado.empenhado
-                        }
-                        helperText={
-                            errors.hasOwnProperty('valor_cancelamento') 
-                            ? errors.valor_cancelamento 
-                            : " "
-                        }
-                        error={errors.hasOwnProperty('valor_cancelamento')}
-                        sx={{ margin: '1rem 0' }}
-                        InputProps={{
-                            startAdornment: <InputAdornment position="start">R$</InputAdornment>,
-                            inputComponent: NumberFormatCustom,
+                            const execData = tabelaRef.getDataAtRow(4)
+                            const postExec = {
+                                data: execData,
+                                id_ano_execucao: execucao.id
+                            }
+                            addMesExec.mutate({execucao: postExec}) 
                         }}
-                        fullWidth
-                        disabled
-                    />
-                </Box>
-
-                <Box sx={{ display: 'flex', justifyContent: 'space-between', gap: '1rem', margin: '1rem 0', mt: 0 }}>
-                    <CampoValores 
-                        label="Empenhado" 
-                        defaultValue={execucaoEditado.empenhado ? execucaoEditado.empenhado : 0}
-                        name="empenhado"
-                        state={execucaoEditado}
-                        setState={setExecucaoEditado}
-                        checaErros={() => {}}
-                        helperText={errors.hasOwnProperty('empenhado') ? errors.empenhado : " "}
-                        error={errors.hasOwnProperty('empenhado')}
-                        fullWidth
-                        onBlur={handleChange}
-                    />
-
-                    <CampoValores 
-                        label="Executado" 
-                        defaultValue={execucaoEditado.executado ? execucaoEditado.executado : '0'}
-                        name="executado"
-                        state={execucaoEditado}
-                        setState={setExecucaoEditado}
-                        checaErros={() => {}}
-                        helperText={errors.hasOwnProperty('executado') ? errors.executado : " "}
-                        error={errors.hasOwnProperty('executado')}
-                        fullWidth
-                        onBlur={handleChange}
-                    />
-                </Box>
-
-                <Box 
-                    sx={{
-                        border: '1px solid #cdcdcd', 
-                        borderRadius: '3px',
-                        padding: '1rem',
-                        display: 'grid',
-                        gridTemplateColumns: '1fr 1fr 1fr 1fr',
-                        columnGap: '2rem',
-                        rowGap: '2rem',
-                        mb: '2rem'
-                    }}
-                >
-                    <Typography 
-                        sx={{ 
-                            fontWeight: 'medium', 
-                            color:
-                                parseFloat(totais.valor_empenhos) + parseFloat(execucaoEditado.empenhado) < 0
-                                ? (theme) => theme.palette.error.main
-                                : ''
-                        }} 
-                        component="span"
                     >
-                        Total empenhado
-                        <Typography 
-                            sx={{ 
-                                padding: '0 1rem', 
-                                mb: '0.5rem'    
-                            }}>
-                            {
-                                execucaoEditado.empenhado 
-                                ? formataValores(parseFloat(totais.total_empenhado) + parseFloat(execucaoEditado.empenhado))
-                                : formataValores(parseFloat(totais.total_empenhado))
-                            }
-                        </Typography>
-                    </Typography>
-                    
-                    <Typography sx={{ fontWeight: 'medium' }} component="span">
-                        Total executado
-                        <Typography sx={{ padding: '0 1rem', mb: '0.5rem' }}>
-                            {
-                                execucaoEditado.executado 
-                                ? formataValores(parseFloat(totais.total_executado) + parseFloat(execucaoEditado.executado))
-                                : formataValores(parseFloat(totais.total_executado))
-                            }
-                        </Typography>
-                    </Typography>
-                    
-                    <Typography sx={{ fontWeight: 'medium' }} component="span">
-                        Contratado atualizado
-                        <Typography sx={{ padding: '0 1rem', mb: '0.5rem' }}>
-                            {formataValores(
-                                parseFloat(execucaoEditado.contratado_inicial) 
-                                + parseFloat(execucaoEditado.valor_aditivo ? execucaoEditado.valor_aditivo : 0)
-                                + parseFloat(execucaoEditado.valor_reajuste ? execucaoEditado.valor_reajuste : 0)
-                                - (parseFloat(execucaoEditado.empenhado ? execucaoEditado.empenhado : 0) 
-                                - parseFloat(execucaoEditado.executado ? execucaoEditado.executado : 0) < 0 
-                                    ? 0 
-                                    : parseFloat(execucaoEditado.empenhado ? execucaoEditado.empenhado : 0) 
-                                      - parseFloat(execucaoEditado.executado ? execucaoEditado.executado : 0)
-                                )
-                            )}
-                        </Typography>
-                    </Typography>
-
-                    <Typography 
-                        sx={{ 
-                            fontWeight: 'medium', 
-                            color:
-                                parseFloat(execucaoEditado.empenhado) - parseFloat(execucaoEditado.executado) < 0
-                                ? (theme) => theme.palette.error.main
-                                : ''
-                        }} 
-                        component="span"
-                    >
-                        Saldo empenho
-                        <Typography 
-                            sx={{ 
-                                padding: '0 1rem', 
-                                mb: '0.5rem'
-                            }}>
-                            {formataValores(
-                                parseFloat(execucaoEditado.empenhado ? execucaoEditado.empenhado : 0) 
-                                - parseFloat(execucaoEditado.executado ? execucaoEditado.executado : 0)
-                            )}
-                        </Typography>
-                    </Typography>
-                </Box>
+                        {mesesExecutados.isLoading
+                            ?<Box className="w-full h-52 flex justify-center items-center">
+                                <CircularProgress size={32} sx={{ color: 'gray' }} />
+                            </Box>
+                            :<TabelaExecFin 
+                                //ref={ref} 
+                                id="hotExec" 
+                                execucao={execucao}
+                                setTabelaRef={setTabelaRef}
+                                mesesExecutados={mesesExecutados?.data}
+                            />
+                        }
+                    </Box>
             </DialogContent>
 
             <DialogActions 
                 sx={{ 
                     margin: '1rem', 
                     display: 'flex', 
-                    alignItems: 'center', 
                     justifyContent: 'space-between' 
                 }}
             >
@@ -595,7 +325,7 @@ const FormEditExecFinanceira = (props) => {
                         variant="contained"
                         onClick={confirmar}
                     >
-                        {carregando
+                        {addMesExec.isLoading
                             ? <CircularProgress size={16} sx={{ color: (theme) => theme.palette.color.main, mr: '0.7rem' }} />
                             : <CheckIcon sx={{ mr: '0.2rem' }} fontSize="small" /> 
                         }
@@ -605,7 +335,7 @@ const FormEditExecFinanceira = (props) => {
                 </Box>
             </DialogActions>
         </Dialog>
-        </Box>
+        </>
     );
 }
 

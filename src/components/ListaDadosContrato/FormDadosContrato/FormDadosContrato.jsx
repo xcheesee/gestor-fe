@@ -12,6 +12,8 @@ import CircularProgress from '@mui/material/CircularProgress';
 import BoxDadosContrato from '../../BoxDadosContrato';
 import DialogConfirmacao from '../../DialogConfirmacao';
 import { editaDadosContrato } from '../../../commom/utils/api';
+import { useSetAtom } from 'jotai';
+import { snackbarAtom } from '../../../atomStore';
 
 const FormDadosContrato = (props) => {
     const {
@@ -19,7 +21,7 @@ const FormDadosContrato = (props) => {
         numContrato,
         openDadosCon,
         setOpenDadosCon,
-        setSnackbar,
+        //setSnackbar,
         mudancaContrato,
         setMudancaContrato,
     } = props;
@@ -34,15 +36,18 @@ const FormDadosContrato = (props) => {
         id: numContrato
     });
 
+    const setSnackbar = useSetAtom(snackbarAtom)
+
     const enviaDadosContrato = async (e, formInterno, id) => {
         setCarregandoEnvio(true);
         const res = await editaDadosContrato(e, dados, formInterno, id)
+        console.log(res)
         if(res.status === 200) {
             setOpenDadosCon(false);
             setSnackbar({
                 open: true,
                 severity: 'success',
-                text: 'Contrato editado com sucesso!',
+                message: 'Contrato editado com sucesso!',
                 color: 'success'
             });
         } else if(res.status === 422) {
@@ -52,7 +57,12 @@ const FormDadosContrato = (props) => {
             setSnackbar({
                 open: true,
                 severity: 'error',
-                text: `Erro ${res.status} - Não foi possível editar o contrato`,
+                message: 
+                    <div>
+                        Não foi possível editar o contrato
+                        <br/>
+                        Erro: ${res.message}
+                    </div>,
                 color: 'error'
             });
         }
@@ -109,7 +119,7 @@ const FormDadosContrato = (props) => {
         </Dialog>
         
         <DialogConfirmacao 
-            form='contrato-form'
+            formId='contrato-form'
             openConfirmacao={openConfirmacao}
             setOpenConfirmacao={setOpenConfirmacao}
             acao="editar"

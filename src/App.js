@@ -13,14 +13,11 @@ import Footer from './components/Footer';
 import { Routes, Route } from 'react-router-dom';
 import MenuInicial from './pages/MenuInicial';
 import { Alert, Snackbar } from '@mui/material';
+import { useAtom } from 'jotai';
+import { snackbarAtom } from './atomStore';
 
 function App() {
-  const [snackbar, setSnackbar] = useState({
-    open: false,
-    severity: 'success',
-    text: 'Contrato enviado com sucesso!',
-    color: 'success'
-  });
+  const [snackbar, setSnackbar] = useAtom(snackbarAtom);
 
   return (
     <>
@@ -73,19 +70,20 @@ function App() {
           </Auth>
         } />
       </Routes>
-      
-      <Snackbar open={snackbar.open} autoHideDuration={3000} onClose={() => { setSnackbar({...snackbar, open: false}); }}>
+
+      <Snackbar open={snackbar.open} autoHideDuration={snackbar.autoHideDuration} onClose={() => setSnackbar( prev => ({...prev, open: false}) ) }>
         <Alert 
             variant="filled"
-            onClose={() => { setSnackbar({...snackbar, open: false}); }}
+            onClose={() => setSnackbar( prev => ({...prev, open: false}) ) }
             severity={snackbar.severity}
             elevation={6} 
             sx={{ width: '100%' }}
             color={snackbar.color}
         >
-          {snackbar.text}
+          {snackbar.message}
         </Alert>
       </Snackbar>
+
       <Footer />
     </>
   );

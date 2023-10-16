@@ -18,6 +18,7 @@ import MaxPrazoInput from '../MaxPrazoInput';
 const BoxProcessoContratacao = (props) => {
     const {
         errors,
+        formId,
         processoContratacao,
         setProcessoContratacao,
         handleChangeModeloLicitacao,
@@ -37,12 +38,11 @@ const BoxProcessoContratacao = (props) => {
     return (
         <Box
             component="form"
-            id="form-contr"
+            id={formId}
             onSubmit={(e) => {
                 e.preventDefault()
                 const formData = new FormData(e.target)
                 enviaDadosProcesso(e, formData, numContrato)
-                console.log(formData)
             }}
         >
             {

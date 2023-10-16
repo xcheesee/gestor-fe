@@ -76,7 +76,7 @@ const  CampoEmpresa = React.forwardRef(({ }, ref) => {
                             id: null
                         })
                     }}/>
-                    :<Box className="block flex h-32">
+                    :<Box className="dashed flex h-32">
                         <Button className="justify-center" fullWidth onClick={handleBtnClick}>
                             <Typography className="text-3xl font-light">Adicionar Empresa</Typography>
                             <AddCircleOutlineIcon className="mx-4 text-3xl"/>

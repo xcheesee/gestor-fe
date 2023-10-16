@@ -30,7 +30,8 @@ const FormNotaEmpenho = (props) => {
         carregando,
         setOpenConfirmacao,
         errors,
-        setErrors
+        setErrors,
+        formId
     } = props;
 
     const [tipo_empenho, setTipoEmpenho] = useState(formNotaEmpenho.tipo_empenho);
@@ -77,7 +78,7 @@ const FormNotaEmpenho = (props) => {
             <DialogContent>
                 <Box
                     component="form"
-                    id="empenho_form"
+                    id={formId}
                     onSubmit={(e) => {
                         e.preventDefault()
                         const formData = new FormData(e.target)

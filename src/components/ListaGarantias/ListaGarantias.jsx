@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { 
     Box,
     Divider,
@@ -11,8 +11,12 @@ import BotoesTab from '../BotoesTab';
 import BotaoAdicionar from '../BotaoAdicionar';
 import FormGarantia from './FormGarantia';
 import { formataData, formataValores, TabValues } from '../../commom/utils/utils';
-import { postFormData, putFormData } from '../../commom/utils/api';
+import { getGarantias, throwableDeleteForm, throwablePostForm, throwablePutForm } from '../../commom/utils/api';
 import { garantiaLabels } from '../../commom/utils/constants';
+import { useSetAtom } from 'jotai';
+import { snackbarAtom } from '../../atomStore';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { useErrorSnackbar } from '../../commom/utils/hooks';
 
 const TabGarantias = (props) => {
     const valores = {
@@ -24,17 +28,11 @@ const TabGarantias = (props) => {
     return <TabValues entry={valores} labels={garantiaLabels} label="garantia" />
 }
 
-const ListaGarantias = (props) => {
-    const {
-        garantias,
-        setGarantias,
-        mudancaGarantias,
-        setMudancaGarantias,
-        carregandoGarantias,
-        setCarregandoGarantias,
-        setSnackbar,
-        numContrato
-    } = props;
+const ListaGarantias = ({ numContrato }) => {
+
+    const queryClient = useQueryClient()
+    const setSnackbar = useSetAtom(snackbarAtom)
+    const errorSnackbar = useErrorSnackbar()
 
     const [acao, setAcao] = useState('editar');
     const [carregando, setCarregando] = useState(false);
@@ -55,26 +53,11 @@ const ListaGarantias = (props) => {
     });
     const [errors, setErrors] = useState({});
 
-    useEffect(() => {
-        const url = `${process.env.REACT_APP_API_URL}/garantias/${numContrato}`;
-        const token = localStorage.getItem('access_token');
-        const options = {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-                'Accept': 'application/json',
-                'Authorization': `Bearer ${token}`
-            },
-        }
+    const garantias = useQuery({
+        queryFn: async () => await getGarantias({numContrato}),
+        queryKey: ['garantias', numContrato] 
+    })
 
-        fetch(url, options)
-            .then(res => res.json())
-            .then(data => {
-                setGarantias(data.data);
-                setCarregandoGarantias(false);
-            })
-    }, [mudancaGarantias, numContrato, setGarantias, setCarregandoGarantias])
-    
     const handleClickExcluir = (id) => {
         setOpenConfirmacao({
             open: true,
@@ -83,43 +66,23 @@ const ListaGarantias = (props) => {
         setAcao('excluir');
     }
 
-    const excluiGarantia = (id) => {
-        const url = `${process.env.REACT_APP_API_URL}/garantia/${id}`;
-        const token = localStorage.getItem('access_token');
-        const options = {
-            method: 'DELETE',
-            headers: {
-                'Content-Type': 'application/json',
-                'Accept': 'application/json',
-                'Authorization': `Bearer ${token}`
-            }
-        }
+    const excluiGarantia = async (id) => {
         
         setCarregando(true);
-
-        fetch(url, options)
-            .then(res => {
-                setMudancaGarantias(!mudancaGarantias);
-                if (res.ok) {
-                    setOpenConfirmacao({ open: false, id: ''});
-                    setCarregando(false);
-                    setSnackbar({
-                        open: true,
-                        severity: 'success',
-                        text: 'Garantia excluída com sucesso!',
-                        color: 'success'
-                    });
-                    return res.json();
-                } else {
-                    setCarregando(false);
-                    setSnackbar({
-                        open: true,
-                        severity: 'error',
-                        text: `Erro ${res.status} - Não foi possível excluir`,
-                        color: 'error'
-                    });
-                }
+        try{
+            await throwableDeleteForm({id, path: 'garantia'})
+            setOpenConfirmacao({ open: false, id: ''});
+            setSnackbar({
+                open: true,
+                severity: 'success',
+                message: 'Garantia excluída com sucesso!',
+                color: 'success'
             });
+            queryClient.invalidateQueries({queryKey: ['garantias', numContrato]})
+        } catch(e) {
+            errorSnackbar.Delete(e)
+        }
+        setCarregando(false);
     }
 
     const handleClickEditar = (e, garantia) => {
@@ -140,12 +103,12 @@ const ListaGarantias = (props) => {
 
     const editaGarantia = async (id, formGarantiaEdit) => {
         setCarregando(true);
-        const res = await putFormData(id, formGarantiaEdit, "garantia")
-        if(res.status === 200) {
+        try{
+            const res = await throwablePutForm({id, form:formGarantiaEdit, path:"garantia"})
             setSnackbar({
                 open: true,
                 severity: 'success',
-                text: 'Garantia editada com sucesso!',
+                message: 'Garantia editada com sucesso!',
                 color: 'success'
             });
             setOpenFormGarantia({
@@ -159,16 +122,11 @@ const ListaGarantias = (props) => {
                 valor_garantia: '',
                 data_validade_garantia: ''
             });
-        } else {
-            setSnackbar({
-                open: true,
-                severity: 'error',
-                text: `Erro ${res.status} - Não foi possível editar a garantia`,
-                color: 'error'
-            });
+            queryClient.invalidateQueries({queryKey: ['garantias', numContrato]})
+        } catch(e) {
+            errorSnackbar.Put(e)
         }
         setCarregando(false);
-        setMudancaGarantias(!mudancaGarantias);
     }
 
     const handleClickAdicionar = () => {
@@ -187,12 +145,12 @@ const ListaGarantias = (props) => {
 
     const enviaGarantia = async (formGarantia) => {
         setCarregando(true);
-        const res = await postFormData(formGarantia, "garantia")
-        if (res.status === 201) {
+        try {
+            await throwablePostForm({form:formGarantia, path:"garantia"})
             setSnackbar({
                 open: true,
                 severity: 'success',
-                text: 'Garantia enviada com sucesso!',
+                message: 'Garantia enviada com sucesso!',
                 color: 'success'
             });
             setOpenFormGarantia({
@@ -206,55 +164,62 @@ const ListaGarantias = (props) => {
                 valor_garantia: '',
                 data_validade_garantia: ''
             });
-        } else {
-            setSnackbar({
-                open: true,
-                severity: 'error',
-                text: `Erro ${res.status} - Não foi possível enviar a garantia`,
-                color: 'error'
-            });
+            queryClient.invalidateQueries({queryKey: ['garantias', numContrato]})
+        } catch(e) {
+            errorSnackbar.Post(e)
         }
-        setMudancaGarantias(!mudancaGarantias);
         setCarregando(false);
     }
 
     return (
         <Box>
-            {garantias.map((garantia, index) => {
-                return (
-                    <Fade in={true} timeout={400} key={index}>
-                        <Box
-                            elevation={3} 
-                            component={Paper} 
-                            sx={{ padding: '1rem', mb: '2rem' }}
-                        >
-                            <Divider
-                                textAlign='right'
-                                sx={{
-                                    fontWeight: 'light',
-                                    fontSize: '1.25rem'
-                                }}
+            {garantias.isLoading
+                ?
+                    <Box 
+                        sx={{ 
+                            display: 'flex', 
+                            alignItems: 'center', 
+                            justifyContent: 'center', 
+                            height: '38rem' 
+                        }}>
+                        <CircularProgress size={30} />
+                    </Box>
+                :garantias?.data?.data?.map((garantia, index) => {
+                    return (
+                        <Fade in={true} timeout={400} key={index}>
+                            <Box
+                                elevation={3} 
+                                component={Paper} 
+                                sx={{ padding: '1rem', mb: '2rem' }}
                             >
-                                Garantia # {garantia.id}
-                            </Divider>
+                                <Divider
+                                    textAlign='right'
+                                    sx={{
+                                        fontWeight: 'light',
+                                        fontSize: '1.25rem'
+                                    }}
+                                >
+                                    Garantia # {garantia.id}
+                                </Divider>
 
-                            <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-                                <TabGarantias 
-                                    instituicao_financeira={garantia.instituicao_financeira}
-                                    numero_documento={garantia.numero_documento}
-                                    valor_garantia={garantia.valor_garantia}
-                                    data_validade_garantia={garantia.data_validade_garantia}
-                                />
+                                <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+                                    <TabGarantias 
+                                        instituicao_financeira={garantia.instituicao_financeira}
+                                        numero_documento={garantia.numero_documento}
+                                        valor_garantia={garantia.valor_garantia}
+                                        data_validade_garantia={garantia.data_validade_garantia}
+                                    />
 
-                                <BotoesTab 
-                                    excluir={(e) => { handleClickExcluir(garantia.id); }}
-                                    editar={(e) => { handleClickEditar(e, garantia, garantia.id); }}
-                                />
+                                    <BotoesTab 
+                                        excluir={(e) => { handleClickExcluir(garantia.id); }}
+                                        editar={(e) => { handleClickEditar(e, garantia, garantia.id); }}
+                                    />
+                                </Box>
                             </Box>
-                        </Box>
-                    </Fade>
-                );
-            })}
+                        </Fade>
+                    ); 
+                }
+            )}
 
             <FormGarantia 
                 formGarantia={formGarantia}
@@ -268,22 +233,6 @@ const ListaGarantias = (props) => {
                 errors={errors}
                 setErrors={setErrors}
             />
-
-            {
-                carregandoGarantias
-                ? 
-                    <Box 
-                        sx={{ 
-                            display: 'flex', 
-                            alignItems: 'center', 
-                            justifyContent: 'center', 
-                            height: '38rem' 
-                        }}>
-                        <CircularProgress size={30} />
-                    </Box>
-                : 
-                    ""
-            }
 
             <BotaoAdicionar 
                 fnAdicionar={handleClickAdicionar}

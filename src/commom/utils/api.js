@@ -59,7 +59,6 @@ export async function postFormData (form, path) {
     const options = {
         method: 'POST',
         headers: {
-            'Content-Type': 'application/json',
             'Accept': 'application/json',
             'Authorization': `Bearer ${token}`
         },
@@ -71,8 +70,48 @@ export async function postFormData (form, path) {
     return {status: res.status, ...json}
 }
 
+export async function throwablePostForm({form, path}) {
+    const token = localStorage.getItem('access_token');
+    const url = `${process.env.REACT_APP_API_URL}/${path}`;
+    const options = {
+        method: 'POST',
+        headers: {
+            'Accept': 'application/json',
+            'Authorization': `Bearer ${token}`
+        },
+        body: form
+    };
+
+    const res = await fetch(url, options)
+    const json = await res.json()
+    if(!res.ok) {
+        throw {status: res.status, ...json}
+    }
+    return {status: res.status, ...json}
+}
+
 export async function postAnoExecFin(formData) {
-    const url = `${process.env.REACT_APP_API_URL}/execucao_financeira`;
+    const url = `${process.env.REACT_APP_API_URL}/exec_financeira`;
+    const token = sessionStorage.getItem('access_token');
+    const options = {
+        method: 'POST',
+        headers: {
+            'Accept': 'application/json',
+            'Authorization': `Bearer ${token}`
+        },
+        body: formData
+    }
+
+    const res = await fetch(url, options)
+    const json = await res.json()
+    if(!res.ok) {
+        throw ({status: res.status, ...json})
+    }
+    return res
+}
+
+export async function postMesesExecFin({execucao}) {
+    const url = `${process.env.REACT_APP_API_URL}/exec_mes`;
     const token = sessionStorage.getItem('access_token');
     const options = {
         method: 'POST',
@@ -81,11 +120,16 @@ export async function postAnoExecFin(formData) {
             'Accept': 'application/json',
             'Authorization': `Bearer ${token}`
         },
-        body: JSON.stringify(formData)
+        body: JSON.stringify(execucao)
     }
 
     const res = await fetch(url, options)
-}
+    const json = await res.json()
+    if(!res.ok) {
+        throw ({status: res.status, ...json})
+    }
+    return res
+} 
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ///                                                                                                                                 // 
@@ -208,14 +252,52 @@ export async function getFormData (path) {
     return await (await fetch(`${url}/${path}`, options)).json()
 } 
 
-export async function getExecucaoFinanceira(id) {
+export async function throwableGetData({path, contratoId=""}) {
+    const token = localStorage.getItem('access_token');
+    const url = `${process.env.REACT_APP_API_URL}/${path}/${contratoId}`
+    const options = {
+        headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+            'Authorization': `Bearer ${token}`
+        },
+        method: 'GET'
+    }
+    const res = await fetch(url, options)
+    const json = await res.json()
+    if(!res.ok) {
+        throw ({status: res.status, ...json})
+    }
+    return {status: res.status, ...json}
+}
 
-    const url = `${process.env.REACT_APP_API_URL}/execucao_financeira/${id}`;
+export async function getExecucoesFinanceiras(contratoId) {
+    const url = `${process.env.REACT_APP_API_URL}/exec_financeira/${contratoId}`;
     const token = localStorage.getItem('access_token');
     const options = {
         method: 'GET',
         headers: {
-            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+            'Authorization': `Bearer ${token}`
+        }
+    };
+
+    const res = await fetch(url, options)
+    const json = await res.json()
+    if(!res.ok) {
+        throw Error('blud')
+    }
+    return json.data
+}
+
+export async function getMesesExecutados(id) {
+
+    const url = `${process.env.REACT_APP_API_URL}/exec_mes/${id}`;
+    const token = localStorage.getItem('access_token');
+    const options = {
+        method: 'GET',
+        headers: {
+            //'Content-Type': 'application/json',
             'Accept': 'application/json',
             'Authorization': `Bearer ${token}`
         }
@@ -227,6 +309,46 @@ export async function getExecucaoFinanceira(id) {
         throw Error("bruh")
     }
     return json.data
+}
+
+export async function getCertidoes({numContrato}) {
+    const url = `${process.env.REACT_APP_API_URL}/certidoes/${numContrato}`;
+    const token = localStorage.getItem('access_token');
+    const options = {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+            'Authorization': `Bearer ${token}`
+        }
+    };
+    
+    const res = await fetch(url, options)
+    const json = await res.json()
+    if(!res.ok) {
+        throw ({status: res.status, ...json})
+    }
+    return json
+}
+
+export async function getGarantias({numContrato}) {
+    const url = `${process.env.REACT_APP_API_URL}/garantias/${numContrato}`;
+    const token = localStorage.getItem('access_token');
+    const options = {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+            'Authorization': `Bearer ${token}`
+        },
+    }
+
+    const res = await fetch(url, options)
+    const json = await res.json()
+    if(!res.ok) {
+        throw ({status: res.status, ...json})
+    }
+    return ({status: res.status, ...json})
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -254,8 +376,9 @@ export const newPwRequest = async (formData) => {
         headers: headers,
         body: JSON.stringify(data),
     })
+    const json = await res.json()
 
-    return await res.json()
+    return {status: res.status, ...json}
 }
 
 export const editaDadosContrato = async (e, dados, formInterno, id) => {
@@ -299,29 +422,51 @@ export async function putFormData (id, form, path) {
     return {status: res.status, ...json}
 }
 
+export async function throwablePutForm({id, form, path}) {
+    const token = localStorage.getItem('access_token');
+    let data = getFormattedFormData(form)
+    const url = `${process.env.REACT_APP_API_URL}/${path}/${id}`;
+    const options = {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+            'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify(data)
+    };
+    const res = await fetch(url, options)
+    const json = await res.json()
+
+    if(!res.ok) {
+        throw ({status: res.status, ...json})
+    }
+    return {status: res.status, ...json}
+
+}
+
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ///                                                                                                                                 // 
 ///                                               DELETE                                                                            //                                             
 ///                                                                                                                                 //
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-export async function deleteReajuste(id) {
+export async function throwableDeleteForm({id, path}) {
+    const url = `${process.env.REACT_APP_API_URL}/${path}/${id}`;
     const token = localStorage.getItem('access_token');
-    const url = `${process.env.REACT_APP_API_URL}/reajuste/${id}`;
     const options = {
         method: 'DELETE',
         headers: {
             'Content-Type': 'application/json',
             'Accept': 'application/json',
             'Authorization': `Bearer ${token}`
-        },
-    };
+        }
+    }
 
     const res = await fetch(url, options)
     const json = await res.json()
-    if(res.ok) {
-        return {status: res.status, ...json}
-    } else {
-        throw ({'message': 'Nao foi possivel deletar o reajuste'})
+    if(!res.ok) {
+        throw ({status: res.status, ...json})
     }
+    return ({status: res.status, ...json})
 }

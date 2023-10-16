@@ -12,6 +12,8 @@ import CircularProgress from '@mui/material/CircularProgress';
 import BoxProcessoContratacao from '../../BoxProcessoContratacao';
 import DialogConfirmacao from '../../DialogConfirmacao';
 import { editaDadosContrato } from '../../../commom/utils/api';
+import { useSetAtom } from 'jotai';
+import { snackbarAtom } from '../../../atomStore';
 
 const FormProcessoContratacao = (props) => {
     const {
@@ -21,11 +23,14 @@ const FormProcessoContratacao = (props) => {
         openProcCon,
         setOpenProcCon,
         numContrato,
-        setSnackbar,
         carregando,
         mudancaContrato,
         setMudancaContrato
     } = props;
+
+    const formContratacaoId = "form-contr"
+
+    const setSnackbar = useSetAtom(snackbarAtom)
 
     const [errors, setErrors] = useState({});
     const [processoContratacao, setProcessoContratacao] = useState({
@@ -96,7 +101,7 @@ const FormProcessoContratacao = (props) => {
             setSnackbar({
                 open: true,
                 severity: 'success',
-                text: 'Processo de contratação editado com sucesso!',
+                message: 'Processo de contratação editado com sucesso!',
                 color: 'success'
             });
         } else if(res.status === 422) {
@@ -105,7 +110,7 @@ const FormProcessoContratacao = (props) => {
             setSnackbar({
                 open: true,
                 severity: 'error',
-                text: `Erro ${res.status} - Não foi possível editar o processo de contratação`,
+                message: <div>Não foi possível editar o processo de contratação. <br/> Erro {res.message}</div>,
                 color: 'error'
             });
         }
@@ -134,6 +139,7 @@ const FormProcessoContratacao = (props) => {
                     estados={estados}
                     carregando={carregando}
                     handleChange={handleChange}
+                    formId={formContratacaoId}
                     acao="editar"
                 />
             </DialogContent>
@@ -164,7 +170,7 @@ const FormProcessoContratacao = (props) => {
             openConfirmacao={openConfirmacao}
             setOpenConfirmacao={setOpenConfirmacao}
             acao="editar"
-            form="form-contr"
+            formId={formContratacaoId}
             formInterno={{
                 ...dados,
                 ...processoContratacao

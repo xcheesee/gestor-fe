@@ -2,7 +2,7 @@ import { Box, CircularProgress, Fade, Paper, TextField } from "@mui/material";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useRef } from "react";
 import { useState } from "react";
-import { deleteReajuste, getFormData, postFormData, putFormData } from "../../commom/utils/api";
+import { getFormData, throwableDeleteForm, throwablePostForm, throwablePutForm } from "../../commom/utils/api";
 import { reajusteLabels } from "../../commom/utils/constants";
 import { formataValores } from "../../commom/utils/utils";
 import BotaoAdicionar from "../BotaoAdicionar";
@@ -11,15 +11,25 @@ import CampoValores from "../CampoValores";
 import ContratoFormWrapper from "../ContratoFormWrapper";
 import DialogConfirmacao from "../DialogConfirmacao";
 import TabContrato from "../TabContrato";
+import { useSetAtom } from "jotai";
+import { snackbarAtom } from "../../atomStore";
+import { useErrorSnackbar } from "../../commom/utils/hooks";
 
-export default function ListaReajustes ({ numContrato, setSnackbar }) {
+export default function ListaReajustes ({ numContrato }) {
     let dados = []
+    const reajusteFormId = 'reajuste-form'
+
+    const setSnackbar = useSetAtom(snackbarAtom)
+    const errorSnackbar = useErrorSnackbar()
+
     const queryClient = useQueryClient()
     const dadosReajuste = useQuery({
         queryKey: ['reajuste', numContrato], 
         queryFn: () => getFormData(`reajustes/${numContrato}`)
     })
+
     const currDados = useRef({id: 0, valor_reajuste: "", indice_reajuste: ""})
+
     const [formDialog, setFormDialog] = useState(false)
     const [acao, setAcao] = useState("")
     const [openConfirmacao, setOpenConfirmacao] = useState({open: false, id: ""})
@@ -27,49 +37,64 @@ export default function ListaReajustes ({ numContrato, setSnackbar }) {
 
     const addReajuste = useMutation({
         mutationFn: async (formData) => {
-                return await postFormData(formData, "reajuste")
-        }, onSuccess: async (res) => {
+                return await throwablePostForm({form:formData, path: 'reajuste'})
+        }, 
+        onSuccess: async (res) => {
             setFormDialog(false)
             setSnackbar({
                 open: true,
                 severity: 'success',
-                text: 'Reajuste criado com sucesso!',
+                message: 'Reajuste criado com sucesso!',
                 color: 'success'
             });
             queryClient.invalidateQueries(['reajuste', numContrato])
+        },
+        onError: async (res) => {
+            setFormDialog(false)
+            errorSnackbar.Post(res)
         }
     })
+
     const editReajuste = useMutation({
-        mutationFn: async ({id, formData}) => {
-                return await putFormData(id, formData, "reajuste")
-        }, onSuccess: async (res) => {
+        mutationFn: async ({id, formData}) => await throwablePutForm({id, form:formData, path:"reajuste"}), 
+        onSuccess: async (res) => {
             setFormDialog(false)
             setSnackbar({
                 open: true,
                 severity: 'success',
-                text: 'Reajuste editado com sucesso!',
+                message: 'Reajuste editado com sucesso!',
                 color: 'success'
             });
             queryClient.invalidateQueries(['reajuste'])
+        },
+        onError: async (res) => {
+            setOpenConfirmacao({open: false, id: ""})
+            errorSnackbar.Put(res)
         }
     })
+
     const deleteReajusteFn = useMutation({
         mutationFn: async (id) => {
-            return await deleteReajuste(id)
-        }, onSuccess: async (res) => {
+            return await throwableDeleteForm({id, path: 'reajuste'})
+        }, 
+        onSuccess: async (res) => {
             setOpenConfirmacao({open: false, id: ""})
             setSnackbar({
                 open: true,
                 severity: 'success',
-                text: 'Reajuste excluido com sucesso!',
+                message: 'Reajuste excluido com sucesso!',
                 color: 'success'
             });
             queryClient.invalidateQueries(['reajuste'])
+        },
+        onError: async (res) => {
+            setOpenConfirmacao({open: false, id: ""})
+            errorSnackbar.Delete(res)
         }
     })
+
     async function handleEditPress (entry) {
         setAcao("editar")
-        // const res = await getFormData(`reajuste/${entry.id}`)
         currDados.current = {
             id: entry.id, 
             valor_reajuste: entry.valor_reajuste, 
@@ -77,9 +102,9 @@ export default function ListaReajustes ({ numContrato, setSnackbar }) {
         }
         setFormDialog(true)
     }
+
     async function handleDeletePress (entry) {
         setAcao("excluir")
-        // const res = await getFormData(`reajuste/${entry.id}`)
         currDados.current = { id: entry.id }
         setOpenConfirmacao({open: true, id: entry.id})
     }
@@ -138,12 +163,14 @@ export default function ListaReajustes ({ numContrato, setSnackbar }) {
             >
                 <Box
                     component='form'
-                    id='reajuste_form'
+                    id={reajusteFormId}
                     onSubmit={async (e) => {
                         e.preventDefault()
                         const formData = new FormData(e.target)
                         formData.append("contrato_id", numContrato)
-                        acao === "adicionar" ? addReajuste.mutate(formData) : editReajuste.mutate({id: currDados.current.id, formData: formData})
+                        acao === "adicionar" 
+                            ? addReajuste.mutate(formData) 
+                            : editReajuste.mutate({id: currDados.current.id, formData: formData})
                     }}
                 >
                     <CampoValores
@@ -182,7 +209,7 @@ export default function ListaReajustes ({ numContrato, setSnackbar }) {
                         ? deleteReajusteFn.isLoading 
                         : false
                 }
-                form="reajuste_form"
+                formId={reajusteFormId}
             />
         </>
     )

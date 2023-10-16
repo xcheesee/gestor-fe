@@ -1,5 +1,8 @@
 import { Box, Typography } from '@mui/material';
 import { cpf, cnpj } from 'cpf-cnpj-validator';
+import { forwardRef } from 'react';
+import { NumericFormat } from 'react-number-format';
+import { meses } from './constants';
 
 // export function getDateDiff(date1, date2) {
 //     if(date1 === null || date2 === null) return 0
@@ -64,11 +67,15 @@ export const formataValores = (valor) => {
       currency: "BRL"
   });
 
-  if (valor === "" || valor === undefined || valor === null || isNaN(valor)) {
-      return valores.format(0);
-  } else {
-      return valores.format(valor);
+  if(valor === "" || valor === undefined || valor === null) {
+    return valores.format(0);
   }
+  else if (isNaN(valor)) {
+    let formatado = valor.replace(/\./g, "")
+    formatado = formatado.replace(/,/g, ".")
+    return valores.format(formatado);
+  }
+  return valores.format(valor);
 }
 
 export function saveLocalStorageInput(numeroContrato, campo, valor) {
@@ -110,4 +117,60 @@ export function TabValues ({ entry, labels, label}) {
         ))}
     </Box>
   )
+}
+
+ export const NumberFormatCustom = forwardRef(function NumberFormatCustom(props, ref) {
+    const { onChange, ...other } = props;
+  
+    return (
+      <NumericFormat
+        {...other}
+        getInputRef={ref}
+        onValueChange={(values) => {
+          onChange({
+            target: {
+              value: values.value,
+              name: values.name
+            },
+          });
+        }}
+        //isNumericString
+        thousandSeparator="."
+        decimalSeparator=","
+        fixedDecimalScale
+        decimalScale={2}
+      />
+    );
+});
+
+export function buildExcelDataArray(options={}) {
+  let {mesesExecutados, valorContratado} = options
+  let data = [];
+
+  const executados = [...Array(12)]
+
+  mesesExecutados.forEach((val => {
+    executados[val.mes - 1] = parseFloat(val.execucao)
+  }))
+
+  for(let i=0; i < 4; i++) {
+    if(i != 3) {
+      data.push( [...Array(12)].map(() => {
+
+        const val = Math.floor(Math.random() * 100000)
+        if(val < 30000) return null
+        return val
+      }))
+    } else {
+      data.push( [...Array(12)].map((v, ind) => {
+        if(ind === 0) {
+          return `=SUM(${String.fromCharCode(ind+65)}1:${String.fromCharCode(ind+65)}3)+${valorContratado ?? 0}`
+        } else{
+          return `=SUM(${String.fromCharCode(ind+65)}1:${String.fromCharCode(ind+65)}3)+${String.fromCharCode(ind+64)}4-${String.fromCharCode(ind+64)}5`
+        }
+    }) )
+    }
+  }
+  data.push(executados)
+  return data
 }

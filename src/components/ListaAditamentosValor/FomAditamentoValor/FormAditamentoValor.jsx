@@ -30,7 +30,8 @@ const FormAditamentoValor = (props) => {
     carregando,
     setOpenConfirmacao,
     errors,
-    setErrors
+    setErrors,
+    formId
   } = props;
 
   useEffect(() => {
@@ -66,7 +67,7 @@ const FormAditamentoValor = (props) => {
       <DialogContent>
         <Box
           component="form"
-          id="aditamento_val_form"
+          id={formId}
           onSubmit={(e) => {
             e.preventDefault()
             const formData = new FormData(e.target)

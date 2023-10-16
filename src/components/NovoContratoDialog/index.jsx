@@ -17,18 +17,24 @@ import { contratoLabels } from "../../commom/utils/constants";
 import { irParaTopo } from "../../commom/utils/utils";
 import CampoProcessoSei from "../CampoProcessoSei";
 import VoltarArrowBtn from "../VoltarArrowBtn";
+import { useSetAtom } from "jotai";
+import { snackbarAtom } from "../../atomStore";
 
-export default function NovoContratoDialog({novoDialog, setNovoDialog, setSnackbar}) {
+export default function NovoContratoDialog({novoDialog, setNovoDialog}) {
     const [sendingForm, setSendingForm] = useState(false)
     const [existeSEI, setExisteSEI] = useState(false)
+
     const clearSwitch= useRef(true) //"switch" utilizado para resetar o valor do campo sei caso
     const contrato = useRef({
         departamento_id: "",
         processo_sei: "",
     })
 
+    const setSnackbar = useSetAtom(snackbarAtom)
+
     const navigate = useNavigate()
     const departamentos = JSON.parse(localStorage.getItem('departamentos'))
+
     return (
         <>
             <Dialog open={novoDialog} maxWidth="md" fullWidth>

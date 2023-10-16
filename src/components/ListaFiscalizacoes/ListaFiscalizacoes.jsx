@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { 
     Box,
     Divider,
@@ -14,28 +14,27 @@ import FormGestaoFiscalizacao from './FormGestaoFiscalizacao';
 import DialogConfirmacao from '../DialogConfirmacao';
 import BotoesTab from '../BotoesTab';
 import BotaoAdicionar from '../BotaoAdicionar';
-import { postFormData, putFormData, sendFiscalizacaoEdit, sendNewFiscalizacao } from '../../commom/utils/api';
+import { throwableDeleteForm, throwableGetData, throwablePostForm, throwablePutForm } from '../../commom/utils/api';
 import CloseIcon from '@mui/icons-material/Close';
 import CheckIcon from '@mui/icons-material/Check';
 import CircularProgress from '@mui/material/CircularProgress';
 import { TabValues } from '../../commom/utils/utils';
 import { fiscLabels } from '../../commom/utils/constants';
+import { useSetAtom } from 'jotai';
+import { snackbarAtom } from '../../atomStore';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { useErrorSnackbar } from '../../commom/utils/hooks';
 
 const TabFiscalizacao = (props) => {
     return <TabValues entry={props} labels={fiscLabels} label="fiscalizacao "/>;
 }
 
-const ListaFiscalizacoes = (props) => {
-    const {
-        fiscalizacoes,
-        setFiscalizacoes,
-        mudancaFiscalizacoes,
-        setMudancaFiscalizacoes,
-        carregandoFiscalizacoes,
-        setCarregandoFiscalizacoes,
-        setSnackbar,
-        numContrato
-    } = props;
+const ListaFiscalizacoes = ({ numContrato }) => {
+
+    const setSnackbar = useSetAtom(snackbarAtom)
+    const errorSnackbar = useErrorSnackbar()
+    const queryClient = useQueryClient()
+    const formFiscalizacaoId = "fisc_form"
 
     const handleClickConfirmar = () => {
         if (openFormFiscalizacao.acao === 'adicionar') {
@@ -69,25 +68,20 @@ const ListaFiscalizacoes = (props) => {
     });
     const [errors, setErrors] = useState({});
 
-    useEffect(() => {
-        const url = `${process.env.REACT_APP_API_URL}/gestaofiscalizacoes/${numContrato}`;
-        const token = localStorage.getItem('access_token');
-        const options = {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-                'Accept': 'application/json',
-                'Authorization': `Bearer ${token}`
-            }
-        };
-
-        fetch(url, options)
-            .then(res => res.json())
-            .then(data => {
-                setFiscalizacoes(data.data);
-                setCarregandoFiscalizacoes(false);
-            })
-    }, [mudancaFiscalizacoes, numContrato, setFiscalizacoes, setCarregandoFiscalizacoes])
+    const fiscalizacoes = useQuery({
+        queryKey: ['fiscalizacoes', numContrato],
+        queryFn: () => throwableGetData({path: `gestaofiscalizacoes`, contratoId: numContrato}),
+        onError: (res) => {
+            errorSnackbar.Get(res)
+            //setSnackbar({
+            //    open: true,
+            //    message: <div>Nao foi possivel recuperar fiscalização<br/>Erro: {res.message}</div>,
+            //    severity: 'error',
+            //    color: 'error'
+            //})
+            return []
+        }
+    })
 
     const handleClickExcluir = (id) => {
         setOpenConfirmacao({
@@ -97,43 +91,39 @@ const ListaFiscalizacoes = (props) => {
         setAcao('excluir');
     }
 
-    const excluiFiscalizacao = (id) => {
-        const url = `${process.env.REACT_APP_API_URL}/gestaofiscalizacao/${id}`
-        const token = localStorage.getItem('access_token');
-        const option = {
-            method: 'DELETE',
-            headers: {
-                'Content-Type': 'application/json',
-                'Accept': 'application/json',
-                'Authorization': `Bearer ${token}`
-            }
-        }
-
+    const excluiFiscalizacao = async (id) => {
         setCarregando(true);
-
-        fetch(url, option)
-            .then(res => {
-                setMudancaFiscalizacoes(!mudancaFiscalizacoes);
-                if (res.ok) {
-                    setOpenConfirmacao({ open: false, id: ''});
-                    setCarregando(false);
-                    setSnackbar({
-                        open: true,
-                        severity: 'success',
-                        text: 'Gestão/fiscalização excluída com sucesso!',
-                        color: 'success'
-                    });
-                    return res.json();
-                } else {
-                    setCarregando(false);
-                    setSnackbar({
-                        open: true,
-                        severity: 'error',
-                        text: `Erro ${res.status} - Não foi possível excluir`,
-                        color: 'error'
-                    });
-                }
+        try {
+            await throwableDeleteForm({id, path:'gestaofiscalizacao'})
+            setOpenConfirmacao({ open: false, id: ''});
+            setCarregando(false);
+            setSnackbar({
+                open: true,
+                severity: 'success',
+                message: 'Gestão/fiscalização excluída com sucesso!',
+                color: 'success'
             });
+            queryClient.invalidateQueries({queryKey: ['fiscalizacoes', numContrato]})
+        } catch(e) {
+            errorSnackbar.Delete(e)
+            //setSnackbar({
+            //    open: true,
+            //    severity: 'error',
+            //    message: 
+            //        <div>
+            //            Não foi possível excluir.
+            //            <br/>
+            //            Erro: {e.message}
+            //            <br/>
+            //            {e.errors
+            //                ?Object.values(e.errors).map( (erro, i) => (<div key={`erro-${i}`}>{erro}</div>))
+            //                :<></>
+            //            }
+            //        </div>,
+            //    color: 'error'
+            //});
+        }
+        setCarregando(false);
     }
 
     const handleClickEditar = (e, fiscalizacao) => {
@@ -156,12 +146,12 @@ const ListaFiscalizacoes = (props) => {
 
     const editaFiscalizacao = async (id, formFiscalizacaoEdit) => {
         setCarregando(true);
-        const res = await putFormData( id, formFiscalizacaoEdit, "gestaofiscalizacao")
-        if(res.status === 200) {
+        try{
+            await throwablePutForm({id, form: formFiscalizacaoEdit, path: 'gestaofiscalizacao'})
             setSnackbar({
                 open: true,
                 severity: 'success',
-                text: 'Gestão/fiscalização editada com sucesso!',
+                message: 'Gestão/fiscalização editada com sucesso!',
                 color: 'success'
             });
             setOpenFormFiscalizacao({
@@ -177,15 +167,26 @@ const ListaFiscalizacoes = (props) => {
                 nome_suplente: '',
                 email_suplente: ''
             });
-        } else {
-            setSnackbar({
-                open: true,
-                severity: 'error',
-                text: `Erro ${res.status} - Não foi possível editar a gestão/fiscalização`,
-                color: 'error'
-            });
+            queryClient.invalidateQueries({queryKey: ['fiscalizacoes', numContrato]})
+        } catch(e) {
+            errorSnackbar.Put(e)
+            //setSnackbar({
+            //    open: true,
+            //    severity: 'error',
+            //    message: 
+            //        <div>
+            //            Não foi possível excluir.
+            //            <br/>
+            //            Erro: {e.message}
+            //            <br/>
+            //            {e.errors
+            //                ?Object.values(e.errors).map( (erro, i) => (<div key={`erro-${i}`}>{erro}</div>))
+            //                :<></>
+            //            }
+            //        </div>,
+            //    color: 'error'
+            //});
         }
-        setMudancaFiscalizacoes(!mudancaFiscalizacoes);
         setCarregando(false);
     }
 
@@ -207,12 +208,13 @@ const ListaFiscalizacoes = (props) => {
 
     const enviaFiscalizacao = async (formFisc) => {
         setCarregando(true);
-        const res = await postFormData(formFisc, "gestaofiscalizacao")
-        if (res.status === 201) {
+
+        try {
+            await throwablePostForm({form: formFisc, path: "gestaofiscalizacao"})
             setSnackbar({
                 open: true,
                 severity: 'success',
-                text: 'Gestão/fiscalização enviada com sucesso!',
+                message: 'Gestão/fiscalização enviada com sucesso!',
                 color: 'success'
             });
             setOpenFormFiscalizacao({
@@ -228,31 +230,28 @@ const ListaFiscalizacoes = (props) => {
                 nome_suplente: '',
                 email_suplente: ''
             });
-        } else if (res.status === 422) {
-            setCarregando(false);
-            setSnackbar({
-                open: true,
-                severity: 'error',
-                text: `Erro ${res.status} - Não foi possível enviar a gestão/fiscalização`,
-                color: 'error'
-            });
-            setErrors(res.errors);
-        } else {
-            setCarregando(false);
-            setSnackbar({
-                open: true,
-                severity: 'error',
-                text: `Erro ${res.status} - Não foi possível enviar a gestão/fiscalização`,
-                color: 'error'
-            });
+            queryClient.invalidateQueries({queryKey: ['fiscalizacoes', numContrato]})
+        } catch(e) {
+            errorSnackbar.Post(e)
+            //setSnackbar({
+            //    open: true,
+            //    severity: 'error',
+            //    message: <div>Não foi possível enviar a gestão/fiscalização<br/>Erro {e.message}</div>,
+            //    color: 'error'
+            //});
+            if(e.status === 422) { setErrors(e.errors); }
         }
+
         setCarregando(false);
-        setMudancaFiscalizacoes(!mudancaFiscalizacoes);
-        }
+    }
 
     return (
         <Box>
-            {fiscalizacoes.map((fiscalizacao, index) => {
+            {fiscalizacoes.isLoading
+                ?<Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '38rem' }}>
+                        <CircularProgress size={30} />
+                    </Box>
+                :fiscalizacoes?.data?.data?.map((fiscalizacao, index) => {
                 return (
                     <Fade in={true} timeout={400} key={index}>
                         <Box  
@@ -287,8 +286,8 @@ const ListaFiscalizacoes = (props) => {
                             </Box>
                         </Box>
                     </Fade>
-                );
-            })}
+                ); })
+            }
 
             <Dialog open={openFormFiscalizacao.open} fullWidth>
                 <DialogTitle>
@@ -305,6 +304,7 @@ const ListaFiscalizacoes = (props) => {
                         openFormFiscalizacao={openFormFiscalizacao}
                         errors={errors}
                         setErrors={setErrors}
+                        formId={formFiscalizacaoId}
                     />
                 </DialogContent>
                 <DialogActions sx={{ margin: '1rem' }}>
@@ -334,16 +334,6 @@ const ListaFiscalizacoes = (props) => {
                 </DialogActions>
             </Dialog>
 
-            {
-                carregandoFiscalizacoes
-                ? 
-                    <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '38rem' }}>
-                        <CircularProgress size={30} />
-                    </Box>
-                : 
-                    ""
-            }  
-
             <BotaoAdicionar 
                 fnAdicionar={handleClickAdicionar}
                 texto="Adicionar gestão/fiscalização"
@@ -353,7 +343,7 @@ const ListaFiscalizacoes = (props) => {
                 openConfirmacao={openConfirmacao}
                 setOpenConfirmacao={setOpenConfirmacao}
                 acao={acao}
-                form="fisc_form"
+                formId={formFiscalizacaoId}
                 fnExcluir={excluiFiscalizacao}
                 fnEditar={editaFiscalizacao}
                 formInterno={formFiscalizacao}

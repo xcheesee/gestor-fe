@@ -15,6 +15,7 @@ import CampoData from '../../CampoData';
 
 const FormCertidao = (props) => {
     const { 
+        formId,
         formCertidao, 
         setFormCertidao, 
         openFormCertidao, 
@@ -61,7 +62,7 @@ const FormCertidao = (props) => {
             <DialogContent>
                 <Box
                     component='form'
-                    id='certidao_form'
+                    id={formId}
                     onSubmit={(e) => {
                         e.preventDefault()
                         const formData = new FormData(e.target)

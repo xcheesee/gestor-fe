@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { 
     Box,
     Divider,
@@ -10,9 +10,13 @@ import DialogConfirmacao from '../DialogConfirmacao';
 import BotoesTab from '../BotoesTab';
 import BotaoAdicionar from '../BotaoAdicionar';
 import FormLocais from './FormLocais';
-import { postFormData, putFormData, sendLocalEdit, sendNewLocal } from '../../commom/utils/api';
+import { throwableDeleteForm, throwableGetData, throwablePostForm, throwablePutForm } from '../../commom/utils/api';
 import { TabValues } from '../../commom/utils/utils';
 import { locaisLabels } from '../../commom/utils/constants';
+import { useSetAtom } from 'jotai';
+import { snackbarAtom } from '../../atomStore';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { useErrorSnackbar } from '../../commom/utils/hooks';
 
 const dicionarioRegioes = {
     "CO": "Centro-Oeste",
@@ -37,17 +41,28 @@ const TabLocaisServico = (props) => {
     return <TabValues entry={valores} labels={locaisLabels} label='locais' />
 }
 
-const ListaLocais = (props) => {
-    const {
-        locais,
-        setLocais,
-        mudancaLocais,
-        setMudancaLocais,
-        carregandoLocais,
-        setCarregandoLocais,
-        numContrato,
-        setSnackbar
-    } = props;
+const ListaLocais = ({ numContrato }) => {
+
+    const formLocalId = "local_form"
+    const queryClient = useQueryClient()
+
+    const locais = useQuery({
+        queryKey: ['locaisContrato', numContrato],
+        queryFn: async () => await throwableGetData({path: 'servicoslocais', contratoId: numContrato}),
+        onError: (res) => {
+            errorSnackbar.Get(res)
+            //setSnackbar({
+            //    open: true,
+            //    message: <div>Nao foi possivel recuperar os locais<br/>Erro: {res.message}</div>,
+            //    severity: 'error',
+            //    color: 'error'
+            //})
+            return []
+        }
+    })
+
+    const setSnackbar = useSetAtom(snackbarAtom)
+    const errorSnackbar = useErrorSnackbar()
 
     const [acao, setAcao] = useState('editar');
     const [carregando, setCarregando] = useState(false);
@@ -68,25 +83,6 @@ const ListaLocais = (props) => {
     });
     const [errors, setErrors] = useState({});
     
-    useEffect(() => {
-        const url = `${process.env.REACT_APP_API_URL}/servicoslocais/${numContrato}`
-        const token = localStorage.getItem('access_token');
-        const options = {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-                'Accept': 'application/json',
-                'Authorization': `Bearer ${token}`
-            }
-        };
-
-        fetch(url, options)
-            .then(res => res.json())
-            .then(data => {
-                setLocais(data.data);
-                setCarregandoLocais(false);
-            })
-    }, [mudancaLocais, numContrato, setLocais, setCarregandoLocais]);
 
     const handleClickExcluir = (id) => {
         setOpenConfirmacao({
@@ -96,43 +92,25 @@ const ListaLocais = (props) => {
         setAcao('excluir');
     }
 
-    const excluiLocal = (id) => {
-        const url = `${process.env.REACT_APP_API_URL}/servicolocal/${id}`;
-        const token = localStorage.getItem('access_token');
-        const options = {
-            method: 'DELETE',
-            headers: {
-                'Content-Type': 'application/json',
-                'Accept': 'application/json',
-                'Authorization': `Bearer ${token}`
-            }
-        }
-
+    const excluiLocal = async (id) => {
         setCarregando(true);
 
-        fetch(url, options)
-            .then(res => {
-                setMudancaLocais(!mudancaLocais);
-                if (res.ok) {
-                    setOpenConfirmacao({ open: false, id: '' });
-                    setCarregando(false);
-                    setSnackbar({
-                        open: true,
-                        severity: 'success',
-                        text: 'Regionalização excluída com sucesso!',
-                        color: 'success'
-                    });
-                    return res.json();
-                } else {
-                    setCarregando(false);
-                    setSnackbar({
-                        open: true,
-                        severity: 'error',
-                        text: `Erro ${res.status} - Não foi possível excluir o local`,
-                        color: 'error'
-                    });
-                }
-            })
+        try {
+            await throwableDeleteForm({id, path: 'servicolocal'})
+            setOpenConfirmacao({ open: false, id: '' });
+            setCarregando(false);
+            setSnackbar({
+                open: true,
+                severity: 'success',
+                message: 'Regionalização excluída com sucesso!',
+                color: 'success'
+            });
+            queryClient.invalidateQueries({queryKey: ['locaisContrato', numContrato]})
+        } catch(e) {
+            errorSnackbar.Delete(e)
+        }
+
+        setCarregando(false);
     }
 
     const handleClickEditar = (e, local) => {
@@ -153,13 +131,12 @@ const ListaLocais = (props) => {
 
     const editaLocal = async (id, formLocalEdit) => {
         setCarregando(true);
-        const res = await putFormData(id, formLocalEdit, "servicolocal")
-
-        if (res.status === 200) {
+        try {
+            await throwablePutForm({id, form: formLocalEdit, path: 'servicolocal'})
             setSnackbar({
                 open: true,
                 severity: 'success',
-                text: 'Regionalização editado com sucesso!',
+                message: 'Regionalização editado com sucesso!',
                 color: 'success'
             });
             setOpenFormLocal({
@@ -173,16 +150,11 @@ const ListaLocais = (props) => {
                 distrito_id: '',
                 unidade: ''
             });
-        } else {
-            setSnackbar({
-                open: true,
-                severity: 'error',
-                text: `Erro ${res.status} - Não foi possível editar o local`,
-                color: 'error'
-            });
+            queryClient.invalidateQueries({queryKey: ['locaisContrato', numContrato]})
+        } catch(e) {
+            errorSnackbar.Put(e)
         }
         setCarregando(false);
-        setMudancaLocais(!mudancaLocais);
     }
 
     const handleClickAdicionar = () => {
@@ -195,12 +167,12 @@ const ListaLocais = (props) => {
 
     const enviaLocal = async (form) => {
         setCarregando(true);
-        const res = await postFormData(form, "servicolocal")
-        if (res.status === 201) {
+        try {
+            await throwablePostForm({form: form, path: 'servicolocal'})
             setSnackbar({
                 open: true,
                 severity: 'success',
-                text: 'Regionalização enviado com sucesso!',
+                message: 'Regionalização enviado com sucesso!',
                 color: 'success'
             });
             setOpenFormLocal({
@@ -214,64 +186,56 @@ const ListaLocais = (props) => {
                 distrito_id: '',
                 unidade: ''
             });
-        } else if (res.status === 422) {
-            setSnackbar({
-                open: true,
-                severity: 'error',
-                text: `Erro ${res.status} - Não foi possível enviar o local`,
-                color: 'error'
-            });
-            setErrors(res.errors);
-        } else {
-            setCarregando(false);
-            setSnackbar({
-                open: true,
-                severity: 'error',
-                text: `Erro ${res.status} - Não foi possível enviar o local`,
-                color: 'error'
-            });
+            queryClient.invalidateQueries({queryKey: ['locaisContrato', numContrato]})
+        } catch(e) {
+            errorSnackbar.Post(e)
+            if(e.status === 422) {setErrors(e.errors);}
         }
         setCarregando(false);
-        setMudancaLocais(!mudancaLocais);
     }
 
     return (
         <Box>
-            {locais.map((local, index) => {
-                return (
-                    <Fade in={true} timeout={400} key={index}>
-                        <Box
-                            elevation={3}
-                            component={Paper}
-                            sx={{ padding: '1rem', mb: '2rem' }}
-                        >
-                            <Divider
-                                textAlign='right'
-                                sx={{
-                                    fontWeight: 'light',
-                                    fontSize: '1.25rem'
-                                }}
+            {locais.isLoading
+                ?<Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '38rem' }}>
+                    <CircularProgress size={30} />
+                </Box>
+                :locais?.data?.data?.map((local, index) => {
+                    return (
+                        <Fade in={true} timeout={400} key={index}>
+                            <Box
+                                elevation={3}
+                                component={Paper}
+                                sx={{ padding: '1rem', mb: '2rem' }}
                             >
-                                Regionalização # {local.id}
-                            </Divider>
+                                <Divider
+                                    textAlign='right'
+                                    sx={{
+                                        fontWeight: 'light',
+                                        fontSize: '1.25rem'
+                                    }}
+                                >
+                                    Regionalização # {local.id}
+                                </Divider>
 
-                            <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-                                <TabLocaisServico 
-                                    regiao={local.regiao}
-                                    subprefeitura={local.subprefeitura}
-                                    distrito={local.distrito}
-                                    unidade={local.unidade}
-                                />
+                                <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+                                    <TabLocaisServico 
+                                        regiao={local.regiao}
+                                        subprefeitura={local.subprefeitura}
+                                        distrito={local.distrito}
+                                        unidade={local.unidade}
+                                    />
 
-                                <BotoesTab 
-                                    editar={(e) => { handleClickEditar(e, local); }}
-                                    excluir={() => { handleClickExcluir(local.id); }}
-                                />
+                                    <BotoesTab 
+                                        editar={(e) => { handleClickEditar(e, local); }}
+                                        excluir={() => { handleClickExcluir(local.id); }}
+                                    />
+                                </Box>
                             </Box>
-                        </Box>
-                    </Fade>
-                )
-            })}
+                        </Fade>
+                    )
+                })
+            }
 
             <FormLocais 
                 formLocal={formLocal}
@@ -285,17 +249,8 @@ const ListaLocais = (props) => {
                 acao={acao}
                 errors={errors}
                 setErrors={setErrors}
+                formId={formLocalId}
             />
-
-            {
-                carregandoLocais
-                ? 
-                    <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '38rem' }}>
-                        <CircularProgress size={30} />
-                    </Box>
-                : 
-                    ""
-            }   
 
             <BotaoAdicionar 
                 fnAdicionar={handleClickAdicionar}
@@ -306,7 +261,7 @@ const ListaLocais = (props) => {
                 openConfirmacao={openConfirmacao} 
                 setOpenConfirmacao={setOpenConfirmacao}
                 acao={acao}
-                form="local_form"
+                formId={formLocalId}
                 fnExcluir={excluiLocal}
                 fnEditar={editaLocal}
                 formInterno={formLocal}

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { 
     Box, 
     Divider, 
@@ -11,10 +11,14 @@ import BotoesTab from "../BotoesTab";
 import BotaoAdicionar from "../BotaoAdicionar";
 import FormAditamentoValor from "./FomAditamentoValor/FormAditamentoValor";
 import { formataValores, TabValues } from "../../commom/utils/utils";
-import { postFormData, putFormData } from "../../commom/utils/api";
+import { throwableDeleteForm, throwableGetData, throwablePostForm, throwablePutForm } from "../../commom/utils/api";
 import { aditValorLabels } from "../../commom/utils/constants";
+import { useSetAtom } from "jotai";
+import { snackbarAtom } from "../../atomStore";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useErrorSnackbar } from "../../commom/utils/hooks";
 
-const TabAditamentosValor = (props) => {
+function TabAditamentosValor (props) {
     const valores = {
         ...props,
         valor_aditamento: formataValores(props.valor_aditamento),
@@ -23,17 +27,12 @@ const TabAditamentosValor = (props) => {
     return <TabValues entry={valores} labels={aditValorLabels} label='aditamento_val' />
 }
 
-  const ListaAditamentosValor = (props) => {
-    const {
-        aditamentos_valor,
-        setaditamentos_valor,
-        mudancaAditamentos_valor,
-        setMudancaAditamentos_valor,
-        carregandoAditamentos_valor,
-        setCarregandoAditamentos_valor,
-        numContrato,
-        setSnackbar
-    } = props;
+function ListaAditamentosValor ({ numContrato }) {
+    const aditamentoValFormId = "aditamento_val_form"
+    const queryClient = useQueryClient()
+
+    const setSnackbar = useSetAtom(snackbarAtom)
+    const errorSnackbar = useErrorSnackbar()
 
     const [acao, setAcao] = useState('editar');
     const [carregando, setCarregando] = useState(false);
@@ -53,25 +52,19 @@ const TabAditamentosValor = (props) => {
     });
     const [errors, setErrors] = useState({});
 
-    useEffect(() => {
-        const url = `${process.env.REACT_APP_API_URL}/aditamentos_valor/${numContrato}`;
-        const token = localStorage.getItem('access_token');
-        const options = {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-                'Accept': 'application/json',
-                'Authorization': `Bearer ${token}`
-            }
-        };
-
-        fetch(url, options)
-            .then(res => res.json())
-            .then(data => {
-                setaditamentos_valor(data.data);
-                setCarregandoAditamentos_valor(false);
+    const aditamentos_valor = useQuery({
+        queryKey: ['aditamentos_val', numContrato],
+        queryFn: async () => await throwableGetData({path: 'aditamentos_valor', contratoId: numContrato}),
+        onError: (res) => {
+            setSnackbar({
+                open: true,
+                message: <div>Nao foi possivel recuperar os aditamentos de valor<br/>Erro: {res.message}</div>,
+                severity: 'error',
+                color: 'error'
             })
-    }, [mudancaAditamentos_valor, numContrato, setaditamentos_valor, setCarregandoAditamentos_valor])
+            return []
+        }
+    })
 
     const handleClickExcluir = (id) => {
         setOpenConfirmacao({
@@ -81,148 +74,115 @@ const TabAditamentosValor = (props) => {
         setAcao('excluir');
     }
 
-    const excluiAditamento = (id) => {
-      const url = `${process.env.REACT_APP_API_URL}/aditamento_valor/${id}`;
-      const token = localStorage.getItem('access_token');
-      const options = {
-          method: 'DELETE',
-          headers: {
-              'Content-Type': 'application/json',
-              'Accept': 'application/json',
-              'Authorization': `Bearer ${token}`
-          }
-      }
-
-      setCarregando(true);                                                                                                                                                                                                                                            
-
-      fetch(url, options)
-      .then(res => {
-        setMudancaAditamentos_valor(!mudancaAditamentos_valor);
-        if (res.ok) {
+    const excluiAditamento = async (id) => {
+        setCarregando(true);                                                                                                                                                                                                                                            
+        try {
+            await throwableDeleteForm({id, path: 'aditamento_valor'})
             setOpenConfirmacao({ open: false, id: '' })
             setCarregando(false);
             setSnackbar({
                 open: true,
                 severity: 'success',
-                text: 'Aditamento excluído com sucesso!',
+                message: 'Aditamento excluído com sucesso!',
                 color: 'success'
             });
-            return res.json();
-        } else {
-            setCarregando(false);
+            queryClient.invalidateQueries({queryKey: ['aditamentos_val', numContrato]})
+        } catch(e) {
+            errorSnackbar.Delete(e)
+        }
+        setCarregando(false);
+    }
+
+    const handleClickEditar = (e, aditamento) => {
+      setFormAditamentos({
+          id: aditamento.id,
+          contrato_id: aditamento.contrato_id,
+          tipo_aditamento: aditamento.tipo_aditamento,
+          valor_aditamento: aditamento.valor_aditamento,
+          percentual: aditamento.percentual
+      });
+      setOpenFormAditamentos({
+          open: true,
+          acao: 'editar'
+      });
+      setAcao('editar');
+    }
+
+    const editaAditamento = async (id, formAditamentoEdit) => {
+        setCarregando(true);
+        try{
+            await throwablePutForm({id, form: formAditamentoEdit, path: 'aditamento_valor'})
             setSnackbar({
                 open: true,
-                severity: 'error',
-                text: `Erro ${res.status} - Não foi possível excluir o aditamento`,
-                color: 'error'
+                severity: 'success',
+                message: 'Aditamento editado com sucesso!',
+                color: 'success'
             });
+            setOpenFormAditamentos({
+                open: false,
+                acao: 'adicionar'
+            });
+            setFormAditamentos({
+                ...formAditamentos,
+                tipo_aditamento: '',
+                valor_aditamento: '',
+                percentual: ''
+            });
+            queryClient.invalidateQueries({queryKey: ['aditamentos_val', numContrato]})
+        } catch(e) {
+            errorSnackbar.Put(e)
         }
-      })
-}
-
-const handleClickEditar = (e, aditamento) => {
-  setFormAditamentos({
-      id: aditamento.id,
-      contrato_id: aditamento.contrato_id,
-      tipo_aditamento: aditamento.tipo_aditamento,
-      valor_aditamento: aditamento.valor_aditamento,
-      percentual: aditamento.percentual
-  });
-  setOpenFormAditamentos({
-      open: true,
-      acao: 'editar'
-  });
-  setAcao('editar');
-}
-
-const editaAditamento = async (id, formAditamentoEdit) => {
-    setCarregando(true);
-    const res = await putFormData(id, formAditamentoEdit, "aditamento_valor")
-    if (res.status === 200) {
-        setSnackbar({
-            open: true,
-            severity: 'success',
-            text: 'Aditamento editado com sucesso!',
-            color: 'success'
-        });
-        setOpenFormAditamentos({
-            open: false,
-            acao: 'adicionar'
-        });
-        setFormAditamentos({
-            ...formAditamentos,
-            tipo_aditamento: '',
-            valor_aditamento: '',
-            percentual: ''
-        });
-    } else {
-        setSnackbar({
-            open: true,
-            severity: 'error',
-            text: `Erro ${res.status} - Não foi possível editar o aditamento`,
-            color: 'error'
-        });
+        setCarregando(false);
     }
-    setCarregando(false);
-    setMudancaAditamentos_valor(!mudancaAditamentos_valor);
-}
 
-const handleClickAdicionar = () => {
-  setOpenFormAditamentos({
-      open: true,
-      acao: 'adicionar'
-  });
-  setFormAditamentos({
-      contrato_id: numContrato,
-      tipo_aditamento: '',
-      valor_aditamento: '',
-      percentual: ''
-  });
-}
-
-const enviaAditamento = async (form) => {
-    setCarregando(true);
-    const res = await postFormData(form, "aditamento_valor")
-    if (res.status === 201) {
-        setSnackbar({
-            open: true,
-            severity: 'success',
-            text: 'Aditamento enviado com sucesso!',
-            color: 'success'
-        });
-        setOpenFormAditamentos({ 
-            open: false, 
-            acao: 'adicionar' 
-        });
-        setFormAditamentos({
-            ...formAditamentos,
-            tipo_aditamento: '',
-            valor_aditamento: '',
-            percentual: ''
-        });
-    } else if (res.status === 422) {
-        setSnackbar({
-            open: true,
-            severity: 'error',
-            text: `Erro ${res.status} - Não foi possível enviar o aditamento`,
-            color: 'error'
-        });
-        setErrors(res.errors)
-    } else {
-        setSnackbar({
-            open: true,
-            severity: 'error',
-            text: `Erro ${res.status} - Não foi possível enviar o aditamento`,
-            color: 'error'
-        });
+    const handleClickAdicionar = () => {
+      setOpenFormAditamentos({
+          open: true,
+          acao: 'adicionar'
+      });
+      setFormAditamentos({
+          contrato_id: numContrato,
+          tipo_aditamento: '',
+          valor_aditamento: '',
+          percentual: ''
+      });
     }
-    setCarregando(false);
-    setMudancaAditamentos_valor(!mudancaAditamentos_valor);
-}
+
+    const enviaAditamento = async (form) => {
+        setCarregando(true);
+        try {
+            await throwablePostForm({form, path: 'aditamento_valor'})
+            setSnackbar({
+                open: true,
+                severity: 'success',
+                message: 'Aditamento enviado com sucesso!',
+                color: 'success'
+            });
+            setOpenFormAditamentos({ 
+                open: false, 
+                acao: 'adicionar' 
+            });
+            setFormAditamentos({
+                ...formAditamentos,
+                tipo_aditamento: '',
+                valor_aditamento: '',
+                percentual: ''
+            });
+            queryClient.invalidateQueries({queryKey: ['aditamentos_val', numContrato]})
+        } catch(e) {
+            errorSnackbar.Post(e)
+            if(e.status === 422) {setErrors(e.errors)}
+        }
+        setCarregando(false);
+    }
 
   return (
     <Box>
-      {aditamentos_valor.map((aditamento, index) => {
+        {aditamentos_valor.isLoading
+            ?<Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '38rem' }}>
+                <CircularProgress size={30} />
+            </Box>
+            :aditamentos_valor?.data?.data?.map((aditamento, index) => {
                 return (
                     <Fade in={true} timeout={400} key={index}>
                         <Box
@@ -268,17 +228,8 @@ const enviaAditamento = async (form) => {
                 setOpenConfirmacao={setOpenConfirmacao}
                 errors={errors}
                 setErrors={setErrors}
+                formId={aditamentoValFormId}
             />
-
-            {
-                carregandoAditamentos_valor
-                ? 
-                    <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '38rem' }}>
-                        <CircularProgress size={30} />
-                    </Box>
-                : 
-                    ""
-            }   
 
             <BotaoAdicionar 
                 fnAdicionar={handleClickAdicionar}
@@ -289,7 +240,7 @@ const enviaAditamento = async (form) => {
                 openConfirmacao={openConfirmacao} 
                 setOpenConfirmacao={setOpenConfirmacao}
                 acao={acao}
-                form="aditamento_val_form"
+                formId={aditamentoValFormId}
                 fnExcluir={excluiAditamento}
                 fnEditar={editaAditamento}
                 formInterno={formAditamentos}

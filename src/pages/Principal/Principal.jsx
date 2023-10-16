@@ -18,7 +18,7 @@ import VoltarArrowBtn from '../../components/VoltarArrowBtn';
 import NovoContratoDialog from '../../components/NovoContratoDialog';
 import { useQuery } from '@tanstack/react-query';
 
-const Principal = ({ snackbar, setSnackbar }) => {
+const Principal = ({ }) => {
     const [novoDialog, setNovoDialog] = useState(false)
     // const [sort, setSort] = useState(false);
     const [carregandoSort, setCarregandoSort] = useState(true);
@@ -28,11 +28,13 @@ const Principal = ({ snackbar, setSnackbar }) => {
         filtros: '',
         sort: ''
     });
+
     const navigate = useNavigate()
+
     const dados = useQuery(['contratos', url], {
         queryFn: () => getContratos(url)
     })
-    
+
     const mudaPagina = (event, value) => {
         if (url.page !== value) {
             irParaTopo();
@@ -53,7 +55,7 @@ const Principal = ({ snackbar, setSnackbar }) => {
 
     useEffect(() => {
         setCarregandoSort(false);
-        setSnackbar({...snackbar, open: false});
+        //setSnackbar({...snackbar, open: false});
     }, [url])
 
     return (
@@ -116,7 +118,7 @@ const Principal = ({ snackbar, setSnackbar }) => {
                     </Box>
                 </Fade>
             </Box>
-            <NovoContratoDialog novoDialog={novoDialog} setNovoDialog={setNovoDialog} setSnackbar={setSnackbar}/>
+            <NovoContratoDialog novoDialog={novoDialog} setNovoDialog={setNovoDialog} />
         </>
     );
 };
