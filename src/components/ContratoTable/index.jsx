@@ -59,9 +59,9 @@ const ContratoTable = ({dados, url, ordena, carregandoSort, isLoading}) => {
                                     }
                                 </StyledTableHeadCell>
                                 <StyledTableHeadCell onClick={() => ordena('credor')}>
-                                    Credor
+                                    Unidade Req.
                                     {
-                                        url.sort === 'credor' || url.sort === '-credor'
+                                        url.sort === 'nome_departamento' || url.sort === '-nome_departamento'
                                         ? <SortArrow url={url} loading={carregandoSort} />
                                         : ''
                                     }
@@ -84,7 +84,7 @@ const ContratoTable = ({dados, url, ordena, carregandoSort, isLoading}) => {
                                     }
                                 </StyledTableHeadCell>
                                 <StyledTableHeadCell onClick={() => ordena('data_inicio_vigencia')}>
-                                    Início da vigência
+                                    Início vigência
                                     {
                                         url.sort === 'data_inicio_vigencia' || url.sort === '-data_inicio_vigencia'
                                         ? <SortArrow url={url} loading={carregandoSort} />
@@ -123,7 +123,7 @@ const ContratoTable = ({dados, url, ordena, carregandoSort, isLoading}) => {
                                         >
                                             <TableCell align="center" sx={background}>{row.id || "- - -"}</TableCell>
                                             <TableCell align="center" sx={background}>{mascaraProcessoSei(row.processo_sei) || "- - -"}</TableCell>
-                                            <TableCell align="center" sx={background}>{row.credor || "- - -"}</TableCell>
+                                            <TableCell align="center" sx={background}>{row.departamento || "- - -"}</TableCell>
                                             <TableCell align="center" sx={background}>{row.empresa || "- - -"}</TableCell>
                                             <TableCell align="center" sx={background}>{mascaraContrato(row.numero_contrato) || "- - -"}</TableCell>
                                             <TableCell align="center" sx={background}>{formataData(row.data_inicio_vigencia) || "- - -"}</TableCell>
