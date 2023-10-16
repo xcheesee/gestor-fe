@@ -284,7 +284,6 @@ const FormEditExecFinanceira = ({
                                 <CircularProgress size={32} sx={{ color: 'gray' }} />
                             </Box>
                             :<TabelaExecFin 
-                                //ref={ref} 
                                 id="hotExec" 
                                 execucao={execucao}
                                 setTabelaRef={setTabelaRef}

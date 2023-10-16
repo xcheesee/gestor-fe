@@ -153,24 +153,24 @@ export function buildExcelDataArray(options={}) {
     executados[val.mes - 1] = parseFloat(val.execucao)
   }))
 
-  for(let i=0; i < 4; i++) {
-    if(i != 3) {
+  for(let i=0; i < 6; i++) {
+    if( i == 5) {
+      data.push( [...Array(12)].map((v, ind) => {
+        if(ind === 0) {
+          return `=SUM(${String.fromCharCode(ind+65)}1:${String.fromCharCode(ind+65)}3)+${valorContratado ?? 0}`
+        } else{
+          return `=SUM(${String.fromCharCode(ind+65)}1:${String.fromCharCode(ind+65)}3)+${String.fromCharCode(ind+64)}4-${String.fromCharCode(ind+64)}5`
+        }}))
+    } else if(i == 4) {
+      data.push(executados)
+    } else {
       data.push( [...Array(12)].map(() => {
 
         const val = Math.floor(Math.random() * 100000)
         if(val < 30000) return null
         return val
       }))
-    } else {
-      data.push( [...Array(12)].map((v, ind) => {
-        if(ind === 0) {
-          return `=SUM(${String.fromCharCode(ind+65)}1:${String.fromCharCode(ind+65)}3)+${valorContratado ?? 0}`
-        } else{
-          return `=SUM(${String.fromCharCode(ind+65)}1:${String.fromCharCode(ind+65)}3)+${String.fromCharCode(ind+64)}4-${String.fromCharCode(ind+64)}5`
-        }
-    }) )
-    }
+    } 
   }
-  data.push(executados)
   return data
 }

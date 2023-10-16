@@ -11,8 +11,11 @@ import DialogConfirmSair from '../../components/DialogConfirmSair';
 import DialogErroEnvio from '../../components/DialogErroEnvio';
 import { useNavigate } from 'react-router-dom';
 import { useEffect } from 'react';
+import { useSetAtom } from 'jotai';
+import { snackbarAtom } from '../../atomStore';
 
-const NovoContrato = ({ setSnackbar }) => {
+const NovoContrato = () => {
+    const setSnackbar = useSetAtom(snackbarAtom)
     const [error, setError] = useState(false);
     const [errors, setErrors] = useState({});
     const [focusError, setFocusError] = useState('')
@@ -116,12 +119,13 @@ const NovoContrato = ({ setSnackbar }) => {
                         setCarregando(false);
                         limpaFormulario();
                         handleCloseConfirm();
-                        setSnackbar({
+                        setSnackbar(prev => ({
+                            ...prev,
                             open: true,
                             severity: 'success',
                             text: 'Contrato enviado com sucesso!',
                             color: 'success'
-                        });
+                        }));
                         return res.json()
                             .then(data => {
                                 navigate(`../contrato/${data.data.id}`, { replace: true });
