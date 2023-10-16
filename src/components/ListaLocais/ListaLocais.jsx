@@ -16,7 +16,7 @@ import { locaisLabels } from '../../commom/utils/constants';
 import { useSetAtom } from 'jotai';
 import { snackbarAtom } from '../../atomStore';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
-import { useErrorSnackbar } from '../ErrorSnackbar';
+import { useErrorSnackbar } from '../../commom/utils/hooks';
 
 const dicionarioRegioes = {
     "CO": "Centro-Oeste",
@@ -50,12 +50,13 @@ const ListaLocais = ({ numContrato }) => {
         queryKey: ['locaisContrato', numContrato],
         queryFn: async () => await throwableGetData({path: 'servicoslocais', contratoId: numContrato}),
         onError: (res) => {
-            setSnackbar({
-                open: true,
-                message: <div>Nao foi possivel recuperar os locais<br/>Erro: {res.message}</div>,
-                severity: 'error',
-                color: 'error'
-            })
+            errorSnackbar.Get(res)
+            //setSnackbar({
+            //    open: true,
+            //    message: <div>Nao foi possivel recuperar os locais<br/>Erro: {res.message}</div>,
+            //    severity: 'error',
+            //    color: 'error'
+            //})
             return []
         }
     })

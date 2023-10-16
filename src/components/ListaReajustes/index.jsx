@@ -2,7 +2,7 @@ import { Box, CircularProgress, Fade, Paper, TextField } from "@mui/material";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useRef } from "react";
 import { useState } from "react";
-import { deleteReajuste, editReajusteContrato, getFormData, postFormData, postReajusteContrato, putFormData, throwablePutForm } from "../../commom/utils/api";
+import { getFormData, throwableDeleteForm, throwablePostForm, throwablePutForm } from "../../commom/utils/api";
 import { reajusteLabels } from "../../commom/utils/constants";
 import { formataValores } from "../../commom/utils/utils";
 import BotaoAdicionar from "../BotaoAdicionar";
@@ -13,12 +13,14 @@ import DialogConfirmacao from "../DialogConfirmacao";
 import TabContrato from "../TabContrato";
 import { useSetAtom } from "jotai";
 import { snackbarAtom } from "../../atomStore";
+import { useErrorSnackbar } from "../../commom/utils/hooks";
 
 export default function ListaReajustes ({ numContrato }) {
     let dados = []
     const reajusteFormId = 'reajuste-form'
 
     const setSnackbar = useSetAtom(snackbarAtom)
+    const errorSnackbar = useErrorSnackbar()
 
     const queryClient = useQueryClient()
     const dadosReajuste = useQuery({
@@ -35,7 +37,7 @@ export default function ListaReajustes ({ numContrato }) {
 
     const addReajuste = useMutation({
         mutationFn: async (formData) => {
-                return await postReajusteContrato({formData})
+                return await throwablePostForm({form:formData, path: 'reajuste'})
         }, 
         onSuccess: async (res) => {
             setFormDialog(false)
@@ -49,22 +51,7 @@ export default function ListaReajustes ({ numContrato }) {
         },
         onError: async (res) => {
             setFormDialog(false)
-            setSnackbar({
-                open: true,
-                severity: 'error',
-                message: 
-                    <div>
-                        Não foi possível enviar o Reajuste.
-                        <br/>
-                        Erro: {res.message}
-                        <br />
-                        {res.errors != null
-                            ?Object.values(res.errors).map((error, i) => (<div key={`error-${i}`}>{i}. {error}<br/></div>))
-                            :<></>
-                        }
-                    </div>,
-                color: 'error'
-            });
+            errorSnackbar.Post(res)
         }
     })
 
@@ -82,18 +69,13 @@ export default function ListaReajustes ({ numContrato }) {
         },
         onError: async (res) => {
             setOpenConfirmacao({open: false, id: ""})
-            setSnackbar({
-                open: true,
-                severity: 'error',
-                message: <div>Não foi possível editar o Reajuste<br/>Erro {res.message}</div>,
-                color: 'error'
-            });
+            errorSnackbar.Put(res)
         }
     })
 
     const deleteReajusteFn = useMutation({
         mutationFn: async (id) => {
-            return await deleteReajuste(id)
+            return await throwableDeleteForm({id, path: 'reajuste'})
         }, 
         onSuccess: async (res) => {
             setOpenConfirmacao({open: false, id: ""})
@@ -107,18 +89,12 @@ export default function ListaReajustes ({ numContrato }) {
         },
         onError: async (res) => {
             setOpenConfirmacao({open: false, id: ""})
-            setSnackbar({
-                open: true,
-                severity: 'error',
-                message: <div>Não foi possível excluir o Reajuste<br/>Erro {res.message}</div>,
-                color: 'error'
-            });
+            errorSnackbar.Delete(res)
         }
     })
 
     async function handleEditPress (entry) {
         setAcao("editar")
-        // const res = await getFormData(`reajuste/${entry.id}`)
         currDados.current = {
             id: entry.id, 
             valor_reajuste: entry.valor_reajuste, 
@@ -129,7 +105,6 @@ export default function ListaReajustes ({ numContrato }) {
 
     async function handleDeletePress (entry) {
         setAcao("excluir")
-        // const res = await getFormData(`reajuste/${entry.id}`)
         currDados.current = { id: entry.id }
         setOpenConfirmacao({open: true, id: entry.id})
     }

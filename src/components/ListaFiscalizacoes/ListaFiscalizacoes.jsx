@@ -23,6 +23,7 @@ import { fiscLabels } from '../../commom/utils/constants';
 import { useSetAtom } from 'jotai';
 import { snackbarAtom } from '../../atomStore';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { useErrorSnackbar } from '../../commom/utils/hooks';
 
 const TabFiscalizacao = (props) => {
     return <TabValues entry={props} labels={fiscLabels} label="fiscalizacao "/>;
@@ -31,6 +32,7 @@ const TabFiscalizacao = (props) => {
 const ListaFiscalizacoes = ({ numContrato }) => {
 
     const setSnackbar = useSetAtom(snackbarAtom)
+    const errorSnackbar = useErrorSnackbar()
     const queryClient = useQueryClient()
     const formFiscalizacaoId = "fisc_form"
 
@@ -70,12 +72,13 @@ const ListaFiscalizacoes = ({ numContrato }) => {
         queryKey: ['fiscalizacoes', numContrato],
         queryFn: () => throwableGetData({path: `gestaofiscalizacoes`, contratoId: numContrato}),
         onError: (res) => {
-            setSnackbar({
-                open: true,
-                message: <div>Nao foi possivel recuperar fiscalização<br/>Erro: {res.message}</div>,
-                severity: 'error',
-                color: 'error'
-            })
+            errorSnackbar.Get(res)
+            //setSnackbar({
+            //    open: true,
+            //    message: <div>Nao foi possivel recuperar fiscalização<br/>Erro: {res.message}</div>,
+            //    severity: 'error',
+            //    color: 'error'
+            //})
             return []
         }
     })
@@ -102,22 +105,23 @@ const ListaFiscalizacoes = ({ numContrato }) => {
             });
             queryClient.invalidateQueries({queryKey: ['fiscalizacoes', numContrato]})
         } catch(e) {
-            setSnackbar({
-                open: true,
-                severity: 'error',
-                message: 
-                    <div>
-                        Não foi possível excluir.
-                        <br/>
-                        Erro: {e.message}
-                        <br/>
-                        {e.errors
-                            ?Object.values(e.errors).map( (erro, i) => (<div key={`erro-${i}`}>{erro}</div>))
-                            :<></>
-                        }
-                    </div>,
-                color: 'error'
-            });
+            errorSnackbar.Delete(e)
+            //setSnackbar({
+            //    open: true,
+            //    severity: 'error',
+            //    message: 
+            //        <div>
+            //            Não foi possível excluir.
+            //            <br/>
+            //            Erro: {e.message}
+            //            <br/>
+            //            {e.errors
+            //                ?Object.values(e.errors).map( (erro, i) => (<div key={`erro-${i}`}>{erro}</div>))
+            //                :<></>
+            //            }
+            //        </div>,
+            //    color: 'error'
+            //});
         }
         setCarregando(false);
     }
@@ -165,22 +169,23 @@ const ListaFiscalizacoes = ({ numContrato }) => {
             });
             queryClient.invalidateQueries({queryKey: ['fiscalizacoes', numContrato]})
         } catch(e) {
-            setSnackbar({
-                open: true,
-                severity: 'error',
-                message: 
-                    <div>
-                        Não foi possível excluir.
-                        <br/>
-                        Erro: {e.message}
-                        <br/>
-                        {e.errors
-                            ?Object.values(e.errors).map( (erro, i) => (<div key={`erro-${i}`}>{erro}</div>))
-                            :<></>
-                        }
-                    </div>,
-                color: 'error'
-            });
+            errorSnackbar.Put(e)
+            //setSnackbar({
+            //    open: true,
+            //    severity: 'error',
+            //    message: 
+            //        <div>
+            //            Não foi possível excluir.
+            //            <br/>
+            //            Erro: {e.message}
+            //            <br/>
+            //            {e.errors
+            //                ?Object.values(e.errors).map( (erro, i) => (<div key={`erro-${i}`}>{erro}</div>))
+            //                :<></>
+            //            }
+            //        </div>,
+            //    color: 'error'
+            //});
         }
         setCarregando(false);
     }
@@ -227,12 +232,13 @@ const ListaFiscalizacoes = ({ numContrato }) => {
             });
             queryClient.invalidateQueries({queryKey: ['fiscalizacoes', numContrato]})
         } catch(e) {
-            setSnackbar({
-                open: true,
-                severity: 'error',
-                message: <div>Não foi possível enviar a gestão/fiscalização<br/>Erro {e.message}</div>,
-                color: 'error'
-            });
+            errorSnackbar.Post(e)
+            //setSnackbar({
+            //    open: true,
+            //    severity: 'error',
+            //    message: <div>Não foi possível enviar a gestão/fiscalização<br/>Erro {e.message}</div>,
+            //    color: 'error'
+            //});
             if(e.status === 422) { setErrors(e.errors); }
         }
 

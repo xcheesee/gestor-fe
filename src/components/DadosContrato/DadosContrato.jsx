@@ -73,7 +73,7 @@ const DadosContrato = ({ setSnackbar }) => {
     const [value, setValue] = useState(0);
     const [dados, setDados] = useState({});
     const [mudancaContrato, setMudancaContrato] = useState(false);
-    const [origemRecursos, setOrigemRecursos] = useState([]);
+    //const [origemRecursos, setOrigemRecursos] = useState([]);
     const [totais, setTotais] = useState([]);
     const [estaCarregado, setEstaCarregado] = useState(false);
     const { numContrato } = useParams();
@@ -229,18 +229,13 @@ const DadosContrato = ({ setSnackbar }) => {
                                         <ListaDotacoes numContrato={numContrato} />
                                     </TabPanel>
                                     <TabPanel value={value} index={9}>
-                                        <ListaReajustes 
-                                            numContrato={numContrato} 
-                                        />
+                                        <ListaReajustes numContrato={numContrato} />
                                     </TabPanel>
                                 </Box>
                             </Box>
 
                             <ExecucaoFinanceira 
-                                //execucao_financeira={dados?.execucao_financeira}
                                 numContrato={numContrato}
-                                mudancaContrato={mudancaContrato}
-                                setMudancaContrato={setMudancaContrato}
                                 totais={totais}
                             />
 

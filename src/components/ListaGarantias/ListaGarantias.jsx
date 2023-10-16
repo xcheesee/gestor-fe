@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { 
     Box,
     Divider,
@@ -11,11 +11,12 @@ import BotoesTab from '../BotoesTab';
 import BotaoAdicionar from '../BotaoAdicionar';
 import FormGarantia from './FormGarantia';
 import { formataData, formataValores, TabValues } from '../../commom/utils/utils';
-import { deleteGarantia, getGarantias, postFormData, putFormData, throwablePostForm, throwablePutForm } from '../../commom/utils/api';
+import { getGarantias, throwableDeleteForm, throwablePostForm, throwablePutForm } from '../../commom/utils/api';
 import { garantiaLabels } from '../../commom/utils/constants';
 import { useSetAtom } from 'jotai';
 import { snackbarAtom } from '../../atomStore';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { useErrorSnackbar } from '../../commom/utils/hooks';
 
 const TabGarantias = (props) => {
     const valores = {
@@ -31,6 +32,7 @@ const ListaGarantias = ({ numContrato }) => {
 
     const queryClient = useQueryClient()
     const setSnackbar = useSetAtom(snackbarAtom)
+    const errorSnackbar = useErrorSnackbar()
 
     const [acao, setAcao] = useState('editar');
     const [carregando, setCarregando] = useState(false);
@@ -68,7 +70,7 @@ const ListaGarantias = ({ numContrato }) => {
         
         setCarregando(true);
         try{
-            await deleteGarantia({id})
+            await throwableDeleteForm({id, path: 'garantia'})
             setOpenConfirmacao({ open: false, id: ''});
             setSnackbar({
                 open: true,
@@ -78,22 +80,7 @@ const ListaGarantias = ({ numContrato }) => {
             });
             queryClient.invalidateQueries({queryKey: ['garantias', numContrato]})
         } catch(e) {
-            setSnackbar({
-                open: true,
-                severity: 'error',
-                message: 
-                    <div>
-                        Não foi possível enviar.
-                        <br/>
-                        Erro: {e.message}
-                        <br/>
-                        {e.errors
-                            ?Object.values(e.errors).map( (erro, i) => (<div key={`erro-${i}`}>{erro}</div>))
-                            :<></>
-                        }
-                    </div>,
-                color: 'error'
-            });
+            errorSnackbar.Delete(e)
         }
         setCarregando(false);
     }
@@ -137,22 +124,7 @@ const ListaGarantias = ({ numContrato }) => {
             });
             queryClient.invalidateQueries({queryKey: ['garantias', numContrato]})
         } catch(e) {
-            setSnackbar({
-                open: true,
-                severity: 'error',
-                message: 
-                    <div>
-                        Não foi possível editar.
-                        <br/>
-                        Erro: {e.message}
-                        <br/>
-                        {e.errors
-                            ?Object.values(e.errors).map( (erro, i) => (<div key={`erro-${i}`}>{erro}</div>))
-                            :<></>
-                        }
-                    </div>,
-                color: 'error'
-            });
+            errorSnackbar.Put(e)
         }
         setCarregando(false);
     }
@@ -194,22 +166,7 @@ const ListaGarantias = ({ numContrato }) => {
             });
             queryClient.invalidateQueries({queryKey: ['garantias', numContrato]})
         } catch(e) {
-            setSnackbar({
-                open: true,
-                severity: 'error',
-                message: 
-                    <div>
-                        Não foi possível enviar.
-                        <br/>
-                        Erro: {e.message}
-                        <br/>
-                        {e.errors
-                            ?Object.values(e.errors).map( (erro, i) => (<div key={`erro-${i}`}>{erro}</div>))
-                            :<></>
-                        }
-                    </div>,
-                color: 'error'
-            });
+            errorSnackbar.Post(e)
         }
         setCarregando(false);
     }

@@ -12,9 +12,8 @@ import BotoesTab from '../BotoesTab';
 import BotaoAdicionar from '../BotaoAdicionar';
 import { formataData, TabValues } from '../../commom/utils/utils';
 import { 
-    deleteCertidao, 
     getCertidoes, 
-    postCertidao, 
+    throwableDeleteForm, 
     throwablePostForm, 
     throwablePutForm
 } from '../../commom/utils/api';
@@ -22,7 +21,7 @@ import { certidaoLabels } from '../../commom/utils/constants';
 import { useSetAtom } from 'jotai';
 import { snackbarAtom } from '../../atomStore';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
-import { useErrorSnackbar } from '../ErrorSnackbar';
+import { useErrorSnackbar } from '../../commom/utils/hooks';
 
 const TabCertidoes = (props) => {
     const valores = {
@@ -73,7 +72,7 @@ const ListaCertidoes = ({ numContrato }) => {
     const excluiCertidao = async (id) => {
         setCarregando(true);
         try{
-            await deleteCertidao({id})
+            await throwableDeleteForm({id, path: 'certidao'})
             setOpenConfirmacao({ open: false, id: ''});
             setSnackbar({
                 open: true,

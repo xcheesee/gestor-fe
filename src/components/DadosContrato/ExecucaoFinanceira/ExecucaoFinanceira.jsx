@@ -16,7 +16,7 @@ import DialogConfirmacao from '../../DialogConfirmacao';
 import ExecucaoFinanceiraCard from './ExecucaoFinanceiraCard';
 import { getExecucaoFinanceira, getExecucoesFinanceiras, postAnoExecFin } from '../../../commom/utils/api';
 
-const ExecucaoFinanceira = (props) => {
+const ExecucaoFinanceira = ({ numContrato, totais}) => {
     //const execucao_financeira = typeof props.execucao_financeira != 'undefined' ? props.execucao_financeira : [];
     //const [openDetalhes, setOpenDetalhes] = useState(false);
     //const [detalheExecFin, setDetalheExecFin] = useState({});
@@ -52,7 +52,7 @@ const ExecucaoFinanceira = (props) => {
 
     useEffect(() => {
         (async () => {
-            const execFin = await getExecucoesFinanceiras(props.numContrato)
+            const execFin = await getExecucoesFinanceiras(numContrato)
             setExecucoesFinanceiras(execFin)
         })();
 
@@ -132,27 +132,15 @@ const ExecucaoFinanceira = (props) => {
     //}
 
     async function handleClickEditarAno (execucao) {
-
-        //setCarregando(true);
-
-        //const data = await getExecucaoFinanceira(id)
-        //execucaoId.current = id
         setCurrExecucao(execucao)
-        //console.log(execucao)
-        //setFormExecFinanceira(data);
         setOpenEditExecFinanceira(true);
-
-        //setCarregando(false);
     }
 
     const Conteudo = () => ( 
         <Box
-            //component={Paper} 
-            //elevation={5}
             sx={{
                 display: 'flex',
                 flexDirection: 'column',
-                //background: '#F8FAF8',
                 margin: '2rem 0', 
             }}
         >
@@ -217,36 +205,27 @@ const ExecucaoFinanceira = (props) => {
             />*/}
 
             <FormExecFinanceira 
-                //meses={meses}
                 formId={formId}
-                contratoId={props.numContrato}
+                contratoId={numContrato}
                 openFormExecFinanceira={openFormExecFinanceira}
                 setOpenFormExecFinanceira={setOpenFormExecFinanceira}
-                //formExecFinanceira={formExecFinanceira}
-                //setFormExecFinanceira={setFormExecFinanceira}
                 errors={errors}
                 setErrors={setErrors}
                 carregando={carregando}
                 setOpenConfirmacao={setOpenConfirmacao}
-                totais={props.totais}
+                totais={totais}
             />
 
             <FormEditExecFinanceira 
-                //meses={meses}
                 openEditExecFinanceira={openEditExecFinanceira}
                 formId={formId}
                 execucao={currExecucao}
                 setExecucao={setCurrExecucao}
                 setOpenEditExecFinanceira={setOpenEditExecFinanceira}
-                //formExecFinanceira={formExecFinanceira}
-                //setFormExecFinanceira={setFormExecFinanceira}
                 errors={errors}
                 setErrors={setErrors}
                 carregando={carregando}
                 setCarregando={setCarregando}
-                //setSnackbar={props.setSnackbar}
-                //mudancaContrato={props.mudancaContrato}
-                //setMudancaContrato={props.setMudancaContrato}
             />
 
             <DialogConfirmacao 

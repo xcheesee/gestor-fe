@@ -21,6 +21,7 @@ import TabelaExecFin from '../TabelaExecFin';
 import { getMesesExecutados, postMesesExecFin } from '../../../../commom/utils/api';
 import { useSetAtom } from 'jotai';
 import { snackbarAtom } from '../../../../atomStore';
+import { useErrorSnackbar } from '../../../../commom/utils/hooks';
 
 
 function DialogEditar ({openEditar, setOpenEditar, formId, carregando}) {
@@ -115,15 +116,12 @@ const FormEditExecFinanceira = ({
     errors,
     setErrors,
     carregando,
-    //setCarregando,
-    //setSnackbar,
-    //mudancaContrato,
-    //setMudancaContrato,
     formId
 }) => {
     const queryClient = useQueryClient()
 
     const setSnackbar = useSetAtom(snackbarAtom)
+    const errorSnackbar = useErrorSnackbar()
 
     const [openExcluir, setOpenExcluir] = useState(false);
     const [openEditar, setOpenEditar] = useState(false);
@@ -143,7 +141,8 @@ const FormEditExecFinanceira = ({
             setOpenEditExecFinanceira(false)
         },
         onError: (e) => {
-            setSnackbar(prev => ({...prev, open: true, severity: "error", message: `Meses de execucao nao enviados.${e}`}))
+            errorSnackbar.Post(e)
+            //setSnackbar(prev => ({...prev, open: true, severity: "error", message: `Meses de execucao nao enviados.${e.message}`}))
         }
     })
 
@@ -278,8 +277,6 @@ const FormEditExecFinanceira = ({
                                 id_ano_execucao: execucao.id
                             }
                             addMesExec.mutate({execucao: postExec}) 
-                            //console.log(data)
-                            //setOpenEditar(false)
                         }}
                     >
                         {mesesExecutados.isLoading

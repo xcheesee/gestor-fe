@@ -15,7 +15,7 @@ import { TabValues } from "../../commom/utils/utils";
 import { aditPrazoLabels } from "../../commom/utils/constants";
 import { useSetAtom } from "jotai";
 import { snackbarAtom } from "../../atomStore";
-import { useErrorSnackbar } from "../ErrorSnackbar";
+import { useErrorSnackbar } from "../../commom/utils/hooks";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 
 const TabAditamentosPrazo = (props) => <TabValues entry={props} labels={aditPrazoLabels} label="aditamento_prazo" />
@@ -48,26 +48,6 @@ const ListaAditamentosPrazo = ({ numContrato }) => {
     queryKey: ['aditamentos_prazo', numContrato],
     queryFn: async () => await throwableGetData({path: 'aditamentos_prazo', contratoId: numContrato}) 
   })
-
-  //useEffect(() => {
-  //  const url = `${process.env.REACT_APP_API_URL}/aditamentos_prazo/${numContrato}`;
-  //  const token = localStorage.getItem('access_token');
-  //  const options = {
-  //      method: 'GET',
-  //      headers: {
-  //          'Content-Type': 'application/json',
-  //          'Accept': 'application/json',
-  //          'Authorization': `Bearer ${token}`
-  //      }
-  //  };
-
-  //  fetch(url, options)
-  //    .then(res => res.json())
-  //    .then(data => {
-  //        setaditamentos_prazo(data.data);
-  //        setCarregandoAditamentos_prazo(false);
-  //    })
-  //}, [mudancaAditamentos_prazo, numContrato, setaditamentos_prazo, setCarregandoAditamentos_prazo])
 
   const handleClickExcluir = (id) => {
     setOpenConfirmacao({

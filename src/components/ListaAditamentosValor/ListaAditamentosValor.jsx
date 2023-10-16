@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { 
     Box, 
     Divider, 
@@ -11,12 +11,12 @@ import BotoesTab from "../BotoesTab";
 import BotaoAdicionar from "../BotaoAdicionar";
 import FormAditamentoValor from "./FomAditamentoValor/FormAditamentoValor";
 import { formataValores, TabValues } from "../../commom/utils/utils";
-import { postFormData, putFormData, throwableDeleteForm, throwableGetData, throwablePostForm, throwablePutForm } from "../../commom/utils/api";
+import { throwableDeleteForm, throwableGetData, throwablePostForm, throwablePutForm } from "../../commom/utils/api";
 import { aditValorLabels } from "../../commom/utils/constants";
 import { useSetAtom } from "jotai";
 import { snackbarAtom } from "../../atomStore";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import {useErrorSnackbar} from "../ErrorSnackbar";
+import { useErrorSnackbar } from "../../commom/utils/hooks";
 
 function TabAditamentosValor (props) {
     const valores = {

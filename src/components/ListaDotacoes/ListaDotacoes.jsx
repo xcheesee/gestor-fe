@@ -18,7 +18,7 @@ import BotaoAdicionar from '../BotaoAdicionar';
 import FormDotacoes from './FormDotacoes';
 import FormRecursos from './FormRecursos';
 import DialogConfirmacao from '../DialogConfirmacao';
-import { getFormData, postFormData, putFormData, throwableGetData, throwablePostForm } from '../../commom/utils/api';
+import { getFormData, throwableDeleteForm, throwableGetData, throwablePostForm, throwablePutForm } from '../../commom/utils/api';
 import CloseIcon from '@mui/icons-material/Close';
 import CheckIcon from '@mui/icons-material/Check';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
@@ -26,7 +26,7 @@ import { TabValues } from '../../commom/utils/utils';
 import { dotacoesLabels } from '../../commom/utils/constants';
 import { useSetAtom } from 'jotai';
 import { snackbarAtom } from '../../atomStore';
-import { useErrorSnackbar } from '../ErrorSnackbar';
+import { useErrorSnackbar } from '../../commom/utils/hooks';
 
 const retornaNumDotacao = (numero_dotacao, descricao) => {
     return (
@@ -99,44 +99,25 @@ const ListaDotacoes = ({ numContrato }) => {
         setAcao('excluir');
     }
 
-    const excluiDotacao = (id) => {
-        const url = `${process.env.REACT_APP_API_URL}/dotacao/${id}`;
-        const token = sessionStorage.getItem('access_token');
-        const options = {
-            method: 'DELETE',
-            headers: {
-                'Content-Type': 'application/json',
-                'Accept': 'application/json',
-                'Authorization': `Bearer ${token}`
-            }
-        }
-
+    const excluiDotacao = async (id) => {
         setCarregando(true);
 
-        fetch(url, options)
-            .then(res => {
-                if (res.ok) {
-                    setOpenConfirmacao({ open: false, id: '', elemento: 'dotacao' });
-                    setCarregando(false);
-                    setSnackbar({
-                        open: true,
-                        severity: 'success',
-                        message: 'Dotação excluída com sucesso',
-                        color: 'success'
-                    });
-                    queryClient.invalidateQueries(['dotacoes', numContrato])
-                    setErrors({})
-                    return res.json();
-                } else {
-                    setCarregando(false);
-                    setSnackbar({
-                        open: true,
-                        severity: 'error',
-                        message: <div>Não foi possível excluir a dotação<br/>Erro {res.message}</div>,
-                        color: 'error'
-                    });
-                }
-            })
+        try {
+            await throwableDeleteForm({id, path: 'dotacao'})
+            setOpenConfirmacao({ open: false, id: '', elemento: 'dotacao' });
+            setSnackbar({
+                open: true,
+                severity: 'success',
+                message: 'Dotação excluída com sucesso',
+                color: 'success'
+            });
+            setErrors({})
+            queryClient.invalidateQueries(['dotacoes', numContrato])
+        } catch(e) {
+            errorSnackbar.Delete(e)
+        }
+
+        setCarregando(false);
     }
 
     const handleClickExcluirRecurso = (id) => {
@@ -148,44 +129,22 @@ const ListaDotacoes = ({ numContrato }) => {
         setAcao('excluir');
     }
 
-    const excluiRecurso = (id) => {
-        const url = `${process.env.REACT_APP_API_URL}/dotacao_recurso/${id}`;
-        const token = localStorage.getItem('access_token');
-        const options = {
-            method: 'DELETE',
-            headers: {
-                'Content-Type': 'application/json',
-                'Accept': 'application/json',
-                'Authorization': `Bearer ${token}`
-            }
-        };
-
+    const excluiRecurso = async (id) => {
         setCarregando(true);
-
-        fetch(url, options)
-            .then(res => {
-                if (res.ok) {
-                    setOpenConfirmacao({ open: false, id: '', elemento: 'dotacao' });
-                    setCarregando(false);
-                    setSnackbar({
-                        open: true,
-                        severity: 'success',
-                        message: 'Fonte de recurso excluída com sucesso',
-                        color: 'success'
-                    });
-                    setErrors({})
-                    queryClient.invalidateQueries(['dotacoes', numContrato])
-                    return res.json();
-                } else {
-                    setCarregando(false);
-                    setSnackbar({
-                        open: true,
-                        severity: 'error',
-                        message: <div>Não foi possível excluir a fonte de recurso<br/>Erro {res.message}</div>,
-                        color: 'error'
-                    });
-                }
-            })
+        try {
+            await throwableDeleteForm({id, path: 'dotacao_recurso'})
+            setOpenConfirmacao({ open: false, id: '', elemento: 'dotacao' });
+            setSnackbar({
+                open: true,
+                severity: 'success',
+                message: 'Fonte de recurso excluída com sucesso',
+                color: 'success'
+            });
+            setErrors({})
+            queryClient.invalidateQueries(['dotacoes', numContrato])
+        } catch(e) {
+            errorSnackbar.Delete(e)
+        }
     }
 
     // edição
@@ -207,8 +166,8 @@ const ListaDotacoes = ({ numContrato }) => {
 
     const editaDotacao = async (id, formDotacao) => {
         setCarregando(true);
-        const res = await putFormData(id, formDotacao, "dotacao")
-        if (res.status === 200) {
+        try{
+            await throwablePutForm({id, form: formDotacao, path: "dotacao"})
             setSnackbar({
                 open: true,
                 severity: 'success',
@@ -227,16 +186,12 @@ const ListaDotacoes = ({ numContrato }) => {
                 elemento: 'dotacao'
             });
             setErrors({})
-        } else {
-            setSnackbar({
-                open: true,
-                severity: 'error',
-                message: <div>Não foi possível editar a dotação<br/>Erro {res.message}</div>,
-                color: 'error'
-            });
+            queryClient.invalidateQueries(['dotacoes', numContrato])
+
+        } catch(e) {
+            errorSnackbar.Put(e)
         }
         setCarregando(false);
-        queryClient.invalidateQueries(['dotacoes', numContrato])
     }
 
     const handleClickEditarRecurso = (recurso) => {
@@ -256,8 +211,8 @@ const ListaDotacoes = ({ numContrato }) => {
 
     const editaRecurso = async (id, formRecurso) => {
         setCarregando(true);
-        const res = await putFormData(id, formRecurso, "dotacao_recurso")
-        if (res.status === 200) {
+        try {
+            await throwablePutForm({id, form:formRecurso, path:"dotacao_recurso"})
             setSnackbar({
                 open: true,
                 severity: 'success',
@@ -276,16 +231,11 @@ const ListaDotacoes = ({ numContrato }) => {
                 elemento: 'recurso'
             });
             setErrors({})
-        } else {
-            setSnackbar({
-                open: true,
-                severity: 'error',
-                message: <div>Não foi possível editar a fonte de recurso<br/>Erro {res.message}</div>,
-                color: 'error'
-            });
+            queryClient.invalidateQueries(['dotacoes', numContrato])
+        } catch(e) {
+            errorSnackbar.Put(e)
         }
         setCarregando(false);
-        queryClient.invalidateQueries(['dotacoes', numContrato])
     }
     
     // adição

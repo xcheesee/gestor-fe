@@ -26,7 +26,7 @@ import { emprenhoLabels } from '../../commom/utils/constants';
 import { useSetAtom } from 'jotai';
 import { snackbarAtom } from '../../atomStore';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
-import { useErrorSnackbar } from '../ErrorSnackbar';
+import { useErrorSnackbar } from '../../commom/utils/hooks';
 
 const TabNotasEmpenho = (props) => {
     const valores = {
