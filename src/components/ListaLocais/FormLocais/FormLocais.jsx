@@ -271,7 +271,6 @@ const FormLocais = (props) => {
                         sx={{ margin: '1rem 0', position: 'relative' }} 
                         error={errors.hasOwnProperty('subprefeitura_id')}
                         fullWidth 
-                        required 
                     >
                         <InputLabel id="subprefeitura-label">Subprefeitura</InputLabel>
                         <Select
@@ -311,7 +310,6 @@ const FormLocais = (props) => {
                         sx={{ margin: '1rem 0', position: 'relative' }} 
                         error={errors.hasOwnProperty('distrito_id')}
                         fullWidth 
-                        required
                     >
                         <InputLabel id="distrito-label">Distrito</InputLabel>
                         <Select
@@ -357,7 +355,6 @@ const FormLocais = (props) => {
                         error={errors.hasOwnProperty('unidade')}
                         helperText={errors.unidade}
                         fullWidth
-                        required
                     />
                 </Box>
                     
