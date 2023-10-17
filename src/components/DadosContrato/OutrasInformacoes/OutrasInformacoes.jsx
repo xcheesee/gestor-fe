@@ -2,13 +2,14 @@ import React, { useState } from 'react';
 import { Box, Typography, Paper, Button } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
 import FormOutrasInformacoes from './FormOutrasInformacoes';
+import { useSetAtom } from 'jotai';
+import { snackbarAtom } from '../../../atomStore';
 
 const OutrasInformacoes = (props) => {
     const {
         outras_informacoes,
         dados,
         numContrato,
-        setSnackbar,
         mudancaContrato,
         setMudancaContrato
     } = props;
@@ -91,7 +92,6 @@ const OutrasInformacoes = (props) => {
                 setOpenOutrasInformacoes={setOpenOutrasInformacoes}
                 dados={dados}
                 numContrato={numContrato}
-                setSnackbar={setSnackbar}
                 mudancaContrato={mudancaContrato}
                 setMudancaContrato={setMudancaContrato}
             /> 

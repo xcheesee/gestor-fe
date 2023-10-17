@@ -24,8 +24,8 @@ export default function TabelaExecFin({id, execucao, setTabelaRef, mesesExecutad
         <HotTable 
             ref={ref}
             id={id}
-            formulas={{ engine: hyperformulaInstance}}
-            rowHeaders={['Notas Empenho', 'Aditamentos', 'Reajustes', 'Empenhado', 'Executado']}
+            formulas={{ engine: hyperformulaInstance }}
+            rowHeaders={['Notas Empenho', 'Aditamentos', 'Reajustes', 'Empenhado', 'Executado', 'Saldo']}
             rowHeaderWidth={120}
             columns={[
                 {

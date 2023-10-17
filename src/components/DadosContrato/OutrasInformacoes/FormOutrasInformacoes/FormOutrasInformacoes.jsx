@@ -12,6 +12,8 @@ import CircularProgress from '@mui/material/CircularProgress';
 import BoxOutrasInformacoes from '../../../BoxOutrasInformacoes';
 import DialogConfirmacao from '../../../DialogConfirmacao';
 import { editaDadosContrato } from '../../../../commom/utils/api';
+import { useSetAtom } from 'jotai';
+import { snackbarAtom } from '../../../../atomStore';
 
 const FormOutrasInformacoes = (props) => {
     const {
@@ -19,10 +21,10 @@ const FormOutrasInformacoes = (props) => {
         setOpenOutrasInformacoes,
         dados,
         numContrato,
-        setSnackbar,
         mudancaContrato,
         setMudancaContrato
     } = props;
+    const setSnackbar = useSetAtom(snackbarAtom)
 
     const [errors, setErrors] = useState({});
     const [carregandoEnvio, setCarregandoEnvio] = useState(false);
@@ -37,23 +39,25 @@ const FormOutrasInformacoes = (props) => {
         setCarregandoEnvio(true);
         const res = await editaDadosContrato(e, dados, formInterno, id)
         if(res.status === 200) {
-            setSnackbar({
+            setSnackbar(prev => ({
+                ...prev,
                 open: true,
                 severity: 'success',
                 text: 'Informações adicionais editadas com sucesso!',
                 color: 'success'
-            });
+            }));
             setOpenOutrasInformacoes(false);
         } else if (res.status === 422) { 
             setErrors(res.errors)
         } else {
             setCarregandoEnvio(false);
-            setSnackbar({
+            setSnackbar(prev => ({
+                ...prev,
                 open: true,
                 severity: 'error',
                 text: `Erro ${res.status} - Não foi possível editar as informações adicionais`,
                 color: 'error'
-            });
+            }));
         }
         setMudancaContrato(!mudancaContrato);
         setCarregandoEnvio(false);

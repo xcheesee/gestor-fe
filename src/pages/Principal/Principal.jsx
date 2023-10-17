@@ -18,7 +18,7 @@ import VoltarArrowBtn from '../../components/VoltarArrowBtn';
 import NovoContratoDialog from '../../components/NovoContratoDialog';
 import { useQuery } from '@tanstack/react-query';
 
-const Principal = ({ }) => {
+const Principal = () => {
     const [novoDialog, setNovoDialog] = useState(false)
     // const [sort, setSort] = useState(false);
     const [carregandoSort, setCarregandoSort] = useState(true);
@@ -55,7 +55,6 @@ const Principal = ({ }) => {
 
     useEffect(() => {
         setCarregandoSort(false);
-        //setSnackbar({...snackbar, open: false});
     }, [url])
 
     return (

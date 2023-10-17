@@ -1,11 +1,9 @@
-import { useState } from 'react';
 import './App.css';
 import 'handsontable/dist/handsontable.full.min.css';
 import Header from './components/Header';
 import Login from './pages/Login';
 import Principal from './pages/Principal';
 import DadosContrato from './components/DadosContrato';
-import EditarContrato from './components/EditarContrato';
 import NovoContrato from './pages/NovoContrato';
 import PaginaNaoEncontrada from './components/PaginaNaoEncontrada';
 import Auth from './components/Auth';
@@ -29,10 +27,7 @@ function App() {
 
         <Route path="/contrato" element={
           <Auth>
-            <Principal 
-              snackbar={snackbar} 
-              setSnackbar={setSnackbar} 
-            />
+            <Principal />
           </Auth>
         } />
 
@@ -45,22 +40,13 @@ function App() {
 
         <Route path="/contrato/:numContrato" element={ 
           <Auth> 
-            <DadosContrato 
-              snackbar={snackbar} 
-              setSnackbar={setSnackbar} 
-            /> 
-          </Auth>
-        } />
-
-        <Route path="/contrato/:numContrato/editar" element={
-          <Auth>
-            <EditarContrato snackbar={snackbar} setSnackbar={setSnackbar} />
+            <DadosContrato /> 
           </Auth>
         } />
 
         <Route path="/novo-contrato" element={ 
           <Auth> 
-            <NovoContrato setSnackbar={setSnackbar}  /> 
+            <NovoContrato /> 
           </Auth>
         } />
 

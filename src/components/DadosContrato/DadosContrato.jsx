@@ -28,6 +28,7 @@ import ListaReajustes from '../ListaReajustes';
 import { getContrato, getContrTot, getRecursos } from '../../commom/utils/api';
 import { formataCpfCnpj } from '../../commom/utils/utils';
 import { CardEmpresa } from '../CampoEmpresa';
+import DelContratoEle from '../DelContratoEle';
 
 const TabPanel = (props) => {
     const { children, value, index, ...other } = props;
@@ -69,7 +70,7 @@ const ListaTabs = [
     'Reajuste'
 ];
 
-const DadosContrato = ({ setSnackbar }) => {
+const DadosContrato = () => {
     const [value, setValue] = useState(0);
     const [dados, setDados] = useState({});
     const [mudancaContrato, setMudancaContrato] = useState(false);
@@ -260,10 +261,12 @@ const DadosContrato = ({ setSnackbar }) => {
                                 outras_informacoes={dados?.outras_informacoes}
                                 dados={dados}
                                 numContrato={numContrato}
-                                setSnackbar={setSnackbar}
                                 mudancaContrato={mudancaContrato}
                                 setMudancaContrato={setMudancaContrato}
                             />
+                            <Box className='flex justify-end'>
+                                <DelContratoEle numContrato={numContrato} />
+                            </Box>
                         </Box>
                     </Box>
                 </Box>
