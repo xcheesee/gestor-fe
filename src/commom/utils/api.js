@@ -351,6 +351,45 @@ export async function getGarantias({numContrato}) {
     return ({status: res.status, ...json})
 }
 
+export async function getSubprefeituras({regiao}) {
+    const url = `${process.env.REACT_APP_API_URL}/subprefeituras/${regiao}`;
+    const token = localStorage.getItem('access_token');
+    const options = {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+            'Authorization': `Bearer ${token}`
+        },
+    }
+
+    const res = await fetch(url, options)
+    const json = await res.json()
+    if(!res.ok) {
+        throw ({status: res.status, ...json})
+    }
+    return json.data
+}
+
+export async function getDistritos({subpref}) {
+    const url = `${process.env.REACT_APP_API_URL}/distritos/${subpref}`;
+    const token = localStorage.getItem('access_token');
+    const options = {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+            'Authorization': `Bearer ${token}`
+        },
+    }
+
+    const res = await fetch(url, options)
+    const json = await res.json()
+    if(!res.ok) {
+        throw ({status: res.status, ...json})
+    }
+    return json.data
+}
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ///                                                                                                                                 // 
 ///                                               UPDATE                                                                            //                                             

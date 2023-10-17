@@ -26,13 +26,6 @@ const dicionarioRegioes = {
 }
 
 const TabLocaisServico = (props) => {
-    const campos = [
-        "Região",
-        "Subprefeitura",
-        "Distrito",
-        "Unidade"
-    ];
-
     const valores = {
         ...props,
         regiao: dicionarioRegioes[props.regiao],
@@ -51,12 +44,6 @@ const ListaLocais = ({ numContrato }) => {
         queryFn: async () => await throwableGetData({path: 'servicoslocais', contratoId: numContrato}),
         onError: (res) => {
             errorSnackbar.Get(res)
-            //setSnackbar({
-            //    open: true,
-            //    message: <div>Nao foi possivel recuperar os locais<br/>Erro: {res.message}</div>,
-            //    severity: 'error',
-            //    color: 'error'
-            //})
             return []
         }
     })
@@ -162,6 +149,13 @@ const ListaLocais = ({ numContrato }) => {
             open: true,
             acao: 'adicionar'
         });
+        setFormLocal({
+            contrato_id: numContrato,
+            regiao: '',
+            subprefeitura_id: [],
+            distrito_id: '',
+            unidade: ''
+        })
         setAcao('adicionar');
     }
 
@@ -263,8 +257,7 @@ const ListaLocais = ({ numContrato }) => {
                 acao={acao}
                 formId={formLocalId}
                 fnExcluir={excluiLocal}
-                fnEditar={editaLocal}
-                formInterno={formLocal}
+                //fnEditar={editaLocal}
                 carregando={carregando}
                 texto="regionalização"
             />
