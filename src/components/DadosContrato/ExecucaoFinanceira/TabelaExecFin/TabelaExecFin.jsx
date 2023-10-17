@@ -122,7 +122,7 @@ export default function TabelaExecFin({id, execucao, setTabelaRef, mesesExecutad
             rowHeights={50}
             colHeaders={meses}
             cells={(row, col, __) => {
-                if(row != 4) {return { 
+                if(row < 3 || row > 4) {return { 
                     readOnly: true,
                     className: "hover:cursor-not-allowed bg-neutral-100 border-1 border-neutral-300"
                 }}

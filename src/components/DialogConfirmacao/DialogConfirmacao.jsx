@@ -100,7 +100,42 @@ const DialogConfirmacao = (props) => {
                 </DialogActions>
             </Dialog>
         );
-    } else {
+    } else if(acao === 'adicionar'){
+        return (
+            <Dialog open={openConfirmacao.open} fullWidth>
+                <DialogTitle>
+                    Adicionar {texto}
+                </DialogTitle>
+                <DialogContent>
+                    <DialogContentText>
+                        Confirmar Envio de {texto}?
+                        {/*<strong> {texto[0].toUpperCase() + texto.substring(1)} {`#${openConfirmacao.id}`}</strong>?*/}
+                    </DialogContentText>
+                </DialogContent>
+                <DialogActions>
+                    <Button 
+                        sx={{ textTransform: 'none', color: '#821f1f' }} 
+                        onClick={() => { setOpenConfirmacao({ ...openConfirmacao, open: false, id: '' }); }}
+                    >
+                        Cancelar
+                    </Button>
+                    <Button 
+                        sx={{ textTransform: 'none' }}  
+                        type="submit"
+                        variant='contained'
+                        form={formId}
+                        onClick={(e) => { 
+                            setOpenConfirmacao({ open: false, id: '' }); 
+                        }}
+                    >
+                        Enviar
+                    </Button>
+                </DialogActions>
+            </Dialog>
+        );
+    }
+     else {
+
         return (
             <Dialog open={openConfirmacao.open} fullWidth>
                 <DialogTitle>

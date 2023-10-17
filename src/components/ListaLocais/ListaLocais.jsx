@@ -233,12 +233,12 @@ const ListaLocais = ({ numContrato }) => {
 
             <FormLocais 
                 formLocal={formLocal}
-                setFormLocal={setFormLocal}
+                //setFormLocal={setFormLocal}
                 openFormLocal={openFormLocal}
                 setOpenFormLocal={setOpenFormLocal}
                 enviaLocal={enviaLocal}
                 editaLocal={editaLocal}
-                carregando={carregando}
+                //carregando={carregando}
                 setOpenConfirmacao={setOpenConfirmacao}
                 acao={acao}
                 errors={errors}

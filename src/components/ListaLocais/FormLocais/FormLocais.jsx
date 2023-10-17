@@ -22,7 +22,6 @@ import DistritoInput from '../DistritoInput';
 const FormLocais = (props) => {
     const {
         formLocal,
-        setFormLocal,
         openFormLocal,
         setOpenFormLocal,
         carregando,
@@ -62,18 +61,12 @@ const FormLocais = (props) => {
     const confirmar = () => {
         setErrors({});
 
-        if (openFormLocal.acao === 'editar') {
-            //setFormLocal({
-            //    ...formLocal,
-            //    subprefeitura_id: formLocal.subprefeitura_id,
-            //    distrito_id: formLocal.distrito_id,
-            //    unidade: formLocal.regiao
-            //});
+        //if (openFormLocal.acao === 'editar') {
             setOpenConfirmacao({
                 open: true,
-                id: formLocal.id
+                id: formLocal?.id ?? ""
             });
-        }
+        //}
     }
 
     return (
@@ -95,7 +88,7 @@ const FormLocais = (props) => {
                         const formData = new FormData(e.target)
                         formData.append("contrato_id", formLocal.contrato_id)
                         console.log(formData)
-                        openFormLocal.acao === 'adicionar' ? enviaLocal(formData) : editaLocal(formLocal.id, formData)
+                        //openFormLocal.acao === 'adicionar' ? enviaLocal(formData) : editaLocal(formLocal.id, formData)
                     }}>
 
                     <FormControl 
@@ -153,14 +146,14 @@ const FormLocais = (props) => {
                 <Button
                     sx={{ textTransform: 'none' }} 
                     variant="contained"
-                    type={openFormLocal.acao === 'adicionar' ? 'submit' : ""}
-                    form={openFormLocal.acao === 'adicionar' ? "local_form" : ""}
+                    //type={openFormLocal.acao === 'adicionar' ? 'submit' : ""}
+                    //form={openFormLocal.acao === 'adicionar' ? formId : ""}
                     onClick={confirmar}
                 >
-                    {carregando
+                    {/*carregando
                         ? <CircularProgress size={16} sx={{ color: (theme) => theme.palette.color.main, mr: '0.7rem' }} />
                         : <CheckIcon sx={{ mr: '0.2rem' }} fontSize="small" /> 
-                    }
+                    */}
 
                     {openFormLocal.acao === 'adicionar'
                         ? "Enviar"
