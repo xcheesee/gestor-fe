@@ -137,7 +137,6 @@ const FormLocais = (props) => {
                         error={errors.hasOwnProperty('unidade')}
                         helperText={errors.unidade}
                         fullWidth
-                        required
                     />
                 </Box>
                     
