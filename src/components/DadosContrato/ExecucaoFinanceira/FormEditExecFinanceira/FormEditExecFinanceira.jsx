@@ -286,6 +286,7 @@ const FormEditExecFinanceira = ({
                             :<TabelaExecFin 
                                 id="hotExec" 
                                 execucao={execucao}
+                                tabelaRef={tabelaRef}
                                 setTabelaRef={setTabelaRef}
                                 mesesExecutados={mesesExecutados?.data}
                             />
