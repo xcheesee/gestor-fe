@@ -4,7 +4,7 @@ import { HyperFormula } from 'hyperformula'
 import { registerAllModules } from 'handsontable/registry'
 import { meses } from '../../../../commom/utils/constants';
 import { useExcelTableRef } from '../../../../commom/utils/hooks';
-import { buildExcelDataArray, formataValores } from '../../../../commom/utils/utils';
+import { buildExcelDataArray } from '../../../../commom/utils/utils';
 import { useSetAtom } from 'jotai';
 import { snackbarAtom } from '../../../../atomStore';
 
@@ -139,7 +139,7 @@ export default function TabelaExecFin({id, execucao, tabelaRef, setTabelaRef, me
                     }
                 } else {
                     opts = {
-                        className: "rounded-none" 
+                        className: "rounded-none",
                     }
                 }
                 return opts
@@ -153,6 +153,7 @@ export default function TabelaExecFin({id, execucao, tabelaRef, setTabelaRef, me
                 const aditamentos = tabelaRef.getDataAtCell(1, col)
                 const reajustes = tabelaRef.getDataAtCell(2, col)
                 const maxEmpenhado = notasEmpenho + aditamentos + reajustes
+
                 if(row === 3) {
                     if(newVal > maxEmpenhado) {
                         setSnackbar(prev => ({
