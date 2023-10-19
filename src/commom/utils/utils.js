@@ -157,15 +157,14 @@ export function buildExcelDataArray(options={}) {
     const currColLetter = String.fromCharCode(colVal+65)
     //transforma numero de coluna em notacao de excel
     //ex apos formatacao: =A4-A5+0 
-    return `=${currColLetter}4-${currColLetter}5+${valorContratado ?? 0}`
+    return `=${currColLetter}4-${currColLetter}5+${parseInt(valorContratado) || 0}`
   }
 
   function saldoFunc(colVal) {
     const currColLetter = String.fromCharCode(colVal+65)
-    const prevColLetter = String.fromCharCode(colVal+64)
     //transforma numero de coluna em notacao de excel
-    //ex apos formatacao: =A6+B4-B5+0 
-    return `=${prevColLetter}6+${currColLetter}4-${currColLetter}5`
+    //ex apos formatacao: =B4-B5+0 
+    return `=${currColLetter}4-${currColLetter}5`
   }
 
   data.push(dadosExecucao.notasEmpenho)
@@ -174,7 +173,7 @@ export function buildExcelDataArray(options={}) {
   data.push([...Array(12)])
   data.push(executados)
   data.push( [...Array(12)].map((v, ind) => {
-    if(ind === 0) {
+    if(ind == 0) {
       return firstColSaldoFunc(ind)
     } else{
       return saldoFunc(ind)
