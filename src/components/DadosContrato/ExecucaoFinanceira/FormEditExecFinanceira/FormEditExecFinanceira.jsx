@@ -18,7 +18,7 @@ import { formataValores } from '../../../../commom/utils/utils';
 import { meses } from '../../../../commom/utils/constants';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import TabelaExecFin from '../TabelaExecFin';
-import { getMesesExecutados, postMesesExecFin } from '../../../../commom/utils/api';
+import { getMesesExecutados, postMesesExecFin, throwableGetData } from '../../../../commom/utils/api';
 import { useSetAtom } from 'jotai';
 import { snackbarAtom } from '../../../../atomStore';
 import { useErrorSnackbar } from '../../../../commom/utils/hooks';
@@ -127,9 +127,17 @@ const FormEditExecFinanceira = ({
     const [openEditar, setOpenEditar] = useState(false);
     const [tabelaRef, setTabelaRef] = useState()
 
-    const mesesExecutados = useQuery({
+    const dadosExecucao = useQuery({
         queryKey: ['mesesExecutados', execucao.id],
-        queryFn: () => getMesesExecutados(execucao.id),
+        queryFn: async () => {
+            const [executados, notasAditReaj] = await Promise.all([
+                getMesesExecutados(execucao.id),
+                throwableGetData({path: 'empenho_nota_teste', contratoId: execucao.id})
+            ])
+            return {exec: executados, aditamentos: notasAditReaj.aditamentos, notasEmpenho: notasAditReaj.empenhos, reajustes: notasAditReaj.reajustes}
+        },
+        onSuccess: (res) => {
+        },
         enabled: !!execucao.id
     })
 
@@ -279,7 +287,7 @@ const FormEditExecFinanceira = ({
                             addMesExec.mutate({execucao: postExec}) 
                         }}
                     >
-                        {mesesExecutados.isLoading
+                        {dadosExecucao.isLoading
                             ?<Box className="w-full h-52 flex justify-center items-center">
                                 <CircularProgress size={32} sx={{ color: 'gray' }} />
                             </Box>
@@ -288,7 +296,7 @@ const FormEditExecFinanceira = ({
                                 execucao={execucao}
                                 tabelaRef={tabelaRef}
                                 setTabelaRef={setTabelaRef}
-                                mesesExecutados={mesesExecutados?.data}
+                                dadosExecucao={dadosExecucao?.data}
                             />
                         }
                     </Box>

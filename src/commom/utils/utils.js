@@ -144,12 +144,12 @@ export function TabValues ({ entry, labels, label}) {
 });
 
 export function buildExcelDataArray(options={}) {
-  let {mesesExecutados, valorContratado} = options
+  let {dadosExecucao, valorContratado} = options
   let data = [];
 
   const executados = [...Array(12)]
 
-  mesesExecutados.forEach((val => {
+  dadosExecucao?.exec?.forEach((val => {
     executados[val.mes - 1] = parseFloat(val.execucao)
   }))
 
@@ -168,23 +168,27 @@ export function buildExcelDataArray(options={}) {
     return `=${prevColLetter}6+${currColLetter}4-${currColLetter}5`
   }
 
+  data.push(dadosExecucao.notasEmpenho)
+  data.push(dadosExecucao.aditamentos)
+  data.push(dadosExecucao.reajustes)
+  data.push([...Array(12)])
+  data.push(executados)
+  data.push( [...Array(12)].map((v, ind) => {
+    if(ind === 0) {
+      return firstColSaldoFunc(ind)
+    } else{
+      return saldoFunc(ind)
+    }}))
   for(let i=0; i < 6; i++) {
     if(i == 5) {
-      data.push( [...Array(12)].map((v, ind) => {
-        if(ind === 0) {
-          return firstColSaldoFunc(ind)
-        } else{
-          return saldoFunc(ind)
-        }}))
     } else if(i == 4) {
-      data.push(executados)
     } else {
-      data.push( [...Array(12)].map(() => {
+      //data.push( [...Array(12)].map(() => {
 
-        const val = Math.floor(Math.random() * 100000)
-        if(val < 30000) return null
-        return val
-      }))
+      //  const val = Math.floor(Math.random() * 100000)
+      //  if(val < 30000) return null
+      //  return val
+      //}))
     } 
   }
   return data

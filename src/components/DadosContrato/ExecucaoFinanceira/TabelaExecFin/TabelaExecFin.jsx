@@ -10,11 +10,11 @@ import { snackbarAtom } from '../../../../atomStore';
 
 registerAllModules();
 
-export default function TabelaExecFin({id, execucao, tabelaRef, setTabelaRef, mesesExecutados}) {
+export default function TabelaExecFin({id, execucao, tabelaRef, setTabelaRef, dadosExecucao}) {
     const setSnackbar = useSetAtom(snackbarAtom)
 
     const ref = useExcelTableRef({
-        dadosIniciais: buildExcelDataArray({valorContratado: execucao.contratado, mesesExecutados: mesesExecutados}), 
+        dadosIniciais: buildExcelDataArray({valorContratado: execucao.contratado, dadosExecucao: dadosExecucao}), 
         execucao: execucao,
         setTabelaRef: setTabelaRef 
     })
@@ -149,10 +149,14 @@ export default function TabelaExecFin({id, execucao, tabelaRef, setTabelaRef, me
             height="auto"
             beforeChange={(changes, source) => {
                 const [[row, col, oldVal, newVal] ] = changes
-                const notasEmpenho = tabelaRef.getDataAtCell(0, col)
-                const aditamentos = tabelaRef.getDataAtCell(1, col)
-                const reajustes = tabelaRef.getDataAtCell(2, col)
-                const maxEmpenhado = notasEmpenho + aditamentos + reajustes
+                const notasEmpenho = parseInt(tabelaRef.getDataAtCell(0, col)) || 0
+                const aditamentos = parseInt(tabelaRef.getDataAtCell(1, col)) || 0
+                const reajustes = parseInt(tabelaRef.getDataAtCell(2, col)) || 0
+                let saldoMesAnterior = 0
+                if(col > 0) {
+                    saldoMesAnterior = parseInt(tabelaRef.getDataAtCell(5, col-1)) || 0
+                }
+                const maxEmpenhado = notasEmpenho + aditamentos + reajustes + saldoMesAnterior
 
                 if(row === 3) {
                     if(newVal > maxEmpenhado) {
@@ -161,7 +165,7 @@ export default function TabelaExecFin({id, execucao, tabelaRef, setTabelaRef, me
                             open: true,
                             severity: 'error',
                             color: 'error',
-                            message: <div>Valor informado ultrapassa o permitido.<br/>(Notas Empenho + Aditamentos + Reajustes)</div>
+                            message: <div>Valor informado ultrapassa o permitido.<br/>(Notas Empenho + Aditamentos + Reajustes + Saldo Mes Anterior)<br/>{maxEmpenhado}</div>
                         }))
                         return false
                     }
