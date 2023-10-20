@@ -9,7 +9,6 @@ import {
   FormHelperText,
   InputLabel,
   Select,
-  TextField,
   MenuItem,
   Box
 } from "@mui/material";
@@ -37,7 +36,7 @@ const FormAditamentoValor = (props) => {
 
   useEffect(() => {
     setErrors({});
-  }, [openFormAditamento.open]);
+  }, [openFormAditamento.open, setErrors]);
 
   const handleInputChange = (e) => {
     setFormAditamento({

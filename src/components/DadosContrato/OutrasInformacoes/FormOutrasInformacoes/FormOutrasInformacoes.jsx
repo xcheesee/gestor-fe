@@ -32,7 +32,7 @@ const FormOutrasInformacoes = (props) => {
         id: numContrato,
         open: false
     })
-    const [infoAdicionaisEditado, setInfoAdicionaisEditado] = useState({});
+    //const [infoAdicionaisEditado, setInfoAdicionaisEditado] = useState({});
     const outras_informacoes = useRef(null);
 
     const editaOutrasInformacoes = async (e, formInterno, id) => {
@@ -109,7 +109,7 @@ const FormOutrasInformacoes = (props) => {
             setOpenConfirmacao={setOpenConfirmacao}
             acao="editar"
             form="outras_infos_form"
-            formInterno={infoAdicionaisEditado}
+            //formInterno={infoAdicionaisEditado}
             texto="informações adicionais"
         />
         </>

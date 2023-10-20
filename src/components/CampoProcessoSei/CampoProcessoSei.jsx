@@ -20,7 +20,7 @@ const CampoProcessoSei = React.forwardRef((props, ref) => {
     useEffect(() => {
         if(clearSwitch.current === null) return
         setProcessoSei("")
-    },[clearSwitch.current])
+    },[clearSwitch])
 
     return (
         <ReactInputMask

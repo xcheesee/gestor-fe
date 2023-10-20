@@ -1,21 +1,22 @@
 import { Divider, MenuItem, Select, TextField, Tooltip, Typography } from "@mui/material";
-import { useEffect, useRef } from "react";
+//import { useEffect, useRef } from "react";
 import { useState } from "react";
 
 export default function MaxPrazoInput ({helperText, validade, disabled, label, defaultValue}) {
     const [prazoDias, setPrazoDias] = useState("")
     const [dayMultiplier, setDayMultiplier] = useState("")
-    const [maxPrazo, setMaxPrazo] = useState(new Date(defaultValue + "T00:00:00").toLocaleDateString("pt-BR"))
-    const isInitialMount = useRef(true)
-    useEffect(() => {
-        if(isInitialMount.current) {
-            isInitialMount.current = false // previne mudanca de valor de max_prazo em montagem inicial do form
-        } else {
-            setMaxPrazo(setNewDate(prazoDias, dayMultiplier, validade))
-        }
-    }, [validade])
+    //const [maxPrazo, setMaxPrazo] = useState(new Date(defaultValue + "T00:00:00").toLocaleDateString("pt-BR"))
+    const [maxPrazo, setMaxPrazo] = useState(setNewDate(prazoDias, dayMultiplier, validade) ?? new Date(defaultValue + "T00:00:00").toLocaleDateString("pt-BR"))
+    //const isInitialMount = useRef(true)
+    //useEffect(() => {
+    //    if(isInitialMount.current) {
+    //        isInitialMount.current = false // previne mudanca de valor de max_prazo em montagem inicial do form
+    //    } else {
+    //        setMaxPrazo(setNewDate(prazoDias, dayMultiplier, validade))
+    //    }
+    //}, [validade])
     function setNewDate(day, multiplier) {
-        if(day === "" || multiplier === "" || validade === "") return ""
+        if(day === "" || multiplier === "" || validade === "") return null
         const novaData = new Date(validade + " 00:00:00")
         if (multiplier > 1){
             novaData.setMonth(novaData.getMonth() + +day)

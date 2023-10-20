@@ -25,7 +25,7 @@ import ListaAditamentosPrazo from '../ListaAditamentosPrazo';
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import ListaReajustes from '../ListaReajustes';
-import { getContrato, getContrTot, getRecursos } from '../../commom/utils/api';
+import { getContrato, /*getContrTot, getRecursos*/ } from '../../commom/utils/api';
 import { formataCpfCnpj } from '../../commom/utils/utils';
 import { CardEmpresa } from '../CampoEmpresa';
 import DelContratoEle from '../DelContratoEle';

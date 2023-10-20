@@ -39,7 +39,7 @@ NumberFormatCustom.propTypes = {
 };
 
 const Filtros = (props) => {
-    const { url, setUrl, page } = props;
+    const { url, setUrl, /*page*/ } = props;
 
     const [filtros, setFiltros] = useState({
         processo_sei: '',

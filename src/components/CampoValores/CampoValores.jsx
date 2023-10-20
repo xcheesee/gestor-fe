@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
-import { TextField, InputAdornment } from '@mui/material';
+import { TextField } from '@mui/material';
 import { NumberFormatCustom } from '../../commom/utils/utils';
 import { NumericFormat } from 'react-number-format'
 
@@ -12,14 +12,14 @@ NumberFormatCustom.propTypes = {
 const CampoValores = (props) => {
   const { 
     label, 
-    defaultValue=null, 
+    //defaultValue=null, 
     name, 
     required, 
-    checaErros, 
+    //checaErros, 
     helperText, 
     error, 
     fullWidth,
-    ...other
+    //...other
   } = props;  
   
   // const handleChange = (event) => {

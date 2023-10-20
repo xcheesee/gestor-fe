@@ -20,7 +20,7 @@ const FormGarantia = (props) => {
         setFormGarantia,
         openFormGarantia,
         setOpenFormGarantia,
-        numContrato,
+        //numContrato,
         enviaGarantia,
         editaGarantia,
         carregando,

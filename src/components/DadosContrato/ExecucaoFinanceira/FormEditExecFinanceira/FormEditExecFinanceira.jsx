@@ -113,7 +113,7 @@ const FormEditExecFinanceira = ({
     setOpenEditExecFinanceira,
     execucao,
     //setExecucao,
-    errors,
+    //errors,
     setErrors,
     carregando,
     formId
@@ -154,7 +154,6 @@ const FormEditExecFinanceira = ({
     const cancelar = () => {
         setOpenEditExecFinanceira(false);
         setErrors({});
-        //setExecucao({})
     }
 
     const confirmar = () => {
@@ -164,56 +163,6 @@ const FormEditExecFinanceira = ({
     const handleClickExcluir = () => {
         setOpenExcluir(true);
     }
-
-    //const excluiMes = () => {
-    //    const url = `${process.env.REACT_APP_API_URL}/execucao_financeira/${formExecFinanceira.id}`;
-    //    const token = localStorage.getItem('access_token');
-    //    const options = {
-    //        method: 'DELETE',
-    //        headers: {
-    //            'Content-Type': 'application/json',
-    //            'Accept': 'application/json',
-    //            'Authorization': `Bearer ${token}`
-    //        }
-    //    };
-
-    //    setCarregando(true);
-    //    setOpenExcluir(false);
-
-    //    fetch(url, options)
-    //        .then(res => {
-    //            if (res.ok) {
-    //                setCarregando(false);
-    //                setSnackbar({
-    //                    open: true,
-    //                    severity: 'success',
-    //                    text: 'Mês de execução excluído com sucesso!',
-    //                    color: 'success'
-    //                });
-    //                setMudancaContrato(!mudancaContrato);
-    //                setOpenEditExecFinanceira(false);
-    //                return res.json();
-    //            } else {
-    //                setCarregando(false);
-    //                setSnackbar({
-    //                    open: true,
-    //                    severity: 'error',
-    //                    text: `Erro ${res.status} - Não foi possível excluir o mês de execução`,
-    //                    color: 'error'
-    //                });
-    //                setOpenEditExecFinanceira(false);
-    //            }
-    //        })
-    //        .catch(err => console.log(err));
-    //}
-
-    //if(execucao.isLoading) 
-    //    return (
-    //        <Box>
-    //            <CircularProgress size={16} sx={{ color: (theme) => theme.palette.color.main, mr: '0.7rem' }} />
-    //        </Box>
-    //    )
-
 
     return (
         <>

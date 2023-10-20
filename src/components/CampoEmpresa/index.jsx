@@ -1,4 +1,4 @@
-import { Button, ButtonBase, IconButton, Menu, MenuItem, Paper, TextField, Typography } from "@mui/material";
+import { Button, ButtonBase, IconButton, Menu, MenuItem, Paper, Typography } from "@mui/material";
 import { Box } from "@mui/system";
 import { useQuery } from "@tanstack/react-query";
 import React, { useState } from "react";
@@ -44,7 +44,7 @@ export function CardEmpresa({empresa, centered=false, displayOnly=false, onClick
     )
 }
 
-const  CampoEmpresa = React.forwardRef(({ }, ref) => {
+const  CampoEmpresa = React.forwardRef((props, ref) => {
     const [anchorEl, setAnchorEl] = useState(null)
     // const [filter, setFilter] = useState("")
     const [currEmpresa, setCurrEmpresa] = useState(ref.current)

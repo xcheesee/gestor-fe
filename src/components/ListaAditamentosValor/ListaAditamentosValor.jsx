@@ -22,7 +22,8 @@ function TabAditamentosValor (props) {
     const valores = {
         ...props,
         valor_aditamento: formataValores(props.valor_aditamento),
-        data: formataData(props.data)
+        data: formataData(props.data),
+        percentual: `${props.percentual}%`
     }
 
     return <TabValues entry={valores} labels={aditValorLabels} label='aditamento_val' />

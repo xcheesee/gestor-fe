@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { 
   Box, 
   Divider, 
@@ -10,7 +10,7 @@ import DialogConfirmacao from "../DialogConfirmacao";
 import BotoesTab from "../BotoesTab";
 import BotaoAdicionar from "../BotaoAdicionar";
 import FormAditamentoPrazo from "./FormAditamentos/FormAditamentoPrazo";
-import { postFormData, putFormData, throwableDeleteForm, throwableGetData, throwablePostForm, throwablePutForm } from "../../commom/utils/api";
+import { putFormData, throwableDeleteForm, throwableGetData, throwablePostForm, throwablePutForm } from "../../commom/utils/api";
 import { TabValues } from "../../commom/utils/utils";
 import { aditPrazoLabels } from "../../commom/utils/constants";
 import { useSetAtom } from "jotai";
@@ -92,7 +92,7 @@ const ListaAditamentosPrazo = ({ numContrato }) => {
 
   const editaAditamento = async (id, formAditamentoEdit) => {
     setCarregando(true);
-    const res = await putFormData(id, formAditamentoEdit, "aditamento_prazo")
+    await putFormData(id, formAditamentoEdit, "aditamento_prazo")
     try{
       await throwablePutForm({id, form: formAditamentoEdit, path: 'aditamento_prazo'})
       setSnackbar({
@@ -131,7 +131,7 @@ const ListaAditamentosPrazo = ({ numContrato }) => {
 
   const enviaAditamento = async (form) => {
     setCarregando(true);
-    const res = await postFormData(form, "aditamento_prazo")
+    //await postFormData(form, "aditamento_prazo")
     try {
       await throwablePostForm({form, path: 'aditamento_prazo'})
       setSnackbar({

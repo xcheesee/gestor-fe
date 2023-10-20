@@ -20,7 +20,7 @@ const DialogConfirmacao = (props) => {
         texto,
         formId,
         //form,
-        ...other
+        //...other
     } = props;
 
     if (acao === 'excluir') {

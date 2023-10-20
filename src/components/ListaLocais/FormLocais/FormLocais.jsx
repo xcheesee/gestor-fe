@@ -10,12 +10,12 @@ import {
     Select,
     MenuItem,
     TextField,
-    CircularProgress,
+    //CircularProgress,
     FormHelperText,
     Box
 } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
-import CheckIcon from '@mui/icons-material/Check';
+//import CheckIcon from '@mui/icons-material/Check';
 import SubprefeituraInput from '../SubprefeituraInput';
 import DistritoInput from '../DistritoInput';
 
@@ -24,13 +24,13 @@ const FormLocais = (props) => {
         formLocal,
         openFormLocal,
         setOpenFormLocal,
-        carregando,
+        //carregando,
         setOpenConfirmacao,
         acao,
         errors,
         setErrors,
-        enviaLocal,
-        editaLocal,
+        //enviaLocal,
+        //editaLocal,
         formId,
     } = props;
 

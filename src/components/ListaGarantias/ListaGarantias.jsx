@@ -104,7 +104,7 @@ const ListaGarantias = ({ numContrato }) => {
     const editaGarantia = async (id, formGarantiaEdit) => {
         setCarregando(true);
         try{
-            const res = await throwablePutForm({id, form:formGarantiaEdit, path:"garantia"})
+            await throwablePutForm({id, form:formGarantiaEdit, path:"garantia"})
             setSnackbar({
                 open: true,
                 severity: 'success',

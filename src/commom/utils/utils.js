@@ -2,7 +2,7 @@ import { Box, Typography } from '@mui/material';
 import { cpf, cnpj } from 'cpf-cnpj-validator';
 import { forwardRef } from 'react';
 import { NumericFormat } from 'react-number-format';
-import { meses } from './constants';
+//import { meses } from './constants';
 
 // export function getDateDiff(date1, date2) {
 //     if(date1 === null || date2 === null) return 0
@@ -111,8 +111,8 @@ export function TabValues ({ entry, labels, label}) {
             ?.map((keyVal, index) => 
             (
                 <Box className="mx-4 my-8" key={`tab-${label}-${index}`}>
-                    <Typography className="font-bold pb-2">{labels[keyVal[0]]}</Typography>
-                    <Box className="ml-4 text-base">{keyVal[1] || "- - -"}</Box>
+                    <Typography className="pb-2">{labels[keyVal[0]]}</Typography>
+                    <Box className="ml-4 font-bold text-base">{keyVal[1] || "- - -"}</Box>
                 </Box>
         ))}
     </Box>
@@ -164,10 +164,11 @@ export function buildExcelDataArray(options={}) {
 
   function saldoFunc(colVal) {
     const currColLetter = String.fromCharCode(colVal+65)
+    const prevColLetter = String.fromCharCode(colVal+64)
     const isMesInicial = colVal === parseInt(execucao.mes_inicial)
     //transforma numero de coluna em notacao de excel
     //ex apos formatacao: =B4-B5+0 
-    return `=${currColLetter}4-${currColLetter}5+${isMesInicial ? (parseInt(execucao.contratado) || 0) : 0}`
+    return `=${prevColLetter}6+${currColLetter}4-${currColLetter}5+${isMesInicial ? (parseInt(execucao.contratado) || 0) : 0}`
   }
 
   data.push(dadosExecucao.notasEmpenho)
@@ -176,7 +177,7 @@ export function buildExcelDataArray(options={}) {
   data.push([...Array(12)])
   data.push(executados)
   data.push( [...Array(12)].map((v, ind) => {
-    if(ind == 0) {
+    if(ind === 0) {
       return firstColSaldoFunc(ind)
     } else{
       return saldoFunc(ind)

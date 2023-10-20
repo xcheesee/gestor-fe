@@ -105,7 +105,7 @@ const ListaCertidoes = ({ numContrato }) => {
 
         setCarregando(true);
         try{
-            const res = await throwablePutForm({id:id, form:formCertidaoEdit, path:'certidao'})
+            await throwablePutForm({id:id, form:formCertidaoEdit, path:'certidao'})
             setSnackbar({
                 open: true,
                 severity: 'success',

@@ -8,7 +8,7 @@ import {
 
 const BoxOutrasInformacoes = (props) => {
     const { 
-        outras_informacoes,
+        //outras_informacoes,
         label,
         dados,
         numContrato,

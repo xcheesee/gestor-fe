@@ -28,7 +28,7 @@ const BoxProcessoContratacao = (props) => {
         modelosLicitacao,
         estados,
         carregando,
-        handleChange,
+        //handleChange,
         acao,
         dados
     } = props;

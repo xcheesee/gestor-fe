@@ -40,32 +40,11 @@ const FormExecFinanceira = (props) => {
         setErrors({});
     }, [openFormExecFinanceira.open, setErrors]);
 
-    //const handleChange = (e) => {
-    //    console.log(e.target.name)
-    //    console.log(e.target.value)
-    //    //setFormExecFinanceira({
-    //    //    ...formExecFinanceira,
-    //    //    [e.target.name]: e.target.value
-    //    //});
-    //}
-    
     const cancelar = () => {
         setOpenFormExecFinanceira({
             open: false,
             acao: 'adicionar'
         });
-        //setFormExecFinanceira({
-        //    ...formExecFinanceira,
-        //    mes: '',
-        //    ano: '',
-        //    planejado_inicial: '',
-        //    contratado_inicial: '',
-        //    valor_reajuste: '',
-        //    valor_aditivo: '',
-        //    valor_cancelamento: '',
-        //    empenhado: '',
-        //    executado: ''
-        //})
     }
 
     const confirmar = () => {
@@ -93,7 +72,7 @@ const FormExecFinanceira = (props) => {
                         const formData = new FormData(e.target)
                         formData.append('id_contrato', contratoId)
                         try {
-                            const res = await postAnoExecFin(formData)
+                            await postAnoExecFin(formData)
                             setOpenFormExecFinanceira(false)
                             setSnackbar(prev => ({...prev, open: true, severity:"success", message: "Ano de execucao enviado."}))
                         } catch(e) {

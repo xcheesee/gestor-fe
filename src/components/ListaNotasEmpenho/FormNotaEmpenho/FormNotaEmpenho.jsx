@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { 
     Dialog,
     DialogTitle,
@@ -34,7 +34,7 @@ const FormNotaEmpenho = (props) => {
         formId
     } = props;
 
-    const [tipo_empenho, setTipoEmpenho] = useState(formNotaEmpenho.tipo_empenho);
+    //const [tipo_empenho, setTipoEmpenho] = useState(formNotaEmpenho.tipo_empenho);
 
     useEffect(() => {
         setErrors({});
@@ -51,10 +51,10 @@ const FormNotaEmpenho = (props) => {
         });
     }
 
-    const handleChangeTipoEmpenho = (valor) => {
-        setTipoEmpenho(valor);
-        console.log(valor);
-    }
+    //const handleChangeTipoEmpenho = (valor) => {
+    //    setTipoEmpenho(valor);
+    //    console.log(valor);
+    //}
 
     const handleClickConfirmar = () => {
         if (openFormNotaEmpenho.acao === 'adicionar') {

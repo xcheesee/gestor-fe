@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { 
     Box,
     Divider,
@@ -11,13 +11,13 @@ import {
     FormHelperText,
 } from '@mui/material';
 import CampoCpfCnpj from '../CampoCpfCnpj';
-import CampoData from '../CampoData';
+//import CampoData from '../CampoData';
 import CampoValores from '../CampoValores';
 import CampoProcessoSei from '../CampoProcessoSei';
 import CampoNumContrato from '../CampoNumContrato';
-import MaxPrazoInput from '../MaxPrazoInput';
+//import MaxPrazoInput from '../MaxPrazoInput';
 import { contratoLabels } from '../../commom/utils/constants';
-import CampoDataControlada from '../CampoDataControlada';
+//import CampoDataControlada from '../CampoDataControlada';
 import CampoEmpresa from '../CampoEmpresa';
 import { formataCpfCnpj } from '../../commom/utils/utils';
 import CampoTexto from '../CampoTexto';
@@ -34,7 +34,7 @@ const BoxDadosContrato = (props) => {
         numContrato,
         acao,
         focusError,
-        setFocusError,
+        //setFocusError,
     } = props;
     // const [validade, setValidade] = useState(dados.data_vencimento ?? "")
     const empresaRef = useRef({

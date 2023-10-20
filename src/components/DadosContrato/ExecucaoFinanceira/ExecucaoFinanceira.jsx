@@ -1,23 +1,18 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState } from 'react';
 import { 
     Box, 
     Typography, 
-    Divider, 
-    Paper,
-    IconButton,
-    Tooltip,
     Button
 } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
-import DialogDetalhes from './DialogDetalhes/DialogDetalhes';
+//import DialogDetalhes from './DialogDetalhes/DialogDetalhes';
 import FormExecFinanceira from './FormExecFinanceira';
 import FormEditExecFinanceira from './FormEditExecFinanceira';
 import DialogConfirmacao from '../../DialogConfirmacao';
 import ExecucaoFinanceiraCard from './ExecucaoFinanceiraCard';
-import { getExecucaoFinanceira, getExecucoesFinanceiras, postAnoExecFin } from '../../../commom/utils/api';
+import { /*getExecucaoFinanceira,*/ getExecucoesFinanceiras/*, postAnoExecFin*/ } from '../../../commom/utils/api';
 
-const ExecucaoFinanceira = ({ numContrato, totais}) => {
-    //const execucao_financeira = typeof props.execucao_financeira != 'undefined' ? props.execucao_financeira : [];
+const ExecucaoFinanceira = ({ numContrato }) => {
     //const [openDetalhes, setOpenDetalhes] = useState(false);
     //const [detalheExecFin, setDetalheExecFin] = useState({});
     const [execucoes_financeiras, setExecucoesFinanceiras] = useState({})
@@ -35,28 +30,13 @@ const ExecucaoFinanceira = ({ numContrato, totais}) => {
         acao: 'adicionar'
     });
 
-    //const [formExecFinanceira, setFormExecFinanceira] = useState({
-    //    contrato_id: props.numContrato,
-    //    mes: '',
-    //    ano: '',
-    //    planejado_inicial: '',
-    //    contratado_inicial: '',
-    //    valor_reajuste: '',
-    //    valor_aditivo: '',
-    //    valor_cancelamento: '',
-    //    empenhado: '',
-    //    executado: ''
-    //});
-
-    //const execucaoId = useRef()
-
     useEffect(() => {
         (async () => {
             const execFin = await getExecucoesFinanceiras(numContrato)
             setExecucoesFinanceiras(execFin)
         })();
 
-    }, [])
+    }, [numContrato])
 
     const formId = "exec-form"
 
@@ -65,71 +45,8 @@ const ExecucaoFinanceira = ({ numContrato, totais}) => {
             open: true,
             acao: 'adicionar'
         });
-        //setFormExecFinanceira({
-        //    contrato_id: props.numContrato,
-        //    mes: '',
-        //    ano: '',
-        //    planejado_inicial: '',
-        //    contratado_inicial: '',
-        //    valor_reajuste: '',
-        //    valor_aditivo: '',
-        //    valor_cancelamento: '',
-        //    empenhado: '',
-        //    executado: ''
-        //});
         setAcao('adicionarExecFin');
     }
-
-    //async function enviaAno (formExecFinanceira) {
-
-    //    setCarregando(true);
-    //    const res = await postAnoExecFin(formExecFinanceira)
-    //    props.setMudancaContrato(!props.mudancaContrato);
-
-    //    if (res.ok) {
-    //        props.setSnackbar({
-    //            open: true,
-    //            severity: 'success',
-    //            text: 'Mês de execução financeira enviado com sucesso!',
-    //            color: 'success'
-    //        });
-    //        setOpenFormExecFinanceira({
-    //            open: false,
-    //            acao: 'adicionar'
-    //        });
-    //        //setFormExecFinanceira({
-    //        //    ...formExecFinanceira,
-    //        //    mes: '',
-    //        //    ano: '',
-    //        //    planejado_inicial: '',
-    //        //    contratado_inicial: '',
-    //        //    valor_reajuste: '',
-    //        //    valor_aditivo: '',
-    //        //    valor_cancelamento: '',
-    //        //    empenhado: '',
-    //        //    executado: ''
-    //        //});
-    //        return res.json();
-    //    } else if (res.status === 422) {
-    //        props.setSnackbar({
-    //            open: true,
-    //            severity: 'error',
-    //            text: `Erro ${res.status} - Não foi possível enviar o mês de execução`,
-    //            color: 'error'
-    //        });
-    //        const json = await res.json()
-    //        setErrors(json.errors)
-    //    } else {
-    //        props.setSnackbar({
-    //            open: true,
-    //            severity: 'error',
-    //            text: `Erro ${res.status} - Não foi possível enviar o mês de execução`,
-    //            color: 'error'
-    //        });
-    //    }
-
-    //    setCarregando(false);
-    //}
 
     async function handleClickEditarAno (execucao) {
         setCurrExecucao(execucao)
@@ -234,8 +151,6 @@ const ExecucaoFinanceira = ({ numContrato, totais}) => {
                 acao={acao}
                 fnExcluir={() => {}}
                 fnEditar={() => {}}
-                //fnAdicionar={enviaAno}
-                //formInterno={formExecFinanceira}
                 carregando={carregando}
                 texto="ano de execução financeira"
                 formId={formId}

@@ -1,14 +1,13 @@
 import { Box, Divider, IconButton, Tooltip, Typography, Paper } from "@mui/material";
-import ManageSearchIcon from '@mui/icons-material/ManageSearch';
 import { formataValores } from '../../../../commom/utils/utils';
 import EditIcon from '@mui/icons-material/Edit';
 
 export default function ExecucaoFinanceiraCard({
     execucao, 
     carregando,
-    setCarregando, 
-    setDetalheExecFin,
-    setOpenDetalhes,
+    //setCarregando, 
+    //setDetalheExecFin,
+    //setOpenDetalhes,
     handleClickEditarAno
 }) {
 

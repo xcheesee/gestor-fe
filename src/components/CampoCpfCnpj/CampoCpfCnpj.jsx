@@ -1,6 +1,6 @@
-import React, { useState, forwardRef } from 'react';
-import NumberFormat from 'react-number-format';
-import PropTypes from 'prop-types';
+import React, { useState } from 'react';
+//import NumberFormat from 'react-number-format';
+//import PropTypes from 'prop-types';
 import { TextField } from '@mui/material';
 import { cpf, cnpj } from 'cpf-cnpj-validator';
 import ReactInputMask from 'react-input-mask';
