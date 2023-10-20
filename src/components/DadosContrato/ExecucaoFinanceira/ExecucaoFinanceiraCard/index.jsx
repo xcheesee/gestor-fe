@@ -78,7 +78,7 @@ export default function ExecucaoFinanceiraCard({
                         justifyContent: 'flex-end' 
                     }}
                 >
-                    <Tooltip title="Detalhes" arrow>
+                    {/*<Tooltip title="Detalhes" arrow>
                         <Box>
                             <IconButton
                                 //onClick={() => detalhaExecucaoFinanceira(execucao?.id)}
@@ -87,7 +87,7 @@ export default function ExecucaoFinanceiraCard({
                                 <ManageSearchIcon />
                             </IconButton>
                         </Box>
-                    </Tooltip>
+                    </Tooltip>*/}
                     
                     <Tooltip title="Editar" arrow>
                         <Box>

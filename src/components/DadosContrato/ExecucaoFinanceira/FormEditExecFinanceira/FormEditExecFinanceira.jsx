@@ -132,11 +132,9 @@ const FormEditExecFinanceira = ({
         queryFn: async () => {
             const [executados, notasAditReaj] = await Promise.all([
                 getMesesExecutados(execucao.id),
-                throwableGetData({path: 'empenho_nota_teste', contratoId: execucao.id})
+                throwableGetData({path: 'exec_valores_meses', contratoId: execucao.id})
             ])
             return {exec: executados, aditamentos: notasAditReaj.aditamentos, notasEmpenho: notasAditReaj.empenhos, reajustes: notasAditReaj.reajustes}
-        },
-        onSuccess: (res) => {
         },
         enabled: !!execucao.id
     })
@@ -150,7 +148,6 @@ const FormEditExecFinanceira = ({
         },
         onError: (e) => {
             errorSnackbar.Post(e)
-            //setSnackbar(prev => ({...prev, open: true, severity: "error", message: `Meses de execucao nao enviados.${e.message}`}))
         }
     })
 

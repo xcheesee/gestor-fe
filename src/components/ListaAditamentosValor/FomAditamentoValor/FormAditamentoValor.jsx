@@ -18,6 +18,7 @@ import CheckIcon from "@mui/icons-material/Check";
 import CircularProgress from "@mui/material/CircularProgress";
 import CampoValores from "../../CampoValores";
 import CampoPorcentagem from "../../CampoPorcentagem";
+import CampoData from "../../CampoData";
 
 const FormAditamentoValor = (props) => {
   const {
@@ -47,7 +48,7 @@ const FormAditamentoValor = (props) => {
 
   const handleClickConfirmar = () => {
     if (openFormAditamento.acao === "adicionar") {
-      enviaAditamento();
+      //enviaAditamento();
     } else if (openFormAditamento.acao === "editar") {
       setOpenConfirmacao({
         open: true,
@@ -117,6 +118,18 @@ const FormAditamentoValor = (props) => {
             error={errors.hasOwnProperty("percentual")}
             helperText={errors.percentual}
             fullWidth
+          />
+
+          <CampoData
+              label="Data de Aditamento"
+              //defaultValue={formNotaEmpenho.data_emissao}
+              name="data_aditamento"
+              //onChange={handleInputChange}
+              margin="1rem 0"
+              error={errors.hasOwnProperty('data_aditamento')}
+              helperText={errors.data_aditamento}
+              fullWidth
+              required
           />
         </Box>
       </DialogContent>

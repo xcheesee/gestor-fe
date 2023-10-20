@@ -59,6 +59,7 @@ export const aditValorLabels = {
     tipo_aditamento: "Tipo",
     valor_aditamento: "Valor",
     percentual: "Porcentagem",
+    data: "Data de Aditamento"
 }
 
 export const aditPrazoLabels = {
@@ -80,6 +81,7 @@ export const dotacoesLabels = {
 export const reajusteLabels = {
     valor_reajuste: "Valor",
     indice_reajuste: "Indice de Reajuste",
+    data: "Data de Reajuste"
 }
 
 export const contratoKeys = [

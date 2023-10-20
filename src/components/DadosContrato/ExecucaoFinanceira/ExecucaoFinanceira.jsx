@@ -213,7 +213,7 @@ const ExecucaoFinanceira = ({ numContrato, totais}) => {
                 setErrors={setErrors}
                 carregando={carregando}
                 setOpenConfirmacao={setOpenConfirmacao}
-                totais={totais}
+                //totais={totais}
             />
 
             <FormEditExecFinanceira 

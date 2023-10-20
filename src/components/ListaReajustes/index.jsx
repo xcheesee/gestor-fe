@@ -4,7 +4,7 @@ import { useRef } from "react";
 import { useState } from "react";
 import { getFormData, throwableDeleteForm, throwablePostForm, throwablePutForm } from "../../commom/utils/api";
 import { reajusteLabels } from "../../commom/utils/constants";
-import { formataValores } from "../../commom/utils/utils";
+import { formataData, formataValores } from "../../commom/utils/utils";
 import BotaoAdicionar from "../BotaoAdicionar";
 import BotoesTab from "../BotoesTab";
 import CampoValores from "../CampoValores";
@@ -14,6 +14,7 @@ import TabContrato from "../TabContrato";
 import { useSetAtom } from "jotai";
 import { snackbarAtom } from "../../atomStore";
 import { useErrorSnackbar } from "../../commom/utils/hooks";
+import CampoData from "../CampoData";
 
 export default function ListaReajustes ({ numContrato }) {
     let dados = []
@@ -114,7 +115,8 @@ export default function ListaReajustes ({ numContrato }) {
             id: entry.id,
             contrato_id: entry.contrato_id,
             valor_reajuste: formataValores(entry.valor_reajuste),
-            indice_reajuste: `${entry.indice_reajuste}`
+            indice_reajuste: `${entry.indice_reajuste}`,
+            data: formataData(entry.data_reajuste)
         })
     })
 
@@ -191,6 +193,18 @@ export default function ListaReajustes ({ numContrato }) {
                         sx={{ margin: '1rem 0' }}
                         error={errors.hasOwnProperty('indice_reajuste')}
                         helperText={errors.hasOwnProperty('indice_reajuste') ? errors : "Ex: "}
+                        fullWidth
+                        required
+                    />
+
+                    <CampoData
+                        label="Data Reajuste"
+                        //defaultValue={formNotaEmpenho.data_emissao}
+                        name="data_reajuste"
+                        //onChange={handleInputChange}
+                        margin="1rem 0"
+                        error={errors.hasOwnProperty('data_reajuste')}
+                        helperText={errors.data_reajuste}
                         fullWidth
                         required
                     />

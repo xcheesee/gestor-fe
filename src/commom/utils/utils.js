@@ -144,7 +144,7 @@ export function TabValues ({ entry, labels, label}) {
 });
 
 export function buildExcelDataArray(options={}) {
-  let {dadosExecucao, valorContratado} = options
+  let {dadosExecucao, execucao} = options
   let data = [];
 
   const executados = [...Array(12)]
@@ -157,14 +157,17 @@ export function buildExcelDataArray(options={}) {
     const currColLetter = String.fromCharCode(colVal+65)
     //transforma numero de coluna em notacao de excel
     //ex apos formatacao: =A4-A5+0 
-    return `=${currColLetter}4-${currColLetter}5+${parseInt(valorContratado) || 0}`
+    const isMesInicial = colVal === parseInt(execucao.mes_inicial)
+
+    return `=${currColLetter}4-${currColLetter}5+${isMesInicial ? (parseInt(execucao.contratado) || 0) : 0}`
   }
 
   function saldoFunc(colVal) {
     const currColLetter = String.fromCharCode(colVal+65)
+    const isMesInicial = colVal === parseInt(execucao.mes_inicial)
     //transforma numero de coluna em notacao de excel
     //ex apos formatacao: =B4-B5+0 
-    return `=${currColLetter}4-${currColLetter}5`
+    return `=${currColLetter}4-${currColLetter}5+${isMesInicial ? (parseInt(execucao.contratado) || 0) : 0}`
   }
 
   data.push(dadosExecucao.notasEmpenho)
@@ -178,17 +181,5 @@ export function buildExcelDataArray(options={}) {
     } else{
       return saldoFunc(ind)
     }}))
-  for(let i=0; i < 6; i++) {
-    if(i == 5) {
-    } else if(i == 4) {
-    } else {
-      //data.push( [...Array(12)].map(() => {
-
-      //  const val = Math.floor(Math.random() * 100000)
-      //  if(val < 30000) return null
-      //  return val
-      //}))
-    } 
-  }
   return data
 }

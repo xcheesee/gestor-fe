@@ -14,7 +14,7 @@ export default function TabelaExecFin({id, execucao, tabelaRef, setTabelaRef, da
     const setSnackbar = useSetAtom(snackbarAtom)
 
     const ref = useExcelTableRef({
-        dadosIniciais: buildExcelDataArray({valorContratado: execucao.contratado, dadosExecucao: dadosExecucao}), 
+        dadosIniciais: buildExcelDataArray({execucao, dadosExecucao}), 
         execucao: execucao,
         setTabelaRef: setTabelaRef 
     })
@@ -132,7 +132,7 @@ export default function TabelaExecFin({id, execucao, tabelaRef, setTabelaRef, da
                         className: "hover:cursor-not-allowed bg-neutral-100 border-1 border-neutral-300"
                     }
                 }
-                else if(row === 4 && col < execucao.mes_inicial) {
+                else if((row === 4 && col < execucao.mes_inicial) || (row === 3 && col < execucao.mes_inicial)) {
                     opts = { 
                         readOnly: true, 
                         className: "bg-neutral-100 border-1 border-neutral-300 hover:cursor-not-allowed" 

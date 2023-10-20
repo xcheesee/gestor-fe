@@ -10,7 +10,7 @@ import DialogConfirmacao from "../DialogConfirmacao";
 import BotoesTab from "../BotoesTab";
 import BotaoAdicionar from "../BotaoAdicionar";
 import FormAditamentoValor from "./FomAditamentoValor/FormAditamentoValor";
-import { formataValores, TabValues } from "../../commom/utils/utils";
+import { formataData, formataValores, TabValues } from "../../commom/utils/utils";
 import { throwableDeleteForm, throwableGetData, throwablePostForm, throwablePutForm } from "../../commom/utils/api";
 import { aditValorLabels } from "../../commom/utils/constants";
 import { useSetAtom } from "jotai";
@@ -22,6 +22,7 @@ function TabAditamentosValor (props) {
     const valores = {
         ...props,
         valor_aditamento: formataValores(props.valor_aditamento),
+        data: formataData(props.data)
     }
 
     return <TabValues entry={valores} labels={aditValorLabels} label='aditamento_val' />
@@ -205,6 +206,7 @@ function ListaAditamentosValor ({ numContrato }) {
                                     tipo_aditamento={aditamento.tipo_aditamento}
                                     valor_aditamento={aditamento.valor_aditamento}
                                     percentual={aditamento.percentual}
+                                    data={aditamento.data_aditamento}
                                 />
 
                                 <BotoesTab 

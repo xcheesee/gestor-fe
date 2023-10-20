@@ -75,7 +75,7 @@ const DadosContrato = () => {
     const [dados, setDados] = useState({});
     const [mudancaContrato, setMudancaContrato] = useState(false);
     //const [origemRecursos, setOrigemRecursos] = useState([]);
-    const [totais, setTotais] = useState([]);
+    //const [totais, setTotais] = useState([]);
     const [estaCarregado, setEstaCarregado] = useState(false);
     const { numContrato } = useParams();
     
@@ -92,12 +92,12 @@ const DadosContrato = () => {
                 navigate("../contrato", { replace: true });
             }
             setDados(contrato?.data)
-            const [ totRec] = await Promise.all([
-                //getRecursos(),
-                getContrTot(numContrato),
-            ])
+            //const [ totRec] = await Promise.all([
+            //    //getRecursos(),
+            //    getContrTot(numContrato),
+            //])
             //setOrigemRecursos(recOri.data)
-            setTotais(totRec.data)
+            //setTotais(totRec.data)
             setEstaCarregado(true)
         })();
     }, [numContrato, navigate, mudancaContrato])
@@ -237,7 +237,7 @@ const DadosContrato = () => {
 
                             <ExecucaoFinanceira 
                                 numContrato={numContrato}
-                                totais={totais}
+                                //totais={totais}
                             />
 
                             <Typography variant="h2" sx={{ fontSize: '2rem', margin: '2rem 0' }}>

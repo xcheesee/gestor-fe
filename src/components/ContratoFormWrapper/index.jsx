@@ -34,7 +34,7 @@ export default function ContratoFormWrapper({
                         variant="contained"
                         type={acao === 'adicionar' ? "submit" : ""}
                         form={acao === 'adicionar' ? `${form}` : ""}
-                        onClick={ () => acao === "editar" ?  setOpenConfirmacao({open: true, id: currId}) : () => {} }
+                        onClick={ () => acao === "editar" ?  setOpenConfirmacao({open: true, id: currId}) : setOpenConfirmacao({open: true}) }
                     >
                         {isLoading
                             ? <CircularProgress size={16} sx={{ color: (theme) => theme.palette.color.main, mr: '0.7rem' }} />
