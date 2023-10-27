@@ -89,6 +89,7 @@ function ListaAditamentosValor ({ numContrato }) {
                 color: 'success'
             });
             queryClient.invalidateQueries({queryKey: ['aditamentos_val', numContrato]})
+            queryClient.invalidateQueries({queryKey: ['mesesExecutados']})
         } catch(e) {
             errorSnackbar.Delete(e)
         }
@@ -131,6 +132,7 @@ function ListaAditamentosValor ({ numContrato }) {
                 percentual: ''
             });
             queryClient.invalidateQueries({queryKey: ['aditamentos_val', numContrato]})
+            queryClient.invalidateQueries({queryKey: ['mesesExecutados']})
         } catch(e) {
             errorSnackbar.Put(e)
         }
@@ -171,6 +173,7 @@ function ListaAditamentosValor ({ numContrato }) {
                 percentual: ''
             });
             queryClient.invalidateQueries({queryKey: ['aditamentos_val', numContrato]})
+            queryClient.invalidateQueries({queryKey: ['mesesExecutados']})
         } catch(e) {
             errorSnackbar.Post(e)
             if(e.status === 422) {setErrors(e.errors)}

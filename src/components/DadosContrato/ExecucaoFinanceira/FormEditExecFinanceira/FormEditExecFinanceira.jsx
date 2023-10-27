@@ -18,7 +18,7 @@ import { formataValores } from '../../../../commom/utils/utils';
 import { meses } from '../../../../commom/utils/constants';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import TabelaExecFin from '../TabelaExecFin';
-import { getMesesExecutados, postMesesExecFin, throwableGetData } from '../../../../commom/utils/api';
+import { getMesesExecutados, postMesesExecFin, throwableDeleteForm, throwableGetData } from '../../../../commom/utils/api';
 import { useSetAtom } from 'jotai';
 import { snackbarAtom } from '../../../../atomStore';
 import { useErrorSnackbar } from '../../../../commom/utils/hooks';
@@ -67,7 +67,7 @@ function DialogEditar ({openEditar, setOpenEditar, formId, carregando}) {
     );
 }
 
-function DialogExcluir({openExcluir, setOpenExcluir, carregando}) {
+function DialogExcluir({openExcluir, setOpenExcluir, carregando, excluiMes}) {
     return(
         <Dialog open={openExcluir}>
             <DialogTitle>
@@ -94,7 +94,7 @@ function DialogExcluir({openExcluir, setOpenExcluir, carregando}) {
 
                 <Button 
                     sx={{ textTransform: 'none' }} 
-                    //onClick={excluiMes}
+                    onClick={excluiMes}
                 >
                     {
                         carregando
@@ -116,7 +116,8 @@ const FormEditExecFinanceira = ({
     //errors,
     setErrors,
     carregando,
-    formId
+    formId,
+    numContrato
 }) => {
     const queryClient = useQueryClient()
 
@@ -143,13 +144,30 @@ const FormEditExecFinanceira = ({
         mutationFn: ({execucao}) => postMesesExecFin({ execucao }),
         onSuccess: () => {
             queryClient.invalidateQueries(['mesesExecutados', execucao.id])
-            setSnackbar(prev => ({...prev, open: true, severity: "success", message: "Meses de execucao enviados."}))
+            setSnackbar(prev => ({...prev, open: true, severity: "success", message: "Meses de execucao enviados.", color: "success"}))
             setOpenEditExecFinanceira(false)
         },
         onError: (e) => {
             errorSnackbar.Post(e)
         }
     })
+
+    const excluirMes = useMutation({
+        mutationFn: ({idExecucao}) => throwableDeleteForm({id: idExecucao, path: 'exec_financeira'}),
+        onSuccess: () => {
+            setSnackbar(prev => ({...prev, open: true, severity: "success", message: "Meses de execucao excluidos.", color: "success"}))
+            queryClient.invalidateQueries(['execucoes', numContrato]) 
+            setOpenEditExecFinanceira(false)
+            setOpenExcluir(false)
+        },
+        onError: (e) => {
+            errorSnackbar.Delete(e)
+        }
+    })
+
+    function excluiMes (idExecucao) {
+        excluirMes.mutate({idExecucao})
+    }
 
     const cancelar = () => {
         setOpenEditExecFinanceira(false);
@@ -169,7 +187,8 @@ const FormEditExecFinanceira = ({
         <DialogExcluir 
             openExcluir={openExcluir}
             setOpenExcluir={setOpenExcluir}
-            carregando={carregando}
+            carregando={excluirMes.isLoading}
+            excluiMes={() => excluiMes(execucao.id)}
         />
 
         <DialogEditar 
@@ -212,7 +231,7 @@ const FormEditExecFinanceira = ({
                     <Typography className="text-lg font-medium" component={'div'}>
                         Mes Inicial
                         <Typography className='text-xl font-light pl-4'>
-                            { meses[execucao?.mes_inicial] }
+                            { meses[execucao?.mes_inicial - 1] }
                         </Typography>
                     </Typography>
                 </Box>
@@ -226,8 +245,10 @@ const FormEditExecFinanceira = ({
                             e.preventDefault()
 
                             const execData = tabelaRef.getDataAtRow(4)
+                            const empenhadoData = tabelaRef.getDataAtRow(3)
                             const postExec = {
-                                data: execData,
+                                data_empenhado: empenhadoData,
+                                data_execucao: execData,
                                 id_ano_execucao: execucao.id
                             }
                             addMesExec.mutate({execucao: postExec}) 

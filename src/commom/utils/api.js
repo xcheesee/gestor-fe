@@ -91,7 +91,7 @@ export async function throwablePostForm({form, path}) {
 }
 
 export async function postAnoExecFin(formData) {
-    const url = `${process.env.REACT_APP_API_URL}/exec_financeira`;
+    const url = `${process.env.REACT_APP_API_URL}/exec_financeira_ano`;
     const token = sessionStorage.getItem('access_token');
     const options = {
         method: 'POST',
@@ -272,7 +272,7 @@ export async function throwableGetData({path, contratoId=""}) {
 }
 
 export async function getExecucoesFinanceiras(contratoId) {
-    const url = `${process.env.REACT_APP_API_URL}/exec_financeira/${contratoId}`;
+    const url = `${process.env.REACT_APP_API_URL}/exec_financeira_ano/${contratoId}`;
     const token = localStorage.getItem('access_token');
     const options = {
         method: 'GET',

@@ -92,12 +92,6 @@ const DadosContrato = () => {
                 navigate("../contrato", { replace: true });
             }
             setDados(contrato?.data)
-            //const [ totRec] = await Promise.all([
-            //    //getRecursos(),
-            //    getContrTot(numContrato),
-            //])
-            //setOrigemRecursos(recOri.data)
-            //setTotais(totRec.data)
             setEstaCarregado(true)
         })();
     }, [numContrato, navigate, mudancaContrato])

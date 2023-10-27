@@ -89,6 +89,7 @@ const ListaNotasEmpenho = ({numContrato}) => {
                 color: 'success'
             });
             queryClient.invalidateQueries({queryKey: ['notasEmpenho', numContrato]})
+            queryClient.invalidateQueries({queryKey: ['mesesExecutados']})
         } catch(e) {
             errorSnackbar.Delete(e)
         }
@@ -108,6 +109,7 @@ const ListaNotasEmpenho = ({numContrato}) => {
             open: true, 
             acao: 'editar' 
         });
+        setErrors({})
         setAcao('editar');
     }
 
@@ -133,8 +135,10 @@ const ListaNotasEmpenho = ({numContrato}) => {
                 valor_empenho: ''
             });
             queryClient.invalidateQueries({queryKey: ['notasEmpenho', numContrato]})
+            queryClient.invalidateQueries({queryKey: ['mesesExecutados']})
         } catch(e) {
             errorSnackbar.Put(e)
+            setErrors(e.errors)
         }
         setCarregando(false);
     }
@@ -151,11 +155,13 @@ const ListaNotasEmpenho = ({numContrato}) => {
             numero_nota: '',
             valor_empenho: ''
         });
+        setErrors({})
     }
 
     const enviaNotaEmpenho = async (form) => {
         setCarregando(true);
         try {
+            setErrors({})
             await throwablePostForm({form, path: 'empenho_nota'})
             setSnackbar({
                 open: true,
@@ -175,8 +181,10 @@ const ListaNotasEmpenho = ({numContrato}) => {
                 valor_empenho: ''
             });
             queryClient.invalidateQueries({queryKey: ['notasEmpenho', numContrato]})
+            queryClient.invalidateQueries({queryKey: ['mesesExecutados']})
         } catch(e) {
             errorSnackbar.Post(e)
+            setErrors(e.errors)
         }
         setCarregando(false);
     }

@@ -11,11 +11,12 @@ import FormEditExecFinanceira from './FormEditExecFinanceira';
 import DialogConfirmacao from '../../DialogConfirmacao';
 import ExecucaoFinanceiraCard from './ExecucaoFinanceiraCard';
 import { /*getExecucaoFinanceira,*/ getExecucoesFinanceiras/*, postAnoExecFin*/ } from '../../../commom/utils/api';
+import { useQuery } from '@tanstack/react-query';
 
 const ExecucaoFinanceira = ({ numContrato }) => {
     //const [openDetalhes, setOpenDetalhes] = useState(false);
     //const [detalheExecFin, setDetalheExecFin] = useState({});
-    const [execucoes_financeiras, setExecucoesFinanceiras] = useState({})
+    //const [execucoes_financeiras, setExecucoesFinanceiras] = useState({})
     const [errors, setErrors] = useState({});
     const [carregando, setCarregando] = useState(false);
     const [openEditExecFinanceira, setOpenEditExecFinanceira] = useState(false);
@@ -30,13 +31,18 @@ const ExecucaoFinanceira = ({ numContrato }) => {
         acao: 'adicionar'
     });
 
-    useEffect(() => {
-        (async () => {
-            const execFin = await getExecucoesFinanceiras(numContrato)
-            setExecucoesFinanceiras(execFin)
-        })();
+    //useEffect(() => {
+    //    (async () => {
+    //        const execFin = await getExecucoesFinanceiras(numContrato)
+    //        setExecucoesFinanceiras(execFin)
+    //    })();
 
-    }, [numContrato])
+    //}, [numContrato])
+
+    const execucoes_financeiras = useQuery({
+        queryKey: ['execucoes', numContrato],
+        queryFn: async () => await getExecucoesFinanceiras(numContrato)
+    })
 
     const formId = "exec-form"
 
@@ -69,8 +75,8 @@ const ExecucaoFinanceira = ({ numContrato }) => {
                     mb: '1rem'
                 }} 
             >
-                {execucoes_financeiras.length  > 0
-                    ? execucoes_financeiras?.map( (execucao, i) => 
+                {execucoes_financeiras?.data?.length  > 0
+                    ? execucoes_financeiras?.data?.map( (execucao, i) => 
                         <ExecucaoFinanceiraCard 
                             key={`ex_card${i}`}
                             execucao={execucao} 
@@ -128,7 +134,7 @@ const ExecucaoFinanceira = ({ numContrato }) => {
                 setOpenFormExecFinanceira={setOpenFormExecFinanceira}
                 errors={errors}
                 setErrors={setErrors}
-                carregando={carregando}
+                //carregando={execucoes_financeiras.isLoading}
                 setOpenConfirmacao={setOpenConfirmacao}
                 //totais={totais}
             />
@@ -143,6 +149,7 @@ const ExecucaoFinanceira = ({ numContrato }) => {
                 setErrors={setErrors}
                 carregando={carregando}
                 setCarregando={setCarregando}
+                numContrato={numContrato}
             />
 
             <DialogConfirmacao 

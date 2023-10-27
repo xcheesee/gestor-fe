@@ -147,34 +147,42 @@ export function buildExcelDataArray(options={}) {
   let {dadosExecucao, execucao} = options
   let data = [];
 
-  const executados = [...Array(12)]
+  const executados = new Array(12).fill("")
+  const empenhados = new Array(12).fill("")
 
   dadosExecucao?.exec?.forEach((val => {
-    executados[val.mes - 1] = parseFloat(val.execucao)
+    executados[val.mes - 1] = !!val.execucao ? val.execucao : ""
+    empenhados[val.mes - 1] = !!val.empenhado ? val.empenhado : ""
   }))
+
 
   function firstColSaldoFunc(colVal) {
     const currColLetter = String.fromCharCode(colVal+65)
     //transforma numero de coluna em notacao de excel
     //ex apos formatacao: =A4-A5+0 
-    const isMesInicial = colVal === parseInt(execucao.mes_inicial)
+    const isMesInicial = colVal === parseInt(execucao.mes_inicial) - 1 
+    const isBeforeMesInicial = colVal === parseInt(execucao.mes_inicial) - 2
+    if(isMesInicial && empenhados[0] == "") {
+      empenhados[0] = execucao.contratado
+    }
 
-    return `=${currColLetter}4-${currColLetter}5+${isMesInicial ? (parseInt(execucao.contratado) || 0) : 0}`
+    return `=${currColLetter}4-${currColLetter}5+${isBeforeMesInicial ? (parseInt(execucao.contratado) || 0) : 0}`
   }
 
   function saldoFunc(colVal) {
     const currColLetter = String.fromCharCode(colVal+65)
-    const prevColLetter = String.fromCharCode(colVal+64)
-    const isMesInicial = colVal === parseInt(execucao.mes_inicial)
+    //const prevColLetter = String.fromCharCode(colVal+64)
+    //const isMesInicial = colVal === parseInt(execucao.mes_inicial) - 1
+    const isBeforeMesInicial = colVal === parseInt(execucao.mes_inicial) - 2
     //transforma numero de coluna em notacao de excel
-    //ex apos formatacao: =B4-B5+0 
-    return `=${prevColLetter}6+${currColLetter}4-${currColLetter}5+${isMesInicial ? (parseInt(execucao.contratado) || 0) : 0}`
+    //ex apos formatacao: =A6+B4-B5+0 
+    return `=${currColLetter}4-${currColLetter}5+${isBeforeMesInicial ? (parseInt(execucao.contratado) || 0) : 0}`
   }
 
   data.push(dadosExecucao.notasEmpenho)
   data.push(dadosExecucao.aditamentos)
   data.push(dadosExecucao.reajustes)
-  data.push([...Array(12)])
+  data.push(empenhados)
   data.push(executados)
   data.push( [...Array(12)].map((v, ind) => {
     if(ind === 0) {

@@ -12,7 +12,7 @@ NumberFormatCustom.propTypes = {
 const CampoValores = (props) => {
   const { 
     label, 
-    //defaultValue=null, 
+    defaultValue=null, 
     name, 
     required, 
     //checaErros, 
@@ -41,7 +41,7 @@ const CampoValores = (props) => {
           //value={valorInterno}
           customInput={TextField}
           label={label} 
-          //defaultValue={defaultValue}
+          defaultValue={defaultValue}
           //name={name}
           //onValueChange={(values, _) =>  {
           //  setValorInterno(values.floatValue)

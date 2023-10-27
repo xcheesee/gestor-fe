@@ -21,6 +21,8 @@ import { meses } from '../../../../commom/utils/constants';
 import { postAnoExecFin } from '../../../../commom/utils/api';
 import { useSetAtom } from 'jotai';
 import { snackbarAtom } from '../../../../atomStore';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useErrorSnackbar } from '../../../../commom/utils/hooks';
 
 const FormExecFinanceira = (props) => {
     const {
@@ -28,13 +30,14 @@ const FormExecFinanceira = (props) => {
         setOpenFormExecFinanceira,
         errors,
         setErrors,
-        carregando,
+        //carregando,
         setOpenConfirmacao,
         formId,
         contratoId
     } = props;
-
+    const queryClient = useQueryClient()
     const setSnackbar = useSetAtom(snackbarAtom)
+    const errorSnackbar =   useErrorSnackbar()
 
     useEffect(() => {
         setErrors({});
@@ -46,6 +49,18 @@ const FormExecFinanceira = (props) => {
             acao: 'adicionar'
         });
     }
+
+    const postNewAno = useMutation({
+        mutationFn: async ({formData}) => await postAnoExecFin(formData),
+        onSuccess: () => {
+            setSnackbar(prev => ({...prev, open: true, severity:"success", message: "Ano de execucao enviado."}))
+            queryClient.invalidateQueries(['execucoes', contratoId])
+            setOpenFormExecFinanceira(false)
+        },
+        onError: (e) => {
+            errorSnackbar.Post(e)
+        }
+    })
 
     const confirmar = () => {
         if (openFormExecFinanceira.acao === 'adicionar') {
@@ -71,28 +86,30 @@ const FormExecFinanceira = (props) => {
                         e.preventDefault() 
                         const formData = new FormData(e.target)
                         formData.append('id_contrato', contratoId)
-                        try {
-                            await postAnoExecFin(formData)
-                            setOpenFormExecFinanceira(false)
-                            setSnackbar(prev => ({...prev, open: true, severity:"success", message: "Ano de execucao enviado."}))
-                        } catch(e) {
-                            setSnackbar(prev => ({
-                                ...prev, 
-                                open: true, 
-                                severity: 'error', 
-                                message: 
-                                <div>
-                                    Nao foi possivel enviar o ano de execucao
-                                    <br/>
-                                    Error: {e.message}
-                                    <br/>
-                                    {e.errors
-                                        ?Object.values(e.errors).map( (error, i) => (<div key={`error-${i}`}>{error}</div>))
-                                        :<></>
-                                    }
-                                </div>
-                            }))
-                        }
+                        postNewAno.mutate({formData})
+                        //try {
+                        //    await postAnoExecFin(formData)
+                        //    setOpenFormExecFinanceira(false)
+                        //    setSnackbar(prev => ({...prev, open: true, severity:"success", message: "Ano de execucao enviado."}))
+                        //    queryClient.invalidateQueries(['execucoes', contratoId])
+                        //} catch(e) {
+                        //    setSnackbar(prev => ({
+                        //        ...prev, 
+                        //        open: true, 
+                        //        severity: 'error', 
+                        //        message: 
+                        //        <div>
+                        //            Nao foi possivel enviar o ano de execucao
+                        //            <br/>
+                        //            Error: {e.message}
+                        //            <br/>
+                        //            {e.errors
+                        //                ?Object.values(e.errors).map( (error, i) => (<div key={`error-${i}`}>{error}</div>))
+                        //                :<></>
+                        //            }
+                        //        </div>
+                        //    }))
+                        //}
 
                     }}
                 >
@@ -191,7 +208,7 @@ const FormExecFinanceira = (props) => {
                     variant="contained"
                     onClick={confirmar}
                 >
-                    {carregando
+                    {postNewAno.isLoading
                         ? <CircularProgress size={16} sx={{ color: (theme) => theme.palette.color.main, mr: '0.7rem' }} />
                         : <CheckIcon sx={{ mr: '0.2rem' }} fontSize="small" /> 
                     }

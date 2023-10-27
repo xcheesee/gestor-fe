@@ -132,7 +132,7 @@ export default function TabelaExecFin({id, execucao, tabelaRef, setTabelaRef, da
                         className: "hover:cursor-not-allowed bg-neutral-100 border-1 border-neutral-300"
                     }
                 }
-                else if((row === 4 && col < execucao.mes_inicial) || (row === 3 && col < execucao.mes_inicial)) {
+                else if((row === 4 && col < (execucao.mes_inicial - 1)) || (row === 3 && col < (execucao.mes_inicial - 1))) {
                     opts = { 
                         readOnly: true, 
                         className: "bg-neutral-100 border-1 border-neutral-300 hover:cursor-not-allowed" 
@@ -165,7 +165,7 @@ export default function TabelaExecFin({id, execucao, tabelaRef, setTabelaRef, da
                             open: true,
                             severity: 'error',
                             color: 'error',
-                            message: <div>Valor informado ultrapassa o permitido.<br/>(Notas Empenho + Aditamentos + Reajustes + Saldo Mes Anterior)<br/>{maxEmpenhado}</div>
+                            message: <div>Valor informado ultrapassa o permitido.<br/>(Notas Empenho + Aditamentos + Reajustes + Saldo Mes Anterior)</div>
                         }))
                         return false
                     }

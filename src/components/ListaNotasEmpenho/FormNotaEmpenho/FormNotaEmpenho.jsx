@@ -22,7 +22,7 @@ import CampoValores from '../../CampoValores';
 const FormNotaEmpenho = (props) => {
     const { 
         formNotaEmpenho, 
-        setFormNotaEmpenho, 
+        //setFormNotaEmpenho, 
         openFormNotaEmpenho, 
         setOpenFormNotaEmpenho, 
         enviaNotaEmpenho,
@@ -30,30 +30,14 @@ const FormNotaEmpenho = (props) => {
         carregando,
         setOpenConfirmacao,
         errors,
-        setErrors,
         formId
     } = props;
 
-    //const [tipo_empenho, setTipoEmpenho] = useState(formNotaEmpenho.tipo_empenho);
-
-    useEffect(() => {
-        setErrors({});
-        // setTipoEmpenho('');
-        // if (openFormNotaEmpenho.acao === "editar") {
-        //     setTipoEmpenho(formNotaEmpenho.tipo_empenho);
-        // }
-    }, [openFormNotaEmpenho.open]);
-
-    const handleInputChange = (e) => {
-        setFormNotaEmpenho({
-            ...formNotaEmpenho,
-            [e.target.name]: e.target.value
-        });
-    }
-
-    //const handleChangeTipoEmpenho = (valor) => {
-    //    setTipoEmpenho(valor);
-    //    console.log(valor);
+    //const handleInputChange = (e) => {
+    //    setFormNotaEmpenho({
+    //        ...formNotaEmpenho,
+    //        [e.target.name]: e.target.value
+    //    });
     //}
 
     const handleClickConfirmar = () => {
@@ -97,9 +81,9 @@ const FormNotaEmpenho = (props) => {
                             labelId="tipo_empenho-label"
                             id="tipo_empenho"
                             label="Tipo de Empenho"
-                            value={formNotaEmpenho.tipo_empenho}
+                            defaultValue={formNotaEmpenho.tipo_empenho}
                             name="tipo_empenho"
-                            onChange={handleInputChange}
+                            //onChange={handleInputChange}
                             fullWidth
                             required
                         >
@@ -114,7 +98,7 @@ const FormNotaEmpenho = (props) => {
                         label="Data de Emissão da Nota"
                         defaultValue={formNotaEmpenho.data_emissao}
                         name="data_emissao"
-                        onChange={handleInputChange}
+                        //onChange={handleInputChange}
                         margin="1rem 0"
                         error={errors.hasOwnProperty('data_emissao')}
                         helperText={errors.data_emissao}
@@ -129,7 +113,7 @@ const FormNotaEmpenho = (props) => {
                         label="Número da Nota de Empenho"
                         sx={{ margin: '1rem 0' }}
                         error={errors.hasOwnProperty('numero_nota')}
-                        helperText={errors.hasOwnProperty('numero_nota') ? errors.tipo_empenho : "Ex: 1234"}
+                        helperText={errors.hasOwnProperty('numero_nota') ? errors.numero_nota : "Ex: 1234"}
                         fullWidth
                         required
                     />

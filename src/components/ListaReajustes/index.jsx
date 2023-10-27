@@ -49,6 +49,7 @@ export default function ListaReajustes ({ numContrato }) {
                 color: 'success'
             });
             queryClient.invalidateQueries(['reajuste', numContrato])
+            queryClient.invalidateQueries({queryKey: ['mesesExecutados']})
         },
         onError: async (res) => {
             setFormDialog(false)
@@ -67,6 +68,7 @@ export default function ListaReajustes ({ numContrato }) {
                 color: 'success'
             });
             queryClient.invalidateQueries(['reajuste'])
+            queryClient.invalidateQueries({queryKey: ['mesesExecutados']})
         },
         onError: async (res) => {
             setOpenConfirmacao({open: false, id: ""})
@@ -87,6 +89,7 @@ export default function ListaReajustes ({ numContrato }) {
                 color: 'success'
             });
             queryClient.invalidateQueries(['reajuste'])
+            queryClient.invalidateQueries({queryKey: ['mesesExecutados']})
         },
         onError: async (res) => {
             setOpenConfirmacao({open: false, id: ""})
