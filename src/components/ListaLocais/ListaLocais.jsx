@@ -29,6 +29,9 @@ const TabLocaisServico = (props) => {
     const valores = {
         ...props,
         regiao: dicionarioRegioes[props.regiao],
+        subprefeituras: props.subprefeituras.length !== 0 
+            ? props.subprefeituras.map( entry => <div>{entry.subprefeitura.nome}</div>) 
+            : "---"
     }
 
     return <TabValues entry={valores} labels={locaisLabels} label='locais' />
@@ -215,7 +218,7 @@ const ListaLocais = ({ numContrato }) => {
                                 <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
                                     <TabLocaisServico 
                                         regiao={local.regiao}
-                                        subprefeitura={local.subprefeitura}
+                                        subprefeituras={local.subprefeitura}
                                         distrito={local.distrito}
                                         unidade={local.unidade}
                                     />

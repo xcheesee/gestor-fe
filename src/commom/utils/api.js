@@ -129,7 +129,7 @@ export async function postMesesExecFin({execucao}) {
         throw ({status: res.status, ...json})
     }
     return res
-} 
+}
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ///                                                                                                                                 // 

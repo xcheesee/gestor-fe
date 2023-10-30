@@ -29,8 +29,8 @@ const FormLocais = (props) => {
         acao,
         errors,
         setErrors,
-        //enviaLocal,
-        //editaLocal,
+        enviaLocal,
+        editaLocal,
         formId,
     } = props;
 
@@ -87,8 +87,8 @@ const FormLocais = (props) => {
                         e.preventDefault()
                         const formData = new FormData(e.target)
                         formData.append("contrato_id", formLocal.contrato_id)
-                        console.log(formData)
-                        //openFormLocal.acao === 'adicionar' ? enviaLocal(formData) : editaLocal(formLocal.id, formData)
+                        //console.log(formData)
+                        openFormLocal.acao === 'adicionar' ? enviaLocal(formData) : editaLocal(formLocal.id, formData)
                     }}>
 
                     <FormControl 

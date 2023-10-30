@@ -50,7 +50,7 @@ export const fiscLabels = {
 
 export const locaisLabels = {
     regiao: "Região",
-    subprefeitura: "Subprefeitura",
+    subprefeituras: "Subprefeitura(s)",
     distrito: "Distrito",
     unidade: "Unidade",
 }
