@@ -35,7 +35,11 @@ const FormLocais = (props) => {
     } = props;
 
     const [regiao, setRegiao] = useState(formLocal.regiao);
-    const [subpref, setSubpref] = useState(typeof formLocal.subprefeitura_id !== 'object' ? [formLocal.subprefeitura_id] : (formLocal.subprefeitura_id ?? []) )
+    const [subpref, setSubpref] = useState(
+        !!formLocal.subprefeitura 
+            ? formLocal.subprefeitura.map( entry => entry.subprefeitura_id) 
+            : (formLocal.subprefeitura_id ?? []) 
+        )
 
     useEffect(() => {
         //Limpa valores ao abrir form
@@ -44,7 +48,7 @@ const FormLocais = (props) => {
 
         if (acao === "editar") {
             setRegiao(formLocal.regiao);
-            setSubpref([formLocal.subprefeitura_id])
+            setSubpref(formLocal.subprefeitura.map( entry => entry.subprefeitura_id))
         }
     }, [openFormLocal.open])
 

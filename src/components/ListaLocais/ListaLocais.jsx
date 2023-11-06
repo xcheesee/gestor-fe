@@ -69,7 +69,8 @@ const ListaLocais = ({ numContrato }) => {
         regiao: '',
         subprefeitura_id: '',
         distrito_id: '',
-        unidade: ''
+        unidade: '',
+        subprefeitura: []
     });
     const [errors, setErrors] = useState({});
     
@@ -104,13 +105,15 @@ const ListaLocais = ({ numContrato }) => {
     }
 
     const handleClickEditar = (e, local) => {
+        console.log(local)
         setFormLocal({
             id: local.id,
             contrato_id: local.contrato_id,
             regiao: local.regiao,
             subprefeitura_id: local.subprefeitura_id,
             distrito_id: local.distrito_id,
-            unidade: local.unidade
+            unidade: local.unidade,
+            subprefeitura: local.subprefeitura
         });
         setOpenFormLocal({
             open: true,
@@ -138,7 +141,8 @@ const ListaLocais = ({ numContrato }) => {
                 regiao: '',
                 subprefeitura_id: '',
                 distrito_id: '',
-                unidade: ''
+                unidade: '',
+                subprefeitura: []
             });
             queryClient.invalidateQueries({queryKey: ['locaisContrato', numContrato]})
         } catch(e) {
@@ -157,7 +161,8 @@ const ListaLocais = ({ numContrato }) => {
             regiao: '',
             subprefeitura_id: [],
             distrito_id: '',
-            unidade: ''
+            unidade: '',
+            subprefeitura: []
         })
         setAcao('adicionar');
     }
@@ -181,7 +186,8 @@ const ListaLocais = ({ numContrato }) => {
                 regiao: '',
                 subprefeitura_id: '',
                 distrito_id: '',
-                unidade: ''
+                unidade: '',
+                subprefeitura: []
             });
             queryClient.invalidateQueries({queryKey: ['locaisContrato', numContrato]})
         } catch(e) {

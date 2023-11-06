@@ -70,9 +70,9 @@ export async function postFormData (form, path) {
     return {status: res.status, ...json}
 }
 
-export async function throwablePostForm({form, path}) {
+export async function throwablePostForm({form, path,id=""}) {
     const token = localStorage.getItem('access_token');
-    const url = `${process.env.REACT_APP_API_URL}/${path}`;
+    const url = `${process.env.REACT_APP_API_URL}/${path}/${id}`;
     const options = {
         method: 'POST',
         headers: {
