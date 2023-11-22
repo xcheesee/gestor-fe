@@ -216,7 +216,7 @@ const Filtros = (props) => {
                     </ReactInputMask>
 
                     <TextField 
-                        label="Departamento"
+                        label="Unidade Requisitante"
                         value={filtros.departamento}
                         name="departamento"
                         onChange={handleChange}
@@ -225,7 +225,7 @@ const Filtros = (props) => {
                     />
 
                     <TextField 
-                        label="Licitação"
+                        label="Tipo de Licitação"
                         value={filtros.licitacao}
                         name="licitacao"
                         onChange={handleChange}
