@@ -48,6 +48,9 @@ const Filtros = (props) => {
         inicio_antes_de: '',
         vencimento_depois_de: '',
         vencimento_antes_de: '',
+        cnpj_empresa: '',
+        departamento: '',
+        licitacao: ''
     });
     const [visibilidade, setVisibilidade] = useState(false);
     const [filtrosAtivos, setFiltrosAtivos] = useState(0);
@@ -74,7 +77,10 @@ const Filtros = (props) => {
             inicio_depois_de: '',
             inicio_antes_de: '',
             vencimento_depois_de: '',
-            vencimento_antes_de: ''
+            vencimento_antes_de: '',
+            cnpj_empresa: '',
+            departamento: '',
+            licitacao: ''
         });
         setFiltrosAtivos(0);
         setUrl({
@@ -90,7 +96,7 @@ const Filtros = (props) => {
 
         Object.entries(filtros).forEach((filtro, index) => {
             if (filtro[1] !== '') {
-                const normalized = filtro[0] === "processo_sei" ? filtro[1].replace(/[\D]/g, "") : filtro[1]
+                const normalized = (filtro[0] === "cnpj_empresa" || filtro[0] === 'processo_sei')  ? filtro[1].replace(/[\D]/g, "") : filtro[1]
                 arrFiltros.push(`filter[${filtro[0]}]=${normalized}`);
             }
         });
@@ -190,6 +196,43 @@ const Filtros = (props) => {
                         size="small"
                         fullWidth
                     />
+
+                    <ReactInputMask
+                        mask="99.999.999/9999-99"
+                        maskChar=""
+                        value={filtros.cnpj_empresa}
+                        name="cnpj_empresa"
+                        onChange={handleChange}
+                    >
+                    {() => (
+                        <TextField 
+                            label="CNPJ"
+                            className='col-span-2'
+                            name='cnpj_empresa'
+                            size="small"
+                            fullWidth
+                        />)
+                    }
+                    </ReactInputMask>
+
+                    <TextField 
+                        label="Departamento"
+                        value={filtros.departamento}
+                        name="departamento"
+                        onChange={handleChange}
+                        size="small"
+                        fullWidth
+                    />
+
+                    <TextField 
+                        label="Licitação"
+                        value={filtros.licitacao}
+                        name="licitacao"
+                        onChange={handleChange}
+                        size="small"
+                        fullWidth
+                    />
+
 
                     <CampoDataRange
                         label={'Inicio - faixa de pesquisa'}
