@@ -150,7 +150,7 @@ const ContratoTable = ({dados, url, ordena, carregandoSort, isLoading}) => {
                                     );
                                 })
                                 :<TableRow>
-                                    <TableCell colSpan={8} className="text-center py-4 text-3xl text-red-600">Nenhum contrato encontrado!</TableCell>
+                                    <TableCell colSpan={8} className="text-center py-4 text-2xl text-red-600 font-light">Nenhum contrato encontrado!</TableCell>
                                 </TableRow>
                             }
                         </TableBody>

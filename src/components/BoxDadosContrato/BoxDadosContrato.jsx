@@ -123,7 +123,7 @@ const BoxDadosContrato = (props) => {
                 helperText={errors.hasOwnProperty('credor') ? errors.credor : " "}
                 fullWidth
             />
-            <CampoCpfCnpj
+            {/*<CampoCpfCnpj
                 className="form__campo"
                 defaultValue={dados.cnpj_cpf ?? ""}
                 setError={setError}
@@ -132,7 +132,7 @@ const BoxDadosContrato = (props) => {
                 setErrors={setErrors}
                 label={contratoLabels.cnpj_cpf}
                 fullWidth
-            />
+            />*/}
 
             <FormControl 
                 sx={{ margin: '1rem 0' }}
