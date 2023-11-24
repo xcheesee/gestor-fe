@@ -103,9 +103,6 @@ const Header = (props) => {
     useEffect(() => {
         ( async () => {
             const data = await getContratosVencidos()
-            if(data.status === 401) {
-                navigate('/contratos')
-            }
             setContratoVencido(data);
             setQtdVencido(data?.length ?? 0);
             setEstaCarregado(true);
