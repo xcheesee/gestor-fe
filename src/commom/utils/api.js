@@ -190,7 +190,11 @@ export async function getContrato (numContrato) {
         method: 'GET'
     }
     const resContr = await fetch(`${url}/contrato/${numContrato}`, options)
-    if(resContr.status === 404 || resContr.status === 401) return {status: resContr.status}
+    if(resContr.status === 401) {
+        localStorage.removeItem('access_token');
+        document.location.reload();
+    }
+    if(resContr.status === 404) return {status: resContr.status}
     const data = await resContr.json()
 
     return {status: resContr.status, ...data}
@@ -389,6 +393,26 @@ export async function getDistritos({subpref}) {
         throw ({status: res.status, ...json})
     }
     return json.data
+}
+
+export async function getContratosVencidos() {
+        const url = `${process.env.REACT_APP_API_URL}/contratos_vencimento`;
+        const token = localStorage.getItem('access_token');
+        const options = {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+                'Authorization': `Bearer ${token}`
+            }
+        };
+        const res = await fetch(url, options)
+        const json = await res.json()
+        if(res.status === 401) {
+            localStorage.removeItem('access_token');
+            return {status: res.status, json: json}
+        }
+        return json?.data
 }
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ///                                                                                                                                 // 

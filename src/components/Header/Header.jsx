@@ -29,7 +29,7 @@ import { useNavigate, useLocation, Link } from 'react-router-dom';
 import LockIcon from '@mui/icons-material/Lock'
 import DialogAltSenh from '../DialogAltSenh';
 import { mascaraContrato, mascaraProcessoSei } from '../../commom/utils/utils';
-import { newPwRequest } from '../../commom/utils/api';
+import { getContratosVencidos, newPwRequest } from '../../commom/utils/api';
 
 const Header = (props) => {
     const [open, setOpen] = useState(false);
@@ -101,26 +101,16 @@ const Header = (props) => {
     }
 
     useEffect(() => {
-        const url = `${process.env.REACT_APP_API_URL}/contratos_vencimento`;
-        const token = localStorage.getItem('access_token');
-        const options = {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-                'Accept': 'application/json',
-                'Authorization': `Bearer ${token}`
+        ( async () => {
+            const data = await getContratosVencidos()
+            if(data.status === 401) {
+                navigate('/contratos')
             }
-        };
-
-        if (token) {
-            fetch(url, options)
-                .then(res => res.json())
-                .then(data => {
-                    setContratoVencido(data.data);
-                    setQtdVencido(data.data.length);
-                    setEstaCarregado(true);
-                });
+            setContratoVencido(data);
+            setQtdVencido(data?.length ?? 0);
+            setEstaCarregado(true);
         }
+        )();
     }, [accessToken])
 
     const handleClick = (event) => {

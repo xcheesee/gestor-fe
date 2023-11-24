@@ -101,7 +101,7 @@ const Filtros = (props) => {
             }
         });
 
-        setFiltrosAtivos(arrFiltros.length - 1);
+        setFiltrosAtivos(arrFiltros?.length - 1);
         setUrl({
             ...url,
             page: 1,
