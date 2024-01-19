@@ -107,7 +107,7 @@ const ListaDadosContrato = (props) => {
         const valores = {
             departamento: dados?.departamento,
             processo_sei: mascaraProcessoSei(dados?.processo_sei),
-            credor: dados?.credor,
+            //credor: dados?.credor,
             //cnpj_cpf: formataCpfCnpj(dados?.cnpj_cpf),
             tipo_objeto: primeiraLetraMaiuscula(dados?.tipo_objeto),
             objeto: dados?.objeto,

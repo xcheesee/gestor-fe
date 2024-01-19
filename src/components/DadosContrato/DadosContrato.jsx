@@ -229,11 +229,6 @@ const DadosContrato = () => {
                                 </Box>
                             </Box>
 
-                            <ExecucaoFinanceira 
-                                numContrato={numContrato}
-                                //totais={totais}
-                            />
-
                             <Typography variant="h2" sx={{ fontSize: '2rem', margin: '2rem 0' }}>
                                 Dados da empresa
                             </Typography>
@@ -250,6 +245,12 @@ const DadosContrato = () => {
                                 />
                                 :<Typography className='text-red-500 font-bold'>Nenhum dado de empresa disponível para este contrato!</Typography>
                             }
+
+                            <ExecucaoFinanceira 
+                                numContrato={numContrato}
+                                //totais={totais}
+                            />
+
 
                             <OutrasInformacoes 
                                 outras_informacoes={dados?.outras_informacoes}

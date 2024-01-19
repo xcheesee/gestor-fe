@@ -108,7 +108,7 @@ const BoxDadosContrato = (props) => {
                 name="processo_sei"
             />
             
-            <TextField
+            {/*<TextField
                 variant="outlined"
                 defaultValue={dados.credor ?? localStorage.getItem(`contrato-${numContrato}-credor`) ?? ""}
                 onChange={e => {
@@ -122,7 +122,10 @@ const BoxDadosContrato = (props) => {
                 error={errors.hasOwnProperty('credor')}
                 helperText={errors.hasOwnProperty('credor') ? errors.credor : " "}
                 fullWidth
-            />
+            />*/}
+            <CampoEmpresa
+                ref={empresaRef}
+             />
             {/*<CampoCpfCnpj
                 className="form__campo"
                 defaultValue={dados.cnpj_cpf ?? ""}
@@ -288,9 +291,6 @@ const BoxDadosContrato = (props) => {
                 helperText={errors.hasOwnProperty('valor_reserva') ? errors.valor_reserva : " "}
                 fullWidth 
             />
-            <CampoEmpresa
-                ref={empresaRef}
-             />
         </Box>
     );
 }
