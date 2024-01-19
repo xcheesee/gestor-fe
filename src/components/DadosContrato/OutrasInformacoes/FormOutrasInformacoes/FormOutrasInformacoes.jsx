@@ -14,6 +14,7 @@ import DialogConfirmacao from '../../../DialogConfirmacao';
 import { editaDadosContrato } from '../../../../commom/utils/api';
 import { useSetAtom } from 'jotai';
 import { snackbarAtom } from '../../../../atomStore';
+import { useErrorSnackbar } from '../../../../commom/utils/hooks';
 
 const FormOutrasInformacoes = (props) => {
     const {
@@ -32,6 +33,7 @@ const FormOutrasInformacoes = (props) => {
         id: numContrato,
         open: false
     })
+    const errorSnackbar = useErrorSnackbar()
     //const [infoAdicionaisEditado, setInfoAdicionaisEditado] = useState({});
     const outras_informacoes = useRef(null);
 
@@ -43,19 +45,20 @@ const FormOutrasInformacoes = (props) => {
                 ...prev,
                 open: true,
                 severity: 'success',
-                text: 'Informações adicionais editadas com sucesso!',
+                message: 'Informações adicionais editadas com sucesso!',
                 color: 'success'
             }));
             setOpenOutrasInformacoes(false);
         } else if (res.status === 422) { 
             setErrors(res.errors)
+            //errorSnackbar.Post(e)
         } else {
             setCarregandoEnvio(false);
             setSnackbar(prev => ({
                 ...prev,
                 open: true,
                 severity: 'error',
-                text: `Erro ${res.status} - Não foi possível editar as informações adicionais`,
+                message: `Erro ${res.status} - Não foi possível editar as informações adicionais`,
                 color: 'error'
             }));
         }
@@ -108,7 +111,7 @@ const FormOutrasInformacoes = (props) => {
             openConfirmacao={openConfirmacao}
             setOpenConfirmacao={setOpenConfirmacao}
             acao="editar"
-            form="outras_infos_form"
+            formId="outras_infos_form"
             //formInterno={infoAdicionaisEditado}
             texto="informações adicionais"
         />
