@@ -158,7 +158,7 @@ const FormExecFinanceira = (props) => {
                         //onBlur={handleChange}
                     />
 
-                    <CampoValores 
+                    {/*<CampoValores 
                         label="Reservado" 
                         //value={formExecFinanceira.planejado_inicial}
                         name="reservado"
@@ -170,7 +170,7 @@ const FormExecFinanceira = (props) => {
                         error={errors.hasOwnProperty('reservado')}
                         fullWidth 
                         //onBlur={handleChange}
-                    />
+                    />*/}
 
                     <CampoValores 
                         label="Contratado" 

@@ -18,6 +18,9 @@ import CheckIcon from '@mui/icons-material/Check';
 import CircularProgress from '@mui/material/CircularProgress';
 import CampoData from '../../CampoData';
 import CampoValores from '../../CampoValores';
+import MonthPicker from '../../MonthPicker/monthPicker';
+import { meses } from '../../../commom/utils/constants';
+import CampoAno from '../../CampoAno';
 
 const FormNotaEmpenho = (props) => {
     const { 
@@ -61,6 +64,7 @@ const FormNotaEmpenho = (props) => {
 
             <DialogContent>
                 <Box
+                    className='grid gap-4 py-2'
                     component="form"
                     id={formId}
                     onSubmit={(e) => {
@@ -71,7 +75,7 @@ const FormNotaEmpenho = (props) => {
                     }}>
 
                     <FormControl 
-                        sx={{ margin: '1rem 0' }}
+                        //sx={{ margin: '1rem 0' }}
                         error={errors.hasOwnProperty('tipo_empenho')}
                         fullWidth 
                         required
@@ -99,7 +103,7 @@ const FormNotaEmpenho = (props) => {
                         defaultValue={formNotaEmpenho.data_emissao}
                         name="data_emissao"
                         //onChange={handleInputChange}
-                        margin="1rem 0"
+                        //margin="1rem 0"
                         error={errors.hasOwnProperty('data_emissao')}
                         helperText={errors.data_emissao}
                         fullWidth
@@ -107,11 +111,33 @@ const FormNotaEmpenho = (props) => {
                     />
 
                     <TextField
+                        select
+                        fullWidth
+                        label="Mes de Referencia"
+                        name='mes-referencia'
+                        defaultValue=""
+                    >
+                        {meses.map((mes, i) => {
+                            return(
+                                <MenuItem key={`mes-ref-${i}`} value={i} className=''>{mes}</MenuItem>
+
+                            )
+                        })}
+                    </TextField>
+
+                    <CampoAno
+                        label="Ano de Referencia"
+                        fullWidth
+                        name="ano-referencia"
+                    />
+
+
+                    <TextField
                         variant="outlined"
                         defaultValue={formNotaEmpenho.numero_nota}
                         name="numero_nota"
                         label="Número da Nota de Empenho"
-                        sx={{ margin: '1rem 0' }}
+                        //sx={{ margin: '1rem 0' }}
                         error={errors.hasOwnProperty('numero_nota')}
                         helperText={errors.hasOwnProperty('numero_nota') ? errors.numero_nota : "Ex: 1234"}
                         fullWidth

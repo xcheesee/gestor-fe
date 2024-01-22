@@ -13,6 +13,7 @@ const CampoValores = (props) => {
   const { 
     label, 
     defaultValue=null, 
+    prefix="",
     name, 
     required, 
     //checaErros, 
@@ -35,14 +36,12 @@ const CampoValores = (props) => {
 
   return (
       <NumericFormat
-          //label={label}
-          //defaultValue={defaultValue}
           name={name}
           //value={valorInterno}
           customInput={TextField}
           label={label} 
           defaultValue={defaultValue}
-          //name={name}
+          prefix={prefix}
           //onValueChange={(values, _) =>  {
           //  setValorInterno(values.floatValue)
           //  console.log(values)
@@ -53,7 +52,7 @@ const CampoValores = (props) => {
           helperText={helperText}
           error={error}
           required={required}
-          sx={{ margin: '1rem 0' }}
+          //sx={{ margin: '1rem 0' }}
           fullWidth={fullWidth}
           //{...other}
           thousandSeparator="."

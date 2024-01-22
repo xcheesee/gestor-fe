@@ -10,6 +10,8 @@ import {
     CircularProgress,
     Typography,
     Tooltip,
+    TextField,
+    InputAdornment,
 } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import CheckIcon from '@mui/icons-material/Check';
@@ -22,6 +24,7 @@ import { getMesesExecutados, postMesesExecFin, throwableDeleteForm, throwableGet
 import { useSetAtom } from 'jotai';
 import { snackbarAtom } from '../../../../atomStore';
 import { useErrorSnackbar } from '../../../../commom/utils/hooks';
+import CampoValores from '../../../CampoValores';
 
 
 function DialogEditar ({openEditar, setOpenEditar, formId, carregando}) {
@@ -67,7 +70,7 @@ function DialogEditar ({openEditar, setOpenEditar, formId, carregando}) {
     );
 }
 
-function DialogExcluir({openExcluir, setOpenExcluir, carregando, excluiMes}) {
+function DialogExcluir({openExcluir, setOpenExcluir, carregando, excluirAno}) {
     return(
         <Dialog open={openExcluir}>
             <DialogTitle>
@@ -94,7 +97,7 @@ function DialogExcluir({openExcluir, setOpenExcluir, carregando, excluiMes}) {
 
                 <Button 
                     sx={{ textTransform: 'none' }} 
-                    onClick={excluiMes}
+                    onClick={excluirAno}
                 >
                     {
                         carregando
@@ -152,7 +155,7 @@ const FormEditExecFinanceira = ({
         }
     })
 
-    const excluirMes = useMutation({
+    const excluiAno = useMutation({
         mutationFn: ({idExecucao}) => throwableDeleteForm({id: idExecucao, path: 'exec_financeira'}),
         onSuccess: () => {
             setSnackbar(prev => ({...prev, open: true, severity: "success", message: "Meses de execucao excluidos.", color: "success"}))
@@ -165,8 +168,8 @@ const FormEditExecFinanceira = ({
         }
     })
 
-    function excluiMes (idExecucao) {
-        excluirMes.mutate({idExecucao})
+    function excluirAno (idExecucao) {
+        excluiAno.mutate({idExecucao})
     }
 
     const cancelar = () => {
@@ -187,8 +190,8 @@ const FormEditExecFinanceira = ({
         <DialogExcluir 
             openExcluir={openExcluir}
             setOpenExcluir={setOpenExcluir}
-            carregando={excluirMes.isLoading}
-            excluiMes={() => excluiMes(execucao.id)}
+            carregando={excluiAno.isLoading}
+            excluiAno={() => excluirAno(execucao.id)}
         />
 
         <DialogEditar 
@@ -204,13 +207,38 @@ const FormEditExecFinanceira = ({
             </DialogTitle>
 
             <DialogContent>
-                <Box className="grid grid-cols-2 gap-8 px-4">
-                    <Typography className="text-lg font-medium" component={'div'}>
+                <Box className="grid grid-cols-2 gap-8 px-4 py-2"
+
+                        component={'form'}
+                        id={formId}
+                        onSubmit={async (e) => {
+                            e.preventDefault()
+                            const formData = new FormData(e.target)
+
+                            const execData = tabelaRef.getDataAtRow(4)
+                            const empenhadoData = tabelaRef.getDataAtRow(3)
+                            const postExec = {
+                                data_empenhado: empenhadoData,
+                                data_execucao: execData,
+                                id_ano_execucao: execucao.id
+                            }
+                            console.log(formData)
+                            console.log(postExec)
+                            //addMesExec.mutate({execucao: postExec}) 
+                        }}
+                >
+                    <CampoValores
+                        defaultValue={execucao?.planejado}
+                        label="Planejado(LOA)"
+                        prefix="R$ "
+                        name="planejado"
+                    />
+                    {/*<Typography className="text-lg font-medium" component={'div'}>
                         Planejado(LOA)
                         <Typography className='text-xl font-light pl-4'>
                             {formataValores(execucao?.planejado)}
                         </Typography>
-                    </Typography>
+                    </Typography>*/}
                     
 
                     <Typography className="text-lg font-medium" component={'div'}>
@@ -220,13 +248,18 @@ const FormEditExecFinanceira = ({
                         </Typography>
                     </Typography>
 
-
-                    <Typography className="text-lg font-medium" component={'div'}>
+                    <CampoValores
+                        defaultValue={execucao?.contratado}
+                        label="Contratado"
+                        prefix="R$ "
+                        name="contratado"
+                    />
+                    {/*<Typography className="text-lg font-medium" component={'div'}>
                         Contratado
                         <Typography className='text-xl font-light pl-4'>
                             {formataValores(execucao?.contratado)}
                         </Typography>
-                    </Typography>
+                    </Typography>*/}
 
                     <Typography className="text-lg font-medium" component={'div'}>
                         Mes Inicial
@@ -239,7 +272,7 @@ const FormEditExecFinanceira = ({
                     <Box 
                         sx={{  alignItems: 'center'}}
                         className='pt-8 px-8'
-                        component={'form'}
+                        /*component={'form'}
                         id={formId}
                         onSubmit={async (e) => {
                             e.preventDefault()
@@ -253,6 +286,7 @@ const FormEditExecFinanceira = ({
                             }
                             addMesExec.mutate({execucao: postExec}) 
                         }}
+                        */
                     >
                         {dadosExecucao.isLoading
                             ?<Box className="w-full h-52 flex justify-center items-center">
@@ -276,7 +310,7 @@ const FormEditExecFinanceira = ({
                     justifyContent: 'space-between' 
                 }}
             >
-                <Tooltip title="Excluir mês" placement="top" arrow>
+                <Tooltip title="Excluir ano" placement="top" arrow>
                     <Button 
                         sx={{ textTransform: 'none' }}
                         variant="contained"
