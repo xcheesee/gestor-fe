@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useState } from 'react';
 import { 
     Dialog,
     DialogTitle,
@@ -11,14 +11,12 @@ import {
     MenuItem,
     FormHelperText,
     TextField,
-    Box
+    Box,
 } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import CheckIcon from '@mui/icons-material/Check';
 import CircularProgress from '@mui/material/CircularProgress';
-import CampoData from '../../CampoData';
 import CampoValores from '../../CampoValores';
-import MonthPicker from '../../MonthPicker/monthPicker';
 import { meses } from '../../../commom/utils/constants';
 import CampoAno from '../../CampoAno';
 
@@ -36,12 +34,10 @@ const FormNotaEmpenho = (props) => {
         formId
     } = props;
 
-    //const handleInputChange = (e) => {
-    //    setFormNotaEmpenho({
-    //        ...formNotaEmpenho,
-    //        [e.target.name]: e.target.value
-    //    });
-    //}
+    const [dataEmissao, setDataEmissao] = useState(formNotaEmpenho.data_emissao ?? "")
+    const arrData = dataEmissao?.split('-') ?? ""
+    const [mesReferencia, setMesReferencia] = useState(+arrData[1]-1 ?? "")
+    const [anoReferencia, setAnoReferencia] = useState(+arrData[0] ?? "")
 
     const handleClickConfirmar = () => {
         if (openFormNotaEmpenho.acao === 'adicionar') {
@@ -75,7 +71,6 @@ const FormNotaEmpenho = (props) => {
                     }}>
 
                     <FormControl 
-                        //sx={{ margin: '1rem 0' }}
                         error={errors.hasOwnProperty('tipo_empenho')}
                         fullWidth 
                         required
@@ -87,7 +82,6 @@ const FormNotaEmpenho = (props) => {
                             label="Tipo de Empenho"
                             defaultValue={formNotaEmpenho.tipo_empenho}
                             name="tipo_empenho"
-                            //onChange={handleInputChange}
                             fullWidth
                             required
                         >
@@ -98,14 +92,20 @@ const FormNotaEmpenho = (props) => {
                     <FormHelperText>{errors.tipo_empenho}</FormHelperText>
                     </FormControl>
 
-                    <CampoData
+                    <TextField
                         label="Data de Emissão da Nota"
-                        defaultValue={formNotaEmpenho.data_emissao}
+                        type='date'
                         name="data_emissao"
-                        //onChange={handleInputChange}
-                        //margin="1rem 0"
+                        value={dataEmissao}
+                        onChange={(e) => {
+                            setDataEmissao(e.target.value)
+                            const arrData = e.target.value?.split("-")
+                            setMesReferencia(+arrData[1]-1)
+                            setAnoReferencia(+arrData[0])
+                        }}
                         error={errors.hasOwnProperty('data_emissao')}
                         helperText={errors.data_emissao}
+                        InputLabelProps={{ shrink: true}}
                         fullWidth
                         required
                     />
@@ -114,8 +114,12 @@ const FormNotaEmpenho = (props) => {
                         select
                         fullWidth
                         label="Mes de Referencia"
-                        name='mes-referencia'
-                        defaultValue=""
+                        name='mes_referencia'
+                        value={mesReferencia}
+                        onChange={(e) => {
+                            setMesReferencia(e.target.value)
+                        }}
+                        //defaultValue={2}
                     >
                         {meses.map((mes, i) => {
                             return(
@@ -128,9 +132,12 @@ const FormNotaEmpenho = (props) => {
                     <CampoAno
                         label="Ano de Referencia"
                         fullWidth
-                        name="ano-referencia"
+                        value={anoReferencia}
+                        onChange={(e) => {
+                            setAnoReferencia(e.target.value)
+                        }}
+                        name="ano_referencia"
                     />
-
 
                     <TextField
                         variant="outlined"
@@ -159,7 +166,12 @@ const FormNotaEmpenho = (props) => {
 
             <DialogActions sx={{ margin: '1rem' }}>
                 <Button 
-                    onClick={() => { setOpenFormNotaEmpenho({ ...openFormNotaEmpenho, open: false }); }}
+                    onClick={() => { 
+                        setOpenFormNotaEmpenho({ ...openFormNotaEmpenho, open: false }); 
+                        setDataEmissao("")
+                        setMesReferencia("")
+                        setAnoReferencia("")
+                    }}
                     sx={{ textTransform: 'none', mr: '1rem', color: '#821f1f' }}
                 >
                     <CloseIcon sx={{ mr: '0.2rem' }} fontSize="small" /> Cancelar
