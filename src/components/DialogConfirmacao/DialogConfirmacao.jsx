@@ -15,11 +15,9 @@ const DialogConfirmacao = (props) => {
         setOpenConfirmacao,
         acao,
         fnExcluir,
-        //formInterno,
         carregando,
         texto,
         formId,
-        //form,
         //...other
     } = props;
 

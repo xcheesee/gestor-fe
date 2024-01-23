@@ -4,7 +4,8 @@ import {
     Divider,
     Paper,
     CircularProgress,
-    Fade
+    Fade,
+    Dialog
 } from '@mui/material';
 import FormNotaEmpenho from './FormNotaEmpenho';
 import DialogConfirmacao from '../DialogConfirmacao';
@@ -97,14 +98,7 @@ const ListaNotasEmpenho = ({numContrato}) => {
     }
 
     const handleClickEditar = (e, notaempenho) => {
-        setFormNotaEmpenho({
-            id: notaempenho.id,
-            contrato_id: notaempenho.contrato_id,
-            tipo_empenho: notaempenho.tipo_empenho,
-            data_emissao: notaempenho.data_emissao,
-            numero_nota: notaempenho.numero_nota,
-            valor_empenho: notaempenho.valor_empenho
-        }); 
+        setFormNotaEmpenho({ ...notaempenho }); 
         setOpenFormNotaEmpenho({ 
             open: true, 
             acao: 'editar' 
@@ -138,7 +132,7 @@ const ListaNotasEmpenho = ({numContrato}) => {
             queryClient.invalidateQueries({queryKey: ['mesesExecutados']})
         } catch(e) {
             errorSnackbar.Put(e)
-            setErrors(e.errors)
+            //setErrors(e.errors)
         }
         setCarregando(false);
     }
@@ -184,7 +178,7 @@ const ListaNotasEmpenho = ({numContrato}) => {
             queryClient.invalidateQueries({queryKey: ['mesesExecutados']})
         } catch(e) {
             errorSnackbar.Post(e)
-            setErrors(e.errors)
+            //setErrors(e.errors)
         }
         setCarregando(false);
     }
@@ -233,19 +227,21 @@ const ListaNotasEmpenho = ({numContrato}) => {
                 })
             }
 
-            <FormNotaEmpenho 
-                formNotaEmpenho={formNotaEmpenho} 
-                setFormNotaEmpenho={setFormNotaEmpenho} 
-                openFormNotaEmpenho={openFormNotaEmpenho}
-                setOpenFormNotaEmpenho={setOpenFormNotaEmpenho}
-                enviaNotaEmpenho={enviaNotaEmpenho}
-                editaNotaEmpenho={editaNotaEmpenho}
-                carregando={carregando}
-                setOpenConfirmacao={setOpenConfirmacao}
-                errors={errors}
-                setErrors={setErrors}
-                formId={empenhoFormId}
-            />
+            <Dialog open={openFormNotaEmpenho.open} fullWidth>
+                <FormNotaEmpenho 
+                    formNotaEmpenho={formNotaEmpenho} 
+                    setFormNotaEmpenho={setFormNotaEmpenho} 
+                    openFormNotaEmpenho={openFormNotaEmpenho}
+                    setOpenFormNotaEmpenho={setOpenFormNotaEmpenho}
+                    enviaNotaEmpenho={enviaNotaEmpenho}
+                    editaNotaEmpenho={editaNotaEmpenho}
+                    carregando={carregando}
+                    setOpenConfirmacao={setOpenConfirmacao}
+                    errors={errors}
+                    //setErrors={setErrors}
+                    formId={empenhoFormId}
+                />
+            </Dialog>
 
             <BotaoAdicionar 
                 fnAdicionar={handleClickAdicionar}
@@ -258,8 +254,6 @@ const ListaNotasEmpenho = ({numContrato}) => {
                 acao={acao} 
                 formId={empenhoFormId}
                 fnExcluir={excluiNotaEmpenho}
-                fnEditar={editaNotaEmpenho}
-                formInterno={formNotaEmpenho}
                 carregando={carregando}
                 texto="nota de empenho"
             />
