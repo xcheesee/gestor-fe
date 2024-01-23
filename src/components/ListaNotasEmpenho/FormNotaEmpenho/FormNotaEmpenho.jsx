@@ -31,12 +31,12 @@ const FormNotaEmpenho = (props) => {
     const [anoReferencia, setAnoReferencia] = useState(formNotaEmpenho.ano_referencia ?? "")
 
     const handleClickConfirmar = () => {
-        if (openFormNotaEmpenho.acao === 'editar') {
+        //if (openFormNotaEmpenho.acao === 'editar') {
             setOpenConfirmacao({
                 open: true,
                 id: formNotaEmpenho.id
             });
-        }
+        //}
     }
 
     return (
@@ -44,9 +44,10 @@ const FormNotaEmpenho = (props) => {
             open={openFormNotaEmpenho}
             setOpen={setOpenFormNotaEmpenho}
             title={openFormNotaEmpenho.acao === 'editar' ? 'Editar Nota de Empenho' : 'Nova Nota de Empenho'}
-            formId={formId}
+            //formId={formId}
             acao={openFormNotaEmpenho.acao === 'editar' ? 'Editar' : 'Enviar'}
             carregando={carregando}
+            onClick={handleClickConfirmar}
         >
             <Box
                 className='grid gap-4 py-2'

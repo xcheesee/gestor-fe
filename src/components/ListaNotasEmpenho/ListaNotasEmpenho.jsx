@@ -149,6 +149,7 @@ const ListaNotasEmpenho = ({numContrato}) => {
             numero_nota: '',
             valor_empenho: ''
         });
+        setAcao('adicionar')
         setErrors({})
     }
 

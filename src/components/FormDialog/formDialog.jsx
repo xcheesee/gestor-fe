@@ -9,7 +9,8 @@ export default function FormDialog({
     children,
     formId,
     acao,
-    carregando
+    carregando,
+    onClick
 }) {
     return(
         <Dialog open={open} fullWidth>
@@ -28,9 +29,9 @@ export default function FormDialog({
                 <Button 
                     sx={{ textTransform: 'none' }} 
                     variant="contained"
-                    //onClick={handleClickConfirmar}  
-                    form={formId} 
-                    type="submit"
+                    onClick={onClick}  
+                    //form={formId} 
+                    //type="submit"
                 >
                     {carregando
                         ? <CircularProgress size={16} sx={{ color: '#FFFFFF', mr: '0.7rem' }} />
