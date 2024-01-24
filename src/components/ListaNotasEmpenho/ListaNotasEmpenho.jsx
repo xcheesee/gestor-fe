@@ -23,7 +23,7 @@ import {
     throwablePostForm, 
     throwablePutForm 
 } from '../../commom/utils/api';
-import { emprenhoLabels } from '../../commom/utils/constants';
+import { emprenhoLabels, meses } from '../../commom/utils/constants';
 import { useSetAtom } from 'jotai';
 import { snackbarAtom } from '../../atomStore';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
@@ -33,7 +33,8 @@ const TabNotasEmpenho = (props) => {
     const valores = {
         ...props,
         data_emissao: formataData(props.data_emissao),
-        valor_empenho: formataValores(props.valor_empenho)
+        valor_empenho: formataValores(props.valor_empenho),
+        mes_referencia: meses[props.mes_referencia]
     }
 
     return <TabValues entry={valores} labels={emprenhoLabels} label="empenho" />
@@ -69,6 +70,7 @@ const ListaNotasEmpenho = ({numContrato}) => {
         queryKey: ['notasEmpenho', numContrato],
         queryFn: async () => await throwableGetData({path: 'empenho_notas', contratoId: numContrato})
     })
+    console.log(notasEmpenho.data)
 
     const handleClickExcluir = (id) => {
         setOpenConfirmacao({ 
@@ -215,6 +217,8 @@ const ListaNotasEmpenho = ({numContrato}) => {
                                         data_emissao={notaempenho.data_emissao}
                                         numero_nota={notaempenho.numero_nota}
                                         valor_empenho={notaempenho.valor_empenho}
+                                        mes_referencia={notaempenho.mes_referencia}
+                                        ano_referencia={notaempenho.ano_referencia}
                                     />
 
                                     <BotoesTab 

@@ -12,61 +12,64 @@ NumberFormatCustom.propTypes = {
 const CampoValores = (props) => {
   const { 
     label, 
-    defaultValue=null, 
+    className="",
+    defaultValue="", 
     prefix="",
     name, 
-    required, 
-    //checaErros, 
-    helperText, 
-    error, 
-    fullWidth,
-    //...other
+    id="",
+    required=false, 
+    value=null,
+    onChange=()=>{},
+    onBlur=()=>{},
+    helperText="", 
+    error=false, 
+    fullWidth=true,
+    ...other
   } = props;  
-  
-  // const handleChange = (event) => {
-  //   setValor(event.target.value);
-  // }
 
-  // const handleBlur = (event) => {
-  //   setState({
-  //     ...state,
-  //     [event.target.name]: valor
-  //   });
-  // }
-
+  if(value === null) {
+    return (
+        <NumericFormat
+            className={className}
+            name={name}
+            customInput={TextField}
+            label={label} 
+            defaultValue={defaultValue}
+            prefix={prefix}
+            id={id}
+            helperText={helperText}
+            error={error}
+            required={required}
+            fullWidth={fullWidth}
+            thousandSeparator="."
+            decimalSeparator=","
+            fixedDecimalScale
+            decimalScale={2}
+            onBlur={onBlur}
+        />
+    );
+  }
   return (
-      <NumericFormat
-          name={name}
-          //value={valorInterno}
-          customInput={TextField}
-          label={label} 
-          defaultValue={defaultValue}
-          prefix={prefix}
-          //onValueChange={(values, _) =>  {
-          //  setValorInterno(values.floatValue)
-          //  console.log(values)
-          //} }
-          //onChange={(e) => setValor(e.target.value)}
-          //onBlur={() => {}}
-          //onChange={(e) => setValorInterno(e.target.value)}
-          helperText={helperText}
-          error={error}
-          required={required}
-          //sx={{ margin: '1rem 0' }}
-          fullWidth={fullWidth}
-          //{...other}
-          thousandSeparator="."
-          decimalSeparator=","
-          fixedDecimalScale
-          decimalScale={2}
-          //NumberisNumericString
-          //onBlur={(e) => { checaErros(e);}}
-          //InputProps={{
-          //    startAdornment: <InputAdornment position="start">R$</InputAdornment>,
-          //    inputComponent: NumberFormatCustom,
-          //}}
-      />
-  );
+        <NumericFormat
+            className={className}
+            name={name}
+            value={value}
+            onChange={onChange}
+            customInput={TextField}
+            label={label} 
+            prefix={prefix}
+            id={id}
+            helperText={helperText}
+            error={error}
+            required={required}
+            fullWidth={fullWidth}
+            thousandSeparator="."
+            decimalSeparator=","
+            fixedDecimalScale
+            decimalScale={2}
+        />
+    );
+  
 };
 
 export default CampoValores;

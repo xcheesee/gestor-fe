@@ -84,6 +84,7 @@ export async function throwablePostForm({form, path,id=""}) {
 
     const res = await fetch(url, options)
     const json = await res.json()
+    //const json = {}
     if(!res.ok) {
         throw {status: res.status, ...json}
     }

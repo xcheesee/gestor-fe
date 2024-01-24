@@ -30,7 +30,7 @@ const TabLocaisServico = (props) => {
         ...props,
         regiao: dicionarioRegioes[props.regiao],
         subprefeituras: props.subprefeituras.length !== 0 
-            ? props.subprefeituras.map( entry => <div>{entry.subprefeitura.nome}</div>) 
+            ? props.subprefeituras.map( (entry,i) => <div key={`locais-i-${i}`}>{entry.subprefeitura.nome}</div>) 
             : "---"
     }
 

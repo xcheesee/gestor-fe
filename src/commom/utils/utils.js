@@ -78,6 +78,11 @@ export const formataValores = (valor) => {
   return valores.format(valor);
 }
 
+export function brlToFloat(num) {
+  const formatted = num.replace(/[^\d.,]+/g,"")
+  return formatted
+}
+
 export function saveLocalStorageInput(numeroContrato, campo, valor) {
   return localStorage.setItem(`contrato-${numeroContrato}-${campo}`, valor)
 }

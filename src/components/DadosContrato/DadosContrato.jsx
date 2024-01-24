@@ -16,7 +16,6 @@ import OutrasInformacoes from './OutrasInformacoes';
 import ListaDadosContrato from '../ListaDadosContrato';
 import ListaCertidoes from '../ListaCertidoes';
 import ListaGarantias from '../ListaGarantias';
-import ListaFiscalizacao from '../ListaFiscalizacoes';
 import ListaLocais from '../ListaLocais';
 import ListaDotacoes from '../ListaDotacoes';
 import ListaNotasEmpenho from '../ListaNotasEmpenho';
@@ -29,6 +28,9 @@ import { getContrato, /*getContrTot, getRecursos*/ } from '../../commom/utils/ap
 import { formataCpfCnpj } from '../../commom/utils/utils';
 import { CardEmpresa } from '../CampoEmpresa';
 import DelContratoEle from '../DelContratoEle';
+import ListaFiscalizacoes from '../ListaFiscalizacoes';
+import ListaNotasReserva from '../NotasReserva';
+import ListaNotasLiquidacao from '../NotasLiquidacao';
 
 const TabPanel = (props) => {
     const { children, value, index, ...other } = props;
@@ -43,7 +45,7 @@ const TabPanel = (props) => {
         >
             {value === index && (
                 <Box sx={{ p: 3, height: '42rem', overflow: 'auto', background: '#F8FAF8'}}>
-                    <Typography variant="h5">{children}</Typography>
+                    <Box className="h-full w-full">{children}</Box>
                 </Box>
             )}
         </div>
@@ -57,25 +59,10 @@ const a11yProps = (index) => {
     };
 }
 
-const ListaTabs = [
-    'Contrato',
-    'Certidões',
-    'Garantias',
-    'Fiscalização',
-    'Regionalização',
-    'Aditamentos de valor',
-    'Aditamentos de prazo',
-    'Notas de empenho',
-    'Dotações',
-    'Reajuste'
-];
-
 const DadosContrato = () => {
     const [value, setValue] = useState(0);
     const [dados, setDados] = useState({});
     const [mudancaContrato, setMudancaContrato] = useState(false);
-    //const [origemRecursos, setOrigemRecursos] = useState([]);
-    //const [totais, setTotais] = useState([]);
     const [estaCarregado, setEstaCarregado] = useState(false);
     const { numContrato } = useParams();
     
@@ -99,6 +86,63 @@ const DadosContrato = () => {
     const handleChange = (event, newValue) => {
         setValue(newValue);
     }
+
+    const contratoTabs = [
+        {
+            nome: 'Contrato',
+            element: 
+                <ListaDadosContrato
+                    dados={dados}
+                    numContrato={numContrato}
+                    mudancaContrato={mudancaContrato}
+                    setMudancaContrato={setMudancaContrato}
+                />
+        },
+        {
+            nome: 'Certidões',
+            element: <ListaCertidoes numContrato={numContrato}/>,
+        },
+        {
+            nome: 'Garantias',
+            element: <ListaGarantias numContrato={numContrato}/>,
+        },
+        {
+            nome: 'Fiscalização',
+            element: <ListaFiscalizacoes numContrato={numContrato}/>,
+        },
+        {
+            nome: 'Regionalização',
+            element: <ListaLocais numContrato={numContrato}/>,
+        },
+        {
+            nome: 'Aditamentos de valor',
+            element: <ListaAditamentosValor numContrato={numContrato}/>,
+        },
+        {
+            nome: 'Aditamento de prazo',
+            element: <ListaAditamentosPrazo numContrato={numContrato}/>,
+        },
+        {
+            nome: 'Notas de empenho',
+            element: <ListaNotasEmpenho numContrato={numContrato}/>,
+        },
+        {
+            nome: 'Notas de reserva',
+            element: <ListaNotasReserva numContrato={numContrato} />
+        },
+        {
+            nome: 'Notas de Liquidação',
+            element: <ListaNotasLiquidacao numContrato={numContrato} />
+        },
+        {
+            nome: 'Dotações',
+            element: <ListaDotacoes numContrato={numContrato}/>,
+        },
+        {
+            nome: 'Reajuste',
+            element: <ListaReajustes numContrato={numContrato}/>,
+        },
+    ]
 
     return (
         <>
@@ -125,7 +169,7 @@ const DadosContrato = () => {
                                 Contrato # <strong>{estaCarregado ? dados?.id : " "}</strong>
                             </Typography>
 
-                            <Box sx={{ display: 'flex', width: '100%', margin: '2rem 0' }} component={Paper} elevation={5}>
+                            <Box sx={{ display: 'flex', width: '100%', margin: '2rem 0' }} className='rounded overflow-hidden' component={Paper} elevation={5}>
                                 <Box sx={{ display: 'flex' }}>
                                     <Tabs 
                                         orientation="vertical" 
@@ -139,27 +183,8 @@ const DadosContrato = () => {
                                         }}
                                     >
 
-                                        {ListaTabs.map((label, index) => {
+                                        {contratoTabs.map((tab, index) => {
                                             return (
-                                                index === 0 
-                                                ?
-                                                <Tab 
-                                                    sx={{ '&.Mui-selected': { 
-                                                            background: (theme) => theme.palette.primary.main, 
-                                                            color: (theme) => theme.palette.color.main, 
-                                                            borderTopLeftRadius: '3px', 
-                                                            transition: '0.5s'
-                                                        }, 
-                                                        alignItems: 'flex-start', 
-                                                        textAlign: 'left', 
-                                                        textTransform: 'none',
-                                                        width: '11.25rem',
-                                                    }} 
-                                                    label={label}
-                                                    {...a11yProps(index)} 
-                                                    key={index}
-                                                />
-                                                :
                                                 <Tab 
                                                     sx={{ '&.Mui-selected': { 
                                                             background: (theme) => theme.palette.primary.main, 
@@ -171,7 +196,7 @@ const DadosContrato = () => {
                                                         textTransform: 'none',
                                                         width: '11.25rem',
                                                     }} 
-                                                    label={label}
+                                                    label={tab.nome}
                                                     {...a11yProps(index)}
                                                     key={index} 
                                                 />
@@ -183,49 +208,13 @@ const DadosContrato = () => {
                                 </Box>
 
                                 <Box sx={{ width: '100%' }}>
-                                    <TabPanel value={value} index={0}>
-                                        <ListaDadosContrato
-                                            dados={dados}
-                                            numContrato={numContrato}
-                                            mudancaContrato={mudancaContrato}
-                                            setMudancaContrato={setMudancaContrato}
-                                        />
-                                    </TabPanel>
-
-                                    <TabPanel value={value} index={1}>
-                                        <ListaCertidoes numContrato={numContrato}/>
-                                    </TabPanel>
-
-                                    <TabPanel value={value} index={2}>
-                                        <ListaGarantias numContrato={numContrato} />
-                                    </TabPanel>
-
-                                    <TabPanel value={value} index={3}>
-                                        <ListaFiscalizacao numContrato={numContrato} />
-                                    </TabPanel>
-
-                                    <TabPanel value={value} index={4}>
-                                        <ListaLocais numContrato={numContrato} />
-                                    </TabPanel>
-                                    
-                                    <TabPanel value={value} index={5}>
-                                        <ListaAditamentosValor numContrato={numContrato} />                                                                                                               
-                                    </TabPanel>
-
-                                    <TabPanel value={value} index={6}>
-                                        <ListaAditamentosPrazo numContrato={numContrato} />
-                                    </TabPanel>
-
-                                    <TabPanel value={value} index={7}>
-                                        <ListaNotasEmpenho numContrato={numContrato} />
-                                    </TabPanel>
-
-                                    <TabPanel value={value} index={8}>
-                                        <ListaDotacoes numContrato={numContrato} />
-                                    </TabPanel>
-                                    <TabPanel value={value} index={9}>
-                                        <ListaReajustes numContrato={numContrato} />
-                                    </TabPanel>
+                                    {contratoTabs.map((tab, i) => {
+                                        return (
+                                            <TabPanel value={value} index={i} key={`tab-${i}`}>
+                                                {tab.element}
+                                            </TabPanel>
+                                        )
+                                    })}
                                 </Box>
                             </Box>
 

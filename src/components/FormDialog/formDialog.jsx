@@ -1,18 +1,23 @@
-import { CircularProgress, Dialog, DialogTitle, DialogContent, DialogActions, Button } from "@mui/material";
+import { CircularProgress, Dialog, DialogTitle, DialogContent, DialogActions, Button, Typography } from "@mui/material";
 import CloseIcon from '@mui/icons-material/Close';
 import CheckIcon from '@mui/icons-material/Check';
+import DialogConf from "../DialogConf";
 
 export default function FormDialog({
     open, 
     setOpen, 
     title,
     children,
-    formId,
     acao,
     carregando,
-    onClick
+    onClick,
+    openConfirmar,
+    setOpenConfirmar,
+    tipoForm,
+    formId
 }) {
     return(
+        <>
         <Dialog open={open} fullWidth>
             <DialogTitle>{title}</DialogTitle>
 
@@ -30,8 +35,6 @@ export default function FormDialog({
                     sx={{ textTransform: 'none' }} 
                     variant="contained"
                     onClick={onClick}  
-                    //form={formId} 
-                    //type="submit"
                 >
                     {carregando
                         ? <CircularProgress size={16} sx={{ color: '#FFFFFF', mr: '0.7rem' }} />
@@ -42,5 +45,15 @@ export default function FormDialog({
                 </Button>
             </DialogActions>
         </Dialog>
+
+        <DialogConf 
+            title={`${acao} ${tipoForm}`}
+            body={<Typography>Deseja {acao} a(o) {tipoForm}?</Typography>}
+            formId={formId}
+            open={openConfirmar}
+            setOpen={setOpenConfirmar}
+            acao='Enviar'
+        />
+        </>
     )
 }

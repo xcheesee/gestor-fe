@@ -213,18 +213,19 @@ const FormEditExecFinanceira = ({
                         id={formId}
                         onSubmit={async (e) => {
                             e.preventDefault()
-                            const formData = new FormData(e.target)
+                            const planejado = document.getElementById('planejado').value
+                            const contratado = document.getElementById('contratado').value
 
                             const execData = tabelaRef.getDataAtRow(4)
                             const empenhadoData = tabelaRef.getDataAtRow(3)
                             const postExec = {
                                 data_empenhado: empenhadoData,
                                 data_execucao: execData,
-                                id_ano_execucao: execucao.id
+                                id_ano_execucao: execucao.id,
+                                contratado: contratado,
+                                planejado: planejado
                             }
-                            console.log(formData)
-                            console.log(postExec)
-                            //addMesExec.mutate({execucao: postExec}) 
+                            addMesExec.mutate({execucao: postExec}) 
                         }}
                 >
                     <CampoValores
@@ -232,6 +233,7 @@ const FormEditExecFinanceira = ({
                         label="Planejado(LOA)"
                         prefix="R$ "
                         name="planejado"
+                        id="planejado"
                     />
                     {/*<Typography className="text-lg font-medium" component={'div'}>
                         Planejado(LOA)
@@ -253,6 +255,7 @@ const FormEditExecFinanceira = ({
                         label="Contratado"
                         prefix="R$ "
                         name="contratado"
+                        id="contratado"
                     />
                     {/*<Typography className="text-lg font-medium" component={'div'}>
                         Contratado
