@@ -29,8 +29,9 @@ import { formataCpfCnpj } from '../../commom/utils/utils';
 import { CardEmpresa } from '../CampoEmpresa';
 import DelContratoEle from '../DelContratoEle';
 import ListaFiscalizacoes from '../ListaFiscalizacoes';
-import ListaNotasReserva from '../NotasReserva';
-import ListaNotasLiquidacao from '../NotasLiquidacao';
+import ListaNotasReserva from '../ListaNotasReserva';
+import ListaNotasLiquidacao from '../ListaNotasLiquidacao';
+import ListaDevolucoes from '../ListaDevolucoes';
 
 const TabPanel = (props) => {
     const { children, value, index, ...other } = props;
@@ -131,8 +132,12 @@ const DadosContrato = () => {
             element: <ListaNotasReserva numContrato={numContrato} />
         },
         {
-            nome: 'Notas de Liquidação',
+            nome: 'Notas de liquidação',
             element: <ListaNotasLiquidacao numContrato={numContrato} />
+        },
+        {
+            nome: 'Devolucoes',
+            element: <ListaDevolucoes numContrato={numContrato} />
         },
         {
             nome: 'Dotações',

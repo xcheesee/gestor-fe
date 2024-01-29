@@ -30,7 +30,7 @@ export default function CampoMasked(props) {
                 customInput={TextField}
                 name={name}
                 defaultValue={defaultValue}
-                format='####'
+                format={mask}
                 required={required}
                 fullWidth={fullWidth}
                 {...other}
