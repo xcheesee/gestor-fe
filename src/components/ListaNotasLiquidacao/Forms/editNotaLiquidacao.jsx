@@ -56,7 +56,7 @@ export function FormEditNotaLiquidacao({
             <TextField
                 select
                 fullWidth
-                label="Mes de Referencia"
+                label="Mês de Referência"
                 name='mes_referencia'
                 value={mesReferencia}
                 onChange={(e) => {
@@ -72,7 +72,7 @@ export function FormEditNotaLiquidacao({
             </TextField>
 
             <CampoMasked
-                label="Ano de Referencia"
+                label="Ano de Referência"
                 fullWidth
                 mask="####"
                 value={anoReferencia}

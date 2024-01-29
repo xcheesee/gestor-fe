@@ -3,13 +3,36 @@ import CampoMasked from "../../CampoMasked";
 import CampoValores from "../../CampoValores";
 import { tipos_notas_reserva } from "../../../commom/utils/constants";
 import { brlToFloat } from "../../../commom/utils/utils";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useSetAtom } from "jotai";
+import { snackbarAtom } from "../../../atomStore";
+import { useErrorSnackbar } from "../../../commom/utils/hooks";
+import { throwablePutForm } from "../../../commom/utils/api";
 
 export function FormEditNotaReserva({
     formId,
     numContrato,
     dadosNota,
-    editMutation
+    //editMutation,
+    setOpen,
+    setCarregando
 }) {
+    const queryClient = useQueryClient()
+    const setSnackbar = useSetAtom(snackbarAtom)
+    const errorSnackbar = useErrorSnackbar();
+
+    const editMutation = useMutation({
+        mutationFn: ({formData, id}) => throwablePutForm({form:formData, path:'nota_reserva', id: id}),
+        onSuccess: (res) => {
+            queryClient.invalidateQueries({queryKey: ['notas_reserva']})
+            setSnackbar(prev => ({...prev, open: true, severity: "success", message: "Nota de Reserva editada.", color: "success"}))
+        },
+        onError: (res) =>  {
+            errorSnackbar.Put(res)
+            setCarregando(false)
+        }
+    })
+
     return(
         <Box
             className="grid gap-4 py-2"
@@ -23,7 +46,13 @@ export function FormEditNotaReserva({
                 formData.set('valor', formatted)
 
                 formData.append('contrato_id', numContrato)
-                editMutation.mutate({formData, id: dadosNota.id})
+                setCarregando(true)
+                editMutation.mutate({formData, id: dadosNota.id}, {
+                    onSuccess: () => {
+                        setOpen(false)
+                        setCarregando(false)
+                    }
+                })
             }}
         >
             <CampoMasked

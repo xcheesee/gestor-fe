@@ -136,7 +136,7 @@ const DadosContrato = () => {
             element: <ListaNotasLiquidacao numContrato={numContrato} />
         },
         {
-            nome: 'Devolucoes',
+            nome: 'Devoluções',
             element: <ListaDevolucoes numContrato={numContrato} />
         },
         {

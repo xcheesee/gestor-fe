@@ -72,8 +72,8 @@ export const emprenhoLabels = {
     data_emissao: "Data Emissão",
     numero_nota: "Número da Nota de Empenho",
     valor_empenho: "Valor de Empenho",
-    mes_referencia: "Mes de Referencia",
-    ano_referencia: "Ano de Referencia"
+    mes_referencia: "Mês de Referência",
+    ano_referencia: "Ano de Referência"
 }
 
 export const reservaLabels = {
@@ -85,11 +85,17 @@ export const reservaLabels = {
 }
 
 export const liquidacaoLabels = {
-    numero_nota_liquidacao: "Número da Nota de Liquidacao",
+    numero_nota_liquidacao: "Número da Nota de Liquidação",
     data_pagamento: "Data de Pagamento",
     valor: "Valor de Pagamento", 
-    mes_referencia: "Mes de Referencia",
-    ano_referencia: "Ano de Referencia"
+    mes_referencia: "Mês de Referência",
+    ano_referencia: "Ano de Referência"
+}
+
+export const DevolucaoLabels = {
+    numero_devolucao: "Número de Devolução",
+    data_devolucao: "Data de Devolução",
+    valor: "Valor de Devolução", 
 }
 
 export const dotacoesLabels = {
@@ -98,7 +104,7 @@ export const dotacoesLabels = {
 
 export const reajusteLabels = {
     valor_reajuste: "Valor",
-    indice_reajuste: "Indice de Reajuste",
+    indice_reajuste: "Índice de Reajuste",
     data: "Data de Reajuste"
 }
 

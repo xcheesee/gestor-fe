@@ -12,8 +12,26 @@ import { brlToFloat } from "../../../commom/utils/utils";
 export function FormPostNotaReserva({
     formId,
     numContrato,
-    postMutation
+    //postMutation,
+    setOpen,
+    setCarregando
 }) {
+    const errorSnackbar = useErrorSnackbar()
+    const queryClient = useQueryClient()
+    const setSnackbar = useSetAtom(snackbarAtom)
+
+    const postMutation = useMutation({
+        mutationFn: ({notaReserva, path}) => throwablePostForm({form:notaReserva, path}),
+        onSuccess: (res) => {
+            queryClient.invalidateQueries({queryKey: ['notas_reserva']})
+            setSnackbar(prev => ({...prev, open: true, severity: "success", message: "Nota de Reserva enviada.", color: "success"}))
+        },
+        onError: (res) =>  {
+            errorSnackbar.Post(res)
+            setCarregando(false)
+        }
+    })
+
     return(
         <Box
             className="grid gap-4 py-2"
@@ -27,7 +45,13 @@ export function FormPostNotaReserva({
                 formData.set('valor', formatted)
                 
                 formData.append('contrato_id', numContrato)
-                postMutation.mutate(formData)
+                setCarregando(true)
+                postMutation.mutate({notaReserva: formData, path: 'nota_reserva'}, {
+                    onSuccess: () => {
+                        setOpen(false)
+                        setCarregando(false)
+                    }
+                })
             }}
         >
             <CampoMasked

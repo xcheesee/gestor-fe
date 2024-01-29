@@ -1,14 +1,36 @@
-import { Box, TextField } from "@mui/material";
+import { Box, MenuItem, TextField } from "@mui/material";
 import CampoMasked from "../../CampoMasked";
 import CampoValores from "../../CampoValores";
+import { tipos_notas_reserva } from "../../../commom/utils/constants";
 import { brlToFloat } from "../../../commom/utils/utils";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useSetAtom } from "jotai";
+import { snackbarAtom } from "../../../atomStore";
+import { useErrorSnackbar } from "../../../commom/utils/hooks";
+import { throwablePutForm } from "../../../commom/utils/api";
 
 export function FormEditDevolucao({
     formId,
     numContrato,
     dados,
-    editMutation,
+    //editMutation,
+    setOpen,
+    setCarregando
 }) {
+    const queryClient = useQueryClient()
+    const setSnackbar = useSetAtom(snackbarAtom)
+    const errorSnackbar = useErrorSnackbar();
+
+    const editMutation = useMutation({
+        mutationFn: ({formData, id}) => throwablePutForm({form:formData, path:'devolucao', id}),
+        onSuccess: (res) => {
+            queryClient.invalidateQueries({queryKey: ['devolucoes']})
+            setSnackbar(prev => ({...prev, open: true, severity: "success", message: "Devolução editada.", color: "success"}))
+        },
+        onError: (res) =>  {
+            errorSnackbar.Put(res)
+        }
+    })
 
     return(
         <Box
@@ -22,7 +44,16 @@ export function FormEditDevolucao({
                 const formatted = brlToFloat(val)
                 formData.set('valor', formatted)
                 formData.append('contrato_id', numContrato)
-                editMutation.mutate({formData, id: dados.id})
+                setCarregando(true)
+                editMutation.mutate({formData, id: dados.id}, {
+                    onSuccess: () => {
+                        setOpen(false)
+                        setCarregando(false)
+                    },
+                    onError: () => {
+                        setCarregando(false)
+                    }
+                })
             }}
         >
             <CampoMasked

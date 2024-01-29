@@ -58,7 +58,7 @@ export default function ListaNotasLiquidacao({
         onSuccess: (res) => {
             setOpenPostForm(false)
             queryClient.invalidateQueries({queryKey: ['notas_liquidacao']})
-            setSnackbar(prev => ({...prev, open: true, severity: "success", message: "Nota de Liquidacao enviada.", color: "success"}))
+            setSnackbar(prev => ({...prev, open: true, severity: "success", message: "Nota de Liquidação enviada.", color: "success"}))
         },
         onError: (res) =>  {
             errorSnackbar.Post(res)
@@ -70,7 +70,7 @@ export default function ListaNotasLiquidacao({
         onSuccess: (res) => {
             setEditForm(prev => ({...prev, open: false}))
             queryClient.invalidateQueries({queryKey: ['notas_liquidacao']})
-            setSnackbar(prev => ({...prev, open: true, severity: "success", message: "Nota de Liquidacao editada.", color: "success"}))
+            setSnackbar(prev => ({...prev, open: true, severity: "success", message: "Nota de Liquidação editada.", color: "success"}))
         },
         onError: (res) =>  {
             errorSnackbar.Put(res)
@@ -82,7 +82,7 @@ export default function ListaNotasLiquidacao({
         onSuccess: (res) => {
             queryClient.invalidateQueries(['notas_liquidacao'])
             setOpenDelete(prev => ({...prev, open: false}))
-            setSnackbar(prev => ({...prev, open: true, severity: "success", message: "Nota de Liquidacao excluida.", color: "success"}))
+            setSnackbar(prev => ({...prev, open: true, severity: "success", message: "Nota de Liquidação excluída.", color: "success"}))
         },
         onError: (res) => {
             errorSnackbar.Delete(res)
@@ -177,7 +177,7 @@ export default function ListaNotasLiquidacao({
             open={openDelete.open}
             id={openDelete.id}
             setOpen={(bool) => setOpenDelete(prev => ({...prev, open: bool}))}
-            tipo_op="nota de liquidacao"
+            tipo_op="nota de liquidação"
             fnDelete={(id) => deleteMutation.mutate({id: id})}
             carregando={deleteMutation.isLoading}
         />
