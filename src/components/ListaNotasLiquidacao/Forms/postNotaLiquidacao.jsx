@@ -4,15 +4,39 @@ import CampoValores from "../../CampoValores";
 import { useState } from "react";
 import { meses } from "../../../commom/utils/constants";
 import { brlToFloat } from "../../../commom/utils/utils";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useSetAtom } from "jotai";
+import { snackbarAtom } from "../../../atomStore";
+import { useErrorSnackbar } from "../../../commom/utils/hooks";
+import { throwablePostForm } from "../../../commom/utils/api";
 
 export function FormPostNotaLiquidacao({
     formId,
     numContrato,
-    postMutation,
+    setCarregando,
+    setOpen
 }) {
+    const queryClient = useQueryClient()
+    const setSnackbar = useSetAtom(snackbarAtom)
+    const errorSnackbar = useErrorSnackbar()
+
     const [dataPagamento, setDataPagamento] = useState("")
     const [mesReferencia, setMesReferencia] = useState("")
     const [anoReferencia, setAnoReferencia] = useState("")
+
+    const postMutation = useMutation({
+        mutationFn: (notaLiq) => throwablePostForm({form:notaLiq, path:'nota_liquidacao'}),
+        onSuccess: (res) => {
+            setOpen(false)
+            setCarregando(false)
+            queryClient.invalidateQueries({queryKey: ['notas_liquidacao']})
+            setSnackbar(prev => ({...prev, open: true, severity: "success", message: "Nota de Liquidação enviada.", color: "success"}))
+        },
+        onError: (res) =>  {
+            errorSnackbar.Post(res)
+            setCarregando(false)
+        }
+    })
     return(
         <Box
             className="grid gap-4 py-2"
@@ -25,6 +49,7 @@ export function FormPostNotaLiquidacao({
                 const formatted = brlToFloat(val)
                 formData.set('valor', formatted)
                 formData.append('contrato_id', numContrato)
+                setCarregando(true)
                 postMutation.mutate(formData)
             }}
         >

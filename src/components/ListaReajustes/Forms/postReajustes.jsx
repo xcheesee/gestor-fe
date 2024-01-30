@@ -43,7 +43,7 @@ export default function FormPostReajustes({
 
     return(
         <Box
-            className="grid gap-4 py-2"
+            className="grid gap-8 py-2"
             component="form"
             id={formId}
             onSubmit={(e) => {

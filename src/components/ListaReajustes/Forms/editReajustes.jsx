@@ -42,7 +42,7 @@ export default function FormEditReajustes({
 
     return(
         <Box
-            className="grid gap-4 py-2"
+            className="grid gap-8 py-2"
             component="form"
             id={formId}
             onSubmit={(e) => {
@@ -78,7 +78,6 @@ export default function FormEditReajustes({
                 defaultValue={dados.indice_reajuste}
                 name="indice_reajuste"
                 label={reajusteLabels.indice_reajuste}
-                sx={{ margin: '1rem 0' }}
                 //error={errors.hasOwnProperty('indice_reajuste')}
                 //helperText={errors.hasOwnProperty('indice_reajuste') ? errors : "Ex: "}
                 fullWidth
@@ -90,7 +89,6 @@ export default function FormEditReajustes({
                 defaultValue={dados.data_reajuste}
                 name="data_reajuste"
                 //onChange={handleInputChange}
-                margin="1rem 0"
                 //error={errors.hasOwnProperty('data_reajuste')}
                 //helperText={errors.data_reajuste}
                 fullWidth
