@@ -105,7 +105,7 @@ export const dotacoesLabels = {
 export const reajusteLabels = {
     valor_reajuste: "Valor",
     indice_reajuste: "Índice de Reajuste",
-    data: "Data de Reajuste"
+    data_reajuste: "Data de Reajuste"
 }
 
 export const contratoKeys = [

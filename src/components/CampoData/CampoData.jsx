@@ -16,7 +16,7 @@ const CampoData = ({ label, defaultValue, name, helperText, error, size, require
                 startAdornment: <InputAdornment position="start"> </InputAdornment>,
             }}
             required={required}
-            sx={ margin === "" ? { margin: '1rem 0' } : {margin: margin} }
+            sx={ margin === "" ? { margin: '0' } : {margin: margin} }
             fullWidth={fullWidth}
             // {...props}
         />
