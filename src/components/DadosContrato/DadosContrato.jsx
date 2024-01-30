@@ -32,6 +32,10 @@ import ListaFiscalizacoes from '../ListaFiscalizacoes';
 import ListaNotasReserva from '../ListaNotasReserva';
 import ListaNotasLiquidacao from '../ListaNotasLiquidacao';
 import ListaDevolucoes from '../ListaDevolucoes';
+import TotalizadorCardEle from '../TotalizadorCardEle';
+import CurrencyExchangeOutlinedIcon from '@mui/icons-material/CurrencyExchangeOutlined';
+import ReceiptLongOutlinedIcon from '@mui/icons-material/ReceiptLongOutlined';
+import BarChartOutlinedIcon from '@mui/icons-material/BarChartOutlined';
 
 const TabPanel = (props) => {
     const { children, value, index, ...other } = props;
@@ -169,12 +173,52 @@ const DadosContrato = () => {
                             <ArrowBackIosIcon /> Voltar
                         </Button>
                     </Link>
-                        <Box sx={{ display: 'flex', flexDirection: 'column', margin: '1rem' }}>
+                        <Box sx={{ display: 'flex', flexDirection: 'column', margin: '1rem', gap: '2rem' }}>
                             <Typography variant="h2" component="h1" sx={{ fontSize: '2rem' }}>
                                 Contrato # <strong>{estaCarregado ? dados?.id : " "}</strong>
                             </Typography>
+                            <Box className="grid grid-cols-12 w-full gap-2">
+                                <TotalizadorCardEle 
+                                    className="col-span-4 bg-[#3b948c]"
+                                    title="Total Reservado"
+                                    val={109492.88}
+                                />
+                                <TotalizadorCardEle 
+                                    className="col-span-4 bg-[#54ada4]"
+                                    title="Total Empenhado"
+                                    val={109492.88}
+                                />
+                                <TotalizadorCardEle 
+                                    className="col-span-4 bg-[#7fc9bf]"
+                                    title="Média Mensal Empenhado"
+                                    val={109492.88}
+                                />
+                                <TotalizadorCardEle 
+                                    className="col-span-6 bg-[#2c756f]"
+                                    title="Realizado (Liquidado)"
+                                    val={109492.88}
+                                    icon={<ReceiptLongOutlinedIcon className='text-[5rem] text-white' />}
+                                />
+                                <TotalizadorCardEle 
+                                    className="col-span-6 bg-[#2c756f]"
+                                    title="Média Mensal Realizado"
+                                    val={109492.88}
+                                    icon={<BarChartOutlinedIcon className='text-[5rem] text-white' />}
+                                />
+                                <TotalizadorCardEle 
+                                    className="col-span-8 bg-[#54ada4]"
+                                    title="Devoluções"
+                                    val={109492.88}
+                                    icon={<CurrencyExchangeOutlinedIcon className='text-[5rem] text-white' />}
+                                />
+                                <TotalizadorCardEle 
+                                    className="col-span-4 bg-[#54ada4]"
+                                    title="Saldo"
+                                    val={109492.88}
+                                />
+                            </Box>
 
-                            <Box sx={{ display: 'flex', width: '100%', margin: '2rem 0' }} className='rounded overflow-hidden' component={Paper} elevation={5}>
+                            <Box sx={{ display: 'flex', width: '100%' }} className='rounded overflow-hidden' component={Paper} elevation={5}>
                                 <Box sx={{ display: 'flex' }}>
                                     <Tabs 
                                         orientation="vertical" 
@@ -223,7 +267,7 @@ const DadosContrato = () => {
                                 </Box>
                             </Box>
 
-                            <Typography variant="h2" sx={{ fontSize: '2rem', margin: '2rem 0' }}>
+                            <Typography variant="h2" sx={{ fontSize: '2rem' }}>
                                 Dados da empresa
                             </Typography>
                             {dados?.empresa_id !== null 

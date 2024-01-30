@@ -26,7 +26,7 @@ const OutrasInformacoes = (props) => {
 
     return (
         <Box>
-            <Typography variant="h2" sx={{ fontSize: '2rem', mt: '2rem' }}>
+            <Typography variant="h2" sx={{ fontSize: '2rem' }}>
                 Outras informações
             </Typography>
 
