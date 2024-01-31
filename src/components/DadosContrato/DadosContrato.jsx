@@ -90,11 +90,16 @@ const DadosContrato = () => {
 
     useEffect(() => {
         const totContainer = document.getElementById('totalizador-container')
-        totContainer.addEventListener("wheel", (e) => {
+
+        function horizontalScroll(e) {
             e.preventDefault()
             totContainer.scrollLeft += e.deltaY;
-        })
+        }
+
+        totContainer.addEventListener("wheel", horizontalScroll)
+        return () => totContainer.removeEventListener('wheel', horizontalScroll)
     }, [])
+
     const handleChange = (event, newValue) => {
         setValue(newValue);
     }
