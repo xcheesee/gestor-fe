@@ -16,7 +16,7 @@ import {
 import CloseIcon from '@mui/icons-material/Close';
 import CheckIcon from '@mui/icons-material/Check';
 import DeleteIcon from '@mui/icons-material/Delete';
-import { formataValores } from '../../../../commom/utils/utils';
+import { brlToFloat, formataValores } from '../../../../commom/utils/utils';
 import { meses } from '../../../../commom/utils/constants';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import TabelaExecFin from '../TabelaExecFin';
@@ -147,6 +147,7 @@ const FormEditExecFinanceira = ({
         mutationFn: ({execucao}) => postMesesExecFin({ execucao }),
         onSuccess: () => {
             queryClient.invalidateQueries(['mesesExecutados', execucao.id])
+            queryClient.invalidateQueries(['execucoes', numContrato])
             setSnackbar(prev => ({...prev, open: true, severity: "success", message: "Meses de execucao enviados.", color: "success"}))
             setOpenEditExecFinanceira(false)
         },
@@ -213,8 +214,10 @@ const FormEditExecFinanceira = ({
                         id={formId}
                         onSubmit={async (e) => {
                             e.preventDefault()
-                            const planejado = document.getElementById('planejado').value
-                            const contratado = document.getElementById('contratado').value
+                            let planejado = document.getElementById('planejado').value
+                            let contratado = document.getElementById('contratado').value
+                            planejado = brlToFloat(planejado)
+                            contratado = brlToFloat(contratado)
 
                             const execData = tabelaRef.getDataAtRow(4)
                             const empenhadoData = tabelaRef.getDataAtRow(3)

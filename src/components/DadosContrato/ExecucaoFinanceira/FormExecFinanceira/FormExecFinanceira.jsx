@@ -80,6 +80,7 @@ const FormExecFinanceira = (props) => {
             <DialogContent>
                 <Box 
                     sx={{ display: 'grid'}}
+                    className='py-2'
                     component="form"
                     id={formId}
                     onSubmit={async (e) => {
@@ -87,30 +88,6 @@ const FormExecFinanceira = (props) => {
                         const formData = new FormData(e.target)
                         formData.append('id_contrato', contratoId)
                         postNewAno.mutate({formData})
-                        //try {
-                        //    await postAnoExecFin(formData)
-                        //    setOpenFormExecFinanceira(false)
-                        //    setSnackbar(prev => ({...prev, open: true, severity:"success", message: "Ano de execucao enviado."}))
-                        //    queryClient.invalidateQueries(['execucoes', contratoId])
-                        //} catch(e) {
-                        //    setSnackbar(prev => ({
-                        //        ...prev, 
-                        //        open: true, 
-                        //        severity: 'error', 
-                        //        message: 
-                        //        <div>
-                        //            Nao foi possivel enviar o ano de execucao
-                        //            <br/>
-                        //            Error: {e.message}
-                        //            <br/>
-                        //            {e.errors
-                        //                ?Object.values(e.errors).map( (error, i) => (<div key={`error-${i}`}>{error}</div>))
-                        //                :<></>
-                        //            }
-                        //        </div>
-                        //    }))
-                        //}
-
                     }}
                 >
                     <CampoAno 
@@ -146,52 +123,23 @@ const FormExecFinanceira = (props) => {
 
                     <CampoValores 
                         label="Planejado(LOA)" 
-                        //value={formExecFinanceira.planejado_inicial}
                         name="planejado"
                         required
-                        //state={formExecFinanceira}
-                        //setState={setFormExecFinanceira}
-                        checaErros={() => {}}
-                        helperText={errors.hasOwnProperty('planejado_inicial') ? errors.planejado_inicial : " "}
-                        error={errors.hasOwnProperty('planejado_inicial')}
+                        //helperText={errors.hasOwnProperty('planejado_inicial') ? errors.planejado_inicial : " "}
+                        //error={errors.hasOwnProperty('planejado_inicial')}
                         fullWidth 
-                        //onBlur={handleChange}
                     />
-
-                    {/*<CampoValores 
-                        label="Reservado" 
-                        //value={formExecFinanceira.planejado_inicial}
-                        name="reservado"
-                        required
-                        //state={formExecFinanceira}
-                        //setState={setFormExecFinanceira}
-                        checaErros={() => {}}
-                        helperText={errors.hasOwnProperty('reservado') ? errors.planejado_inicial : " "}
-                        error={errors.hasOwnProperty('reservado')}
-                        fullWidth 
-                        //onBlur={handleChange}
-                    />*/}
 
                     <CampoValores 
                         label="Contratado" 
-                        //value={formExecFinanceira.contratado_inicial}
                         name="contratado"
                         required
-                        //state={formExecFinanceira}
-                        //setState={setFormExecFinanceira}
-                        checaErros={() => {}}
-                        helperText={errors.hasOwnProperty('contratado_inicial' ? errors.contratado_inicial : " ")}
-                        error={errors.hasOwnProperty('contratado_inicial')}
+                        //helperText={errors.hasOwnProperty('contratado_inicial' ? errors.contratado_inicial : " ")}
+                        //error={errors.hasOwnProperty('contratado_inicial')}
                         fullWidth 
-                        //onBlur={handleChange}
                     />
 
                 </Box>
-
-                {/*<RefExecucaoFinanceira 
-                    totais={totais}
-                />*/}
-
 
             </DialogContent>
 
