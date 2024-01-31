@@ -1,9 +1,10 @@
-import { Box, Divider, Fade, Paper } from "@mui/material";
+import { Box, Divider, Fade, Paper, Typography } from "@mui/material";
 import { useState } from "react";
 import BotaoAdicionar from "../BotaoAdicionar";
 import FormDialog from "../FormDialog";
 import BotoesTab from "../BotoesTab";
 import DialogDelete from "../DialogDelete";
+import DialogConf from "../DialogConf";
 
 export default function ListaCardElement({
     formId,
@@ -25,7 +26,10 @@ export default function ListaCardElement({
         open: false,
         id: ""
     })
-    const [openConfirmar, setOpenConfirmar] = useState(false)
+    const [openConfirmar, setOpenConfirmar] = useState({
+        open: false,
+        acao: ""
+    })
 
     return(
         <>
@@ -75,13 +79,12 @@ export default function ListaCardElement({
         <FormDialog
             open={openPostForm}
             setOpen={setOpenPostForm}
-            acao="Enviar"
-            onClick={() => setOpenConfirmar(true)}
-            tipoForm={tipo_lista}
-            openConfirmar={openConfirmar}
             setOpenConfirmar={setOpenConfirmar}
+            acao="Enviar"
+            tipoForm={tipo_lista}
             formId={formId}
             carregando={carregando}
+            title={`Enviar ${tipo_lista}`}
         >
             {renderPost((bool) => setOpenPostForm(bool))}
         </FormDialog>
@@ -89,16 +92,25 @@ export default function ListaCardElement({
         <FormDialog
             open={editForm.open}
             setOpen={(bool) => setEditForm(prev => ({...prev, open: bool}))}
-            acao="Editar"
-            onClick={() => setOpenConfirmar(true)}
-            tipoForm={tipo_lista}
-            openConfirmar={openConfirmar}
             setOpenConfirmar={setOpenConfirmar}
+            acao="Editar"
+            tipoForm={tipo_lista}
             formId={formId}
             carregando={carregando}
+            title={`Editar ${tipo_lista}`}
         >
             {renderEdit(editForm.dados, (bool) => setEditForm(prev => ({...prev, open: bool})))}
         </FormDialog>
+
+        <DialogConf 
+            title={`${openConfirmar.acao} ${tipo_lista}`}
+            body={<Typography>Deseja {openConfirmar.acao} o(a) {tipo_lista}?</Typography>}
+            formId={formId}
+            open={openConfirmar.open}
+            setOpen={setOpenConfirmar}
+            acao={openConfirmar.acao}
+        />
+
         <DialogDelete 
             open={openDelete.open}
             setOpen={(bool) => setOpenDelete(prev => ({...prev, open: bool}))}

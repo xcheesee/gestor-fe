@@ -26,6 +26,13 @@ export const mascaraContrato = (contrato) => {
     }
   }
 
+export function mascaraDevolucao(numDevolucao) {
+  if (numDevolucao !== null && numDevolucao !== "" && numDevolucao !== undefined) {
+    return `${numDevolucao}`.replace(/([\d]{2})([\d]{4})/gm, '$1.$2')
+  }
+  return "---"
+}
+
 export const irParaTopo = () => window.scrollTo(0, 0);
 
 export const formataCpfCnpj = (cpfCnpj) => {

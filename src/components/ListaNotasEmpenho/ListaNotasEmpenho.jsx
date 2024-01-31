@@ -28,6 +28,9 @@ import { useSetAtom } from 'jotai';
 import { snackbarAtom } from '../../atomStore';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { useErrorSnackbar } from '../../commom/utils/hooks';
+import FormPostNotaEmpenho from './FormNotaEmpenho/postNotaEmpenho';
+import FormEditNotaEmpenho from './FormNotaEmpenho/editNotaEmpenho';
+import ListaCardElement from '../ListaCardElement';
 
 const TabNotasEmpenho = (props) => {
     const valores = {
@@ -41,7 +44,7 @@ const TabNotasEmpenho = (props) => {
 }
 
 const ListaNotasEmpenho = ({numContrato}) => {
-    const empenhoFormId = 'empenho_form'
+    const formId = 'empenho_form'
     const queryClient = useQueryClient()
 
     const setSnackbar = useSetAtom(snackbarAtom)
@@ -70,7 +73,6 @@ const ListaNotasEmpenho = ({numContrato}) => {
         queryKey: ['notasEmpenho', numContrato],
         queryFn: async () => await throwableGetData({path: 'empenho_notas', contratoId: numContrato})
     })
-    console.log(notasEmpenho.data)
 
     const handleClickExcluir = (id) => {
         setOpenConfirmacao({ 
@@ -185,85 +187,117 @@ const ListaNotasEmpenho = ({numContrato}) => {
         }
         setCarregando(false);
     }
-    
+
     return (
-        <Box>
-            {notasEmpenho.isLoading
-                ?<Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '38rem' }}>
-                    <CircularProgress size={30} />
-                </Box>
-                :notasEmpenho?.data?.data?.map((notaempenho, index) => {
-                    return (
-                        <Fade in={true} timeout={400} key={index}>
-                            <Box 
-                                key={index} 
-                                elevation={3} 
-                                component={Paper} 
-                                sx={{ padding: '1rem', mb: '2rem' }}
-                            >
-                                <Divider 
-                                    textAlign='right' 
-                                    sx={{ 
-                                        fontWeight: 'light', 
-                                        fontSize: '1.25rem' 
-                                    }}
-                                >
-                                    Nota de Empenho # {notaempenho.id}
-                                </Divider>
-                                
-                                <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-                                    <TabNotasEmpenho 
-                                        tipo_empenho={(notaempenho?.tipo_empenho?.split("_"))?.reduce((acc, val) => acc + ` ${primeiraLetraMaiuscula(val)}`, "") }
-                                        data_emissao={notaempenho.data_emissao}
-                                        numero_nota={notaempenho.numero_nota}
-                                        valor_empenho={notaempenho.valor_empenho}
-                                        mes_referencia={notaempenho.mes_referencia}
-                                        ano_referencia={notaempenho.ano_referencia}
-                                    />
-
-                                    <BotoesTab 
-                                        editar={(e) => { handleClickEditar(e, notaempenho, notaempenho.id); }}
-                                        excluir={() => { handleClickExcluir(notaempenho.id); }}
-                                    />
-                                </Box>
-                            </Box>
-                        </Fade>
-                    );
-                })
-            }
-
-            <Dialog open={openFormNotaEmpenho.open} fullWidth>
-                <FormNotaEmpenho 
-                    formNotaEmpenho={formNotaEmpenho} 
-                    setFormNotaEmpenho={setFormNotaEmpenho} 
-                    openFormNotaEmpenho={openFormNotaEmpenho}
-                    setOpenFormNotaEmpenho={setOpenFormNotaEmpenho}
-                    enviaNotaEmpenho={enviaNotaEmpenho}
-                    editaNotaEmpenho={editaNotaEmpenho}
-                    carregando={carregando}
-                    setOpenConfirmacao={setOpenConfirmacao}
-                    errors={errors}
-                    //setErrors={setErrors}
-                    formId={empenhoFormId}
+        <ListaCardElement
+            formId={formId}
+            dadosArr={notasEmpenho}
+            carregando={carregando}
+            deleteProps={{
+                deletePath: 'nota_liquidacao',
+                queryKey: 'notas_liquidacao',
+                setCarregando: setCarregando
+            }}
+            tipo_lista="Nota de liquidação"
+            TabDados={TabNotasEmpenho}
+            renderEdit={(notas, setOpenModal) => 
+                <FormEditNotaEmpenho
+                    setOpen={setOpenModal}
+                    formId={formId}
+                    numContrato={numContrato}
+                    dados={notas}
+                    setCarregando={setCarregando}
                 />
-            </Dialog>
+            }
+            renderPost={(setOpenModal) => 
+                <FormPostNotaEmpenho
+                    setOpen={setOpenModal}
+                    formId={formId}
+                    numContrato={numContrato}
+                    setCarregando={setCarregando}
+                />
+            }
+        />
+    )
+    
+    //return (
+    //    <Box>
+    //        {notasEmpenho.isLoading
+    //            ?<Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '38rem' }}>
+    //                <CircularProgress size={30} />
+    //            </Box>
+    //            :notasEmpenho?.data?.data?.map((notaempenho, index) => {
+    //                return (
+    //                    <Fade in={true} timeout={400} key={index}>
+    //                        <Box 
+    //                            key={index} 
+    //                            elevation={3} 
+    //                            component={Paper} 
+    //                            sx={{ padding: '1rem', mb: '2rem' }}
+    //                        >
+    //                            <Divider 
+    //                                textAlign='right' 
+    //                                sx={{ 
+    //                                    fontWeight: 'light', 
+    //                                    fontSize: '1.25rem' 
+    //                                }}
+    //                            >
+    //                                Nota de Empenho # {notaempenho.id}
+    //                            </Divider>
+    //                            
+    //                            <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+    //                                <TabNotasEmpenho 
+    //                                    tipo_empenho={(notaempenho?.tipo_empenho?.split("_"))?.reduce((acc, val) => acc + ` ${primeiraLetraMaiuscula(val)}`, "") }
+    //                                    data_emissao={notaempenho.data_emissao}
+    //                                    numero_nota={notaempenho.numero_nota}
+    //                                    valor_empenho={notaempenho.valor_empenho}
+    //                                    mes_referencia={notaempenho.mes_referencia}
+    //                                    ano_referencia={notaempenho.ano_referencia}
+    //                                />
 
-            <BotaoAdicionar 
-                fnAdicionar={handleClickAdicionar}
-                texto="Adicionar nota de empenho"
-            />
-        
-            <DialogConfirmacao
-                openConfirmacao={openConfirmacao} 
-                setOpenConfirmacao={setOpenConfirmacao}
-                acao={acao} 
-                formId={empenhoFormId}
-                fnExcluir={excluiNotaEmpenho}
-                carregando={carregando}
-                texto="nota de empenho"
-            />
-        </Box>
-    );
+    //                                <BotoesTab 
+    //                                    editar={(e) => { handleClickEditar(e, notaempenho, notaempenho.id); }}
+    //                                    excluir={() => { handleClickExcluir(notaempenho.id); }}
+    //                                />
+    //                            </Box>
+    //                        </Box>
+    //                    </Fade>
+    //                );
+    //            })
+    //        }
+
+    //        <Dialog open={openFormNotaEmpenho.open} fullWidth>
+    //            <FormNotaEmpenho 
+    //                formNotaEmpenho={formNotaEmpenho} 
+    //                setFormNotaEmpenho={setFormNotaEmpenho} 
+    //                openFormNotaEmpenho={openFormNotaEmpenho}
+    //                setOpenFormNotaEmpenho={setOpenFormNotaEmpenho}
+    //                enviaNotaEmpenho={enviaNotaEmpenho}
+    //                editaNotaEmpenho={editaNotaEmpenho}
+    //                carregando={carregando}
+    //                setOpenConfirmacao={setOpenConfirmacao}
+    //                errors={errors}
+    //                //setErrors={setErrors}
+    //                formId={empenhoFormId}
+    //            />
+    //        </Dialog>
+
+    //        <BotaoAdicionar 
+    //            fnAdicionar={handleClickAdicionar}
+    //            texto="Adicionar nota de empenho"
+    //        />
+    //    
+    //        <DialogConfirmacao
+    //            openConfirmacao={openConfirmacao} 
+    //            setOpenConfirmacao={setOpenConfirmacao}
+    //            acao={acao} 
+    //            formId={empenhoFormId}
+    //            fnExcluir={excluiNotaEmpenho}
+    //            carregando={carregando}
+    //            texto="nota de empenho"
+    //        />
+    //    </Box>
+    //);
 }
 
 export default ListaNotasEmpenho;

@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { throwableGetData } from "../../commom/utils/api";
 import { DevolucaoLabels } from "../../commom/utils/constants";
-import { TabValues, formataData, formataValores } from "../../commom/utils/utils";
+import { TabValues, formataData, formataValores, mascaraDevolucao } from "../../commom/utils/utils";
 import { FormEditDevolucao } from "./Forms/editDevolucao";
 import { FormPostDevolucao } from "./Forms/postDevolucao";
 import ListaCardElement from "../ListaCardElement";
@@ -10,7 +10,7 @@ import ListaCardElement from "../ListaCardElement";
 
 const TabDevolucoes = (props) => {
     const valores = {
-        numero_devolucao: props.numero_devolucao,
+        numero_devolucao: mascaraDevolucao(props.numero_devolucao),
         data_devolucao: formataData(props.data_devolucao),
         valor: formataValores(props.valor),
     };
