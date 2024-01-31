@@ -6,6 +6,7 @@ import { liquidacaoLabels, meses } from "../../commom/utils/constants";
 import { TabValues, formataData, formataValores } from "../../commom/utils/utils";
 import { FormEditNotaLiquidacao } from "./Forms/editNotaLiquidacao";
 import ListaCardElement from "../ListaCardElement";
+import { Box, CircularProgress } from "@mui/material";
 
 
 const TabNotaLiquidacao = (props) => {
@@ -30,6 +31,12 @@ export default function ListaNotasLiquidacao({
 
     const [carregando, setCarregando] = useState(false)
     const formId = "notas-liquidacao-form"
+
+    if(notas?.isLoading) return (
+        <Box className="w-full h-full grid place-content-center">
+            <CircularProgress className="" />
+        </Box>
+    )
 
     return (
         <ListaCardElement

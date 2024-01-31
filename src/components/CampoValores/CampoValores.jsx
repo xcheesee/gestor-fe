@@ -15,6 +15,7 @@ const CampoValores = (props) => {
     className="",
     defaultValue="", 
     prefix="",
+    suffix="",
     name, 
     id="",
     required=false, 
@@ -36,6 +37,7 @@ const CampoValores = (props) => {
             label={label} 
             defaultValue={defaultValue}
             prefix={prefix}
+            suffix={suffix}
             id={id}
             helperText={helperText}
             error={error}
@@ -58,6 +60,7 @@ const CampoValores = (props) => {
             customInput={TextField}
             label={label} 
             prefix={prefix}
+            suffix={suffix}
             id={id}
             helperText={helperText}
             error={error}
