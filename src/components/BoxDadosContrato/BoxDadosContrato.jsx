@@ -273,24 +273,6 @@ const BoxDadosContrato = (props) => {
                 helperText={errors.hasOwnProperty('numero_nota_reserva') ? errors.numero_nota_reserva : " "}
                 fullWidth
             /> */}
-            <CampoTexto
-                defaultValue={dados?.numero_nota_reserva}
-                name="numero_nota_reserva"
-                errors={errors}
-                labels={contratoLabels}
-            />
-
-            <CampoValores
-                index=""
-                className="form__campo"
-                label={contratoLabels.valor_reserva}
-                defaultValue={dados?.valor_reserva}
-                name="valor_reserva"
-                checaErros={() => {}}
-                error={errors.hasOwnProperty('valor_reserva')}
-                helperText={errors.hasOwnProperty('valor_reserva') ? errors.valor_reserva : " "}
-                fullWidth 
-            />
         </Box>
     );
 }
