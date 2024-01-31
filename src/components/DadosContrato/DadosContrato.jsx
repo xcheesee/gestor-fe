@@ -88,6 +88,13 @@ const DadosContrato = () => {
         })();
     }, [numContrato, navigate, mudancaContrato])
 
+    useEffect(() => {
+        const totContainer = document.getElementById('totalizador-container')
+        totContainer.addEventListener("wheel", (e) => {
+            e.preventDefault()
+            totContainer.scrollLeft += e.deltaY;
+        })
+    }, [])
     const handleChange = (event, newValue) => {
         setValue(newValue);
     }
@@ -153,6 +160,7 @@ const DadosContrato = () => {
         },
     ]
 
+
     return (
         <>
             <Backdrop 
@@ -177,7 +185,11 @@ const DadosContrato = () => {
                             <Typography variant="h2" component="h1" sx={{ fontSize: '2rem' }}>
                                 Contrato # <strong>{estaCarregado ? dados?.id : " "}</strong>
                             </Typography>
-                            <Box className="grid grid-cols-12 w-full gap-2">
+                            <Box 
+                                className=" overflow-x-scroll overflow-y-hidden"
+                                id="totalizador-container"
+                            >
+                            <Box className="grid grid-rows-3 grid-flow-col auto-cols-[90px] gap-2">
                                 <TotalizadorCardEle 
                                     className="col-span-4 bg-[#3b948c]"
                                     title="Total Reservado"
@@ -216,6 +228,45 @@ const DadosContrato = () => {
                                     title="Saldo"
                                     val={109492.88}
                                 />
+                                <TotalizadorCardEle 
+                                    className="col-span-4 bg-[#3b948c]"
+                                    title="Total Reservado"
+                                    val={109492.88}
+                                />
+                                <TotalizadorCardEle 
+                                    className="col-span-4 bg-[#54ada4]"
+                                    title="Total Empenhado"
+                                    val={109492.88}
+                                />
+                                <TotalizadorCardEle 
+                                    className="col-span-4 bg-[#7fc9bf]"
+                                    title="Média Mensal Empenhado"
+                                    val={109492.88}
+                                />
+                                <TotalizadorCardEle 
+                                    className="col-span-6 bg-[#2c756f]"
+                                    title="Realizado (Liquidado)"
+                                    val={109492.88}
+                                    icon={<ReceiptLongOutlinedIcon className='text-[5rem] text-white' />}
+                                />
+                                <TotalizadorCardEle 
+                                    className="col-span-6 bg-[#2c756f]"
+                                    title="Média Mensal Realizado"
+                                    val={109492.88}
+                                    icon={<BarChartOutlinedIcon className='text-[5rem] text-white' />}
+                                />
+                                <TotalizadorCardEle 
+                                    className="col-span-8 bg-[#54ada4]"
+                                    title="Devoluções"
+                                    val={109492.88}
+                                    icon={<CurrencyExchangeOutlinedIcon className='text-[5rem] text-white' />}
+                                />
+                                <TotalizadorCardEle 
+                                    className="col-span-4 bg-[#54ada4]"
+                                    title="Saldo"
+                                    val={109492.88}
+                                />
+                            </Box>
                             </Box>
 
                             <Box sx={{ display: 'flex', width: '100%' }} className='rounded overflow-hidden' component={Paper} elevation={5}>
