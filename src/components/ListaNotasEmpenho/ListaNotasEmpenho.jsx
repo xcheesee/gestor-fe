@@ -17,12 +17,20 @@ import FormPostNotaEmpenho from './FormNotaEmpenho/postNotaEmpenho';
 import FormEditNotaEmpenho from './FormNotaEmpenho/editNotaEmpenho';
 import ListaCardElement from '../ListaCardElement';
 
+const tipos_empenho = {
+    cancelamento: "Cancelamento",
+    complemento: "Complemento",
+    novo_empenho: "Novo Empenho"
+}
+
 const TabNotasEmpenho = (props) => {
     const valores = {
         ...props,
+        tipo_empenho: tipos_empenho[props.tipo_empenho],
         data_emissao: formataData(props.data_emissao),
         valor_empenho: formataValores(props.valor_empenho),
-        mes_referencia: meses[props.mes_referencia]
+        ano_referencia: props.ano_referencia,
+        mes_referencia: meses[props.mes_referencia],
     }
 
     return <TabValues entry={valores} labels={emprenhoLabels} label="empenho" />
@@ -50,11 +58,11 @@ const ListaNotasEmpenho = ({numContrato}) => {
             dadosArr={notasEmpenho}
             carregando={carregando}
             deleteProps={{
-                deletePath: 'nota_liquidacao',
-                queryKey: 'notas_liquidacao',
+                deletePath: 'empenho_nota',
+                queryKey: 'notasEmpenho',
                 setCarregando: setCarregando
             }}
-            tipo_lista="Nota de liquidação"
+            tipo_lista="Nota de Empenho"
             TabDados={TabNotasEmpenho}
             renderEdit={(notas, setOpenModal) => 
                 <FormEditNotaEmpenho

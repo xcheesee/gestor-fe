@@ -80,7 +80,7 @@ function ListaAditamentosPrazo({ numContrato }) {
               queryKey: 'aditamentos_prazo',
               setCarregando: setCarregando
           }}
-          tipo_lista="Aditamento de prazo"
+          tipo_lista="Aditamento"
           TabDados={TabAditamentosPrazo}
           renderEdit={(adit, setOpenModal) => 
               <FormAditamentoPrazo

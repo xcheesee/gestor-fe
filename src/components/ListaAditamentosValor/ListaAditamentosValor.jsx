@@ -96,7 +96,7 @@ function ListaAditamentosValor ({ numContrato }) {
                 queryKey: 'aditamentos_val',
                 setCarregando: setCarregando
             }}
-            tipo_lista="Devolução"
+            tipo_lista="Aditamento"
             TabDados={TabAditamentosValor}
             renderEdit={(adit, setOpenModal) => 
                 <FormAditamentoValor

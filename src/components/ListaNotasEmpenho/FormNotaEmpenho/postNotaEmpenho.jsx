@@ -55,9 +55,9 @@ export default function FormPostNotaEmpenho({
                 e.preventDefault()
                 const formData = new FormData(e.target)
                 formData.append("contrato_id", numContrato)
-                const val = formData.get('valor')
+                const val = formData.get('valor_empenho')
                 const formatted = brlToFloat(val)
-                formData.set('valor', formatted)
+                formData.set('valor_empenho', formatted)
                 //openFormNotaEmpenho.acao === 'adicionar' ? enviaNotaEmpenho(formData) : editaNotaEmpenho(formNotaEmpenho.id, formData)
                 postMutation.mutate({formData})
             }}>
@@ -67,32 +67,12 @@ export default function FormPostNotaEmpenho({
                 required
                 label="Tipo de Empenho"
                 id="tipo_empenho"
+                name="tipo_empenho"
             >
                 <MenuItem value={"complemento"}>Complemento</MenuItem>
                 <MenuItem value={"cancelamento"}>Cancelamento</MenuItem>
                 <MenuItem value={"novo_empenho"}>Novo Empenho</MenuItem>
             </TextField>
-            {/*<FormControl 
-                //error={errors?.hasOwnProperty('tipo_empenho')}
-                fullWidth 
-                required
-            >
-                <InputLabel id="tipo_empenho-label">Tipo de Empenho</InputLabel>
-                <Select
-                    labelId="tipo_empenho-label"
-                    id="tipo_empenho"
-                    label="Tipo de Empenho"
-                    defaultValue={dados.tipo_empenho}
-                    name="tipo_empenho"
-                    fullWidth
-                    required
-                >
-                    <MenuItem value={"complemento"}>Complemento</MenuItem>
-                    <MenuItem value={"cancelamento"}>Cancelamento</MenuItem>
-                    <MenuItem value={"novo_empenho"}>Novo Empenho</MenuItem>
-                </Select>
-            <FormHelperText>{errors?.tipo_empenho}</FormHelperText>
-            </FormControl>*/}
 
             <TextField
                 label="Data de Emissão da Nota"
@@ -160,6 +140,7 @@ export default function FormPostNotaEmpenho({
                 //helperText={errors?.valor_empenho}
                 required
                 fullWidth
+                prefix="R$ "
             />
         </Box>
     )

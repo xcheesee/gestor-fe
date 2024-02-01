@@ -47,7 +47,7 @@ export default function ListaNotasReserva({
                 queryKey: 'notas_reserva',
                 setCarregando: setCarregando
             }}
-            tipo_lista="Notas de reserva"
+            tipo_lista="Nota de reserva"
             TabDados={TabNotaReserva}
             renderEdit={(notas, setOpenModal) => 
                 <FormEditNotaReserva

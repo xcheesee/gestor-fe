@@ -9,6 +9,11 @@ import { Box, TextField, MenuItem } from "@mui/material"
 import CampoAno from "../../CampoAno"
 import CampoValores from "../../CampoValores"
 import { useState } from "react"
+const tipos_empenho = {
+    cancelamento: "Cancelamento",
+    complemento: "Complemento",
+    novo_empenho: "Novo Empenho"
+}
 
 export default function FormEditNotaEmpenho({
     numContrato,
@@ -56,9 +61,9 @@ export default function FormEditNotaEmpenho({
                 e.preventDefault()
                 const formData = new FormData(e.target)
                 formData.append("contrato_id", numContrato)
-                const val = formData.get('valor')
+                const val = formData.get('valor_empenho')
                 const formatted = brlToFloat(val)
-                formData.set('valor', formatted)
+                formData.set('valor_empenho', formatted)
                 editMutation.mutate({formData, id: dados.id})
             }}>
 
@@ -68,6 +73,7 @@ export default function FormEditNotaEmpenho({
                 required
                 label="Tipo de Empenho"
                 id="tipo_empenho"
+                name="tipo_empenho"
                 defaultValue={dados.tipo_empenho}
             >
                 <MenuItem value={"complemento"}>Complemento</MenuItem>
