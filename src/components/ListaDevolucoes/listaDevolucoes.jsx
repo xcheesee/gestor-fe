@@ -6,6 +6,7 @@ import { TabValues, formataData, formataValores, mascaraDevolucao } from "../../
 import { FormEditDevolucao } from "./Forms/editDevolucao";
 import { FormPostDevolucao } from "./Forms/postDevolucao";
 import ListaCardElement from "../ListaCardElement";
+import { Box, CircularProgress } from "@mui/material";
 
 
 const TabDevolucoes = (props) => {
@@ -28,6 +29,12 @@ export default function ListaDevolucoes({
     const [carregando, setCarregando] = useState(false)
 
     const formId = "devolucoes-form"
+
+    if(devolucoes?.isLoading) return (
+        <Box className="w-full h-full grid place-content-center">
+            <CircularProgress className="" />
+        </Box>
+    )
 
     return (
         <ListaCardElement

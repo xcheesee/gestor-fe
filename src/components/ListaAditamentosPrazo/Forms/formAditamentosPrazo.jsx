@@ -1,4 +1,4 @@
-import { Box, FormControl, FormHelperText, InputAdornment, InputLabel, Select, TextField, MenuItem } from "@mui/material"
+import { Box, FormControl, FormHelperText, InputLabel, Select, TextField, MenuItem } from "@mui/material"
 
 export default function FormAditamentoPrazo({
     numContrato,
@@ -38,7 +38,6 @@ export default function FormAditamentoPrazo({
                 label="Tipo"
                 defaultValue={dados?.tipo_aditamento ?? ""}
                 name="tipo_aditamento"
-                //onChange={handleInputChange}
                 required
                 fullWidth
               >
@@ -56,9 +55,7 @@ export default function FormAditamentoPrazo({
               variant="outlined"
               defaultValue={dados?.dias_reajuste ?? ""}
               name="dias_reajuste"
-              //onChange={handleInputChange}
               label="Dias Reajuste"
-              //sx={{ margin: "1rem 0" }}
               //error={errors?.hasOwnProperty("dias_reajuste")}
               //helperText={errors?.dias_reajuste}
               fullWidth

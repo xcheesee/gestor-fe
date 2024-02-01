@@ -1,34 +1,23 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { 
-    Dialog,
-    DialogTitle,
-    DialogContent,
-    DialogActions,
-    Button,
-    //TextField,
-    Box,
-    Typography
-} from '@mui/material';
+import { Box, Dialog, DialogTitle, DialogContent, DialogActions, Typography, Button } from "@mui/material"
+import { useRef, useState } from "react"
+import CampoTexto from "../../CampoTexto"
+import { fiscLabels } from "../../../commom/utils/constants"
 
-import CampoTexto from '../../CampoTexto';
-import { fiscLabels } from '../../../commom/utils/constants';
-
-const FormGestaoFiscalizacao = (props) => {
-    const {
-        formFiscalizacao,
-        enviaFiscalizacao,
-        editaFiscalizacao,
-        openFormFiscalizacao,
-        errors,
-        setErrors,
-        formId
-    } = props;
+export default function FormFiscalizacoes({
+    numContrato,
+    acao,
+    dados={},
+    errors={},
+    formId,
+    onSubmit,
+    setOpen
+}) {
 
     const [mesmoCargoDialog, setMesmoCargoDialog] = useState(false)
     
-    const gestorRef = useRef(formFiscalizacao.nome_gestor)
-    const fiscalRef = useRef(formFiscalizacao.nome_fiscal)
-    const suplenteRef = useRef(formFiscalizacao.nome_suplente)
+    const gestorRef = useRef(dados?.nome_gestor ?? "")
+    const fiscalRef = useRef(dados?.nome_fiscal ?? "")
+    const suplenteRef = useRef(dados?.nome_suplente ?? "")
     const labelsRef = useRef([])
     const firstWarningRef = useRef({
         fiscal: false,
@@ -36,15 +25,13 @@ const FormGestaoFiscalizacao = (props) => {
         suplente: false
     })
 
-    useEffect(() => {
-        setErrors({});
-    }, [openFormFiscalizacao.open])
+    //useEffect(() => {
+    //    setErrors({});
+    //}, [openFormFiscalizacao.open])
 
     function checkSameName (currRef, campo) {
         let sameCampo = [campo]
         let isSame = false
-        // if(currRef === gestorRef && !firstWarningRef.current.gestor) { // check de equalidade de referencia
-            // firstWarningRef.current.gestor = true
             if(currRef !== fiscalRef 
                 && !firstWarningRef.current.fiscal 
                 && currRef.current === fiscalRef.current 
@@ -64,9 +51,6 @@ const FormGestaoFiscalizacao = (props) => {
                 sameCampo.push("Suplente")
                 isSame = true
             }
-        // } else if (currRef === fiscalRef && !firstWarningRef.current.fiscal) {
-            // firstWarningRef.current.fiscal = true
-            // sameCampo.push("Fiscal")
             if(currRef !== gestorRef 
                 && !firstWarningRef.current.gestor 
                 && currRef.current === gestorRef.current 
@@ -76,29 +60,9 @@ const FormGestaoFiscalizacao = (props) => {
                 sameCampo.push("Gestor")
                 isSame = true
             }
-            // if(currRef.current === suplenteRef.current && currRef.current !== "") {
-            //     firstWarningRef.current.suplente = true
-            //     sameCampo.push("Suplente")
-            //     isSame = true
-            // }
-        // } else if (currRef === suplenteRef && !firstWarningRef.current.suplente) {
-            // firstWarningRef.current.suplente = true
-            // sameCampo.push("Suplente")
-        //     if(currRef.current === gestorRef.current && currRef.current !== "") {
-        //         firstWarningRef.current.gestor = true
-        //         sameCampo.push("Gestor")
-        //         isSame = true
-        //     }
-        //     if(currRef.current === fiscalRef.current && currRef.current !== "") {
-        //         firstWarningRef.current.fiscal = true
-        //         sameCampo.push("Fiscal")
-        //         isSame = true
-        //     }
-        // }
         return {isSame: isSame, labels: sameCampo}
     }
-    
-    return (
+    return(
         <>
             <Box
                 component="form"
@@ -106,11 +70,17 @@ const FormGestaoFiscalizacao = (props) => {
                 onSubmit={(e) => {
                     e.preventDefault()
                     const formData = new FormData(e.target)
-                    formData.append("contrato_id", formFiscalizacao.contrato_id)
-                    openFormFiscalizacao.acao === 'adicionar' ? enviaFiscalizacao(formData) : editaFiscalizacao(formFiscalizacao.id, formData)
+                    formData.append("contrato_id", numContrato)
+                    acao === 'Enviar' 
+                        ? onSubmit({formData},{
+                            onSuccess: () => setOpen(false)
+                        }) 
+                        : onSubmit({formData, id: dados.id}, {
+                            onSuccess: () => setOpen(false)
+                        })
                 }}>
                 <CampoTexto
-                    defaultValue={formFiscalizacao.nome_gestor}
+                    defaultValue={dados.nome_gestor}
                     name="nome_gestor"
                     changeFn={(e) => {
                         firstWarningRef.current.fiscal = false
@@ -131,14 +101,14 @@ const FormGestaoFiscalizacao = (props) => {
                     required
                 />
                 <CampoTexto
-                    defaultValue={formFiscalizacao.email_gestor}
+                    defaultValue={dados.email_gestor}
                     name="email_gestor"
                     labels={fiscLabels}
                     errors={errors}
                     required
                 />
                 <CampoTexto
-                    defaultValue={formFiscalizacao.nome_fiscal}
+                    defaultValue={dados.nome_fiscal}
                     name="nome_fiscal"
                     changeFn={(e) => {
                         firstWarningRef.current.gestor = false
@@ -158,14 +128,14 @@ const FormGestaoFiscalizacao = (props) => {
                     required
                 />
                 <CampoTexto
-                    defaultValue={formFiscalizacao.email_fiscal}
+                    defaultValue={dados.email_fiscal}
                     name="email_fiscal"
                     labels={fiscLabels}
                     errors={errors}
                     required
                 />
                 <CampoTexto
-                    defaultValue={formFiscalizacao.nome_suplente}
+                    defaultValue={dados.nome_suplente}
                     name="nome_suplente"
                     labels={fiscLabels}
                     errors={errors}
@@ -185,13 +155,14 @@ const FormGestaoFiscalizacao = (props) => {
                     required
                 />
                 <CampoTexto
-                    defaultValue={formFiscalizacao.email_suplente}
+                    defaultValue={dados.email_suplente}
                     name="email_suplente"
                     labels={fiscLabels}
                     errors={errors}
                     required
                 />
             </Box>
+
             <Dialog open={mesmoCargoDialog}>
                 <DialogTitle>
                     <Typography className='text-3xl font-light text-center'>Atenção!</Typography>
@@ -213,7 +184,6 @@ const FormGestaoFiscalizacao = (props) => {
                 </DialogActions>
             </Dialog>
         </>
-    );
-}
+    )
 
-export default FormGestaoFiscalizacao;
+}
