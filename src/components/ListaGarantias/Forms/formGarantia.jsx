@@ -1,6 +1,7 @@
 import { Box, TextField } from "@mui/material"
 import CampoValores from "../../CampoValores"
 import CampoData from "../../CampoData"
+import { brlToFloat } from "../../../commom/utils/utils"
 
 export default function FormGarantia({
     numContrato,
@@ -20,6 +21,9 @@ export default function FormGarantia({
                 e.preventDefault()
                 const formData = new FormData(e.target)
                 formData.append("contrato_id", numContrato)
+                const val = formData.get('valor_garantia')
+                const formatted = brlToFloat(val)
+                formData.set('valor_garantia', formatted)
                 acao === "Enviar"
                     ? onSubmit({formData}, {
                         onSuccess: () => setOpen(false)
@@ -58,6 +62,7 @@ export default function FormGarantia({
                 label="Valor"
                 defaultValue={dados?.valor_garantia ?? ""}
                 name="valor_garantia"
+                prefix="R$ "
                 //checaErros={() => {}}
                 error={errors?.hasOwnProperty('valor_garantia')}
                 helperText={errors?.valor_garantia ?? ""}

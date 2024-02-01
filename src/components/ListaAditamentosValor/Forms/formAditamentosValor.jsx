@@ -1,6 +1,7 @@
 import { Box, FormControl, FormHelperText, InputAdornment, InputLabel, Select, TextField, MenuItem } from "@mui/material"
 import CampoValores from "../../CampoValores"
 import CampoData from "../../CampoData"
+import { brlToFloat } from "../../../commom/utils/utils"
 
 export default function FormAditamentoValor({
     numContrato,
@@ -20,6 +21,9 @@ export default function FormAditamentoValor({
             e.preventDefault()
             const formData = new FormData(e.target)
             formData.append("contrato_id", numContrato)
+            const val = formData.get('valor_aditamento')
+            const formatted = brlToFloat(val)
+            formData.set('valor_aditamento', formatted)
             acao === "Enviar" 
               ?  onSubmit({formData}, {
                 onSuccess: () => setOpen(false)
@@ -56,6 +60,7 @@ export default function FormAditamentoValor({
             label="Valor"
             defaultValue={dados.valor_aditamento ?? ""}
             name="valor_aditamento"
+            prefix="R$ "
             //checaErros={() => {}}
             error={errors?.hasOwnProperty("valor_aditamento")}
             helperText={errors?.valor_aditamento}
