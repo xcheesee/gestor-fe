@@ -1,7 +1,6 @@
-import { Box, MenuItem, TextField } from "@mui/material";
+import { Box, TextField } from "@mui/material";
 import CampoMasked from "../../CampoMasked";
 import CampoValores from "../../CampoValores";
-import { tipos_notas_reserva } from "../../../commom/utils/constants";
 import { brlToFloat } from "../../../commom/utils/utils";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useSetAtom } from "jotai";
@@ -67,6 +66,7 @@ export function FormEditDevolucao({
                 type="date"
                 name="data_devolucao"
                 label="Data de Devolução"
+                defaultValue={dados?.data_devolucao ?? ""}
                 InputLabelProps={{
                     shrink: true
                 }}

@@ -5,13 +5,10 @@ import {
     DialogContent,
     DialogActions,
     Button,
-    FormControl,
-    FormHelperText,
-    InputLabel,
-    Select,
     MenuItem,
     Box,
-    CircularProgress
+    CircularProgress,
+    TextField
 } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import CheckIcon from '@mui/icons-material/Check';
@@ -80,7 +77,7 @@ const FormExecFinanceira = (props) => {
             <DialogContent>
                 <Box 
                     sx={{ display: 'grid'}}
-                    className='py-2'
+                    className='py-2 gap-4'
                     component="form"
                     id={formId}
                     onSubmit={async (e) => {
@@ -96,30 +93,25 @@ const FormExecFinanceira = (props) => {
                         id="ano"
                         //onChange={handleChange}
                         error={errors.hasOwnProperty('ano')}
-                        helperText={errors.hasOwnProperty('ano') ? errors.ano : " "}
+                        helperText={errors.hasOwnProperty('ano') ? errors.ano : null}
                         required
                     />
-
-                    <FormControl sx={{ margin: '1rem 0', mr: '1rem' }} required fullWidth>
-                        <InputLabel id="ano-label">Mês inicial</InputLabel>
-                        <Select
-                            labelId="mes-label"
-                            id="mes_inicial"
-                            label="Mês inicial"
-                            name="mes_inicial"
-                            //value={formExecFinanceira.mes}
-                            //onChange={handleChange}
-                            error={errors.hasOwnProperty('mes_inicial')}
-                        >
+                    <TextField
+                        select
+                        fullWidth
+                        required
+                        name='mes_inicial'
+                        id='mes_inicial'
+                        label="Mês inicial"
+                        error={errors.hasOwnProperty('mes_inicial')}
+                        helperText={errors?.mes_inicial ?? ""}
+                    >
                             {meses.map((mes, index) => {
                                 return (
                                     <MenuItem key={index} value={index + 1}>{mes}</MenuItem>
                                 );
                             })}
-                        </Select>
-
-                        <FormHelperText>{errors.hasOwnProperty('mes_inicial') ? errors.mes_inicial : " "}</FormHelperText>
-                    </FormControl>
+                    </TextField>
 
                     <CampoValores 
                         label="Planejado(LOA)" 
