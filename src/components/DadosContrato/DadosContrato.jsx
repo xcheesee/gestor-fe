@@ -24,7 +24,7 @@ import ListaAditamentosPrazo from '../ListaAditamentosPrazo';
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import ListaReajustes from '../ListaReajustes';
-import { getContrato, /*getContrTot, getRecursos*/ } from '../../commom/utils/api';
+import { getContrato, throwableGetData, /*getContrTot, getRecursos*/ } from '../../commom/utils/api';
 import { formataCpfCnpj } from '../../commom/utils/utils';
 import { CardEmpresa } from '../CampoEmpresa';
 import DelContratoEle from '../DelContratoEle';
@@ -36,6 +36,7 @@ import TotalizadorCardEle from '../TotalizadorCardEle';
 import CurrencyExchangeOutlinedIcon from '@mui/icons-material/CurrencyExchangeOutlined';
 import ReceiptLongOutlinedIcon from '@mui/icons-material/ReceiptLongOutlined';
 import BarChartOutlinedIcon from '@mui/icons-material/BarChartOutlined';
+import { useQuery } from '@tanstack/react-query';
 
 const TabPanel = (props) => {
     const { children, value, index, ...other } = props;
@@ -72,6 +73,12 @@ const DadosContrato = () => {
     const { numContrato } = useParams();
     
     const navigate = useNavigate();
+
+    const dadosTotalizador = useQuery({
+        queryFn: () => throwableGetData({path: 'totalizadores_contrato', contratoId: numContrato}),
+        queryKey: ['totalizadores'],
+    })
+    console.log(dadosTotalizador.data)
 
     useEffect(() => {
         (async () => {
@@ -194,84 +201,46 @@ const DadosContrato = () => {
                                 className=" overflow-x-scroll overflow-y-hidden"
                                 id="totalizador-container"
                             >
-                            <Box className="grid grid-rows-3 grid-flow-col auto-cols-[90px] gap-2">
-                                <TotalizadorCardEle 
-                                    className="col-span-4 bg-[#3b948c]"
-                                    title="Total Reservado"
-                                    val={109492.88}
-                                />
-                                <TotalizadorCardEle 
-                                    className="col-span-4 bg-[#54ada4]"
-                                    title="Total Empenhado"
-                                    val={109492.88}
-                                />
-                                <TotalizadorCardEle 
-                                    className="col-span-4 bg-[#7fc9bf]"
-                                    title="Média Mensal Empenhado"
-                                    val={109492.88}
-                                />
-                                <TotalizadorCardEle 
-                                    className="col-span-6 bg-[#2c756f]"
-                                    title="Realizado (Liquidado)"
-                                    val={109492.88}
-                                    icon={<ReceiptLongOutlinedIcon className='text-[5rem] text-white' />}
-                                />
-                                <TotalizadorCardEle 
-                                    className="col-span-6 bg-[#2c756f]"
-                                    title="Média Mensal Realizado"
-                                    val={109492.88}
-                                    icon={<BarChartOutlinedIcon className='text-[5rem] text-white' />}
-                                />
-                                <TotalizadorCardEle 
-                                    className="col-span-8 bg-[#54ada4]"
-                                    title="Devoluções"
-                                    val={109492.88}
-                                    icon={<CurrencyExchangeOutlinedIcon className='text-[5rem] text-white' />}
-                                />
-                                <TotalizadorCardEle 
-                                    className="col-span-4 bg-[#54ada4]"
-                                    title="Saldo"
-                                    val={109492.88}
-                                />
-                                <TotalizadorCardEle 
-                                    className="col-span-4 bg-[#3b948c]"
-                                    title="Total Reservado"
-                                    val={109492.88}
-                                />
-                                <TotalizadorCardEle 
-                                    className="col-span-4 bg-[#54ada4]"
-                                    title="Total Empenhado"
-                                    val={109492.88}
-                                />
-                                <TotalizadorCardEle 
-                                    className="col-span-4 bg-[#7fc9bf]"
-                                    title="Média Mensal Empenhado"
-                                    val={109492.88}
-                                />
-                                <TotalizadorCardEle 
-                                    className="col-span-6 bg-[#2c756f]"
-                                    title="Realizado (Liquidado)"
-                                    val={109492.88}
-                                    icon={<ReceiptLongOutlinedIcon className='text-[5rem] text-white' />}
-                                />
-                                <TotalizadorCardEle 
-                                    className="col-span-6 bg-[#2c756f]"
-                                    title="Média Mensal Realizado"
-                                    val={109492.88}
-                                    icon={<BarChartOutlinedIcon className='text-[5rem] text-white' />}
-                                />
-                                <TotalizadorCardEle 
-                                    className="col-span-8 bg-[#54ada4]"
-                                    title="Devoluções"
-                                    val={109492.88}
-                                    icon={<CurrencyExchangeOutlinedIcon className='text-[5rem] text-white' />}
-                                />
-                                <TotalizadorCardEle 
-                                    className="col-span-4 bg-[#54ada4]"
-                                    title="Saldo"
-                                    val={109492.88}
-                                />
-                            </Box>
+                                <Box className="grid grid-cols-12 gap-2">
+                                    <TotalizadorCardEle 
+                                        className="col-span-4 bg-[#3b948c]"
+                                        title="Total Reservado"
+                                        val={dadosTotalizador?.data?.totalResevado.toLocaleString('pt-BR', { minimumFractionDigits: 2}) ?? ""}
+                                    />
+                                    <TotalizadorCardEle 
+                                        className="col-span-4 bg-[#54ada4]"
+                                        title="Total Empenhado"
+                                        val={dadosTotalizador?.data?.totalEmpenhado.toLocaleString('pt-BR', { minimumFractionDigits: 2}) ?? ""}
+                                    />
+                                    <TotalizadorCardEle 
+                                        className="col-span-4 bg-[#7fc9bf]"
+                                        title="Média Mensal Empenhado"
+                                        val={dadosTotalizador?.data?.mediaAnualEmpenho[0].media_anual.toLocaleString('pt-BR', { minimumFractionDigits: 2}) ?? ""}
+                                    />
+                                    <TotalizadorCardEle 
+                                        className="col-span-6 bg-[#2c756f]"
+                                        title="Realizado (Liquidado)"
+                                        val={dadosTotalizador?.data?.realizado.toLocaleString('pt-BR', { minimumFractionDigits: 2}) ?? ""}
+                                        icon={<ReceiptLongOutlinedIcon className='text-[5rem] text-white' />}
+                                    />
+                                    <TotalizadorCardEle 
+                                        className="col-span-6 bg-[#2c756f]"
+                                        title="Média Mensal Realizado"
+                                        val={dadosTotalizador?.data?.mediaAnualRealizado[0].media_anual.toLocaleString('pt-BR', { minimumFractionDigits: 2}) ?? ""}
+                                        icon={<BarChartOutlinedIcon className='text-[5rem] text-white' />}
+                                    />
+                                    <TotalizadorCardEle 
+                                        className="col-span-8 bg-[#54ada4]"
+                                        title="Devoluções"
+                                        val={dadosTotalizador?.data?.totalDevolucoes.toLocaleString('pt-BR', { minimumFractionDigits: 2}) ?? ""}
+                                        icon={<CurrencyExchangeOutlinedIcon className='text-[5rem] text-white' />}
+                                    />
+                                    <TotalizadorCardEle 
+                                        className="col-span-4 bg-[#54ada4]"
+                                        title="Saldo"
+                                        val={dadosTotalizador?.data?.saldo.toLocaleString('pt-BR', { minimumFractionDigits: 2}) ?? ""}
+                                    />
+                                </Box>
                             </Box>
 
                             <Box sx={{ display: 'flex', width: '100%' }} className='rounded overflow-hidden' component={Paper} elevation={5}>
