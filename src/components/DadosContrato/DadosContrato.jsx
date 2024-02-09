@@ -78,7 +78,6 @@ const DadosContrato = () => {
         queryFn: () => throwableGetData({path: 'totalizadores_contrato', contratoId: numContrato}),
         queryKey: ['totalizadores'],
     })
-    console.log(dadosTotalizador.data)
 
     useEffect(() => {
         (async () => {
@@ -95,17 +94,17 @@ const DadosContrato = () => {
         })();
     }, [numContrato, navigate, mudancaContrato])
 
-    useEffect(() => {
-        const totContainer = document.getElementById('totalizador-container')
+    //useEffect(() => {
+    //    const totContainer = document.getElementById('totalizador-container')
 
-        function horizontalScroll(e) {
-            e.preventDefault()
-            totContainer.scrollLeft += e.deltaY;
-        }
+    //    function horizontalScroll(e) {
+    //        e.preventDefault()
+    //        totContainer.scrollLeft += e.deltaY;
+    //    }
 
-        totContainer.addEventListener("wheel", horizontalScroll)
-        return () => totContainer.removeEventListener('wheel', horizontalScroll)
-    }, [])
+    //    totContainer.addEventListener("wheel", horizontalScroll)
+    //    return () => totContainer.removeEventListener('wheel', horizontalScroll)
+    //}, [])
 
     const handleChange = (event, newValue) => {
         setValue(newValue);
@@ -203,7 +202,7 @@ const DadosContrato = () => {
                             >
                                 <Box className="grid grid-cols-12 gap-2">
                                     <TotalizadorCardEle 
-                                        className="col-span-4 bg-[#3b948c]"
+                                        className="col-span-4 bg-[#54ada4]"
                                         title="Total Reservado"
                                         val={dadosTotalizador?.data?.totalResevado.toLocaleString('pt-BR', { minimumFractionDigits: 2}) ?? ""}
                                     />
@@ -213,32 +212,32 @@ const DadosContrato = () => {
                                         val={dadosTotalizador?.data?.totalEmpenhado.toLocaleString('pt-BR', { minimumFractionDigits: 2}) ?? ""}
                                     />
                                     <TotalizadorCardEle 
+                                        className="col-span-4 bg-[#54ada4]"
+                                        title="Saldo"
+                                        val={dadosTotalizador?.data?.saldo.toLocaleString('pt-BR', { minimumFractionDigits: 2}) ?? ""}
+                                    />
+                                    {/*<TotalizadorCardEle 
                                         className="col-span-4 bg-[#7fc9bf]"
                                         title="Média Mensal Empenhado"
                                         val={dadosTotalizador?.data?.mediaAnualEmpenho[0].media_anual.toLocaleString('pt-BR', { minimumFractionDigits: 2}) ?? ""}
-                                    />
+                                    />*/}
                                     <TotalizadorCardEle 
                                         className="col-span-6 bg-[#2c756f]"
                                         title="Realizado (Liquidado)"
                                         val={dadosTotalizador?.data?.realizado.toLocaleString('pt-BR', { minimumFractionDigits: 2}) ?? ""}
                                         icon={<ReceiptLongOutlinedIcon className='text-[5rem] text-white' />}
                                     />
-                                    <TotalizadorCardEle 
+                                    {/*<TotalizadorCardEle 
                                         className="col-span-6 bg-[#2c756f]"
                                         title="Média Mensal Realizado"
                                         val={dadosTotalizador?.data?.mediaAnualRealizado[0].media_anual.toLocaleString('pt-BR', { minimumFractionDigits: 2}) ?? ""}
                                         icon={<BarChartOutlinedIcon className='text-[5rem] text-white' />}
-                                    />
+                                    />*/}
                                     <TotalizadorCardEle 
-                                        className="col-span-8 bg-[#54ada4]"
+                                        className="col-span-6 bg-[#2c756f]"
                                         title="Devoluções"
                                         val={dadosTotalizador?.data?.totalDevolucoes.toLocaleString('pt-BR', { minimumFractionDigits: 2}) ?? ""}
                                         icon={<CurrencyExchangeOutlinedIcon className='text-[5rem] text-white' />}
-                                    />
-                                    <TotalizadorCardEle 
-                                        className="col-span-4 bg-[#54ada4]"
-                                        title="Saldo"
-                                        val={dadosTotalizador?.data?.saldo.toLocaleString('pt-BR', { minimumFractionDigits: 2}) ?? ""}
                                     />
                                 </Box>
                             </Box>

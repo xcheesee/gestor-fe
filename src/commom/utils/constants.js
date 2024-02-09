@@ -149,3 +149,13 @@ export const tipos_notas_reserva = {
         cancelamento: "Cancelamento",
         renovacao: "Renovação",
     }
+
+export const totalizadoresLabels = {
+    totalResevado: "Total Reservado",
+    totalEmpenhado: "Total Empenhado",
+    realizado: "Realizado",
+    totalDevolucoes: "Devolucoes",
+    saldo: "Saldo",
+    mediaAnualEmpenho: "Média Mensal Empenhado",
+    mediaAnualRealizado: "Média Mensal Realizado"
+}
