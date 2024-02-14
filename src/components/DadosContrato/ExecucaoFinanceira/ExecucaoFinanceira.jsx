@@ -1,22 +1,18 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { 
     Box, 
     Typography, 
     Button
 } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
-//import DialogDetalhes from './DialogDetalhes/DialogDetalhes';
 import FormExecFinanceira from './FormExecFinanceira';
 import FormEditExecFinanceira from './FormEditExecFinanceira';
 import DialogConfirmacao from '../../DialogConfirmacao';
 import ExecucaoFinanceiraCard from './ExecucaoFinanceiraCard';
-import { /*getExecucaoFinanceira,*/ getExecucoesFinanceiras/*, postAnoExecFin*/ } from '../../../commom/utils/api';
+import { getExecucoesFinanceiras } from '../../../commom/utils/api';
 import { useQuery } from '@tanstack/react-query';
 
 const ExecucaoFinanceira = ({ numContrato }) => {
-    //const [openDetalhes, setOpenDetalhes] = useState(false);
-    //const [detalheExecFin, setDetalheExecFin] = useState({});
-    //const [execucoes_financeiras, setExecucoesFinanceiras] = useState({})
     const [errors, setErrors] = useState({});
     const [carregando, setCarregando] = useState(false);
     const [openEditExecFinanceira, setOpenEditExecFinanceira] = useState(false);
@@ -30,14 +26,6 @@ const ExecucaoFinanceira = ({ numContrato }) => {
         open: false,
         acao: 'adicionar'
     });
-
-    //useEffect(() => {
-    //    (async () => {
-    //        const execFin = await getExecucoesFinanceiras(numContrato)
-    //        setExecucoesFinanceiras(execFin)
-    //    })();
-
-    //}, [numContrato])
 
     const execucoes_financeiras = useQuery({
         queryKey: ['execucoes', numContrato],
@@ -82,8 +70,6 @@ const ExecucaoFinanceira = ({ numContrato }) => {
                             execucao={execucao} 
                             carregando={carregando}
                             setCarregando={setCarregando}
-                            //setDetalheExecFin={setCurrExecucao}
-                            //setOpenDetalhes={setOpenDetalhes}
                             handleClickEditarAno={handleClickEditarAno}
                         />
                     )
@@ -121,12 +107,6 @@ const ExecucaoFinanceira = ({ numContrato }) => {
 
             <Conteudo />
 
-            {/*<DialogDetalhes 
-                detalhes={detalheExecFin}
-                openDetalhes={openDetalhes}
-                setOpenDetalhes={setOpenDetalhes}
-            />*/}
-
             <FormExecFinanceira 
                 formId={formId}
                 contratoId={numContrato}
@@ -134,9 +114,7 @@ const ExecucaoFinanceira = ({ numContrato }) => {
                 setOpenFormExecFinanceira={setOpenFormExecFinanceira}
                 errors={errors}
                 setErrors={setErrors}
-                //carregando={execucoes_financeiras.isLoading}
                 setOpenConfirmacao={setOpenConfirmacao}
-                //totais={totais}
             />
 
             <FormEditExecFinanceira 

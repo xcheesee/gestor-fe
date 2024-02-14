@@ -12,6 +12,12 @@ import {
     Tooltip,
     TextField,
     InputAdornment,
+    TableContainer,
+    Table,
+    TableHead,
+    TableBody,
+    TableRow,
+    TableCell,
 } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import CheckIcon from '@mui/icons-material/Check';
@@ -26,6 +32,9 @@ import { snackbarAtom } from '../../../../atomStore';
 import { useErrorSnackbar } from '../../../../commom/utils/hooks';
 import CampoValores from '../../../CampoValores';
 
+function createTableRow(tipo, dados) {
+    return [tipo, ...dados]
+}
 
 function DialogEditar ({openEditar, setOpenEditar, formId, carregando}) {
     return (
@@ -186,6 +195,16 @@ const FormEditExecFinanceira = ({
         setOpenExcluir(true);
     }
 
+    const tableData = [
+        createTableRow('Reservas', ['10','10','','','','','','','','','','',]),
+        createTableRow('Aditamentos', ['20','20','','','','','','','','','','',]),
+        createTableRow('Reajustes', ['30','','','','','','','','','','','',]),
+        createTableRow('Empenhado', ['30','50','','','','','','','','','','',]),
+        createTableRow('Executado', ['40','40','','','','','','','','','','',]),
+        createTableRow('Saldo', []),
+
+    ]
+
     return (
         <>
         <DialogExcluir 
@@ -238,13 +257,6 @@ const FormEditExecFinanceira = ({
                         name="planejado"
                         id="planejado"
                     />
-                    {/*<Typography className="text-lg font-medium" component={'div'}>
-                        Planejado(LOA)
-                        <Typography className='text-xl font-light pl-4'>
-                            {formataValores(execucao?.planejado)}
-                        </Typography>
-                    </Typography>*/}
-                    
 
                     <Typography className="text-lg font-medium" component={'div'}>
                         Reservado
@@ -260,12 +272,6 @@ const FormEditExecFinanceira = ({
                         name="contratado"
                         id="contratado"
                     />
-                    {/*<Typography className="text-lg font-medium" component={'div'}>
-                        Contratado
-                        <Typography className='text-xl font-light pl-4'>
-                            {formataValores(execucao?.contratado)}
-                        </Typography>
-                    </Typography>*/}
 
                     <Typography className="text-lg font-medium" component={'div'}>
                         Mes Inicial
@@ -275,38 +281,44 @@ const FormEditExecFinanceira = ({
                     </Typography>
                 </Box>
 
-                    <Box 
-                        sx={{  alignItems: 'center'}}
-                        className='pt-8 px-8'
-                        /*component={'form'}
-                        id={formId}
-                        onSubmit={async (e) => {
-                            e.preventDefault()
-
-                            const execData = tabelaRef.getDataAtRow(4)
-                            const empenhadoData = tabelaRef.getDataAtRow(3)
-                            const postExec = {
-                                data_empenhado: empenhadoData,
-                                data_execucao: execData,
-                                id_ano_execucao: execucao.id
-                            }
-                            addMesExec.mutate({execucao: postExec}) 
-                        }}
-                        */
-                    >
-                        {dadosExecucao.isLoading
-                            ?<Box className="w-full h-52 flex justify-center items-center">
-                                <CircularProgress size={32} sx={{ color: 'gray' }} />
-                            </Box>
-                            :<TabelaExecFin 
-                                id="hotExec" 
-                                execucao={execucao}
-                                tabelaRef={tabelaRef}
-                                setTabelaRef={setTabelaRef}
-                                dadosExecucao={dadosExecucao?.data}
-                            />
-                        }
-                    </Box>
+                {/*<Box 
+                    sx={{  alignItems: 'center'}}
+                    className='pt-8 px-8'
+                >
+                    {dadosExecucao.isLoading
+                        ?<Box className="w-full h-52 flex justify-center items-center">
+                            <CircularProgress size={32} sx={{ color: 'gray' }} />
+                        </Box>
+                        :<TabelaExecFin 
+                            id="hotExec" 
+                            execucao={execucao}
+                            tabelaRef={tabelaRef}
+                            setTabelaRef={setTabelaRef}
+                            dadosExecucao={dadosExecucao?.data}
+                        />
+                    }
+                </Box>*/}
+                <TableContainer className='mt-4 rounded'>
+                    <Table className="min-w-48  relative">
+                        <TableHead>
+                            <TableRow className='bg-[#3b948c] '>
+                                <TableCell className='sticky left-0 z-10 bg-[#3b948c]'> </TableCell>
+                                {meses.map( (mes, i) => <TableCell key={i} className='text-white'>{mes}</TableCell>)}
+                            </TableRow>
+                        </TableHead>
+                        <TableBody>
+                            {tableData.map( (arr, i) => 
+                                <TableRow key={`row-${i}`}>
+                                    {arr.map( (dados, i) => {
+                                        if(i === 0) {
+                                            return <TableCell key={`cell-${i}`} className='font-bold text-white bg-[#3b948c] border-white sticky left-0 '>{dados}</TableCell>
+                                        }
+                                        return <TableCell key={`cell-${i}`} className='text-center'>{dados}</TableCell>
+                                    })}
+                                </TableRow>)}
+                        </TableBody>
+                    </Table>
+                </TableContainer>
             </DialogContent>
 
             <DialogActions 

@@ -5,22 +5,8 @@ import EditIcon from '@mui/icons-material/Edit';
 export default function ExecucaoFinanceiraCard({
     execucao, 
     carregando,
-    //setCarregando, 
-    //setDetalheExecFin,
-    //setOpenDetalhes,
     handleClickEditarAno
 }) {
-
-    //async function detalhaExecucaoFinanceira (execucao) {
-    //    setCarregando(true);
-
-    //    //const data = await getExecucaoFinanceira(id)
-    //    //console.log(execucao)
-    //    //setDetalheExecFin()
-    //    //setOpenDetalhes(true)
-
-    //    setCarregando(false)
-    //}
 
     return(
         <Box
@@ -31,7 +17,6 @@ export default function ExecucaoFinanceiraCard({
                 minWidth: '16rem',
                 mr: '1rem'
             }}
-            //key={index}
         >
             <Divider
                 textAlign='right'
@@ -77,17 +62,6 @@ export default function ExecucaoFinanceiraCard({
                         justifyContent: 'flex-end' 
                     }}
                 >
-                    {/*<Tooltip title="Detalhes" arrow>
-                        <Box>
-                            <IconButton
-                                //onClick={() => detalhaExecucaoFinanceira(execucao?.id)}
-                                disabled={carregando}
-                            >
-                                <ManageSearchIcon />
-                            </IconButton>
-                        </Box>
-                    </Tooltip>*/}
-                    
                     <Tooltip title="Editar" arrow>
                         <Box>
                             <IconButton
