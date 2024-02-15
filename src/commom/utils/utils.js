@@ -98,6 +98,20 @@ export function getLocalStorageInput(numeroContrato, campo) {
   return localStorage.getItem(`contrato-${numeroContrato}-${campo}`)
 }
 
+export function calculaSaldo(dadosExecucao) {
+  if(!dadosExecucao) return []
+  const { empenhos, aditamentos, reajustes, executado, reservado} = dadosExecucao
+  const saldo = new Array(12) 
+  for(let i = 0; i < 12; i++) {
+    if(i === 0) {
+      saldo[i] = +empenhos[i] + +aditamentos[i] + +reajustes[i] + +reservado[i] - +executado[i]
+    } else {
+      saldo[i] = +saldo[i-1] + +empenhos[i] + +aditamentos[i] + +reajustes[i] + +reservado[i] - +executado[i]
+    }
+  }
+  return saldo
+}
+
 // export function RetornaCampoValor ({campos, valores}) {
 //   return (
 //       <Box sx={{ margin: '0 1rem' }}>

@@ -10,8 +10,6 @@ import {
     CircularProgress,
     Typography,
     Tooltip,
-    TextField,
-    InputAdornment,
     TableContainer,
     Table,
     TableHead,
@@ -22,11 +20,11 @@ import {
 import CloseIcon from '@mui/icons-material/Close';
 import CheckIcon from '@mui/icons-material/Check';
 import DeleteIcon from '@mui/icons-material/Delete';
-import { brlToFloat, formataValores } from '../../../../commom/utils/utils';
+import { brlToFloat, calculaSaldo, formataValores } from '../../../../commom/utils/utils';
 import { meses } from '../../../../commom/utils/constants';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import TabelaExecFin from '../TabelaExecFin';
-import { getMesesExecutados, postMesesExecFin, throwableDeleteForm, throwableGetData } from '../../../../commom/utils/api';
+import { getMesesExecutados, postMesesExecFin, throwableGetData } from '../../../../commom/utils/api';
 import { useSetAtom } from 'jotai';
 import { snackbarAtom } from '../../../../atomStore';
 import { useErrorSnackbar } from '../../../../commom/utils/hooks';
@@ -107,11 +105,12 @@ const FormEditExecFinanceira = ({
     const dadosExecucao = useQuery({
         queryKey: ['mesesExecutados', execucao.id],
         queryFn: async () => {
-            const [executados, notasAditReaj] = await Promise.all([
-                getMesesExecutados(execucao.id),
-                throwableGetData({path: 'exec_valores_meses', contratoId: execucao.id})
-            ])
-            return {exec: executados, aditamentos: notasAditReaj.aditamentos, notasEmpenho: notasAditReaj.empenhos, reajustes: notasAditReaj.reajustes}
+            //const [executados, notasAditReaj] = await Promise.all([
+            //    getMesesExecutados(execucao.id),
+            //    throwableGetData({path: 'exec_valores_meses', contratoId: execucao.id})
+            //])
+            return throwableGetData({path: 'exec_valores_meses', contratoId: execucao.id})
+            //{exec: executados, aditamentos: notasAditReaj.aditamentos, notasEmpenho: notasAditReaj.empenhos, reajustes: notasAditReaj.reajustes}
         },
         enabled: !!execucao.id
     })
@@ -139,13 +138,12 @@ const FormEditExecFinanceira = ({
     }
 
     const tableData = [
-        createTableRow('Reservas', ['10','10','','','','','','','','','','']),
-        createTableRow('Aditamentos', ['20','20','','','','','','','','','','']),
-        createTableRow('Reajustes', ['30','','','','','','','','','','','']),
-        createTableRow('Empenhado', ['30','50','','','','','','','','','','']),
-        createTableRow('Executado', ['40','40','','','','','','','','','','']),
-        createTableRow('Saldo', ['40','40','','','','','','','','','','']),
-
+        createTableRow('Reservas', dadosExecucao?.data?.reservado?.map(val => formataValores(val)) ?? [] ),
+        createTableRow('Aditamentos', dadosExecucao?.data?.aditamentos?.map(val => formataValores(val)) ?? []),
+        createTableRow('Reajustes', dadosExecucao?.data?.reajustes?.map(val => formataValores(val)) ?? []),
+        createTableRow('Empenhado', dadosExecucao?.data?.empenhos?.map(val => formataValores(val)) ?? []),
+        createTableRow('Executado', dadosExecucao?.data?.executado?.map(val => formataValores(val)) ?? []),
+        createTableRow( 'Saldo', calculaSaldo(dadosExecucao?.data)?.map(val => formataValores(val)) ?? [] ),
     ]
 
     return (
@@ -189,8 +187,6 @@ const FormEditExecFinanceira = ({
                             //const execData = tabelaRef.getDataAtRow(4)
                             //const empenhadoData = tabelaRef.getDataAtRow(3)
                             const postExec = {
-                                data_execucao: ['','','','','','','','','','','',''],
-                                data_empenhado: ['','','','','','','','','','','','',''],
                                 id_ano_execucao: execucao.id,
                                 contratado: contratado,
                                 planejado: planejado
@@ -246,28 +242,34 @@ const FormEditExecFinanceira = ({
                         />
                     }
                 </Box>*/}
+                {
+                    dadosExecucao.isLoading 
+                        ?<Box className="w-full h-full grid place-content-center pt-16">
+                            <CircularProgress className="" />
+                        </Box>
+                        : <TableContainer className='mt-4 rounded'>
+                            <Table className="relative">
+                                <TableHead>
+                                    <TableRow className='bg-[#3b948c] '>
+                                        <TableCell className='sticky left-0 z-10 bg-[#3b948c] text-white text-center'>-</TableCell>
+                                        {meses.map( (mes, i) => <TableCell key={i} className='text-white text-center'>{mes}</TableCell>)}
+                                    </TableRow>
+                                </TableHead>
+                                <TableBody>
+                                    {tableData.map( (arr, i) => 
+                                        <TableRow key={`row-${i}`}>
+                                            {arr.map( (dados, i) => {
+                                                if(i === 0) {
+                                                    return <TableCell key={`cell-${i}`} className='font-bold text-white bg-[#3b948c] border-white sticky left-0 '>{dados}</TableCell>
+                                                }
+                                                return <TableCell key={`cell-${i}`} className='text-center whitespace-nowrap'>{dados}</TableCell>
+                                            })}
+                                        </TableRow>)}
+                                </TableBody>
+                            </Table>
+                        </TableContainer>
+                }
 
-                <TableContainer className='mt-4 rounded'>
-                    <Table className="min-w-48  relative">
-                        <TableHead>
-                            <TableRow className='bg-[#3b948c] '>
-                                <TableCell className='sticky left-0 z-10 bg-[#3b948c] text-white text-center'>-</TableCell>
-                                {meses.map( (mes, i) => <TableCell key={i} className='text-white'>{mes}</TableCell>)}
-                            </TableRow>
-                        </TableHead>
-                        <TableBody>
-                            {tableData.map( (arr, i) => 
-                                <TableRow key={`row-${i}`}>
-                                    {arr.map( (dados, i) => {
-                                        if(i === 0) {
-                                            return <TableCell key={`cell-${i}`} className='font-bold text-white bg-[#3b948c] border-white sticky left-0 '>{dados}</TableCell>
-                                        }
-                                        return <TableCell key={`cell-${i}`} className='text-center'>{dados}</TableCell>
-                                    })}
-                                </TableRow>)}
-                        </TableBody>
-                    </Table>
-                </TableContainer>
             </DialogContent>
 
             <DialogActions 
