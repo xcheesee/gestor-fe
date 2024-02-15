@@ -11,6 +11,7 @@ import DialogConfirmacao from '../../DialogConfirmacao';
 import ExecucaoFinanceiraCard from './ExecucaoFinanceiraCard';
 import { getExecucoesFinanceiras } from '../../../commom/utils/api';
 import { useQuery } from '@tanstack/react-query';
+import DialogDelete from '../../DialogDelete';
 
 const ExecucaoFinanceira = ({ numContrato }) => {
     const [errors, setErrors] = useState({});

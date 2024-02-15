@@ -31,6 +31,7 @@ import { useSetAtom } from 'jotai';
 import { snackbarAtom } from '../../../../atomStore';
 import { useErrorSnackbar } from '../../../../commom/utils/hooks';
 import CampoValores from '../../../CampoValores';
+import DialogDelete from '../../../DialogDelete';
 
 function createTableRow(tipo, dados) {
     return [tipo, ...dados]
@@ -79,47 +80,6 @@ function DialogEditar ({openEditar, setOpenEditar, formId, carregando}) {
     );
 }
 
-function DialogExcluir({openExcluir, setOpenExcluir, carregando, excluirAno}) {
-    return(
-        <Dialog open={openExcluir}>
-            <DialogTitle>
-                Excluir mês de execução financeira
-            </DialogTitle>
-
-            <DialogContent>
-                <DialogContentText>
-                    Confirma a exclusão do ano de execucao financeira 
-                    <strong> {}</strong>?
-                </DialogContentText>
-            </DialogContent>
-
-            <DialogActions>
-                <Button 
-                    sx={{ 
-                        textTransform: 'none', 
-                        color: (theme) => theme.palette.error.main 
-                    }}
-                    onClick={() => setOpenExcluir(false)}
-                >
-                    Cancelar
-                </Button>
-
-                <Button 
-                    sx={{ textTransform: 'none' }} 
-                    onClick={excluirAno}
-                >
-                    {
-                        carregando
-                        ? <CircularProgress sx={{ mr: '0.3rem' }} size="0.7rem" />
-                        : ""
-                    }
-                    Excluir
-                </Button>
-            </DialogActions>
-        </Dialog>
-    )
-}
-
 const FormEditExecFinanceira = ({
     openEditExecFinanceira,
     setOpenEditExecFinanceira,
@@ -128,6 +88,7 @@ const FormEditExecFinanceira = ({
     //errors,
     setErrors,
     carregando,
+    setCarregando,
     formId,
     numContrato
 }) => {
@@ -136,9 +97,12 @@ const FormEditExecFinanceira = ({
     const setSnackbar = useSetAtom(snackbarAtom)
     const errorSnackbar = useErrorSnackbar()
 
-    const [openExcluir, setOpenExcluir] = useState(false);
+    const [excluir, setExcluir] = useState({
+        id: '',
+        open: false
+    });
     const [openEditar, setOpenEditar] = useState(false);
-    const [tabelaRef, setTabelaRef] = useState()
+    //const [tabelaRef, setTabelaRef] = useState()
 
     const dadosExecucao = useQuery({
         queryKey: ['mesesExecutados', execucao.id],
@@ -165,23 +129,6 @@ const FormEditExecFinanceira = ({
         }
     })
 
-    const excluiAno = useMutation({
-        mutationFn: ({idExecucao}) => throwableDeleteForm({id: idExecucao, path: 'exec_financeira'}),
-        onSuccess: () => {
-            setSnackbar(prev => ({...prev, open: true, severity: "success", message: "Meses de execucao excluidos.", color: "success"}))
-            queryClient.invalidateQueries(['execucoes', numContrato]) 
-            setOpenEditExecFinanceira(false)
-            setOpenExcluir(false)
-        },
-        onError: (e) => {
-            errorSnackbar.Delete(e)
-        }
-    })
-
-    function excluirAno (idExecucao) {
-        excluiAno.mutate({idExecucao})
-    }
-
     const cancelar = () => {
         setOpenEditExecFinanceira(false);
         setErrors({});
@@ -191,27 +138,28 @@ const FormEditExecFinanceira = ({
         setOpenEditar(true);
     }
 
-    const handleClickExcluir = () => {
-        setOpenExcluir(true);
-    }
-
     const tableData = [
-        createTableRow('Reservas', ['10','10','','','','','','','','','','',]),
-        createTableRow('Aditamentos', ['20','20','','','','','','','','','','',]),
-        createTableRow('Reajustes', ['30','','','','','','','','','','','',]),
-        createTableRow('Empenhado', ['30','50','','','','','','','','','','',]),
-        createTableRow('Executado', ['40','40','','','','','','','','','','',]),
-        createTableRow('Saldo', []),
+        createTableRow('Reservas', ['10','10','','','','','','','','','','']),
+        createTableRow('Aditamentos', ['20','20','','','','','','','','','','']),
+        createTableRow('Reajustes', ['30','','','','','','','','','','','']),
+        createTableRow('Empenhado', ['30','50','','','','','','','','','','']),
+        createTableRow('Executado', ['40','40','','','','','','','','','','']),
+        createTableRow('Saldo', ['40','40','','','','','','','','','','']),
 
     ]
 
     return (
         <>
-        <DialogExcluir 
-            openExcluir={openExcluir}
-            setOpenExcluir={setOpenExcluir}
-            carregando={excluiAno.isLoading}
-            excluiAno={() => excluirAno(execucao.id)}
+        <DialogDelete
+            open={excluir.open}
+            setOpen={(bool) => setExcluir(prev => ({...prev, open: bool}))}
+            tipo_op="Execucao Financeira"
+            id={execucao.id}
+            carregando={carregando}
+            setCarregando={setCarregando}
+            queryKey='execucoes'
+            deletePath='exec_financeira'
+            onSucc={() => setOpenEditExecFinanceira(false)}
         />
 
         <DialogEditar 
@@ -238,11 +186,11 @@ const FormEditExecFinanceira = ({
                             planejado = brlToFloat(planejado)
                             contratado = brlToFloat(contratado)
 
-                            const execData = tabelaRef.getDataAtRow(4)
-                            const empenhadoData = tabelaRef.getDataAtRow(3)
+                            //const execData = tabelaRef.getDataAtRow(4)
+                            //const empenhadoData = tabelaRef.getDataAtRow(3)
                             const postExec = {
-                                data_empenhado: empenhadoData,
-                                data_execucao: execData,
+                                data_execucao: ['','','','','','','','','','','',''],
+                                data_empenhado: ['','','','','','','','','','','','',''],
                                 id_ano_execucao: execucao.id,
                                 contratado: contratado,
                                 planejado: planejado
@@ -298,11 +246,12 @@ const FormEditExecFinanceira = ({
                         />
                     }
                 </Box>*/}
+
                 <TableContainer className='mt-4 rounded'>
                     <Table className="min-w-48  relative">
                         <TableHead>
                             <TableRow className='bg-[#3b948c] '>
-                                <TableCell className='sticky left-0 z-10 bg-[#3b948c]'> </TableCell>
+                                <TableCell className='sticky left-0 z-10 bg-[#3b948c] text-white text-center'>-</TableCell>
                                 {meses.map( (mes, i) => <TableCell key={i} className='text-white'>{mes}</TableCell>)}
                             </TableRow>
                         </TableHead>
@@ -333,7 +282,7 @@ const FormEditExecFinanceira = ({
                         sx={{ textTransform: 'none' }}
                         variant="contained"
                         color="error"
-                        onClick={handleClickExcluir}
+                        onClick={() => setExcluir(prev => ({open: true, id: execucao.id}))}
                     >
                         <DeleteIcon />
                     </Button>
