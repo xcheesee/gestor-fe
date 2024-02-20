@@ -20,7 +20,6 @@ import { useQuery } from '@tanstack/react-query';
 
 const Principal = () => {
     const [novoDialog, setNovoDialog] = useState(false)
-    // const [sort, setSort] = useState(false);
     const [carregandoSort, setCarregandoSort] = useState(true);
     const [url, setUrl] = useState({
         url: `${process.env.REACT_APP_API_URL}/contratos?`,

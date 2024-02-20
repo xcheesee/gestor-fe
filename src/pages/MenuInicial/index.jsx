@@ -1,7 +1,7 @@
 import { Box, Button, Fade, Paper, Typography } from "@mui/material"
 import TextSnippetIcon from '@mui/icons-material/TextSnippet';
 import FilePresentIcon from '@mui/icons-material/FilePresent';
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const MenuInicial = ({ title }) => {
     return(
@@ -34,12 +34,15 @@ function MenuButton ({ children, className = "" , path = '/404'}) {
     }
 
     return(
-            <Button 
-                variant="outlined" 
-                className={`h-60 text-4xl font-thin ${className}`}
-                onClick={handleClick}>
-                { children }
-            </Button>
+            <Link to={path} className="w-full">
+                <Button 
+                    variant="outlined" 
+                    className={`h-60 text-4xl font-thin w-full ${className}`}
+                    //onClick={handleClick}
+                >
+                    { children }
+                </Button>
+            </Link>
     )
 }
 

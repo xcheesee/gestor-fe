@@ -250,17 +250,17 @@ const FormEditExecFinanceira = ({
                         : <TableContainer className='mt-4 rounded'>
                             <Table className="relative">
                                 <TableHead>
-                                    <TableRow className='bg-[#3b948c] '>
+                                    <TableRow className='bg-[#3b948c] [&>*]:border-0'>
                                         <TableCell className='sticky left-0 z-10 bg-[#3b948c] text-white text-center'>-</TableCell>
                                         {meses.map( (mes, i) => <TableCell key={i} className='text-white text-center'>{mes}</TableCell>)}
                                     </TableRow>
                                 </TableHead>
                                 <TableBody>
                                     {tableData.map( (arr, i) => 
-                                        <TableRow key={`row-${i}`}>
+                                        <TableRow key={`row-${i}`} className='even:bg-slate-200 [&>*]:border-0'>
                                             {arr.map( (dados, i) => {
                                                 if(i === 0) {
-                                                    return <TableCell key={`cell-${i}`} className='font-bold text-white bg-[#3b948c] border-white sticky left-0 '>{dados}</TableCell>
+                                                    return <TableCell key={`cell-${i}`} className='font-bold text-white bg-[#3b948c] sticky left-0 '>{dados}</TableCell>
                                                 }
                                                 return <TableCell key={`cell-${i}`} className='text-center whitespace-nowrap'>{dados}</TableCell>
                                             })}

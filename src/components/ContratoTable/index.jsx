@@ -1,5 +1,5 @@
 import { Box, Fade, IconButton, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from "@mui/material";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import SortArrow from "../SortArrow";
 import { formataData, irParaTopo, mascaraContrato, mascaraProcessoSei } from "../../commom/utils/utils";
 import ManageSearchIcon from '@mui/icons-material/ManageSearch';
@@ -14,7 +14,7 @@ const ContratoTable = ({dados, url, ordena, carregandoSort, isLoading}) => {
             }} 
             align="center"
         >
-                        <Box
+            <Box
                 sx={{ 
                     display: 'flex', 
                     justifyContent: 'center', 
@@ -139,12 +139,14 @@ const ContratoTable = ({dados, url, ordena, carregandoSort, isLoading}) => {
                                                 }
                                             </TableCell>
                                             <TableCell align="center" sx={background}>
-                                                <IconButton onClick={() => {
-                                                    irParaTopo()
-                                                    navigate(`../contrato/${row.id}`)
-                                                }}>
-                                                    <ManageSearchIcon />
-                                                </IconButton>
+                                                <Link to={`../contrato/${row.id}`}>
+                                                    <IconButton onClick={() => {
+                                                        irParaTopo()
+                                                        //navigate(`../contrato/${row.id}`)
+                                                    }}>
+                                                        <ManageSearchIcon />
+                                                    </IconButton>
+                                                </Link>
                                             </TableCell>
                                         </TableRow>
                                     );
