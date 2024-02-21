@@ -24,6 +24,7 @@ export function FormPostDevolucao({
         onSuccess: (res) => {
             //setOpenPostForm(false)
             queryClient.invalidateQueries({queryKey: ['devolucoes']})
+            queryClient.invalidateQueries({queryKey: ['totalizadores']})
             setSnackbar(prev => ({...prev, open: true, severity: "success", message: "Devolução enviada.", color: "success"}))
         },
         onError: (res) =>  {

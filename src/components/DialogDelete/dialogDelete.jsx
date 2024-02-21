@@ -13,7 +13,7 @@ export default function DialogDelete({
     open,
     setOpen,
     deletePath,
-    queryKey,
+    queryKeys,
     onSucc=()=>{}
 }) {
     const setSnackbar = useSetAtom(snackbarAtom)
@@ -26,7 +26,9 @@ export default function DialogDelete({
             setOpen(false)
             setCarregando(false)
             setSnackbar(prev => ({...prev, open: true, severity: "success", message: `${tipo_op} excluído(a).`, color: "success"}))
-            queryClient.invalidateQueries([queryKey])
+            queryKeys.forEach(key => {
+                queryClient.invalidateQueries([key])
+            })
             onSucc()
 
         },

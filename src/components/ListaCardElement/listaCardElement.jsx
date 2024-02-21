@@ -118,7 +118,7 @@ export default function ListaCardElement({
             id={openDelete.id}
             carregando={carregando}
             setCarregando={deleteProps.setCarregando}
-            queryKey={deleteProps.queryKey}
+            queryKeys={deleteProps.queryKeys}
             deletePath={deleteProps.deletePath}
         />
 

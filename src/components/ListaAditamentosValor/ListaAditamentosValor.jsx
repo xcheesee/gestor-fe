@@ -93,7 +93,7 @@ function ListaAditamentosValor ({ numContrato }) {
             carregando={carregando}
             deleteProps={{
                 deletePath: 'aditamento_valor',
-                queryKey: 'aditamentos_val',
+                queryKeys: ['aditamentos_val'],
                 setCarregando: setCarregando
             }}
             tipo_lista="Aditamento"

@@ -77,7 +77,7 @@ function ListaAditamentosPrazo({ numContrato }) {
           carregando={carregando}
           deleteProps={{
               deletePath: 'aditamento_prazo',
-              queryKey: 'aditamentos_prazo',
+              queryKeys: ['aditamentos_prazo'],
               setCarregando: setCarregando
           }}
           tipo_lista="Aditamento"

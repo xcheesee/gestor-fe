@@ -43,7 +43,7 @@ export default function ListaDevolucoes({
             carregando={carregando}
             deleteProps={{
                 deletePath: 'devolucao',
-                queryKey: 'devolucoes',
+                queryKeys: ['devolucoes', 'totalizadores'],
                 setCarregando: setCarregando
             }}
             tipo_lista="Devolução"

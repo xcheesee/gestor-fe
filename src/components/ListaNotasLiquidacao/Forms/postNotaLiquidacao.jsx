@@ -29,6 +29,7 @@ export function FormPostNotaLiquidacao({
         onSuccess: (res) => {
             setOpen(false)
             setCarregando(false)
+            queryClient.invalidateQueries({queryKey: ['totalizadores']})
             queryClient.invalidateQueries({queryKey: ['notas_liquidacao']})
             setSnackbar(prev => ({...prev, open: true, severity: "success", message: "Nota de Liquidação enviada.", color: "success"}))
         },

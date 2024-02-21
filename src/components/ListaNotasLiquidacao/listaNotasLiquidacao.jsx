@@ -45,7 +45,7 @@ export default function ListaNotasLiquidacao({
             carregando={carregando}
             deleteProps={{
                 deletePath: 'nota_liquidacao',
-                queryKey: 'notas_liquidacao',
+                queryKeys: ['notas_liquidacao', 'totalizadores'],
                 setCarregando: setCarregando
             }}
             tipo_lista="Nota de liquidação"

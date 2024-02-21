@@ -91,7 +91,7 @@ const ListaCertidoes = ({ numContrato }) => {
             carregando={carregando}
             deleteProps={{
                 deletePath: 'certidao',
-                queryKey: 'certidoes',
+                queryKeys: ['certidoes'],
                 setCarregando: setCarregando
             }}
             tipo_lista="Certidão"

@@ -97,7 +97,7 @@ const ListaGarantias = ({ numContrato }) => {
             carregando={carregando}
             deleteProps={{
                 deletePath: 'garantia',
-                queryKey: 'garantias',
+                queryKeys: ['garantias'],
                 setCarregando: setCarregando
             }}
             tipo_lista="Garantia"

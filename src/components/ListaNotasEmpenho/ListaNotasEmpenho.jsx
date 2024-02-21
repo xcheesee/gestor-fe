@@ -59,7 +59,7 @@ const ListaNotasEmpenho = ({numContrato}) => {
             carregando={carregando}
             deleteProps={{
                 deletePath: 'empenho_nota',
-                queryKey: 'notasEmpenho',
+                queryKeys: ['notasEmpenho', 'totalizadores', 'mesesExecutados'],
                 setCarregando: setCarregando
             }}
             tipo_lista="Nota de Empenho"

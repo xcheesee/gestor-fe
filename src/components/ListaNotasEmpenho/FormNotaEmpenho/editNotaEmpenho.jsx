@@ -45,6 +45,7 @@ export default function FormEditNotaEmpenho({
             });
             queryClient.invalidateQueries({queryKey: ['notasEmpenho', numContrato]})
             queryClient.invalidateQueries({queryKey: ['mesesExecutados']})
+            queryClient.invalidateQueries({queryKey: ['totalizadores']})
         },
         onError: (res) => {
             errorSnackbar.Put(res)

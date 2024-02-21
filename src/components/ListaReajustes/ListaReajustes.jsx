@@ -41,7 +41,7 @@ export default function ListaReajustes ({ numContrato }) {
             carregando={carregando}
             deleteProps={{
                 deletePath: 'reajuste',
-                queryKey: 'reajuste',
+                queryKeys: ['reajuste'],
                 setCarregando: setCarregando
             }}
             tipo_lista="Reajuste"

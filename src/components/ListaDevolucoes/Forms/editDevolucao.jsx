@@ -24,6 +24,7 @@ export function FormEditDevolucao({
         mutationFn: ({formData, id}) => throwablePutForm({form:formData, path:'devolucao', id}),
         onSuccess: (res) => {
             queryClient.invalidateQueries({queryKey: ['devolucoes']})
+            queryClient.invalidateQueries({queryKey: ['totalizadores']})
             setSnackbar(prev => ({...prev, open: true, severity: "success", message: "Devolução editada.", color: "success"}))
         },
         onError: (res) =>  {

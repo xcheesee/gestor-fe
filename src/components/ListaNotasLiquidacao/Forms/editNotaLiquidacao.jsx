@@ -31,6 +31,7 @@ export function FormEditNotaLiquidacao({
             setOpen(false)
             setCarregando(false)
             queryClient.invalidateQueries({queryKey: ['notas_liquidacao']})
+            queryClient.invalidateQueries({queryKey: ['totalizadores']})
             setSnackbar(prev => ({...prev, open: true, severity: "success", message: "Nota de Liquidação editada.", color: "success"}))
         },
         onError: (res) =>  {

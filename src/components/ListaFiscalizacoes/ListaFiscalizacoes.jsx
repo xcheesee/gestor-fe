@@ -101,7 +101,7 @@ const ListaFiscalizacoes = ({ numContrato }) => {
             carregando={carregando}
             deleteProps={{
                 deletePath: 'gestaofiscalizacao',
-                queryKey: 'fiscalizacoes',
+                queryKeys: ['fiscalizacoes'],
                 setCarregando: setCarregando
             }}
             tipo_lista="Fiscalização"

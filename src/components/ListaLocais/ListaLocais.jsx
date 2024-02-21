@@ -105,7 +105,7 @@ const ListaLocais = ({ numContrato }) => {
             carregando={carregando}
             deleteProps={{
                 deletePath: 'servicolocal',
-                queryKey: 'locaisContrato',
+                queryKeys: ['locaisContrato'],
                 setCarregando: setCarregando
             }}
             tipo_lista="Regionalização"

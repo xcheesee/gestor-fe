@@ -44,7 +44,7 @@ export default function ListaNotasReserva({
             carregando={carregando}
             deleteProps={{
                 deletePath: 'nota_reserva',
-                queryKey: 'notas_reserva',
+                queryKeys: ['notas_reserva', 'totalizadores', 'mesesExecutados'],
                 setCarregando: setCarregando
             }}
             tipo_lista="Nota de reserva"

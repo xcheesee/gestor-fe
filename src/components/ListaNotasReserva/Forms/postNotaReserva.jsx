@@ -24,6 +24,8 @@ export function FormPostNotaReserva({
         mutationFn: ({notaReserva, path}) => throwablePostForm({form:notaReserva, path}),
         onSuccess: (res) => {
             queryClient.invalidateQueries({queryKey: ['notas_reserva']})
+            queryClient.invalidateQueries({queryKey: ['mesesExecutados']})
+            queryClient.invalidateQueries({queryKey: ['totalizadores']})
             setSnackbar(prev => ({...prev, open: true, severity: "success", message: "Nota de Reserva enviada.", color: "success"}))
         },
         onError: (res) =>  {
