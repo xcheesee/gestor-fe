@@ -30,7 +30,7 @@ const TabNotasEmpenho = (props) => {
         data_emissao: formataData(props.data_emissao),
         valor_empenho: formataValores(props.valor_empenho),
         ano_referencia: props.ano_referencia,
-        mes_referencia: meses[props.mes_referencia],
+        mes_referencia: meses[props.mes_referencia-1],
     }
 
     return <TabValues entry={valores} labels={emprenhoLabels} label="empenho" />

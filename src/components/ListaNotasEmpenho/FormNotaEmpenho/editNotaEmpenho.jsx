@@ -90,7 +90,7 @@ export default function FormEditNotaEmpenho({
                 onChange={(e) => {
                     setDataEmissao(e.target.value)
                     const arrData = e.target.value?.split("-")
-                    setMesReferencia(+arrData[1]-1)
+                    setMesReferencia(+arrData[1])
                     setAnoReferencia(+arrData[0])
                 }}
                 //error={errors.hasOwnProperty('data_emissao')}
@@ -112,7 +112,7 @@ export default function FormEditNotaEmpenho({
             >
                 {meses.map((mes, i) => {
                     return(
-                        <MenuItem key={`mes-ref-${i}`} value={i} className=''>{mes}</MenuItem>
+                        <MenuItem key={`mes-ref-${i+1}`} value={i+1} className=''>{mes}</MenuItem>
 
                     )
                 })}

@@ -49,8 +49,8 @@ function ListaAditamentosValor ({ numContrato }) {
         mutationFn: ({formData}) => throwablePostForm({form: formData, path: "aditamento_valor"}),
         onMutate: () => { setCarregando(true) },
         onSuccess: () => {
-            queryClient.invalidateQueries({queryKey: ['aditamentos_val', numContrato]})
-            queryClient.invalidateQueries({queryKey: ['mesesExecutados']})
+            queryClient.invalidateQueries(['aditamentos_val', numContrato])
+            queryClient.invalidateQueries(['mesesExecutados'])
             setSnackbar({
                 open: true,
                 severity: 'success',
@@ -67,8 +67,8 @@ function ListaAditamentosValor ({ numContrato }) {
         mutationFn: ({formData, id}) => throwablePutForm({form: formData, path: "aditamento_valor", id: id}),
         onMutate: () => { setCarregando(true) },
         onSuccess: () => {
-            queryClient.invalidateQueries({queryKey: ['aditamentos_val', numContrato]})
-            queryClient.invalidateQueries({queryKey: ['mesesExecutados']})
+            queryClient.invalidateQueries(['aditamentos_val', numContrato])
+            queryClient.invalidateQueries(['mesesExecutados'])
             setSnackbar({
                 open: true,
                 severity: 'success',
@@ -93,7 +93,7 @@ function ListaAditamentosValor ({ numContrato }) {
             carregando={carregando}
             deleteProps={{
                 deletePath: 'aditamento_valor',
-                queryKeys: ['aditamentos_val'],
+                queryKeys: ['aditamentos_val', 'mesesExecutados'],
                 setCarregando: setCarregando
             }}
             tipo_lista="Aditamento"

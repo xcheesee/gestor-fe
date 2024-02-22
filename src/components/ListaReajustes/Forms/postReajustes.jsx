@@ -33,7 +33,7 @@ export default function FormPostReajustes({
                 color: 'success'
             });
             queryClient.invalidateQueries(['reajuste', numContrato])
-            queryClient.invalidateQueries({queryKey: ['mesesExecutados']})
+            queryClient.invalidateQueries(['mesesExecutados'])
         },
         onError: async (res) => {
             setCarregando(false)

@@ -32,6 +32,7 @@ export function FormEditNotaLiquidacao({
             setCarregando(false)
             queryClient.invalidateQueries({queryKey: ['notas_liquidacao']})
             queryClient.invalidateQueries({queryKey: ['totalizadores']})
+            queryClient.invalidateQueries({queryKey: ['mesesExecutados']})
             setSnackbar(prev => ({...prev, open: true, severity: "success", message: "Nota de Liquidação editada.", color: "success"}))
         },
         onError: (res) =>  {
@@ -70,7 +71,7 @@ export function FormEditNotaLiquidacao({
                 onChange={(e) => {
                     const dataArr = e.target.value.split('-')
                     setDataPagamento(e.target.value)
-                    setMesReferencia(+dataArr[1]-1)
+                    setMesReferencia(+dataArr[1])
                     setAnoReferencia(+dataArr[0])
                 }}
                 label="Data de Pagamento"
@@ -91,7 +92,7 @@ export function FormEditNotaLiquidacao({
             >
                 {meses.map((mes, i) => {
                     return(
-                        <MenuItem key={`mes-ref-${i}`} value={i} className=''>{mes}</MenuItem>
+                        <MenuItem key={`mes-ref-${i+1}`} value={i+1} className=''>{mes}</MenuItem>
 
                     )
                 })}

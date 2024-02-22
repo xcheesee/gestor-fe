@@ -14,7 +14,7 @@ const TabNotaLiquidacao = (props) => {
         numero_nota_liquidacao: props.numero_nota_liquidacao,
         data_pagamento: formataData(props.data_pagamento),
         ano_referencia: props.ano_referencia,
-        mes_referencia: meses[props.mes_referencia],
+        mes_referencia: meses[props.mes_referencia-1],
         valor: formataValores(props.valor),
     };
 
@@ -45,7 +45,7 @@ export default function ListaNotasLiquidacao({
             carregando={carregando}
             deleteProps={{
                 deletePath: 'nota_liquidacao',
-                queryKeys: ['notas_liquidacao', 'totalizadores'],
+                queryKeys: ['notas_liquidacao', 'totalizadores', 'mesesExecutados'],
                 setCarregando: setCarregando
             }}
             tipo_lista="Nota de liquidação"

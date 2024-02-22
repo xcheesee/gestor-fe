@@ -38,12 +38,12 @@ export default function ExecucaoFinanceiraCard({
                         </Typography>
                     </Typography>
 
-                    <Typography component="span" className="font-medium">
+                    {/*<Typography component="span" className="font-medium">
                         Reservado
                         <Typography sx={{ padding: '0 1rem', mb: '0.5rem'}}>
                             {formataValores(execucao.reservado)}
                         </Typography>
-                    </Typography>
+                    </Typography>*/}
         
                     <Typography component="span" className="font-medium">
                         Contratado
