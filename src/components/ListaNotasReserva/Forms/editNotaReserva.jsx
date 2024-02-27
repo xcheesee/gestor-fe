@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { Box, MenuItem, TextField } from "@mui/material";
 import CampoMasked from "../../CampoMasked";
 import CampoValores from "../../CampoValores";
@@ -20,6 +21,8 @@ export function FormEditNotaReserva({
     const queryClient = useQueryClient()
     const setSnackbar = useSetAtom(snackbarAtom)
     const errorSnackbar = useErrorSnackbar();
+    const [errors, setErrors] = useState()
+    console.log(errors)
 
     const editMutation = useMutation({
         mutationFn: ({formData, id}) => throwablePutForm({form:formData, path:'nota_reserva', id: id}),
@@ -32,6 +35,7 @@ export function FormEditNotaReserva({
         onError: (res) =>  {
             errorSnackbar.Put(res)
             setCarregando(false)
+            setErrors(res.errors)
         }
     })
 
@@ -62,6 +66,8 @@ export function FormEditNotaReserva({
                 name="numero_nota_reserva"
                 label="Numero da Nota de Reserva"
                 defaultValue={dadosNota.numero_nota_reserva} 
+                error={errors?.hasOwnProperty('numero_nota_reserva')}
+                helperText={errors?.numero_nota_reserva ?? ""}
             />
 
             <TextField
@@ -72,12 +78,16 @@ export function FormEditNotaReserva({
                     shrink: true
                 }}
                 defaultValue={dadosNota.data_emissao}
+                error={errors?.hasOwnProperty('data_emissao')}
+                helperText={errors?.data_emissao ?? ""}
             />
             <TextField
                 select
                 name="tipo_nota"
                 label="Tipo de Nota"
                 defaultValue={dadosNota.tipo_nota}
+                error={errors?.hasOwnProperty('tipo_nota')}
+                helperText={errors?.tipo_nota ?? ""}
             >
                 {Object.entries(tipos_notas_reserva).map((tipo_nota, i) => (
                     <MenuItem value={tipo_nota[0]} key={`tipo-nota-${i}`} >{tipo_nota[1]}</MenuItem>
@@ -88,6 +98,8 @@ export function FormEditNotaReserva({
                 label="Valor da Nota de Reserva"
                 defaultValue={dadosNota.valor}
                 prefix="R$ "
+                error={errors?.hasOwnProperty('valor')}
+                helperText={errors?.valor ?? ""}
             />
         </Box>
     )

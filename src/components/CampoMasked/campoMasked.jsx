@@ -19,6 +19,8 @@ export default function CampoMasked(props) {
         defaultValue="",
         required=false,
         fullWidth,
+        helperText,
+        error=false,
         mask="",
         ...other
     } = props;
@@ -33,6 +35,8 @@ export default function CampoMasked(props) {
                 format={mask}
                 required={required}
                 fullWidth={fullWidth}
+                helperText={helperText}
+                error={error}
                 {...other}
             />
         );

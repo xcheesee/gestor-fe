@@ -8,6 +8,7 @@ import CampoValores from "../../CampoValores";
 import CampoData from "../../CampoData";
 import { reajusteLabels } from "../../../commom/utils/constants";
 import { brlToFloat } from "../../../commom/utils/utils";
+import { useState } from "react";
 
 export default function FormPostReajustes({
     setOpen,
@@ -18,6 +19,8 @@ export default function FormPostReajustes({
     const errorSnackbar = useErrorSnackbar()
     const queryClient = useQueryClient()
     const setSnackbar = useSetAtom(snackbarAtom)
+
+    const [errors, setErrors] = useState({})
 
     const postMutation = useMutation({
         mutationFn: async (formData) => {
@@ -38,6 +41,7 @@ export default function FormPostReajustes({
         onError: async (res) => {
             setCarregando(false)
             errorSnackbar.Post(res)
+            setErrors(res.errors)
         }
     })
 
@@ -68,28 +72,28 @@ export default function FormPostReajustes({
                 label={reajusteLabels.valor_reajuste}
                 checaErros={() => {}}
                 prefix="R$ "
-                //error={errors.hasOwnProperty('valor_reajuste')}
-                //helperText={errors.hasOwnProperty('valor_reajuste') ? errors : "Ex: "}
+                error={errors?.hasOwnProperty('valor_reajuste')}
+                helperText={errors.valor_reajuste ?? "Ex: "}
                 fullWidth
-                required
+                
             />
             <TextField
                 variant="outlined"
                 name="indice_reajuste"
                 label={reajusteLabels.indice_reajuste}
-                //error={errors.hasOwnProperty('indice_reajuste')}
-                //helperText={errors.hasOwnProperty('indice_reajuste') ? errors : "Ex: "}
+                error={errors?.hasOwnProperty('indice_reajuste')}
+                helperText={errors?.indice_reajuste ?? "Ex: "}
                 fullWidth
-                required
+                
             />
 
             <CampoData
                 label="Data Reajuste"
                 name="data_reajuste"
-                //error={errors.hasOwnProperty('data_reajuste')}
-                //helperText={errors.data_reajuste}
+                error={errors?.hasOwnProperty('data_reajuste')}
+                helperText={errors?.data_reajuste ?? ""}
                 fullWidth
-                required
+                
             />
         </Box>
     )

@@ -7,6 +7,7 @@ import { useSetAtom } from "jotai";
 import { snackbarAtom } from "../../../atomStore";
 import { useErrorSnackbar } from "../../../commom/utils/hooks";
 import { throwablePutForm } from "../../../commom/utils/api";
+import { useState } from "react";
 
 export function FormEditDevolucao({
     formId,
@@ -20,6 +21,8 @@ export function FormEditDevolucao({
     const setSnackbar = useSetAtom(snackbarAtom)
     const errorSnackbar = useErrorSnackbar();
 
+    const [errors, setErrors] = useState({})
+
     const editMutation = useMutation({
         mutationFn: ({formData, id}) => throwablePutForm({form:formData, path:'devolucao', id}),
         onSuccess: (res) => {
@@ -29,6 +32,7 @@ export function FormEditDevolucao({
         },
         onError: (res) =>  {
             errorSnackbar.Put(res)
+            setErrors(res.errors)
         }
     })
 
@@ -61,11 +65,15 @@ export function FormEditDevolucao({
                 name="numero_devolucao"
                 label="Numero de Devolução"
                 defaultValue={dados?.numero_devolucao}
+                error={errors?.hasOwnProperty('numero_devolucao')}
+                helperText={errors?.numero_devolucao ?? ""}
             />
 
             <TextField
                 type="date"
                 name="data_devolucao"
+                error={errors?.hasOwnProperty('data_devolucao')}
+                helperText={errors?.data_devolucao ?? ""}
                 label="Data de Devolução"
                 defaultValue={dados?.data_devolucao ?? ""}
                 InputLabelProps={{
@@ -75,8 +83,10 @@ export function FormEditDevolucao({
 
             <CampoValores 
                 name="valor"
+                error={errors?.hasOwnProperty('valor')}
+                helperText={errors?.valor ?? ""}
                 label="Valor da Devolução"
-                defaultValue={dados.valor}
+                defaultValue={dados?.valor}
                 prefix="R$ "
             />
         </Box>

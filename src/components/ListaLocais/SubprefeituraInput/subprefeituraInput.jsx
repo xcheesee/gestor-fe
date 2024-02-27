@@ -2,7 +2,13 @@ import { CircularProgress, FormControl, InputLabel, MenuItem, Select } from "@mu
 import { useQuery } from "@tanstack/react-query";
 import { getSubprefeituras } from "../../../commom/utils/api";
 
-export default function SubprefeituraInput({regiao, selectedSub=null, onChange=() => {}}) {
+export default function SubprefeituraInput({
+    regiao, 
+    selectedSub=null, 
+    onChange=() => {},
+    error=false,
+    helperText
+}) {
     const subprefeituras = useQuery({
         queryKey: ['subprefeituras', regiao],
         queryFn: () => getSubprefeituras({regiao}),
@@ -28,6 +34,8 @@ export default function SubprefeituraInput({regiao, selectedSub=null, onChange=(
                     value={selectedSub}
                     onChange={handleChange}
                     disabled={!subprefeituras || subprefeituras.isLoading}
+                    error={error}
+                    helperText={helperText}
                 >
                     {subprefeituras?.data
                         ?.map?.((subprefeitura, i) => <MenuItem key={`sub-${i}`} value={subprefeitura.id}>{subprefeitura.nome}</MenuItem> )

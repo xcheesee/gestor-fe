@@ -9,7 +9,7 @@ const CampoTexto = React.forwardRef((props, ref) => {
         defaultValue, 
         name, 
         labels, //labels da aba em que o componente se encontra
-        errors, 
+        error=false, 
         helperText="", 
         required=false,
         changeFn= () => {}, //funcao executada onChange
@@ -28,8 +28,8 @@ const CampoTexto = React.forwardRef((props, ref) => {
             }}
             className="form__campo"
             sx={{margin: "1rem 0"}}
-            error={errors.hasOwnProperty(name)}
-            helperText={errors.hasOwnProperty(name) ? errors[name] : helperText}
+            error={error}
+            helperText={helperText}
             fullWidth
             required={required}
             {...other}

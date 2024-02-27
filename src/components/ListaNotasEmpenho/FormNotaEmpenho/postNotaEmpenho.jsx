@@ -23,6 +23,7 @@ export default function FormPostNotaEmpenho({
     const [dataEmissao, setDataEmissao] = useState("")
     const [mesReferencia, setMesReferencia] = useState("")
     const [anoReferencia, setAnoReferencia] = useState("")
+    const [errors, setErrors] = useState()
 
     const postMutation = useMutation({
         mutationFn: ({formData}) => throwablePostForm({form: formData, path: 'empenho_nota'}),
@@ -43,6 +44,7 @@ export default function FormPostNotaEmpenho({
         },
         onError: (res) => {
             errorSnackbar.Post(res)
+            setErrors(res.errors)
         },
         onSettled: () => setCarregando(false)
         
@@ -59,16 +61,16 @@ export default function FormPostNotaEmpenho({
                 const val = formData.get('valor_empenho')
                 const formatted = brlToFloat(val)
                 formData.set('valor_empenho', formatted)
-                //openFormNotaEmpenho.acao === 'adicionar' ? enviaNotaEmpenho(formData) : editaNotaEmpenho(formNotaEmpenho.id, formData)
                 postMutation.mutate({formData})
             }}>
             <TextField
                 select
                 fullWidth
-                required
                 label="Tipo de Empenho"
                 id="tipo_empenho"
                 name="tipo_empenho"
+                error={errors?.hasOwnProperty('tipo_empenho')}
+                helperText={errors?.tipo_empenho ?? ""}
             >
                 <MenuItem value={"complemento"}>Complemento</MenuItem>
                 <MenuItem value={"cancelamento"}>Cancelamento</MenuItem>
@@ -79,6 +81,8 @@ export default function FormPostNotaEmpenho({
                 label="Data de Emissão da Nota"
                 type='date'
                 name="data_emissao"
+                error={errors?.hasOwnProperty('data_emissao')}
+                helperText={errors?.data_emissao ?? ""}
                 value={dataEmissao}
                 onChange={(e) => {
                     setDataEmissao(e.target.value)
@@ -86,11 +90,9 @@ export default function FormPostNotaEmpenho({
                     setMesReferencia(+arrData[1])
                     setAnoReferencia(+arrData[0])
                 }}
-                //error={errors.hasOwnProperty('data_emissao')}
-                //helperText={errors?.data_emissao}
                 InputLabelProps={{ shrink: true}}
                 fullWidth
-                required
+                
             />
 
             <TextField
@@ -102,6 +104,8 @@ export default function FormPostNotaEmpenho({
                 onChange={(e) => {
                     setMesReferencia(e.target.value)
                 }}
+                error={errors?.hasOwnProperty('mes_referencia')}
+                helperText={errors?.mes_referencia ?? ""}
             >
                 {meses.map((mes, i) => {
                     return(
@@ -119,27 +123,25 @@ export default function FormPostNotaEmpenho({
                     setAnoReferencia(e.target.value)
                 }}
                 name="ano_referencia"
+                error={errors?.hasOwnProperty('ano_referencia')}
+                helperText={errors?.ano_referencia ?? ""}
             />
 
             <TextField
                 variant="outlined"
-                //defaultValue={dados.numero_nota}
                 name="numero_nota"
                 label="Número da Nota de Empenho"
-                //error={errors?.hasOwnProperty('numero_nota')}
-                //helperText={errors?.numero_nota ??  "Ex: 1234"}
+                error={errors?.hasOwnProperty('numero_nota')}
+                helperText={errors?.numero_nota ??  "Ex: 1234"}
                 fullWidth
-                required
+                
             />
 
             <CampoValores
                 label="Valor de empenho"
-                //defaultValue={dados.valor_empenho}
                 name="valor_empenho"
-                //checaErros={() => {}}
-                //error={errors?.hasOwnProperty('valor_garantia')}
-                //helperText={errors?.valor_empenho}
-                required
+                error={errors?.hasOwnProperty('valor_empenho')}
+                helperText={errors?.valor_empenho}
                 fullWidth
                 prefix="R$ "
             />

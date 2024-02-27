@@ -9,6 +9,7 @@ import { Box, TextField, MenuItem } from "@mui/material"
 import CampoAno from "../../CampoAno"
 import CampoValores from "../../CampoValores"
 import { useState } from "react"
+                
 const tipos_empenho = {
     cancelamento: "Cancelamento",
     complemento: "Complemento",
@@ -29,6 +30,7 @@ export default function FormEditNotaEmpenho({
     const [dataEmissao, setDataEmissao] = useState(dados?.data_emissao ?? "")
     const [mesReferencia, setMesReferencia] = useState(dados?.mes_referencia ?? "")
     const [anoReferencia, setAnoReferencia] = useState(dados.ano_referencia ?? "")
+    const [errors, setErrors] = useState({})
 
     const editMutation = useMutation({
         mutationFn: ({formData, id}) => throwablePutForm({id: id, form: formData, path: 'empenho_nota'}),
@@ -49,6 +51,7 @@ export default function FormEditNotaEmpenho({
         },
         onError: (res) => {
             errorSnackbar.Put(res)
+            setErrors(res.errors)
         },
         onSettled: () => setCarregando(false)
         
@@ -71,11 +74,12 @@ export default function FormEditNotaEmpenho({
             <TextField
                 select
                 fullWidth
-                required
                 label="Tipo de Empenho"
                 id="tipo_empenho"
                 name="tipo_empenho"
                 defaultValue={dados.tipo_empenho}
+                error={errors?.hasOwnProperty('tipo_empenho')}
+                helperText={errors?.tipo_empenho ?? ""}
             >
                 <MenuItem value={"complemento"}>Complemento</MenuItem>
                 <MenuItem value={"cancelamento"}>Cancelamento</MenuItem>
@@ -86,6 +90,8 @@ export default function FormEditNotaEmpenho({
                 label="Data de Emissão da Nota"
                 type='date'
                 name="data_emissao"
+                error={errors?.hasOwnProperty('data_emissao')}
+                helperText={errors?.data_emissao ?? ""}
                 value={dataEmissao}
                 onChange={(e) => {
                     setDataEmissao(e.target.value)
@@ -93,11 +99,8 @@ export default function FormEditNotaEmpenho({
                     setMesReferencia(+arrData[1])
                     setAnoReferencia(+arrData[0])
                 }}
-                //error={errors.hasOwnProperty('data_emissao')}
-                //helperText={errors?.data_emissao}
                 InputLabelProps={{ shrink: true}}
                 fullWidth
-                required
             />
 
             <TextField
@@ -109,6 +112,8 @@ export default function FormEditNotaEmpenho({
                 onChange={(e) => {
                     setMesReferencia(e.target.value)
                 }}
+                error={errors?.hasOwnProperty('mes_referencia')}
+                helperText={errors?.mes_referencia ?? ""}
             >
                 {meses.map((mes, i) => {
                     return(
@@ -126,6 +131,8 @@ export default function FormEditNotaEmpenho({
                     setAnoReferencia(e.target.value)
                 }}
                 name="ano_referencia"
+                error={errors?.hasOwnProperty('ano_referencia')}
+                helperText={errors?.ano_referencia ?? ""}
             />
 
             <TextField
@@ -133,21 +140,19 @@ export default function FormEditNotaEmpenho({
                 defaultValue={dados.numero_nota}
                 name="numero_nota"
                 label="Número da Nota de Empenho"
-                //error={errors?.hasOwnProperty('numero_nota')}
-                //helperText={errors?.numero_nota ??  "Ex: 1234"}
+                error={errors?.hasOwnProperty('numero_nota')}
+                helperText={errors?.numero_nota ??  "Ex: 1234"}
                 fullWidth
-                required
+                
             />
 
             <CampoValores
                 label="Valor de empenho"
                 defaultValue={dados.valor_empenho}
                 name="valor_empenho"
+                error={errors?.hasOwnProperty('valor_empenho')}
+                helperText={errors?.valor_empenho}
                 prefix="R$ "
-                //checaErros={() => {}}
-                //error={errors?.hasOwnProperty('valor_garantia')}
-                //helperText={errors?.valor_empenho}
-                required
                 fullWidth
             />
         </Box>

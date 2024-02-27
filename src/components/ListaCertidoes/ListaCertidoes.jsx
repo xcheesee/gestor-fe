@@ -48,7 +48,7 @@ const ListaCertidoes = ({ numContrato }) => {
             setSnackbar({
                 open: true,
                 severity: 'success',
-                message: 'Fiscalização enviado com sucesso!',
+                message: 'Certidão enviada com sucesso!',
                 color: 'success'
             });
             queryClient.invalidateQueries({queryKey: ['certidoes', numContrato]})
@@ -66,7 +66,7 @@ const ListaCertidoes = ({ numContrato }) => {
             setSnackbar({
                 open: true,
                 severity: 'success',
-                message: 'Fiscalização editada com sucesso!',
+                message: 'Certidão editada com sucesso!',
                 color: 'success'
             });
             queryClient.invalidateQueries({queryKey: ['certidoes', numContrato]})

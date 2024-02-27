@@ -8,6 +8,7 @@ import CampoValores from "../../CampoValores";
 import CampoData from "../../CampoData";
 import { reajusteLabels } from "../../../commom/utils/constants";
 import { brlToFloat } from "../../../commom/utils/utils";
+import { useState } from "react";
 
 export default function FormEditReajustes({
     dados,
@@ -19,6 +20,8 @@ export default function FormEditReajustes({
     const queryClient = useQueryClient()
     const errorSnackbar = useErrorSnackbar()
     const setSnackbar = useSetAtom(snackbarAtom)
+
+    const [errors, setErrors] = useState({})
 
     const putMutation = useMutation({
         mutationFn: async ({id, formData}) => await throwablePutForm({id, form:formData, path:"reajuste"}), 
@@ -37,6 +40,7 @@ export default function FormEditReajustes({
         onError: async (res) => {
             setCarregando(false)
             errorSnackbar.Put(res)
+            setErrors(res.errors)
         }
     })
 
@@ -51,7 +55,6 @@ export default function FormEditReajustes({
                 const val = formData.get('valor_reajuste')
                 const formatted = brlToFloat(val)
                 formData.set('valor_reajuste', formatted)
-                
                 formData.append('contrato_id', numContrato)
                 setCarregando(true)
                 putMutation.mutate({id:dados.id, formData:formData}, {
@@ -68,31 +71,30 @@ export default function FormEditReajustes({
                 label={reajusteLabels.valor_reajuste}
                 checaErros={() => {}}
                 prefix="R$ "
-                //error={errors.hasOwnProperty('valor_reajuste')}
-                //helperText={errors.hasOwnProperty('valor_reajuste') ? errors : "Ex: "}
+                error={errors?.hasOwnProperty('valor_reajuste')}
+                helperText={errors?.valor_reajuste ?? "Ex: "}
                 fullWidth
-                required
+                
             />
             <TextField
                 variant="outlined"
                 defaultValue={dados.indice_reajuste}
                 name="indice_reajuste"
                 label={reajusteLabels.indice_reajuste}
-                //error={errors.hasOwnProperty('indice_reajuste')}
-                //helperText={errors.hasOwnProperty('indice_reajuste') ? errors : "Ex: "}
+                error={errors?.hasOwnProperty('indice_reajuste')}
+                helperText={errors.indice_reajuste ?? "Ex: "}
                 fullWidth
-                required
+                
             />
 
             <CampoData
                 label="Data Reajuste"
                 defaultValue={dados.data_reajuste}
                 name="data_reajuste"
-                //onChange={handleInputChange}
-                //error={errors.hasOwnProperty('data_reajuste')}
-                //helperText={errors.data_reajuste}
+                error={errors?.hasOwnProperty('data_reajuste')}
+                helperText={errors?.data_reajuste ?? ""}
                 fullWidth
-                required
+                
             />
         </Box>
     )

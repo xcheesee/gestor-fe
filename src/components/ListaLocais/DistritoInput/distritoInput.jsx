@@ -3,7 +3,12 @@ import { getDistritos } from "../../../commom/utils/api"
 import { CircularProgress, FormControl, InputLabel, MenuItem, Select } from "@mui/material"
 import { useEffect, useState } from "react"
 
-export default function DistritoInput({subpref, defaultValue}) {
+export default function DistritoInput({
+    subpref, 
+    defaultValue,
+    error=false,
+    helperText
+}) {
     const distritos = useQuery({
         queryKey: ['distritos', subpref],
         queryFn: () => getDistritos({subpref}),
@@ -32,6 +37,8 @@ export default function DistritoInput({subpref, defaultValue}) {
                     //value={selectedSubs}
                     //onChange={handleChange}
                     disabled={!distritos?.data || distritos.isLoading || subpref.length === 0}
+                    error={error}
+                    helperText={helperText}
                 >
                     {distritos?.data
                         ?.map?.((distrito, i) => <MenuItem key={`dist-${i}`} value={distrito.id}>{distrito.nome}</MenuItem> )

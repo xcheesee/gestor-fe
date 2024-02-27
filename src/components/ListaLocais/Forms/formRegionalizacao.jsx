@@ -7,12 +7,12 @@ export default function FormRegionalizacao({
     numContrato,
     acao,
     dados={},
-    errors={},
     formId,
     onSubmit,
     setOpen
 }) {
 
+    const [errors, setErrors] = useState({})
     const [regiao, setRegiao] = useState(dados.regiao);
     const [subpref, setSubpref] = useState(
         !!dados?.subprefeitura 
@@ -36,10 +36,12 @@ export default function FormRegionalizacao({
                 formData.append("contrato_id", numContrato)
                 acao === 'Enviar' 
                     ? onSubmit({formData},{
-                        onSuccess: () => setOpen(false)
+                        onSuccess: () => setOpen(false),
+                        onError: (res) => setErrors(res.errors)
                     }) 
                     : onSubmit({formData, id: dados.id}, {
-                        onSuccess: () => setOpen(false)
+                        onSuccess: () => setOpen(false),
+                        onError: (res) => setErrors(res.errors)
                     })
             }}>
 
@@ -66,9 +68,16 @@ export default function FormRegionalizacao({
                 regiao={regiao} 
                 selectedSub={subpref} 
                 onChange={ (value) => setSubpref( typeof value === 'string' ? value.split(',') : value) }
+                error={errors?.hasOwnProperty('subprefeitura')}
+                helperText={errors?.subprefeitura ?? ""}
             />
 
-            <DistritoInput subpref={subpref} defaultValue={dados?.distrito_id} />
+            <DistritoInput 
+                subpref={subpref} 
+                defaultValue={dados?.distrito_id} 
+                error={errors?.hasOwnProperty('distrito_id')}
+                helperText={errors?.distrito_id ?? ""}
+            />
 
             <TextField
                 variant="outlined"

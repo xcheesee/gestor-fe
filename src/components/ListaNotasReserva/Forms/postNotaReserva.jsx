@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { Box, MenuItem, TextField } from "@mui/material";
 import CampoMasked from "../../CampoMasked";
 import CampoValores from "../../CampoValores";
@@ -19,6 +20,8 @@ export function FormPostNotaReserva({
     const errorSnackbar = useErrorSnackbar()
     const queryClient = useQueryClient()
     const setSnackbar = useSetAtom(snackbarAtom)
+    const [errors, setErrors] = useState()
+    console.log(errors)
 
     const postMutation = useMutation({
         mutationFn: ({notaReserva, path}) => throwablePostForm({form:notaReserva, path}),
@@ -31,6 +34,7 @@ export function FormPostNotaReserva({
         onError: (res) =>  {
             errorSnackbar.Post(res)
             setCarregando(false)
+            setErrors(res.errors)
         }
     })
 
@@ -60,6 +64,8 @@ export function FormPostNotaReserva({
                 mask="####"
                 name="numero_nota_reserva"
                 label="Numero da Nota de Reserva"
+                error={errors?.hasOwnProperty('numero_nota_reserva')}
+                helperText={errors?.numero_nota_reserva ?? ""}
             />
 
             <TextField
@@ -69,11 +75,15 @@ export function FormPostNotaReserva({
                 InputLabelProps={{
                     shrink: true
                 }}
+                error={errors?.hasOwnProperty('data_emissao')}
+                helperText={errors?.data_emissao ?? ""}
             />
             <TextField
                 select
                 name="tipo_nota"
                 label="Tipo de Nota"
+                error={errors?.hasOwnProperty('tipo_nota')}
+                helperText={errors?.tipo_nota ?? ""}
             >
                 {Object.entries(tipos_notas_reserva).map((tipo_nota, i) => (
                     <MenuItem value={tipo_nota[0]} key={`tipo-nota-${i}`} >{tipo_nota[1]}</MenuItem>
@@ -83,6 +93,8 @@ export function FormPostNotaReserva({
                 name="valor"
                 label="Valor da Nota de Reserva"
                 prefix="R$ "
+                error={errors?.hasOwnProperty('valor')}
+                helperText={errors?.valor ?? ""}
             />
         </Box>
     )

@@ -21,6 +21,7 @@ export function FormEditNotaLiquidacao({
     const setSnackbar = useSetAtom(snackbarAtom)
     const errorSnackbar = useErrorSnackbar()
 
+    const [errors, setErorrs] = useState({})
     const [dataPagamento, setDataPagamento] = useState(dados?.data_pagamento ?? "")
     const [mesReferencia, setMesReferencia] = useState(dados?.mes_referencia ?? "")
     const [anoReferencia, setAnoReferencia] = useState(dados?.ano_referencia ?? "")
@@ -38,6 +39,7 @@ export function FormEditNotaLiquidacao({
         onError: (res) =>  {
             errorSnackbar.Put(res)
             setCarregando(false)
+            setErorrs(res.errors)
         }
     })
 
@@ -62,11 +64,15 @@ export function FormEditNotaLiquidacao({
                 name="numero_nota_liquidacao"
                 label="Numero da Nota de Liquidação"
                 defaultValue={dados?.numero_nota_liquidacao}
+                error={errors?.hasOwnProperty('numero_nota_liquidacao')}
+                helperText={errors?.numero_nota_liquidacao ?? ""}
             />
 
             <TextField
                 type="date"
                 name="data_pagamento"
+                error={errors?.hasOwnProperty('data_pagamento')}
+                helperText={errors?.data_pagamento ?? ""}
                 value={dataPagamento}
                 onChange={(e) => {
                     const dataArr = e.target.value.split('-')
@@ -85,6 +91,8 @@ export function FormEditNotaLiquidacao({
                 fullWidth
                 label="Mês de Referência"
                 name='mes_referencia'
+                error={errors.hasOwnProperty('mes_referencia')}
+                helperText={errors?.mes_referencia ?? ""}
                 value={mesReferencia}
                 onChange={(e) => {
                     setMesReferencia(e.target.value)
@@ -107,10 +115,14 @@ export function FormEditNotaLiquidacao({
                     setAnoReferencia(e.target.value)
                 }}
                 name="ano_referencia"
+                error={errors.hasOwnProperty('ano_referencia')}
+                helperText={errors?.ano_referencia ?? ""}
             />
 
             <CampoValores 
                 name="valor"
+                error={errors.hasOwnProperty('valor')}
+                helperText={errors?.valor ?? ""}
                 label="Valor da Nota de Liquidação"
                 defaultValue={dados.valor}
                 prefix="R$ "

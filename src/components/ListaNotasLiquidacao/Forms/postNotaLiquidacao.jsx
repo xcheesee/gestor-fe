@@ -20,6 +20,7 @@ export function FormPostNotaLiquidacao({
     const setSnackbar = useSetAtom(snackbarAtom)
     const errorSnackbar = useErrorSnackbar()
 
+    const [errors, setErrors] = useState({})
     const [dataPagamento, setDataPagamento] = useState("")
     const [mesReferencia, setMesReferencia] = useState("")
     const [anoReferencia, setAnoReferencia] = useState("")
@@ -37,6 +38,7 @@ export function FormPostNotaLiquidacao({
         onError: (res) =>  {
             errorSnackbar.Post(res)
             setCarregando(false)
+            setErrors(res.errors)
         }
     })
     return(
@@ -59,11 +61,15 @@ export function FormPostNotaLiquidacao({
                 mask="####"
                 name="numero_nota_liquidacao"
                 label="Numero da Nota de Liquidação"
+                error={errors.hasOwnProperty('numero_nota_liquidacao')}
+                helperText={errors?.numero_nota_liquidacao ?? ""}
             />
 
             <TextField
                 type="date"
                 name="data_pagamento"
+                error={errors.hasOwnProperty('data_pagamento')}
+                helperText={errors?.data_pagamento ?? ""}
                 value={dataPagamento}
                 onChange={(e) => {
                     const dataArr = e.target.value.split('-')
@@ -82,6 +88,8 @@ export function FormPostNotaLiquidacao({
                 fullWidth
                 label="Mês de Referência"
                 name='mes_referencia'
+                error={errors.hasOwnProperty('mes_referencia')}
+                helperText={errors?.mes_referencia ?? ""}
                 value={mesReferencia}
                 onChange={(e) => {
                     setMesReferencia(e.target.value)
@@ -104,12 +112,16 @@ export function FormPostNotaLiquidacao({
                     setAnoReferencia(e.target.value)
                 }}
                 name="ano_referencia"
+                error={errors.hasOwnProperty('ano_referencia')}
+                helperText={errors?.ano_referencia ?? ""}
             />
 
             <CampoValores 
                 name="valor"
                 label="Valor da Nota de Liquidação"
                 prefix="R$ "
+                error={errors.hasOwnProperty('valor')}
+                helperText={errors?.valor ?? ""}
             />
         </Box>
     )

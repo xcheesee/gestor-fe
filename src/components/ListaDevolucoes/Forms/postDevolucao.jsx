@@ -7,6 +7,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useSetAtom } from "jotai";
 import { snackbarAtom } from "../../../atomStore";
 import { throwablePostForm } from "../../../commom/utils/api";
+import { useState } from "react";
 
 export function FormPostDevolucao({
     formId,
@@ -19,6 +20,8 @@ export function FormPostDevolucao({
     const queryClient = useQueryClient()
     const setSnackbar = useSetAtom(snackbarAtom)
 
+    const [errors, setErrors] = useState({})
+
     const postMutation = useMutation({
         mutationFn: (formData) => throwablePostForm({form:formData, path:'devolucao'}),
         onSuccess: (res) => {
@@ -29,6 +32,7 @@ export function FormPostDevolucao({
         },
         onError: (res) =>  {
             errorSnackbar.Post(res)
+            setErrors({})
         }
     })
 
@@ -59,12 +63,16 @@ export function FormPostDevolucao({
             <CampoMasked
                 mask="##.####"
                 name="numero_devolucao"
+                error={errors?.hasOwnProperty('numero_devolucao')}
+                helperText={errors?.numero_devolucao ?? ""}
                 label="Numero de Devolução"
             />
 
             <TextField
                 type="date"
                 name="data_devolucao"
+                error={errors?.hasOwnProperty('data_devolucao')}
+                helperText={errors?.data_devolucao ?? ""}
                 label="Data de Devolução"
                 InputLabelProps={{
                     shrink: true
@@ -73,6 +81,8 @@ export function FormPostDevolucao({
 
             <CampoValores 
                 name="valor"
+                error={errors?.hasOwnProperty('valor')}
+                helperText={errors?.valor ?? ""}
                 label="Valor da Devolução"
                 prefix="R$ "
             />
