@@ -2,39 +2,18 @@ import { Box, TextField } from "@mui/material";
 import CampoMasked from "../../CampoMasked";
 import CampoValores from "../../CampoValores";
 import { brlToFloat } from "../../../commom/utils/utils";
-import { useErrorSnackbar } from "../../../commom/utils/hooks";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { useSetAtom } from "jotai";
-import { snackbarAtom } from "../../../atomStore";
-import { throwablePostForm } from "../../../commom/utils/api";
 import { useState } from "react";
 
-export function FormPostDevolucao({
+export function FormDevolucao({
     formId,
     numContrato,
-    //postMutation,
+    dados,
     setOpen,
-    setCarregando
+    setCarregando,
+    onSubmit,
+    acao
 }) {
-    const errorSnackbar = useErrorSnackbar()
-    const queryClient = useQueryClient()
-    const setSnackbar = useSetAtom(snackbarAtom)
-
     const [errors, setErrors] = useState({})
-
-    const postMutation = useMutation({
-        mutationFn: (formData) => throwablePostForm({form:formData, path:'devolucao'}),
-        onSuccess: (res) => {
-            //setOpenPostForm(false)
-            queryClient.invalidateQueries({queryKey: ['devolucoes']})
-            queryClient.invalidateQueries({queryKey: ['totalizadores']})
-            setSnackbar(prev => ({...prev, open: true, severity: "success", message: "Devolução enviada.", color: "success"}))
-        },
-        onError: (res) =>  {
-            errorSnackbar.Post(res)
-            setErrors({})
-        }
-    })
 
     return(
         <Box
@@ -49,23 +28,24 @@ export function FormPostDevolucao({
                 formData.set('valor', formatted)
                 formData.append('contrato_id', numContrato)
                 setCarregando(true)
-                postMutation.mutate(formData, {
-                    onSuccess: () => {
-                        setOpen(false)
-                        setCarregando(false)
-                    },
-                    onError: () => {
-                        setCarregando(false)
-                    }
-                })
+                acao === 'Enviar' 
+                    ? onSubmit({formData},{
+                        onSuccess: () => setOpen(false),
+                        onError: (res) => setErrors(res.errors)
+                    }) 
+                    : onSubmit({formData, id: dados.id}, {
+                        onSuccess: () => setOpen(false),
+                        onError: (res) => setErrors(res.errors)
+                    })
             }}
         >
             <CampoMasked
                 mask="##.####"
                 name="numero_devolucao"
+                label="Numero de Devolução"
+                defaultValue={dados?.numero_devolucao}
                 error={errors?.hasOwnProperty('numero_devolucao')}
                 helperText={errors?.numero_devolucao ?? ""}
-                label="Numero de Devolução"
             />
 
             <TextField
@@ -74,6 +54,7 @@ export function FormPostDevolucao({
                 error={errors?.hasOwnProperty('data_devolucao')}
                 helperText={errors?.data_devolucao ?? ""}
                 label="Data de Devolução"
+                defaultValue={dados?.data_devolucao ?? ""}
                 InputLabelProps={{
                     shrink: true
                 }}
@@ -84,6 +65,7 @@ export function FormPostDevolucao({
                 error={errors?.hasOwnProperty('valor')}
                 helperText={errors?.valor ?? ""}
                 label="Valor da Devolução"
+                defaultValue={dados?.valor ?? ""}
                 prefix="R$ "
             />
         </Box>

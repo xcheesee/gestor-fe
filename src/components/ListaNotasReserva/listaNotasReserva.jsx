@@ -1,12 +1,14 @@
 import { Box, CircularProgress } from "@mui/material";
 import { useState } from "react";
-import { FormPostNotaReserva } from "./Forms/postNotaReserva";
-import { useQuery } from "@tanstack/react-query";
-import { throwableGetData } from "../../commom/utils/api";
+import { FormNotaReserva } from "./Forms/formNotaReserva";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { throwableGetData, throwablePostForm, throwablePutForm } from "../../commom/utils/api";
 import { reservaLabels, tipos_notas_reserva } from "../../commom/utils/constants";
 import { TabValues, formataData, formataValores } from "../../commom/utils/utils";
-import { FormEditNotaReserva } from "./Forms/editNotaReserva";
+import { snackbarAtom } from "../../atomStore";
+import { useErrorSnackbar } from "../../commom/utils/hooks";
 import ListaCardElement from "../ListaCardElement";
+import { useSetAtom } from "jotai";
 
 const TabNotaReserva = (props) => {
     const valores = {
@@ -22,6 +24,10 @@ const TabNotaReserva = (props) => {
 export default function ListaNotasReserva({
     numContrato
 }) {
+    const queryClient = useQueryClient()
+    const errorSnackbar = useErrorSnackbar()
+    const setSnackbar = useSetAtom(snackbarAtom)
+
     const [carregando, setCarregando] = useState(false)
 
     const formId = "notas-reserva-form"
@@ -29,6 +35,34 @@ export default function ListaNotasReserva({
     const notas = useQuery({
         queryFn: () => throwableGetData({path: 'notas_reserva', contratoId: numContrato}),
         queryKey: ['notas_reserva']
+    })
+
+    const postMutation = useMutation({
+        mutationFn: ({formData}) => throwablePostForm({form:formData, path: 'nota_reserva'}),
+        onSuccess: (res) => {
+            queryClient.invalidateQueries({queryKey: ['notas_reserva']})
+            queryClient.invalidateQueries({queryKey: ['mesesExecutados']})
+            queryClient.invalidateQueries({queryKey: ['totalizadores']})
+            setSnackbar(prev => ({...prev, open: true, severity: "success", message: "Nota de Reserva enviada.", color: "success"}))
+        },
+        onError: (res) =>  {
+            errorSnackbar.Post(res)
+        },
+        onSettled: () => setCarregando(false)
+    })
+
+    const editMutation = useMutation({
+        mutationFn: ({formData, id}) => throwablePutForm({form:formData, path:'nota_reserva', id: id}),
+        onSuccess: (res) => {
+            queryClient.invalidateQueries({queryKey: ['notas_reserva']})
+            queryClient.invalidateQueries({queryKey: ['mesesExecutados']})
+            queryClient.invalidateQueries({queryKey: ['totalizadores']})
+            setSnackbar(prev => ({...prev, open: true, severity: "success", message: "Nota de Reserva editada.", color: "success"}))
+        },
+        onError: (res) =>  {
+            errorSnackbar.Put(res)
+        },
+        onSettled: () => setCarregando(false)
     })
 
     if(notas?.isLoading) return (
@@ -50,20 +84,24 @@ export default function ListaNotasReserva({
             tipo_lista="Nota de reserva"
             TabDados={TabNotaReserva}
             renderEdit={(notas, setOpenModal) => 
-                <FormEditNotaReserva
+                <FormNotaReserva
                     setOpen={setOpenModal}
                     formId={formId}
                     numContrato={numContrato}
                     dadosNota={notas}
                     setCarregando={setCarregando}
+                    acao="Editar"
+                    onSubmit={editMutation.mutate}
                 />
             }
             renderPost={(setOpenModal) => 
-                <FormPostNotaReserva
+                <FormNotaReserva
                     setOpen={setOpenModal}
                     formId={formId}
                     numContrato={numContrato}
                     setCarregando={setCarregando}
+                    acao="Enviar"
+                    onSubmit={postMutation.mutate}
                 />
             }
         />

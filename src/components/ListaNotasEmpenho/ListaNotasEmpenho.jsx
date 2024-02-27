@@ -9,13 +9,15 @@ import {
     TabValues, 
 } from '../../commom/utils/utils';
 import { 
-    throwableGetData, 
+    throwableGetData, throwablePostForm, throwablePutForm, 
 } from '../../commom/utils/api';
 import { emprenhoLabels, meses } from '../../commom/utils/constants';
-import { useQuery } from '@tanstack/react-query';
-import FormPostNotaEmpenho from './FormNotaEmpenho/postNotaEmpenho';
-import FormEditNotaEmpenho from './FormNotaEmpenho/editNotaEmpenho';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import ListaCardElement from '../ListaCardElement';
+import { useErrorSnackbar } from '../../commom/utils/hooks';
+import { useSetAtom } from 'jotai';
+import { snackbarAtom } from '../../atomStore';
+import FormNotaEmpenho from './FormNotaEmpenho/FormNotaEmpenho';
 
 const tipos_empenho = {
     cancelamento: "Cancelamento",
@@ -38,12 +40,53 @@ const TabNotasEmpenho = (props) => {
 
 const ListaNotasEmpenho = ({numContrato}) => {
     const formId = 'empenho_form'
+    const queryClient = useQueryClient()
+    const errorSnackbar = useErrorSnackbar()
+    const setSnackbar = useSetAtom(snackbarAtom)
+
     const [carregando, setCarregando] = useState(false);
-    const [errors, setErrors] = useState({});
 
     const notasEmpenho = useQuery({
         queryKey: ['notasEmpenho', numContrato],
         queryFn: async () => await throwableGetData({path: 'empenho_notas', contratoId: numContrato})
+    })
+
+    const postMutation = useMutation({
+        mutationFn: ({formData}) => throwablePostForm({form: formData, path: 'empenho_nota'}),
+        onMutate: () => setCarregando(true),
+        onSuccess: () => {
+            setSnackbar({
+                open: true,
+                severity: 'success',
+                message: 'Nota de Empenho enviada com sucesso!',
+                color: 'success'
+            });
+            queryClient.invalidateQueries({queryKey: ['notasEmpenho', numContrato]})
+            queryClient.invalidateQueries({queryKey: ['mesesExecutados']})
+            queryClient.invalidateQueries({queryKey: ['totalizadores']})
+        },
+        onError: (res) => errorSnackbar.Post(res),
+        onSettled: () => setCarregando(false)
+        
+    })
+
+    const editMutation = useMutation({
+        mutationFn: ({formData, id}) => throwablePutForm({id: id, form: formData, path: 'empenho_nota'}),
+        onMutate: () => setCarregando(true),
+        onSuccess: () => {
+            setSnackbar({
+                open: true,
+                severity: 'success',
+                message: 'Nota de Empenho editada com sucesso!',
+                color: 'success'
+            });
+            queryClient.invalidateQueries({queryKey: ['notasEmpenho', numContrato]})
+            queryClient.invalidateQueries({queryKey: ['mesesExecutados']})
+            queryClient.invalidateQueries({queryKey: ['totalizadores']})
+        },
+        onError: (res) => errorSnackbar.Put(res),
+        onSettled: () => setCarregando(false)
+        
     })
 
     if(notasEmpenho?.isLoading) return (
@@ -65,20 +108,24 @@ const ListaNotasEmpenho = ({numContrato}) => {
             tipo_lista="Nota de Empenho"
             TabDados={TabNotasEmpenho}
             renderEdit={(notas, setOpenModal) => 
-                <FormEditNotaEmpenho
+                <FormNotaEmpenho
                     setOpen={setOpenModal}
                     formId={formId}
                     numContrato={numContrato}
                     dados={notas}
                     setCarregando={setCarregando}
+                    acao="Editar"
+                    onSubmit={editMutation.mutate}
                 />
             }
             renderPost={(setOpenModal) => 
-                <FormPostNotaEmpenho
+                <FormNotaEmpenho
                     setOpen={setOpenModal}
                     formId={formId}
                     numContrato={numContrato}
                     setCarregando={setCarregando}
+                    acao="Enviar"
+                    onSubmit={postMutation.mutate}
                 />
             }
         />

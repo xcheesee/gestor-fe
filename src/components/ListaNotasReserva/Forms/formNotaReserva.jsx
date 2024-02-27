@@ -10,34 +10,35 @@ import { snackbarAtom } from "../../../atomStore";
 import { useErrorSnackbar } from "../../../commom/utils/hooks";
 import { throwablePutForm } from "../../../commom/utils/api";
 
-export function FormEditNotaReserva({
+export function FormNotaReserva({
     formId,
     numContrato,
-    dadosNota,
+    dadosNota={},
     //editMutation,
     setOpen,
-    setCarregando
+    setCarregando,
+    acao,
+    onSubmit
 }) {
     const queryClient = useQueryClient()
     const setSnackbar = useSetAtom(snackbarAtom)
     const errorSnackbar = useErrorSnackbar();
-    const [errors, setErrors] = useState()
-    console.log(errors)
+    const [errors, setErrors] = useState({})
 
-    const editMutation = useMutation({
-        mutationFn: ({formData, id}) => throwablePutForm({form:formData, path:'nota_reserva', id: id}),
-        onSuccess: (res) => {
-            queryClient.invalidateQueries({queryKey: ['notas_reserva']})
-            queryClient.invalidateQueries({queryKey: ['mesesExecutados']})
-            queryClient.invalidateQueries({queryKey: ['totalizadores']})
-            setSnackbar(prev => ({...prev, open: true, severity: "success", message: "Nota de Reserva editada.", color: "success"}))
-        },
-        onError: (res) =>  {
-            errorSnackbar.Put(res)
-            setCarregando(false)
-            setErrors(res.errors)
-        }
-    })
+    //const editMutation = useMutation({
+    //    mutationFn: ({formData, id}) => throwablePutForm({form:formData, path:'nota_reserva', id: id}),
+    //    onSuccess: (res) => {
+    //        queryClient.invalidateQueries({queryKey: ['notas_reserva']})
+    //        queryClient.invalidateQueries({queryKey: ['mesesExecutados']})
+    //        queryClient.invalidateQueries({queryKey: ['totalizadores']})
+    //        setSnackbar(prev => ({...prev, open: true, severity: "success", message: "Nota de Reserva editada.", color: "success"}))
+    //    },
+    //    onError: (res) =>  {
+    //        errorSnackbar.Put(res)
+    //        setCarregando(false)
+    //        setErrors(res.errors)
+    //    }
+    //})
 
     return(
         <Box
@@ -53,19 +54,28 @@ export function FormEditNotaReserva({
 
                 formData.append('contrato_id', numContrato)
                 setCarregando(true)
-                editMutation.mutate({formData, id: dadosNota.id}, {
-                    onSuccess: () => {
-                        setOpen(false)
-                        setCarregando(false)
-                    }
-                })
+                acao === 'Enviar' 
+                    ? onSubmit({formData},{
+                        onSuccess: () => setOpen(false),
+                        onError: (res) => setErrors(res.errors)
+                    }) 
+                    : onSubmit({formData, id: dadosNota?.id}, {
+                        onSuccess: () => setOpen(false),
+                        onError: (res) => setErrors(res.errors)
+                    })
+                //editMutation.mutate({formData, id: dadosNota.id}, {
+                //    onSuccess: () => {
+                //        setOpen(false)
+                //        setCarregando(false)
+                //    }
+                //})
             }}
         >
             <CampoMasked
                 mask="####"
                 name="numero_nota_reserva"
                 label="Numero da Nota de Reserva"
-                defaultValue={dadosNota.numero_nota_reserva} 
+                defaultValue={dadosNota?.numero_nota_reserva} 
                 error={errors?.hasOwnProperty('numero_nota_reserva')}
                 helperText={errors?.numero_nota_reserva ?? ""}
             />
@@ -77,7 +87,7 @@ export function FormEditNotaReserva({
                 InputLabelProps={{
                     shrink: true
                 }}
-                defaultValue={dadosNota.data_emissao}
+                defaultValue={dadosNota?.data_emissao}
                 error={errors?.hasOwnProperty('data_emissao')}
                 helperText={errors?.data_emissao ?? ""}
             />
@@ -85,7 +95,7 @@ export function FormEditNotaReserva({
                 select
                 name="tipo_nota"
                 label="Tipo de Nota"
-                defaultValue={dadosNota.tipo_nota}
+                defaultValue={dadosNota?.tipo_nota}
                 error={errors?.hasOwnProperty('tipo_nota')}
                 helperText={errors?.tipo_nota ?? ""}
             >
@@ -96,7 +106,7 @@ export function FormEditNotaReserva({
             <CampoValores 
                 name="valor"
                 label="Valor da Nota de Reserva"
-                defaultValue={dadosNota.valor}
+                defaultValue={dadosNota?.valor}
                 prefix="R$ "
                 error={errors?.hasOwnProperty('valor')}
                 helperText={errors?.valor ?? ""}

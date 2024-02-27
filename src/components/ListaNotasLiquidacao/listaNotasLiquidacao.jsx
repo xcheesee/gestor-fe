@@ -1,12 +1,14 @@
 import { useState } from "react";
-import { FormPostNotaLiquidacao } from "./Forms/postNotaLiquidacao";
-import { useQuery } from "@tanstack/react-query";
-import { throwableGetData } from "../../commom/utils/api";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { throwableGetData, throwablePostForm, throwablePutForm } from "../../commom/utils/api";
 import { liquidacaoLabels, meses } from "../../commom/utils/constants";
 import { TabValues, formataData, formataValores } from "../../commom/utils/utils";
-import { FormEditNotaLiquidacao } from "./Forms/editNotaLiquidacao";
 import ListaCardElement from "../ListaCardElement";
 import { Box, CircularProgress } from "@mui/material";
+import { useErrorSnackbar } from "../../commom/utils/hooks";
+import { useSetAtom } from "jotai";
+import { snackbarAtom } from "../../atomStore";
+import { FormNotaLiquidacao } from "./Forms/formNotaLiquidacao";
 
 
 const TabNotaLiquidacao = (props) => {
@@ -24,6 +26,10 @@ const TabNotaLiquidacao = (props) => {
 export default function ListaNotasLiquidacao({
     numContrato
 }) {
+    const errorSnackbar = useErrorSnackbar()
+    const queryClient = useQueryClient()
+    const setSnackbar = useSetAtom(snackbarAtom)
+
     const notas = useQuery({
         queryFn: () => throwableGetData({path: 'notas_liquidacao', contratoId: numContrato}),
         queryKey: ['notas_liquidacao']
@@ -31,6 +37,34 @@ export default function ListaNotasLiquidacao({
 
     const [carregando, setCarregando] = useState(false)
     const formId = "notas-liquidacao-form"
+
+    const postMutation = useMutation({
+        mutationFn: ({formData}) => throwablePostForm({form:formData, path:'nota_liquidacao'}),
+        onSuccess: (res) => {
+            queryClient.invalidateQueries({queryKey: ['totalizadores']})
+            queryClient.invalidateQueries({queryKey: ['notas_liquidacao']})
+            queryClient.invalidateQueries({queryKey: ['mesesExecutados']})
+            setSnackbar(prev => ({...prev, open: true, severity: "success", message: "Nota de Liquidação enviada.", color: "success"}))
+        },
+        onError: (res) =>  {
+            errorSnackbar.Post(res)
+        },
+        onSettled: () => setCarregando(false)
+    })
+
+    const editMutation = useMutation({
+        mutationFn: ({formData, id}) => throwablePutForm({form:formData, path:'nota_liquidacao', id}),
+        onSuccess: (res) => {
+            queryClient.invalidateQueries({queryKey: ['notas_liquidacao']})
+            queryClient.invalidateQueries({queryKey: ['totalizadores']})
+            queryClient.invalidateQueries({queryKey: ['mesesExecutados']})
+            setSnackbar(prev => ({...prev, open: true, severity: "success", message: "Nota de Liquidação editada.", color: "success"}))
+        },
+        onError: (res) =>  {
+            errorSnackbar.Put(res)
+        },
+        onSettled: () => setCarregando(false)
+    })
 
     if(notas?.isLoading) return (
         <Box className="w-full h-full grid place-content-center">
@@ -51,20 +85,24 @@ export default function ListaNotasLiquidacao({
             tipo_lista="Nota de liquidação"
             TabDados={TabNotaLiquidacao}
             renderEdit={(notas, setOpenModal) => 
-                <FormEditNotaLiquidacao
+                <FormNotaLiquidacao
                     setOpen={setOpenModal}
                     formId={formId}
                     numContrato={numContrato}
                     dados={notas}
                     setCarregando={setCarregando}
+                    acao="Editar"
+                    onSubmit={editMutation.mutate}
                 />
             }
             renderPost={(setOpenModal) => 
-                <FormPostNotaLiquidacao
+                <FormNotaLiquidacao
                     setOpen={setOpenModal}
                     formId={formId}
                     numContrato={numContrato}
                     setCarregando={setCarregando}
+                    acao="Enviar"
+                    onSubmit={postMutation.mutate}
                 />
             }
         />

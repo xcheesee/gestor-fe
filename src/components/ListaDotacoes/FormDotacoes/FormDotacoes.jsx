@@ -98,7 +98,6 @@ const FormDotacoes = (props) => {
                 const formData = new FormData(e.target)
                 formData.append("contrato_id", numContrato)
                 formData.append("dotacao_tipo_id", formDotacao.dotacao_tipo_id)
-                console.log(formData)
                 if(formData.get("origem_recurso_id") === "" && formData.get("dotacao_tipo_id") === "") {
                     return setErrors({
                         dotacao_recurso: {
