@@ -167,6 +167,7 @@ const ListaDadosContrato = (props) => {
             homologacao: DateDisplay(props.homologacao, dados.diferenca_abertura_homologacao),
             data_inicio_vigencia: DateDisplay(dados?.data_inicio_vigencia, dados.diferenca_homologacao_vigencia),
             data_vencimento: <VencimentoEle dados={dados} />,
+            data_vencimento_aditada: <Box className='mb-2 inline-block' sx={{color: 'hsl(201, 0%, 20%)'}}>{formataData(dados?.data_vencimento_aditada)}</Box>,
             data_prazo_maximo: DateDisplay(dados?.data_prazo_maximo, dados.diferenca_vencimento_prazo_maximo),
         };
 

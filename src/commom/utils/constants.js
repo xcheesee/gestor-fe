@@ -24,6 +24,7 @@ export const contratoLabels = {
     data_assinatura: "Data de assinatura",
     data_inicio_vigencia: "Início da Vigência",
     data_vencimento: "Data de vencimento",
+    data_vencimento_aditada: "Data de vencimento (c/Aditamentos)",
     data_prazo_maximo: "Prazo Maximo",
 }
 
