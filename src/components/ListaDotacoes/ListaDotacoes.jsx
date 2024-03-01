@@ -58,10 +58,6 @@ const ListaDotacoes = ({ numContrato }) => {
     const dotacoes = useQuery(['dotacoes', numContrato], {
         queryFn: () => getFormData(`dotacoes/${numContrato}`)
     })
-    //const origemRecursos = useQuery({
-    //    queryKey: ['origemRecursos'],
-    //    queryFn: async () => await throwableGetData({path: 'origem_recursos'})
-    //})
 
     const [acao, setAcao] = useState('editar');
     const [carregando, setCarregando] = useState(false);
@@ -79,12 +75,6 @@ const ListaDotacoes = ({ numContrato }) => {
         id: '',
         elemento: 'dotacao'
     });
-
-    //const [openConfirmar, setOpenConfirmar] = useState({
-    //    acao: '',
-    //    open: false
-    //})
-
     const [formDotacao, setFormDotacao] = useState({
         dotacao_tipo_id: '',
         origem_recurso_id: '',
@@ -95,7 +85,6 @@ const ListaDotacoes = ({ numContrato }) => {
         origem_recurso_id: '',
         outros_descricao: ''
     });
-
     const [openDelete, setOpenDelete] = useState({
         open: false,
         id: '',
@@ -264,7 +253,8 @@ const ListaDotacoes = ({ numContrato }) => {
         });
         setFormRecurso({
             ...formRecurso,
-            dotacao_id: id
+            dotacao_id: id,
+            origem_recurso_id: ''
         });
         setAcao('adicionar');
     }
@@ -427,7 +417,6 @@ const ListaDotacoes = ({ numContrato }) => {
                         setErrors={setErrors}
                         formDotacao={formDotacao}
                         numContrato={numContrato}
-                        //origemRecursos={origemRecursos?.data?.data ?? []}
                         enviaDotacao={enviaDotacao}
                         editaDotacao={editaDotacao}
                     />
@@ -486,7 +475,6 @@ const ListaDotacoes = ({ numContrato }) => {
                         openFormRecurso={openFormRecurso}
                         errors={errors}
                         formRecurso={formRecurso}
-                        //origemRecursos={origemRecursos?.data?.data ?? []}
                         enviaRecurso={enviaRecurso}
                         editaRecurso={editaRecurso}
                     />
@@ -494,10 +482,7 @@ const ListaDotacoes = ({ numContrato }) => {
 
                 <DialogActions sx={{ margin: '1rem' }}>
                     <Button
-                        onClick={() => { 
-                            setOpenFormRecurso( prev => ({...prev, open: false}) ) 
-                            setFormRecurso( prev => ({...prev, origem_recurso_id: ''}))
-                        }}     
+                        onClick={() => setOpenFormRecurso(prev => ({...prev, open: false})) }     
                         sx={{ textTransform: 'none', mr: '1rem', color: (theme) => theme.palette.error.main }}
                     >
                         <CloseIcon sx={{ mr: '0.2rem' }} fontSize="small" /> Cancelar
@@ -536,15 +521,6 @@ const ListaDotacoes = ({ numContrato }) => {
                 texto="Adicionar dotação"
             />
 
-            {/*<DialogConf 
-                title={`${openConfirmar.acao} dotacao`}
-                body={<Typography>Deseja {openConfirmar.acao} a dotacao?</Typography>}
-                formId={dotacaoFormId}
-                open={openConfirmar.open}
-                setOpen={setOpenConfirmar}
-                acao={openConfirmar.acao}
-            />*/}
-
             <DialogDelete 
                 open={openDelete.open}
                 setOpen={(bool) => setOpenDelete(prev => ({...prev, open: bool}))}
@@ -561,16 +537,6 @@ const ListaDotacoes = ({ numContrato }) => {
                 setOpenConfirmacao={setOpenConfirmacao}
                 acao={acao}
                 formId={dotacaoFormId}
-                fnEditar={
-                    openConfirmacao.elemento === 'dotacao'
-                    ? () => editaDotacao(formDotacao.id, formDotacao)
-                    : () => editaRecurso(formRecurso.id, formRecurso)
-                }
-                formInterno={
-                    openConfirmacao.elemento === 'dotacao'
-                    ? formDotacao
-                    : formRecurso
-                }
                 carregando={carregando}
                 texto={
                     openConfirmacao.elemento === 'dotacao'

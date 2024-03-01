@@ -1,4 +1,4 @@
-import { FormControl, FormHelperText, InputLabel, MenuItem, Select, TextField } from "@mui/material";
+import { Box, CircularProgress, FormControl, FormHelperText, InputLabel, MenuItem, Select, TextField } from "@mui/material";
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import { throwableGetData } from "../../../commom/utils/api";
@@ -18,6 +18,12 @@ export default function CampoRecurso({
 
     const outrosDesc = dadosRecurso === 999 ?? false;
 
+    if(origemRecursos.isLoading) return (
+        <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '38rem' }}>
+            <CircularProgress size={30} />
+        </Box>
+    )
+
     return(
 
         <>
@@ -25,7 +31,6 @@ export default function CampoRecurso({
             sx={{ margin: '1rem 0', position: 'relative' }}
             error={errors.hasOwnProperty('origem_recurso_id')}
             fullWidth
-            required
         >
             <InputLabel id="dotacao_recurso-label">Fonte de recurso</InputLabel>
 

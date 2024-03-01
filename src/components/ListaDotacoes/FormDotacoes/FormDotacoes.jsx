@@ -36,6 +36,7 @@ const FormDotacoes = (props) => {
             }}>
             <CampoTipoDotacao dotacao={formDotacao}/>
             {openFormDotacao.acao == 'adicionar' ? <CampoRecurso errors={errors} /> : <></>}
+            <Box className="text-red-500 font-bold text-center">{errors?.dotacao_recurso?.message ?? "" }</Box>
         </Box>
     );
 }
