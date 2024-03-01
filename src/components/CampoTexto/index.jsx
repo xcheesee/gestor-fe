@@ -9,8 +9,8 @@ const CampoTexto = React.forwardRef((props, ref) => {
         defaultValue, 
         name, 
         labels, //labels da aba em que o componente se encontra
-        error=false, 
-        helperText="", 
+        error, 
+        helperText, 
         required=false,
         changeFn= () => {}, //funcao executada onChange
         ...other

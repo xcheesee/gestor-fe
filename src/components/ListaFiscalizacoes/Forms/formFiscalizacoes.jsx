@@ -93,7 +93,7 @@ export default function FormFiscalizacoes({
                         }
                     }}
                     labels={fiscLabels}
-                    error={errors.hasOwnProperty('nome_gestor')}
+                    error={errors?.hasOwnProperty('nome_gestor')}
                     helperText={errors?.nome_gestor ?? ""}
                     ref={gestorRef}
                     
@@ -102,14 +102,14 @@ export default function FormFiscalizacoes({
                     defaultValue={dados.email_gestor}
                     name="email_gestor"
                     labels={fiscLabels}
-                    error={errors.hasOwnProperty('nome_gestor')}
-                    helperText={errors?.nome_gestor ?? ""}
+                    error={errors?.hasOwnProperty('email_gestor')}
+                    helperText={errors?.email_gestor ?? ""}
                     
                 />
                 <CampoTexto
                     defaultValue={dados.nome_fiscal}
                     name="nome_fiscal"
-                    error={errors.hasOwnProperty('nome_fiscal')}
+                    error={errors?.hasOwnProperty('nome_fiscal')}
                     helperText={errors?.nome_fiscal ?? ""}
                     changeFn={(e) => {
                         firstWarningRef.current.gestor = false
@@ -130,7 +130,7 @@ export default function FormFiscalizacoes({
                 <CampoTexto
                     defaultValue={dados.email_fiscal}
                     name="email_fiscal"
-                    error={errors.hasOwnProperty('email_fiscal')}
+                    error={errors?.hasOwnProperty('email_fiscal')}
                     helperText={errors?.email_fiscal ?? ""}
                     labels={fiscLabels}
                     
@@ -138,7 +138,7 @@ export default function FormFiscalizacoes({
                 <CampoTexto
                     defaultValue={dados.nome_suplente}
                     name="nome_suplente"
-                    error={errors.hasOwnProperty('nome_suplente')}
+                    error={errors?.hasOwnProperty('nome_suplente')}
                     helperText={errors?.nome_suplente ?? ""}
                     labels={fiscLabels}
                     changeFn={(e) => {
@@ -159,7 +159,7 @@ export default function FormFiscalizacoes({
                 <CampoTexto
                     defaultValue={dados.email_suplente}
                     name="email_suplente"
-                    error={errors.hasOwnProperty('email_suplente')}
+                    error={errors?.hasOwnProperty('email_suplente')}
                     helperText={errors?.email_suplente ?? ""}
                     labels={fiscLabels}
                     

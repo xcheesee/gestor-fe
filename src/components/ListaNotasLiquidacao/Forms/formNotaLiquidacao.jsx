@@ -31,7 +31,6 @@ export function FormNotaLiquidacao({
                 const formatted = brlToFloat(val)
                 formData.set('valor', formatted)
                 formData.append('contrato_id', numContrato)
-                setCarregando(true)
                 acao === 'Enviar' 
                     ? onSubmit({formData},{
                         onSuccess: () => setOpen(false),

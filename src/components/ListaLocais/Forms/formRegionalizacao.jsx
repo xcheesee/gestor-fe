@@ -56,7 +56,6 @@ export default function FormRegionalizacao({
                 fullWidth
                 error={errors?.hasOwnProperty('regiao')}
                 helperText={errors?.regiao ?? ""}
-                required
             >
                 <MenuItem value={"CO"}>Centro-Oeste</MenuItem>
                 <MenuItem value={"L"}>Leste</MenuItem>

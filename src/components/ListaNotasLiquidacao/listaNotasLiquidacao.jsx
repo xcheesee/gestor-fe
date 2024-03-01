@@ -40,6 +40,7 @@ export default function ListaNotasLiquidacao({
 
     const postMutation = useMutation({
         mutationFn: ({formData}) => throwablePostForm({form:formData, path:'nota_liquidacao'}),
+        onMutate: () => setCarregando(true),
         onSuccess: (res) => {
             queryClient.invalidateQueries({queryKey: ['totalizadores']})
             queryClient.invalidateQueries({queryKey: ['notas_liquidacao']})
@@ -54,6 +55,7 @@ export default function ListaNotasLiquidacao({
 
     const editMutation = useMutation({
         mutationFn: ({formData, id}) => throwablePutForm({form:formData, path:'nota_liquidacao', id}),
+        onMutate: () => setCarregando(true),
         onSuccess: (res) => {
             queryClient.invalidateQueries({queryKey: ['notas_liquidacao']})
             queryClient.invalidateQueries({queryKey: ['totalizadores']})

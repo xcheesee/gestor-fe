@@ -49,7 +49,7 @@ function ListaAditamentosPrazo({ numContrato }) {
 
   const editMutation = useMutation({
       mutationFn: ({formData, id}) => throwablePutForm({form: formData, path: "aditamento_prazo", id: id}),
-      onMutate: () => { setCarregando(true) },
+      onMutate: () => setCarregando(true),
       onSuccess: () => {
           queryClient.invalidateQueries({queryKey: ['aditamentos_prazo', numContrato]})
           queryClient.invalidateQueries({queryKey: ['mesesExecutados']})
@@ -61,7 +61,7 @@ function ListaAditamentosPrazo({ numContrato }) {
           });
       },
       onError: (res) => { errorSnackbar.Put(res) },
-      onSettled: () => { setCarregando(false) }
+      onSettled: () => setCarregando(false)
   })
 
     if(aditamentos_prazo?.isLoading) return (

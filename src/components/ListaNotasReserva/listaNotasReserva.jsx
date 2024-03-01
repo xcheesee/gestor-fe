@@ -39,6 +39,7 @@ export default function ListaNotasReserva({
 
     const postMutation = useMutation({
         mutationFn: ({formData}) => throwablePostForm({form:formData, path: 'nota_reserva'}),
+        onMutate: () => setCarregando(true),
         onSuccess: (res) => {
             queryClient.invalidateQueries({queryKey: ['notas_reserva']})
             queryClient.invalidateQueries({queryKey: ['mesesExecutados']})
@@ -53,15 +54,14 @@ export default function ListaNotasReserva({
 
     const editMutation = useMutation({
         mutationFn: ({formData, id}) => throwablePutForm({form:formData, path:'nota_reserva', id: id}),
+        onMutate: () => setCarregando(true),
         onSuccess: (res) => {
             queryClient.invalidateQueries({queryKey: ['notas_reserva']})
             queryClient.invalidateQueries({queryKey: ['mesesExecutados']})
             queryClient.invalidateQueries({queryKey: ['totalizadores']})
             setSnackbar(prev => ({...prev, open: true, severity: "success", message: "Nota de Reserva editada.", color: "success"}))
         },
-        onError: (res) =>  {
-            errorSnackbar.Put(res)
-        },
+        onError: (res) =>  errorSnackbar.Put(res),
         onSettled: () => setCarregando(false)
     })
 

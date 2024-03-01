@@ -39,19 +39,19 @@ export default function ListaDevolucoes({
 
     const postMutation = useMutation({
         mutationFn: ({formData}) => throwablePostForm({form:formData, path:'devolucao'}),
+        onMutate: () => setCarregando(true),
         onSuccess: (res) => {
             queryClient.invalidateQueries({queryKey: ['devolucoes']})
             queryClient.invalidateQueries({queryKey: ['totalizadores']})
             setSnackbar(prev => ({...prev, open: true, severity: "success", message: "Devolução enviada.", color: "success"}))
         },
-        onError: (res) =>  {
-            errorSnackbar.Post(res)
-        },
+        onError: (res) =>  errorSnackbar.Post(res),
         onSettled: () => setCarregando(false)
     })
 
     const editMutation = useMutation({
         mutationFn: ({formData, id}) => throwablePutForm({form:formData, path:'devolucao', id}),
+        onMutate: () => setCarregando(true),
         onSuccess: (res) => {
             queryClient.invalidateQueries({queryKey: ['devolucoes']})
             queryClient.invalidateQueries({queryKey: ['totalizadores']})

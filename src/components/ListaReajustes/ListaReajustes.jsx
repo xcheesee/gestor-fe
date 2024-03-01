@@ -36,6 +36,7 @@ export default function ListaReajustes ({ numContrato }) {
 
     const putMutation = useMutation({
         mutationFn: async ({id, formData}) => await throwablePutForm({id, form:formData, path:"reajuste"}), 
+        onMutate: () => setCarregando(true),
         onSuccess: async (res) => {
             setSnackbar({
                 open: true,
@@ -53,6 +54,7 @@ export default function ListaReajustes ({ numContrato }) {
         mutationFn: async ({formData}) => {
                 return await throwablePostForm({form:formData, path: 'reajuste'})
         }, 
+        onMutate: () => setCarregando(true),
         onSuccess: async (res) => {
             setSnackbar({
                 open: true,

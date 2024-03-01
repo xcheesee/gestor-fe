@@ -4,41 +4,21 @@ import CampoMasked from "../../CampoMasked";
 import CampoValores from "../../CampoValores";
 import { tipos_notas_reserva } from "../../../commom/utils/constants";
 import { brlToFloat } from "../../../commom/utils/utils";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useQueryClient } from "@tanstack/react-query";
 import { useSetAtom } from "jotai";
 import { snackbarAtom } from "../../../atomStore";
 import { useErrorSnackbar } from "../../../commom/utils/hooks";
-import { throwablePutForm } from "../../../commom/utils/api";
 
 export function FormNotaReserva({
     formId,
     numContrato,
     dadosNota={},
-    //editMutation,
     setOpen,
     setCarregando,
     acao,
     onSubmit
 }) {
-    const queryClient = useQueryClient()
-    const setSnackbar = useSetAtom(snackbarAtom)
-    const errorSnackbar = useErrorSnackbar();
     const [errors, setErrors] = useState({})
-
-    //const editMutation = useMutation({
-    //    mutationFn: ({formData, id}) => throwablePutForm({form:formData, path:'nota_reserva', id: id}),
-    //    onSuccess: (res) => {
-    //        queryClient.invalidateQueries({queryKey: ['notas_reserva']})
-    //        queryClient.invalidateQueries({queryKey: ['mesesExecutados']})
-    //        queryClient.invalidateQueries({queryKey: ['totalizadores']})
-    //        setSnackbar(prev => ({...prev, open: true, severity: "success", message: "Nota de Reserva editada.", color: "success"}))
-    //    },
-    //    onError: (res) =>  {
-    //        errorSnackbar.Put(res)
-    //        setCarregando(false)
-    //        setErrors(res.errors)
-    //    }
-    //})
 
     return(
         <Box
@@ -51,9 +31,7 @@ export function FormNotaReserva({
                 const val = formData.get('valor')
                 const formatted = brlToFloat(val)
                 formData.set('valor', formatted)
-
                 formData.append('contrato_id', numContrato)
-                setCarregando(true)
                 acao === 'Enviar' 
                     ? onSubmit({formData},{
                         onSuccess: () => setOpen(false),
@@ -63,12 +41,6 @@ export function FormNotaReserva({
                         onSuccess: () => setOpen(false),
                         onError: (res) => setErrors(res.errors)
                     })
-                //editMutation.mutate({formData, id: dadosNota.id}, {
-                //    onSuccess: () => {
-                //        setOpen(false)
-                //        setCarregando(false)
-                //    }
-                //})
             }}
         >
             <CampoMasked
@@ -103,6 +75,7 @@ export function FormNotaReserva({
                     <MenuItem value={tipo_nota[0]} key={`tipo-nota-${i}`} >{tipo_nota[1]}</MenuItem>
                 ))} 
             </TextField>
+
             <CampoValores 
                 name="valor"
                 label="Valor da Nota de Reserva"

@@ -28,7 +28,6 @@ export default function FormReajustes({
                 const formatted = brlToFloat(val)
                 formData.set('valor_reajuste', formatted)
                 formData.append('contrato_id', numContrato)
-                setCarregando(true)
                 acao === 'Enviar' 
                     ? onSubmit({formData},{
                         onSuccess: () => setOpen(false),
@@ -57,7 +56,7 @@ export default function FormReajustes({
                 name="indice_reajuste"
                 label={reajusteLabels.indice_reajuste}
                 error={errors?.hasOwnProperty('indice_reajuste')}
-                helperText={errors.indice_reajuste ?? "Ex: "}
+                helperText={errors?.indice_reajuste ?? "Ex: "}
                 fullWidth
             />
 
