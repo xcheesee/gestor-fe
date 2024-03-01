@@ -145,6 +145,7 @@ const ListaDotacoes = ({ numContrato }) => {
         } catch(e) {
             errorSnackbar.Delete(e)
         }
+        setCarregando(false)
     }
 
     // edição
