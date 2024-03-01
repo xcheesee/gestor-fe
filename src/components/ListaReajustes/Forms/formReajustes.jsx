@@ -8,7 +8,6 @@ import { useState } from "react";
 export default function FormReajustes({
     dados,
     setOpen,
-    setCarregando,
     formId,
     numContrato,
     onSubmit,
@@ -46,7 +45,7 @@ export default function FormReajustes({
                 checaErros={() => {}}
                 prefix="R$ "
                 error={errors?.hasOwnProperty('valor_reajuste')}
-                helperText={errors?.valor_reajuste ?? "Ex: "}
+                helperText={errors?.valor_reajuste ?? ""}
                 fullWidth
             />
 
@@ -56,7 +55,7 @@ export default function FormReajustes({
                 name="indice_reajuste"
                 label={reajusteLabels.indice_reajuste}
                 error={errors?.hasOwnProperty('indice_reajuste')}
-                helperText={errors?.indice_reajuste ?? "Ex: "}
+                helperText={errors?.indice_reajuste ?? ""}
                 fullWidth
             />
 
