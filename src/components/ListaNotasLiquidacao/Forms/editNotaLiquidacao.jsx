@@ -58,7 +58,7 @@ export function FormEditNotaLiquidacao({
             }}
         >
             <CampoMasked
-                mask="####"
+                mask="#####"
                 name="numero_nota_liquidacao"
                 label="Numero da Nota de Liquidação"
                 defaultValue={dados?.numero_nota_liquidacao}

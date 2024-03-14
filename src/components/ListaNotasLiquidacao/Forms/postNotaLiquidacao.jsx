@@ -56,7 +56,7 @@ export function FormPostNotaLiquidacao({
             }}
         >
             <CampoMasked
-                mask="####"
+                mask="#####"
                 name="numero_nota_liquidacao"
                 label="Numero da Nota de Liquidação"
             />

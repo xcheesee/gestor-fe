@@ -57,7 +57,7 @@ export function FormPostNotaReserva({
             }}
         >
             <CampoMasked
-                mask="####"
+                mask="#####"
                 name="numero_nota_reserva"
                 label="Numero da Nota de Reserva"
             />
