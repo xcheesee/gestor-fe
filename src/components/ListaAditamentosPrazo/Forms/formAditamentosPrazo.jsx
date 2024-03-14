@@ -1,14 +1,15 @@
 import { Box, FormControl, FormHelperText, InputLabel, Select, TextField, MenuItem } from "@mui/material"
+import { useState } from "react"
 
 export default function FormAditamentoPrazo({
     numContrato,
     acao,
     dados={},
-    errors={},
     formId,
     onSubmit,
     setOpen
 }) {
+    const [errors, setErrors] = useState({})
     return(
         <Box
           component="form"
@@ -19,16 +20,18 @@ export default function FormAditamentoPrazo({
             formData.append("contrato_id", numContrato)
             acao === "Enviar" 
               ?  onSubmit({formData}, {
-                onSuccess: () => setOpen(false)
+                onSuccess: () => setOpen(false),
+                onError: (res) => setErrors(res.errors)
               }) 
               : onSubmit({formData, id: dados.id}, {
-                onSuccess: () => setOpen(false)
+                onSuccess: () => setOpen(false),
+                onError: (res) => setErrors(res.errors)
               })
           }}>
 
             <FormControl
               sx={{ margin: "1rem 0" }}
-              //error={errors?.hasOwnProperty("tipo_aditamento")}
+              error={errors?.hasOwnProperty("tipo_aditamento")}
               fullWidth
             >
               <InputLabel id="tipo_aditamento-label">Tipo</InputLabel>
@@ -38,7 +41,6 @@ export default function FormAditamentoPrazo({
                 label="Tipo"
                 defaultValue={dados?.tipo_aditamento ?? ""}
                 name="tipo_aditamento"
-                required
                 fullWidth
               >
                 <MenuItem value="Prorrogação de prazo">
@@ -48,7 +50,7 @@ export default function FormAditamentoPrazo({
                 <MenuItem value="Suspensão">Suspensão</MenuItem>
                 <MenuItem value="Rescisão">Rescisão</MenuItem>
               </Select>
-              <FormHelperText>{errors?.tipo_aditamento}</FormHelperText>
+              <FormHelperText>{errors?.tipo_aditamento ?? ""}</FormHelperText>
             </FormControl>
 
             <TextField
@@ -56,10 +58,9 @@ export default function FormAditamentoPrazo({
               defaultValue={dados?.dias_reajuste ?? ""}
               name="dias_reajuste"
               label="Dias Reajuste"
-              //error={errors?.hasOwnProperty("dias_reajuste")}
-              //helperText={errors?.dias_reajuste}
+              error={errors?.hasOwnProperty("dias_reajuste")}
+              helperText={errors?.dias_reajuste}
               fullWidth
-              required
             />
           </Box>
     )

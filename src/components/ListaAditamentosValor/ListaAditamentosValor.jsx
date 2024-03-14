@@ -47,7 +47,7 @@ function ListaAditamentosValor ({ numContrato }) {
 
     const postMutation = useMutation({
         mutationFn: ({formData}) => throwablePostForm({form: formData, path: "aditamento_valor"}),
-        onMutate: () => { setCarregando(true) },
+        onMutate: () => setCarregando(true),
         onSuccess: () => {
             queryClient.invalidateQueries(['aditamentos_val', numContrato])
             queryClient.invalidateQueries(['mesesExecutados'])
@@ -60,7 +60,7 @@ function ListaAditamentosValor ({ numContrato }) {
 
         },
         onError: (res) => { errorSnackbar.Post(res) },
-        onSettled: () => { setCarregando(false) }
+        onSettled: () => setCarregando(false)
     })
 
     const editMutation = useMutation({

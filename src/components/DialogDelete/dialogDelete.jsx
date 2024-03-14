@@ -6,7 +6,7 @@ import { throwableDeleteForm } from "../../commom/utils/api";
 import { useErrorSnackbar } from "../../commom/utils/hooks";
 
 export default function DialogDelete({
-    tipo_op, 
+    tipo_op="", 
     id,
     carregando,
     setCarregando,
@@ -46,7 +46,7 @@ export default function DialogDelete({
             <DialogContent>
                 <DialogContentText>
                     Confirma a exclusão: 
-                        <strong> {tipo_op[0].toUpperCase() + tipo_op.substring(1)} {`#${id}`}</strong>?
+                        <strong> {tipo_op[0]?.toUpperCase() + tipo_op?.substring(1)} {`#${id}`}</strong>?
                 </DialogContentText>
             </DialogContent>
             <DialogActions>

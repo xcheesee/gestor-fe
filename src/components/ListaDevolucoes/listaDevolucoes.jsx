@@ -1,12 +1,14 @@
 import { useState } from "react";
-import { useQuery } from "@tanstack/react-query";
-import { throwableGetData } from "../../commom/utils/api";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { throwableGetData, throwablePostForm, throwablePutForm } from "../../commom/utils/api";
 import { DevolucaoLabels } from "../../commom/utils/constants";
 import { TabValues, formataData, formataValores, mascaraDevolucao } from "../../commom/utils/utils";
-import { FormEditDevolucao } from "./Forms/editDevolucao";
-import { FormPostDevolucao } from "./Forms/postDevolucao";
 import ListaCardElement from "../ListaCardElement";
 import { Box, CircularProgress } from "@mui/material";
+import { useErrorSnackbar } from "../../commom/utils/hooks";
+import { useSetAtom } from "jotai";
+import { snackbarAtom } from "../../atomStore";
+import { FormDevolucao } from "./Forms/formDevolucao";
 
 
 const TabDevolucoes = (props) => {
@@ -22,13 +24,44 @@ const TabDevolucoes = (props) => {
 export default function ListaDevolucoes({
     numContrato
 }) {
+    const errorSnackbar = useErrorSnackbar()
+    const queryClient = useQueryClient()
+    const setSnackbar = useSetAtom(snackbarAtom)
+
     const devolucoes = useQuery({
         queryFn: () => throwableGetData({path: 'devolucoes', contratoId: numContrato}),
         queryKey: ['devolucoes']
     })
+
     const [carregando, setCarregando] = useState(false)
 
     const formId = "devolucoes-form"
+
+    const postMutation = useMutation({
+        mutationFn: ({formData}) => throwablePostForm({form:formData, path:'devolucao'}),
+        onMutate: () => setCarregando(true),
+        onSuccess: (res) => {
+            queryClient.invalidateQueries({queryKey: ['devolucoes']})
+            queryClient.invalidateQueries({queryKey: ['totalizadores']})
+            setSnackbar(prev => ({...prev, open: true, severity: "success", message: "Devolução enviada.", color: "success"}))
+        },
+        onError: (res) =>  errorSnackbar.Post(res),
+        onSettled: () => setCarregando(false)
+    })
+
+    const editMutation = useMutation({
+        mutationFn: ({formData, id}) => throwablePutForm({form:formData, path:'devolucao', id}),
+        onMutate: () => setCarregando(true),
+        onSuccess: (res) => {
+            queryClient.invalidateQueries({queryKey: ['devolucoes']})
+            queryClient.invalidateQueries({queryKey: ['totalizadores']})
+            setSnackbar(prev => ({...prev, open: true, severity: "success", message: "Devolução editada.", color: "success"}))
+        },
+        onError: (res) =>  {
+            errorSnackbar.Put(res)
+        },
+        onSettled: () => setCarregando(false)
+    })
 
     if(devolucoes?.isLoading) return (
         <Box className="w-full h-full grid place-content-center">
@@ -49,20 +82,24 @@ export default function ListaDevolucoes({
             tipo_lista="Devolução"
             TabDados={TabDevolucoes}
             renderEdit={(devolucoes, setOpenModal) => 
-                <FormEditDevolucao
+                <FormDevolucao
                     setOpen={setOpenModal}
                     formId={formId}
                     numContrato={numContrato}
                     dados={devolucoes}
                     setCarregando={setCarregando}
+                    acao="Editar"
+                    onSubmit={editMutation.mutate}
                 />
             }
             renderPost={(setOpenModal) => 
-                <FormPostDevolucao
+                <FormDevolucao
                     setOpen={setOpenModal}
                     formId={formId}
                     numContrato={numContrato}
                     setCarregando={setCarregando}
+                    acao="Enviar"
+                    onSubmit={postMutation.mutate}
                 />
             }
         />

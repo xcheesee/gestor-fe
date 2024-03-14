@@ -4,42 +4,20 @@ import CampoValores from "../../CampoValores";
 import { useState } from "react";
 import { meses } from "../../../commom/utils/constants";
 import { brlToFloat } from "../../../commom/utils/utils";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { throwablePutForm } from "../../../commom/utils/api";
-import { useSetAtom } from "jotai";
-import { snackbarAtom } from "../../../atomStore";
-import { useErrorSnackbar } from "../../../commom/utils/hooks";
 
-export function FormEditNotaLiquidacao({
+export function FormNotaLiquidacao({
     formId,
     numContrato,
-    dados,
+    dados={},
     setOpen,
-    setCarregando
+    setCarregando,
+    acao,
+    onSubmit
 }) {
-    const queryClient = useQueryClient()
-    const setSnackbar = useSetAtom(snackbarAtom)
-    const errorSnackbar = useErrorSnackbar()
-
+    const [errors, setErrors] = useState({})
     const [dataPagamento, setDataPagamento] = useState(dados?.data_pagamento ?? "")
     const [mesReferencia, setMesReferencia] = useState(dados?.mes_referencia ?? "")
     const [anoReferencia, setAnoReferencia] = useState(dados?.ano_referencia ?? "")
-
-    const editMutation = useMutation({
-        mutationFn: ({formData, id}) => throwablePutForm({form:formData, path:'nota_liquidacao', id}),
-        onSuccess: (res) => {
-            setOpen(false)
-            setCarregando(false)
-            queryClient.invalidateQueries({queryKey: ['notas_liquidacao']})
-            queryClient.invalidateQueries({queryKey: ['totalizadores']})
-            queryClient.invalidateQueries({queryKey: ['mesesExecutados']})
-            setSnackbar(prev => ({...prev, open: true, severity: "success", message: "Nota de Liquidação editada.", color: "success"}))
-        },
-        onError: (res) =>  {
-            errorSnackbar.Put(res)
-            setCarregando(false)
-        }
-    })
 
     return(
         <Box
@@ -53,8 +31,15 @@ export function FormEditNotaLiquidacao({
                 const formatted = brlToFloat(val)
                 formData.set('valor', formatted)
                 formData.append('contrato_id', numContrato)
-                setCarregando(true)
-                editMutation.mutate({formData, id: dados.id})
+                acao === 'Enviar' 
+                    ? onSubmit({formData},{
+                        onSuccess: () => setOpen(false),
+                        onError: (res) => setErrors(res.errors)
+                    }) 
+                    : onSubmit({formData, id: dados?.id}, {
+                        onSuccess: () => setOpen(false),
+                        onError: (res) => setErrors(res.errors)
+                    })
             }}
         >
             <CampoMasked
@@ -62,11 +47,15 @@ export function FormEditNotaLiquidacao({
                 name="numero_nota_liquidacao"
                 label="Numero da Nota de Liquidação"
                 defaultValue={dados?.numero_nota_liquidacao}
+                error={errors?.hasOwnProperty('numero_nota_liquidacao')}
+                helperText={errors?.numero_nota_liquidacao ?? ""}
             />
 
             <TextField
                 type="date"
                 name="data_pagamento"
+                error={errors?.hasOwnProperty('data_pagamento')}
+                helperText={errors?.data_pagamento ?? ""}
                 value={dataPagamento}
                 onChange={(e) => {
                     const dataArr = e.target.value.split('-')
@@ -85,15 +74,14 @@ export function FormEditNotaLiquidacao({
                 fullWidth
                 label="Mês de Referência"
                 name='mes_referencia'
+                error={errors?.hasOwnProperty('mes_referencia')}
+                helperText={errors?.mes_referencia ?? ""}
                 value={mesReferencia}
-                onChange={(e) => {
-                    setMesReferencia(e.target.value)
-                }}
+                onChange={(e) => setMesReferencia(e.target.value)}
             >
                 {meses.map((mes, i) => {
                     return(
                         <MenuItem key={`mes-ref-${i+1}`} value={i+1} className=''>{mes}</MenuItem>
-
                     )
                 })}
             </TextField>
@@ -103,16 +91,18 @@ export function FormEditNotaLiquidacao({
                 fullWidth
                 mask="####"
                 value={anoReferencia}
-                onChange={(e) => {
-                    setAnoReferencia(e.target.value)
-                }}
+                onChange={(e) => setAnoReferencia(e.target.value)}
                 name="ano_referencia"
+                error={errors?.hasOwnProperty('ano_referencia')}
+                helperText={errors?.ano_referencia ?? ""}
             />
 
             <CampoValores 
                 name="valor"
+                error={errors?.hasOwnProperty('valor')}
+                helperText={errors?.valor ?? ""}
                 label="Valor da Nota de Liquidação"
-                defaultValue={dados.valor}
+                defaultValue={dados?.valor}
                 prefix="R$ "
             />
         </Box>

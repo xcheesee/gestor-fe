@@ -1,3 +1,4 @@
+import { useState } from "react"
 import { Box, TextField } from "@mui/material"
 import CampoData from "../../CampoData"
 
@@ -5,11 +6,11 @@ export default function FormCertidao({
     numContrato,
     acao,
     dados={},
-    errors={},
     formId,
     onSubmit,
     setOpen
 }) {
+    const [errors, setErrors] = useState({})
     return(
         <Box
             className="flex flex-col gap-4 py-2"
@@ -21,10 +22,12 @@ export default function FormCertidao({
                 formData.append("contrato_id", numContrato)
                 acao === "Enviar" 
                     ? onSubmit({formData}, {
-                        onSuccess: () => setOpen(false)
+                        onSuccess: () => setOpen(false),
+                        onError: (res) => setErrors(res.errors)
                     }) 
                     : onSubmit({formData, id: dados.id}, {
-                        onSuccess: () => setOpen(false)
+                        onSuccess: () => setOpen(false),
+                        onError: (res) => setErrors(res.errors)
                     })
             }}
         >
@@ -36,7 +39,7 @@ export default function FormCertidao({
                 error={errors?.hasOwnProperty('certidoes')}
                 helperText={errors?.certidoes ?? "Ex: Certidão negativa de débitos"}
                 fullWidth
-                required
+                
             />
 
             <CampoData
@@ -46,7 +49,7 @@ export default function FormCertidao({
                 error={errors?.hasOwnProperty('validade_certidoes')}
                 helperText={errors?.validade_certidoes ?? ""}
                 fullWidth
-                required
+                
             />
 
         </Box>

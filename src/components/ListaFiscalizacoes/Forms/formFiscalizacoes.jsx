@@ -7,13 +7,13 @@ export default function FormFiscalizacoes({
     numContrato,
     acao,
     dados={},
-    errors={},
     formId,
     onSubmit,
     setOpen
 }) {
 
     const [mesmoCargoDialog, setMesmoCargoDialog] = useState(false)
+    const [errors, setErrors] = useState({})
     
     const gestorRef = useRef(dados?.nome_gestor ?? "")
     const fiscalRef = useRef(dados?.nome_fiscal ?? "")
@@ -24,10 +24,6 @@ export default function FormFiscalizacoes({
         gestor: false,
         suplente: false
     })
-
-    //useEffect(() => {
-    //    setErrors({});
-    //}, [openFormFiscalizacao.open])
 
     function checkSameName (currRef, campo) {
         let sameCampo = [campo]
@@ -73,10 +69,12 @@ export default function FormFiscalizacoes({
                     formData.append("contrato_id", numContrato)
                     acao === 'Enviar' 
                         ? onSubmit({formData},{
-                            onSuccess: () => setOpen(false)
+                            onSuccess: () => setOpen(false),
+                            onError: (res) => setErrors(res.errors)
                         }) 
                         : onSubmit({formData, id: dados.id}, {
-                            onSuccess: () => setOpen(false)
+                            onSuccess: () => setOpen(false),
+                            onError: (res) => setErrors(res.errors)
                         })
                 }}>
                 <CampoTexto
@@ -87,7 +85,6 @@ export default function FormFiscalizacoes({
                         firstWarningRef.current.suplente = false
                     }}
                     onBlur={() => {
-
                         const names = checkSameName(gestorRef, "Gestor")
                         if(names.isSame) {
                             firstWarningRef.current.gestor = true
@@ -96,20 +93,24 @@ export default function FormFiscalizacoes({
                         }
                     }}
                     labels={fiscLabels}
-                    errors={errors}
+                    error={errors?.hasOwnProperty('nome_gestor')}
+                    helperText={errors?.nome_gestor ?? ""}
                     ref={gestorRef}
-                    required
+                    
                 />
                 <CampoTexto
                     defaultValue={dados.email_gestor}
                     name="email_gestor"
                     labels={fiscLabels}
-                    errors={errors}
-                    required
+                    error={errors?.hasOwnProperty('email_gestor')}
+                    helperText={errors?.email_gestor ?? ""}
+                    
                 />
                 <CampoTexto
                     defaultValue={dados.nome_fiscal}
                     name="nome_fiscal"
+                    error={errors?.hasOwnProperty('nome_fiscal')}
+                    helperText={errors?.nome_fiscal ?? ""}
                     changeFn={(e) => {
                         firstWarningRef.current.gestor = false
                         firstWarningRef.current.suplente = false
@@ -123,22 +124,23 @@ export default function FormFiscalizacoes({
                         }
                     }}
                     labels={fiscLabels}
-                    errors={errors}
                     ref={fiscalRef}
-                    required
+                    
                 />
                 <CampoTexto
                     defaultValue={dados.email_fiscal}
                     name="email_fiscal"
+                    error={errors?.hasOwnProperty('email_fiscal')}
+                    helperText={errors?.email_fiscal ?? ""}
                     labels={fiscLabels}
-                    errors={errors}
-                    required
+                    
                 />
                 <CampoTexto
                     defaultValue={dados.nome_suplente}
                     name="nome_suplente"
+                    error={errors?.hasOwnProperty('nome_suplente')}
+                    helperText={errors?.nome_suplente ?? ""}
                     labels={fiscLabels}
-                    errors={errors}
                     changeFn={(e) => {
                         firstWarningRef.current.fiscal = false
                         firstWarningRef.current.gestor = false
@@ -152,14 +154,15 @@ export default function FormFiscalizacoes({
                         }
                     }}
                     ref={suplenteRef}
-                    required
+                    
                 />
                 <CampoTexto
                     defaultValue={dados.email_suplente}
                     name="email_suplente"
+                    error={errors?.hasOwnProperty('email_suplente')}
+                    helperText={errors?.email_suplente ?? ""}
                     labels={fiscLabels}
-                    errors={errors}
-                    required
+                    
                 />
             </Box>
 

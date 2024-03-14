@@ -16,6 +16,8 @@ const CampoAno = (props) => {
         //onChange,
         required=false,
         fullWidth,
+        error=false,
+        helperText,
         ...other
     } = props;
 
@@ -39,6 +41,8 @@ const CampoAno = (props) => {
             //}}
             required={required}
             fullWidth={fullWidth}
+            helperText={helperText}
+            error={error}
             {...other}
         />
     );

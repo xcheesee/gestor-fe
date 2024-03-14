@@ -17,7 +17,6 @@ export function CardDotacao({dotacao, centered=false, displayOnly=false, onClick
                 <Typography className={`pl-4 ${toCenter}`} sx={{color: "hsl(175, 50%, 20%)"}}>{dotacao?.descricao}</Typography>
                 <Box className="flex justify-around gap-16 px-2 pt-6">
                     <Typography sx={{color: "hsl(175, 50%, 40%)"}}>{dotacao?.tipo_despesa}</Typography>
-                    {/* <Typography sx={{color: "hsl(175, 50%, 40%)"}}>{dotacao?.tipo_despesa}</Typography> */}
                 </Box>
             </Box>
         )
@@ -45,11 +44,12 @@ export function CardDotacao({dotacao, centered=false, displayOnly=false, onClick
     )
 }
 
-const  CampoTipoDotacao = React.forwardRef(({ dotacao, setDotacao }, ref) => {
+const  CampoTipoDotacao = React.forwardRef(({ dotacao }, ref) => {
     
     const filter = useRef("")
     const [anchorEl, setAnchorEl] = useState(null)
     const [dotacoesFiltradas, setDotacoesFiltradas] = useState([])
+    const [dot, setDot] = useState(dotacao)
     const openAnchor = Boolean(anchorEl)
     
     const dotacoesDados = useQuery({
@@ -68,15 +68,17 @@ const  CampoTipoDotacao = React.forwardRef(({ dotacao, setDotacao }, ref) => {
         ],
         ignoreLocation: true
     })
+
     function handleBtnClick (e) {
         setAnchorEl(e.currentTarget)
     }
     return(
         <>
+            <input type="text" value={dot.dotacao_tipo_id} name='dotacao_tipo_id' className='hidden'/>
             {
-                dotacao?.dotacao_tipo_id !== ""
-                    ?<CardDotacao dotacao={dotacao} setDotacao={setDotacao} onClick={handleBtnClick} handleDelClick={(e) => {
-                        setDotacao(prev => ({
+                dot?.dotacao_tipo_id !== ""
+                    ?<CardDotacao dotacao={dot} onClick={handleBtnClick} handleDelClick={(e) => {
+                        setDot(prev => ({
                             ...prev,
                             descricao: "",
                             numero_dotacao: "",
@@ -84,8 +86,8 @@ const  CampoTipoDotacao = React.forwardRef(({ dotacao, setDotacao }, ref) => {
                             tipo_despesa: "",
                         }))
                     }}/>
-                    :<Box className="block flex h-32">
-                        <Button className="justify-center" fullWidth onClick={handleBtnClick}>
+                    :<Box className="block h-32">
+                        <Button className="h-full" fullWidth onClick={handleBtnClick}>
                             <Typography className="text-3xl font-light">Definir Tipo de Dotacao</Typography>
                             <AddCircleOutlineIcon className="mx-4 text-3xl"/>
                         </Button>
@@ -125,7 +127,7 @@ const  CampoTipoDotacao = React.forwardRef(({ dotacao, setDotacao }, ref) => {
                                         className='m-2 w-full'
                                         onClick={() => {
                                             setAnchorEl(null)
-                                            setDotacao((prev) => ({
+                                            setDot((prev) => ({
                                                 ...prev,
                                                 dotacao_tipo_id: entry.item.id,
                                                 numero_dotacao: entry.item.numero_dotacao,
@@ -151,7 +153,7 @@ const  CampoTipoDotacao = React.forwardRef(({ dotacao, setDotacao }, ref) => {
                                     className='m-2 w-full'
                                     onClick={() => {
                                         setAnchorEl(null)
-                                        setDotacao((prev) => ({
+                                        setDot((prev) => ({
                                             ...prev,
                                             dotacao_tipo_id: entry.id, 
                                             numero_dotacao: entry.numero_dotacao,
@@ -159,9 +161,11 @@ const  CampoTipoDotacao = React.forwardRef(({ dotacao, setDotacao }, ref) => {
                                             descricao: entry.descricao
                                         }))
                                     }}>
+
                                     <CardDotacao 
                                         dotacao={entry} 
-                                        displayOnly/>
+                                        displayOnly
+                                    />
                                 </ButtonBase>
                             )
                         })

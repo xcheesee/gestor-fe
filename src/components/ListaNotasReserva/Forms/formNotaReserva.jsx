@@ -1,38 +1,24 @@
+import { useState } from "react";
 import { Box, MenuItem, TextField } from "@mui/material";
 import CampoMasked from "../../CampoMasked";
 import CampoValores from "../../CampoValores";
 import { tipos_notas_reserva } from "../../../commom/utils/constants";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { throwablePostForm } from "../../../commom/utils/api";
-import { useErrorSnackbar } from "../../../commom/utils/hooks";
+import { brlToFloat } from "../../../commom/utils/utils";
+import { useQueryClient } from "@tanstack/react-query";
 import { useSetAtom } from "jotai";
 import { snackbarAtom } from "../../../atomStore";
-import { brlToFloat } from "../../../commom/utils/utils";
+import { useErrorSnackbar } from "../../../commom/utils/hooks";
 
-export function FormPostNotaReserva({
+export function FormNotaReserva({
     formId,
     numContrato,
-    //postMutation,
+    dadosNota={},
     setOpen,
-    setCarregando
+    setCarregando,
+    acao,
+    onSubmit
 }) {
-    const errorSnackbar = useErrorSnackbar()
-    const queryClient = useQueryClient()
-    const setSnackbar = useSetAtom(snackbarAtom)
-
-    const postMutation = useMutation({
-        mutationFn: ({notaReserva, path}) => throwablePostForm({form:notaReserva, path}),
-        onSuccess: (res) => {
-            queryClient.invalidateQueries({queryKey: ['notas_reserva']})
-            queryClient.invalidateQueries({queryKey: ['mesesExecutados']})
-            queryClient.invalidateQueries({queryKey: ['totalizadores']})
-            setSnackbar(prev => ({...prev, open: true, severity: "success", message: "Nota de Reserva enviada.", color: "success"}))
-        },
-        onError: (res) =>  {
-            errorSnackbar.Post(res)
-            setCarregando(false)
-        }
-    })
+    const [errors, setErrors] = useState({})
 
     return(
         <Box
@@ -45,21 +31,25 @@ export function FormPostNotaReserva({
                 const val = formData.get('valor')
                 const formatted = brlToFloat(val)
                 formData.set('valor', formatted)
-                
                 formData.append('contrato_id', numContrato)
-                setCarregando(true)
-                postMutation.mutate({notaReserva: formData, path: 'nota_reserva'}, {
-                    onSuccess: () => {
-                        setOpen(false)
-                        setCarregando(false)
-                    }
-                })
+                acao === 'Enviar' 
+                    ? onSubmit({formData},{
+                        onSuccess: () => setOpen(false),
+                        onError: (res) => setErrors(res.errors)
+                    }) 
+                    : onSubmit({formData, id: dadosNota?.id}, {
+                        onSuccess: () => setOpen(false),
+                        onError: (res) => setErrors(res.errors)
+                    })
             }}
         >
             <CampoMasked
                 mask="#####"
                 name="numero_nota_reserva"
                 label="Numero da Nota de Reserva"
+                defaultValue={dadosNota?.numero_nota_reserva} 
+                error={errors?.hasOwnProperty('numero_nota_reserva')}
+                helperText={errors?.numero_nota_reserva ?? ""}
             />
 
             <TextField
@@ -69,20 +59,30 @@ export function FormPostNotaReserva({
                 InputLabelProps={{
                     shrink: true
                 }}
+                defaultValue={dadosNota?.data_emissao}
+                error={errors?.hasOwnProperty('data_emissao')}
+                helperText={errors?.data_emissao ?? ""}
             />
             <TextField
                 select
                 name="tipo_nota"
                 label="Tipo de Nota"
+                defaultValue={dadosNota?.tipo_nota}
+                error={errors?.hasOwnProperty('tipo_nota')}
+                helperText={errors?.tipo_nota ?? ""}
             >
                 {Object.entries(tipos_notas_reserva).map((tipo_nota, i) => (
                     <MenuItem value={tipo_nota[0]} key={`tipo-nota-${i}`} >{tipo_nota[1]}</MenuItem>
                 ))} 
             </TextField>
+
             <CampoValores 
                 name="valor"
                 label="Valor da Nota de Reserva"
+                defaultValue={dadosNota?.valor}
                 prefix="R$ "
+                error={errors?.hasOwnProperty('valor')}
+                helperText={errors?.valor ?? ""}
             />
         </Box>
     )

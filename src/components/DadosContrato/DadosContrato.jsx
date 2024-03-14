@@ -166,7 +166,7 @@ const DadosContrato = () => {
             element: <ListaDotacoes numContrato={numContrato}/>,
         },
         {
-            nome: 'Reajuste',
+            nome: 'Reajustes',
             element: <ListaReajustes numContrato={numContrato}/>,
         },
     ]
