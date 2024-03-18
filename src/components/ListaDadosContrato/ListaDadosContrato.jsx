@@ -10,7 +10,7 @@ import {
 import FormDadosContrato from './FormDadosContrato';
 import FormProcessoContratacao from './FormProcessoContratacao';
 import EditIcon from '@mui/icons-material/Edit';
-import { formataCpfCnpj, formataData, formataValores, mascaraContrato, mascaraProcessoSei, primeiraLetraMaiuscula, TabValues } from '../../commom/utils/utils';
+import { formataData, formataValores, mascaraContrato, mascaraProcessoSei, primeiraLetraMaiuscula, TabValues } from '../../commom/utils/utils';
 import { contratoLabels } from '../../commom/utils/constants';
 
 const TabPanel = (props) => {
@@ -109,7 +109,6 @@ const ListaDadosContrato = (props) => {
             processo_sei: mascaraProcessoSei(dados?.processo_sei),
             //credor: dados?.credor,
             //cnpj_cpf: formataCpfCnpj(dados?.cnpj_cpf),
-            //tipo_objeto: primeiraLetraMaiuscula(dados?.tipo_objeto),
             categoria: primeiraLetraMaiuscula(dados?.categoria), 
             subcategoria: primeiraLetraMaiuscula(dados?.subcategoria), 
             objeto: dados?.objeto,

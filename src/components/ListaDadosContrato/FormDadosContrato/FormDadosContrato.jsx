@@ -21,7 +21,6 @@ const FormDadosContrato = (props) => {
         numContrato,
         openDadosCon,
         setOpenDadosCon,
-        //setSnackbar,
         mudancaContrato,
         setMudancaContrato,
     } = props;

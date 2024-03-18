@@ -1,4 +1,4 @@
-//constante utilizada para manter conformidade entre legenda de formulario e feedback em erros
+//constante utilizada para manter conformidade entre legenda de formulario, feedback em erros e display de valores
 
 export const contratoLabels = {
     departamento: "Unidade Requisitante",
@@ -6,7 +6,8 @@ export const contratoLabels = {
     processo_sei: "Processo SEI",
     credor: "Credor",
     cnpj_cpf: "CNPJ/CPF",
-    //tipo_objeto: "Tipo de objeto",
+    categoria: "Categoria",
+    subcategoria: "Subcategoria",
     objeto: "Objeto",
     numero_contrato: "Nº Contrato / Nota de Empenho Inicial",
     valor_contrato: "Valor",
@@ -14,9 +15,6 @@ export const contratoLabels = {
     condicao_pagamento: "Condição de Pagamento",
     numero_nota_reserva: "Número nota reserva",
     valor_reserva: "Valor reserva",
-    categoria: "Categoria",
-    subcategoria: "Subcategoria",
-    // licitacao_modelo_id: "",
     licitacao_modelo: "Modalidade de licitação",
     estado: "Status do Contrato",
     envio_material_tecnico: "Envio material técnico",

@@ -3,21 +3,16 @@ import {
     Box,
     Divider,
     Typography,
-    TextField,
     FormControl,
     InputLabel,
     Select,
     MenuItem,
     FormHelperText,
 } from '@mui/material';
-import CampoCpfCnpj from '../CampoCpfCnpj';
-//import CampoData from '../CampoData';
 import CampoValores from '../CampoValores';
 import CampoProcessoSei from '../CampoProcessoSei';
 import CampoNumContrato from '../CampoNumContrato';
-//import MaxPrazoInput from '../MaxPrazoInput';
 import { contratoLabels } from '../../commom/utils/constants';
-//import CampoDataControlada from '../CampoDataControlada';
 import CampoEmpresa from '../CampoEmpresa';
 import { formataCpfCnpj } from '../../commom/utils/utils';
 import CampoTexto from '../CampoTexto';
@@ -37,7 +32,6 @@ const BoxDadosContrato = (props) => {
         focusError,
         //setFocusError,
     } = props;
-    // const [validade, setValidade] = useState(dados.data_vencimento ?? "")
     const empresaRef = useRef({
         id: dados.empresa_id, 
         nome: dados.empresa, 
@@ -113,31 +107,6 @@ const BoxDadosContrato = (props) => {
                 ref={empresaRef}
              />
 
-            {/*<FormControl 
-                sx={{ margin: '1rem 0' }}
-                error={errors.hasOwnProperty('tipo_contratacao')}
-                fullWidth 
-            >
-                <InputLabel id="tipo_objeto-label">{contratoLabels.tipo_objeto}</InputLabel>
-                <Select
-                    labelId="tipo_objeto-label"
-                    id="tipo_objeto"
-                    label={contratoLabels.tipo_objeto}
-                    defaultValue={dados.tipo_objeto ?? ""}
-                    name="tipo_objeto"
-                    fullWidth
-                >
-                    <MenuItem value={""}>---</MenuItem>
-                    <MenuItem value={"obra"}>Obra</MenuItem>
-                    <MenuItem value={"projeto"}>Projeto</MenuItem>
-                    <MenuItem value={"serviço"}>Serviço</MenuItem>
-                    <MenuItem value={"aquisição"}>Aquisição</MenuItem>
-                </Select>
-                <FormHelperText>
-                    {errors.hasOwnProperty('tipo_contratacao') ? errors.tipo_objeto : " "}
-                </FormHelperText>
-                </FormControl>*/}
-
             <CampoCatSubcat
                 defaultValue={{categoria: dados?.categoria_id, subcategoria: dados?.subcategoria_id}}
                 errors={errors}
@@ -158,7 +127,6 @@ const BoxDadosContrato = (props) => {
                 fullWidth
             />
 
-            {/* TODO: MOSTRAR HELPER TEXT E ERROR BORDER EM NUMERO_CONTRATO */}
             <CampoValores
                 index=""
                 className="form__campo"
