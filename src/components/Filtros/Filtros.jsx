@@ -263,7 +263,7 @@ const Filtros = (props) => {
                             variant="contained"
                             onClick={salvaFiltros}
                         >
-                            Salvar
+                            Filtrar
                         </Button>
                     </Box>
                 </Box>
