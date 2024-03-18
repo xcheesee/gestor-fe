@@ -139,9 +139,9 @@ const FormEditExecFinanceira = ({
 
     const tableData = [
         createTableRow('Reservas', dadosExecucao?.data?.reservado?.map(val => formataValores(val)) ?? [] ),
+        createTableRow('Empenhado', dadosExecucao?.data?.empenhos?.map(val => formataValores(val)) ?? []),
         createTableRow('Aditamentos', dadosExecucao?.data?.aditamentos?.map(val => formataValores(val)) ?? []),
         createTableRow('Reajustes', dadosExecucao?.data?.reajustes?.map(val => formataValores(val)) ?? []),
-        createTableRow('Empenhado', dadosExecucao?.data?.empenhos?.map(val => formataValores(val)) ?? []),
         createTableRow('Executado', dadosExecucao?.data?.executado?.map(val => formataValores(val)) ?? []),
         createTableRow( 'Saldo', calculaSaldo(dadosExecucao?.data)?.map(val => formataValores(val)) ?? [] ),
     ]
