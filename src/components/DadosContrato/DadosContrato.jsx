@@ -94,18 +94,6 @@ const DadosContrato = () => {
         })();
     }, [numContrato, navigate, mudancaContrato])
 
-    //useEffect(() => {
-    //    const totContainer = document.getElementById('totalizador-container')
-
-    //    function horizontalScroll(e) {
-    //        e.preventDefault()
-    //        totContainer.scrollLeft += e.deltaY;
-    //    }
-
-    //    totContainer.addEventListener("wheel", horizontalScroll)
-    //    return () => totContainer.removeEventListener('wheel', horizontalScroll)
-    //}, [])
-
     const handleChange = (event, newValue) => {
         setValue(newValue);
     }
@@ -216,23 +204,12 @@ const DadosContrato = () => {
                                         title="Saldo"
                                         val={dadosTotalizador?.data?.saldo.toLocaleString('pt-BR', { minimumFractionDigits: 2}) ?? ""}
                                     />
-                                    {/*<TotalizadorCardEle 
-                                        className="col-span-4 bg-[#7fc9bf]"
-                                        title="Média Mensal Empenhado"
-                                        val={dadosTotalizador?.data?.mediaAnualEmpenho[0].media_anual.toLocaleString('pt-BR', { minimumFractionDigits: 2}) ?? ""}
-                                    />*/}
                                     <TotalizadorCardEle 
                                         className="col-span-6 bg-[#2c756f]"
                                         title="Realizado (Liquidado)"
                                         val={dadosTotalizador?.data?.realizado.toLocaleString('pt-BR', { minimumFractionDigits: 2}) ?? ""}
                                         icon={<ReceiptLongOutlinedIcon className='text-[5rem] text-white' />}
                                     />
-                                    {/*<TotalizadorCardEle 
-                                        className="col-span-6 bg-[#2c756f]"
-                                        title="Média Mensal Realizado"
-                                        val={dadosTotalizador?.data?.mediaAnualRealizado[0].media_anual.toLocaleString('pt-BR', { minimumFractionDigits: 2}) ?? ""}
-                                        icon={<BarChartOutlinedIcon className='text-[5rem] text-white' />}
-                                    />*/}
                                     <TotalizadorCardEle 
                                         className="col-span-6 bg-[#2c756f]"
                                         title="Devoluções"

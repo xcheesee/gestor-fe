@@ -21,6 +21,7 @@ import { contratoLabels } from '../../commom/utils/constants';
 import CampoEmpresa from '../CampoEmpresa';
 import { formataCpfCnpj } from '../../commom/utils/utils';
 import CampoTexto from '../CampoTexto';
+import CampoCatSubcat from '../CampoCategoria';
 
 const BoxDadosContrato = (props) => {
     const {
@@ -55,6 +56,7 @@ const BoxDadosContrato = (props) => {
         <Box
             component="form"
             id="contrato-form"
+            className="flex flex-col gap-4 py-2"
             onSubmit={(e) => {
                 e.preventDefault()
                 const formData = new FormData(e.target)
@@ -73,7 +75,6 @@ const BoxDadosContrato = (props) => {
             }
 
             <FormControl 
-                sx={{ margin: '1rem 0' }}
                 error={errors.hasOwnProperty('departamento_id')}
                 fullWidth 
                 required
@@ -108,36 +109,11 @@ const BoxDadosContrato = (props) => {
                 name="processo_sei"
             />
             
-            {/*<TextField
-                variant="outlined"
-                defaultValue={dados.credor ?? localStorage.getItem(`contrato-${numContrato}-credor`) ?? ""}
-                onChange={e => {
-                    localStorage.setItem(`contrato-${numContrato}-credor`, e.target.value)
-                }}
-                name="credor"
-                id="credor"
-                className="form__campo"
-                label={contratoLabels.credor}
-                sx={{ margin: '1rem 0' }}
-                error={errors.hasOwnProperty('credor')}
-                helperText={errors.hasOwnProperty('credor') ? errors.credor : " "}
-                fullWidth
-            />*/}
             <CampoEmpresa
                 ref={empresaRef}
              />
-            {/*<CampoCpfCnpj
-                className="form__campo"
-                defaultValue={dados.cnpj_cpf ?? ""}
-                setError={setError}
-                error={errors.hasOwnProperty('cnpj_cpf')}
-                errors={errors}
-                setErrors={setErrors}
-                label={contratoLabels.cnpj_cpf}
-                fullWidth
-            />*/}
 
-            <FormControl 
+            {/*<FormControl 
                 sx={{ margin: '1rem 0' }}
                 error={errors.hasOwnProperty('tipo_contratacao')}
                 fullWidth 
@@ -160,19 +136,13 @@ const BoxDadosContrato = (props) => {
                 <FormHelperText>
                     {errors.hasOwnProperty('tipo_contratacao') ? errors.tipo_objeto : " "}
                 </FormHelperText>
-            </FormControl>
+                </FormControl>*/}
 
-            {/* <TextField
-                variant="outlined"
-                defaultValue={dados.objeto ?? ""}
-                name="objeto"
-                className="form__campo"
-                label={contratoLabels.objeto}
-                sx={{ margin: '1rem 0' }}
-                error={errors.hasOwnProperty('objeto')}
-                helperText={errors.hasOwnProperty('objeto') ? errors.objeto : " "}
-                fullWidth
-            /> */}
+            <CampoCatSubcat
+                defaultValue={{categoria: dados?.categoria_id, subcategoria: dados?.subcategoria_id}}
+                errors={errors}
+             />
+
             <CampoTexto
                 defaultValue={dados?.objeto}
                 name="objeto"
@@ -188,16 +158,6 @@ const BoxDadosContrato = (props) => {
                 fullWidth
             />
 
-            {/* <CampoData
-                className="form__campo"
-                label={contratoLabels.data_assinatura}
-                defaultValue={dados.data_assinatura ?? ""}
-                name="data_assinatura"
-                margin="1rem 0"
-                error={errors.hasOwnProperty('data_assinatura')}
-                helperText={errors.hasOwnProperty('data_assinatura') ? errors.data_assinatura : " "}
-                fullWidth
-            /> */}
             {/* TODO: MOSTRAR HELPER TEXT E ERROR BORDER EM NUMERO_CONTRATO */}
             <CampoValores
                 index=""
@@ -223,29 +183,6 @@ const BoxDadosContrato = (props) => {
                 fullWidth
             />
 
-            {/* <CampoData
-                className="form__campo"
-                label={contratoLabels.data_inicio_vigencia}
-                defaultValue={dados.data_inicio_vigencia ?? ""}
-                name="data_inicio_vigencia"
-                margin="1rem 0"
-                error={errors.hasOwnProperty('data_inicio_vigencia')}
-                helperText={errors.hasOwnProperty('data_inicio_vigencia') ? errors.data_inicio_vigencia : " "}
-                fullWidth
-            /> */}
-
-            {/* <CampoDataControlada
-                className="form__campo"
-                label={contratoLabels.data_vencimento}
-                value={validade}
-                setValue={setValidade}
-                name="data_vencimento"
-                margin="1rem 0"
-                error={errors.hasOwnProperty('data_vencimento')}
-                helperText={errors.hasOwnProperty('data_vencimento') ? errors.data_vencimento : " "}
-                fullWidth
-            /> */}
-
             <CampoTexto
                 defaultValue={dados?.condicao_pagamento}
                 name="condicao_pagamento"
@@ -253,26 +190,6 @@ const BoxDadosContrato = (props) => {
                 helperText={"Ex: Em até 30 dias após o adimplemento."}
                 labels={contratoLabels}
             />
-
-            {/* <MaxPrazoInput 
-                helperText="A contar da data de vencimento..."
-                validade={validade}
-                defaultValue={dados.data_prazo_maximo ?? ""}
-                label={contratoLabels.prazo_a_partir_de}
-                disabled={validade === "" ?? true}
-            /> */}
-
-            {/* <TextField
-                variant="outlined"
-                defaultValue={dados?.numero_nota_reserva}
-                name="numero_nota_reserva"
-                className="form__campo"
-                label={contratoLabels.numero_nota_reserva}
-                sx={{ margin: '1rem 0' }}
-                error={errors.hasOwnProperty('numero_nota_reserva')}
-                helperText={errors.hasOwnProperty('numero_nota_reserva') ? errors.numero_nota_reserva : " "}
-                fullWidth
-            /> */}
         </Box>
     );
 }

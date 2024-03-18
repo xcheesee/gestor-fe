@@ -32,7 +32,6 @@ const CampoProcessoSei = React.forwardRef((props, ref) => {
             {() => (<TextField
                     variant="outlined"
                     label={label}
-                    sx={{ margin: '1rem 0' }}
                     helperText={helperText}
                     error={error}
                     name={name}
