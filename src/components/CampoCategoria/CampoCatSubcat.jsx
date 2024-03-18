@@ -54,7 +54,7 @@ export default function CampoCatSubcat({
     }
 
     function SubcategoriaSelect() {
-        if(subCategorias.isLoading) return (
+        if(subCategorias.isLoading && !!selectedCategoria) return (
             <LoadingInput label="Subcategoria"/>
         )
         return (
