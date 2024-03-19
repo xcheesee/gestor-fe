@@ -25,7 +25,9 @@ export const contratoLabels = {
     data_inicio_vigencia: "Início da Vigência",
     data_vencimento: "Data de vencimento",
     data_vencimento_aditada: "Data de vencimento (c/Aditamentos)",
-    data_prazo_maximo: "Prazo Maximo",
+    data_recebimento_provisorio: "Data de recebimento (Provisório)",
+    data_recebimento_definitivo: "Data de recebimento (Definitivo)",
+    data_prazo_maximo: "Prazo Máximo",
 }
 
 export const certidaoLabels = {

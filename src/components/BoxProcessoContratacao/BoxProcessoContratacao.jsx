@@ -221,10 +221,32 @@ const BoxProcessoContratacao = (props) => {
                 fullWidth
             />
 
+            <CampoData
+                className=""
+                label={contratoLabels.data_recebimento_provisorio}
+                defaultValue={dados.data_recebimento_provisorio ?? ""}
+                name="data_recebimento_provisorio"
+                margin="1rem 0"
+                error={errors.hasOwnProperty('data_recebimento_provisorio')}
+                helperText={errors?.data_recebimento_provisorio ?? " "}
+                fullWidth
+            />
+
+            <CampoData
+                className=""
+                label={contratoLabels.data_recebimento_definitivo}
+                defaultValue={dados.data_recebimento_definitivo ?? ""}
+                name="data_recebimento_definitivo"
+                margin="1rem 0"
+                error={errors.hasOwnProperty('data_recebimento_definitivo')}
+                helperText={errors?.data_recebimento_definitivo ?? " "}
+                fullWidth
+            />
+
             <MaxPrazoInput
                 helperText="A contar da data de vencimento..."
                 validade={validade}
-                defaultValue={dados.data_prazo_maximo ?? ""}
+                defaultValue={dados?.data_prazo_maximo ?? ""}
                 label={contratoLabels.prazo_a_partir_de}
                 disabled={validade === "" ?? true}
             />
