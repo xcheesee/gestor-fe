@@ -41,7 +41,9 @@ const FormProcessoContratacao = (props) => {
         envio_material_tecnico: dados?.envio_material_tecnico,
         minuta_edital: dados?.minuta_edital,
         abertura_certame: dados?.abertura_certame,
-        homologacao: dados?.homologacao
+        homologacao: dados?.homologacao,
+        data_recebimento_provisorio: dados?.data_recebimento_provisorio,
+        data_recebimento_definitivo: dados?.data_recebimento_definitivo,
     });
     const [carregandoEnvio, setCarregandoEnvio] = useState(false);
     const [openConfirmacao, setOpenConfirmacao] = useState({

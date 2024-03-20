@@ -1,6 +1,51 @@
 import { Divider, MenuItem, Select, TextField, Tooltip, Typography } from "@mui/material";
 import { useState } from "react";
 
+function DisabledInput() {
+    return (
+         <Tooltip title="Defina a data de vencimento para definir um prazo máximo prorrogável">
+            <div className='flex border border-gray-300 border-solid rounded items-center' >
+                <TextField
+                    className="max-w-[300px]"
+                    variant='outlined'
+                    label="Prazo a partir de"
+                    fullWidth
+                    disabled
+                    sx={{
+                        "& fieldset": { border: 'none' },
+                        "& label": {backgroundColor: 'white', paddingInline: '4px'}
+                    }}/>
+
+                <Divider orientation='vertical' sx={{height: 40, m: 0.5}}/>
+
+                <Select
+                    variant='outlined'
+                    className="max-w-[300px]"
+                    fullWidth
+                    sx={{ "& fieldset": { border: 'none' }, }}
+                    disabled
+                    >
+                </Select>
+
+                <Divider orientation='vertical' sx={{height: 40, m: 0.5}}/>
+
+                <TextField
+                    variant='outlined'
+                    label="Prazo Máximo Prorrogável"
+                    placeholder={""}
+                    value="- - -"
+                    fullWidth
+                    disabled
+                    sx={{
+                        "& fieldset": { border: 'none' },
+                        "& label": {backgroundColor: 'white', paddingInline: '4px'}
+                    }}
+                    InputLabelProps={{ shrink: true }}/>
+            </div>
+        </Tooltip>
+    )
+}
+
 export default function MaxPrazoInput ({helperText, validade, disabled, label, defaultValue}) {
     const [prazoDias, setPrazoDias] = useState("")
     const [dayMultiplier, setDayMultiplier] = useState("")
@@ -18,44 +63,11 @@ export default function MaxPrazoInput ({helperText, validade, disabled, label, d
         return novaData.toLocaleDateString('pt-br')
     }
 
+
     return(
         <>
-            {disabled
-                ? <Tooltip title="Defina a data de vencimento para definir um prazo máximo prorrogável">
-                    <div className='flex border border-gray-300 border-solid rounded items-center' >
-                        <TextField
-                            className="max-w-[300px]"
-                            variant='outlined'
-                            label={label}
-                            fullWidth
-                            disabled={disabled}
-                            sx={{
-                                "& fieldset": { border: 'none' },
-                                "& label": {backgroundColor: 'white', paddingInline: '4px'}
-                            }}/>
-                        <Divider orientation='vertical' sx={{height: 40, m: 0.5}}/>
-                        <Select
-                            variant='outlined'
-                            className="max-w-[300px]"
-                            fullWidth
-                            sx={{ "& fieldset": { border: 'none' }, }}
-                            disabled={disabled}
-                            >
-                        </Select>
-                        <Divider orientation='vertical' sx={{height: 40, m: 0.5}}/>
-                        <TextField
-                            variant='outlined'
-                            label="Prazo Máximo Prorrogável"
-                            placeholder={""}
-                            value={maxPrazo}
-                            fullWidth
-                            sx={{
-                                "& fieldset": { border: 'none' },
-                                "& label": {backgroundColor: 'white', paddingInline: '4px'}
-                            }}
-                            InputLabelProps={{ shrink: true }}/>
-                    </div>
-                </Tooltip>
+            {disabled 
+                ?<DisabledInput />
                 :<div className='flex border border-gray-300 border-solid rounded items-center' >
                     <TextField
                         className="max-w-[300px]"
@@ -86,7 +98,9 @@ export default function MaxPrazoInput ({helperText, validade, disabled, label, d
                         <MenuItem value={1}>Dia(s)</MenuItem>
                         <MenuItem value={30}>Mes(es)</MenuItem>
                     </Select>
+
                     <Divider orientation='vertical' sx={{height: 40, m: 0.5}}/>
+
                     <TextField
                         variant='outlined'
                         name="data_prazo_maximo"

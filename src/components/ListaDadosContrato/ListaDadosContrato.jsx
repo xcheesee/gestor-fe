@@ -169,8 +169,8 @@ const ListaDadosContrato = (props) => {
             data_inicio_vigencia: DateDisplay(dados?.data_inicio_vigencia, dados.diferenca_homologacao_vigencia),
             data_vencimento: <VencimentoEle dados={dados} />,
             data_vencimento_aditada: <Box className='mb-2 inline-block' sx={{color: 'hsl(201, 0%, 20%)'}}>{formataData(dados?.data_vencimento_aditada)}</Box>,
-            data_recebimento_provisorio: props?.data_recebimento_provisorio,
-            data_recebimento_definitivo: props?.data_recebimento_definitivo,
+            data_recebimento_provisorio: formataData(props?.data_recebimento_provisorio),
+            data_recebimento_definitivo: formataData(props?.data_recebimento_definitivo),
             data_prazo_maximo: DateDisplay(dados?.data_prazo_maximo, dados.diferenca_vencimento_prazo_maximo),
         };
 
@@ -219,12 +219,13 @@ const ListaDadosContrato = (props) => {
 
                 <TabPanel value={value} index={1}>
                     <TabProcessoContratacao 
-                        licitacao_modelo={dados?.licitacao_modelo}
-                        estado={dados?.estado}
-                        envio_material_tecnico={dados?.envio_material_tecnico}
-                        minuta_edital={dados?.minuta_edital}
-                        abertura_certame={dados?.abertura_certame}
-                        homologacao={dados?.homologacao}
+                        {...dados}
+                        //licitacao_modelo={dados?.licitacao_modelo}
+                        //estado={dados?.estado}
+                        //envio_material_tecnico={dados?.envio_material_tecnico}
+                        //minuta_edital={dados?.minuta_edital}
+                        //abertura_certame={dados?.abertura_certame}
+                        //homologacao={dados?.homologacao}
                     />
 
                     <Fab 
