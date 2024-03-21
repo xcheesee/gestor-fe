@@ -2,12 +2,9 @@ import React, { useState } from 'react';
 import { Box, Typography, Paper, Button } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
 import FormOutrasInformacoes from './FormOutrasInformacoes';
-//import { useSetAtom } from 'jotai';
-//import { snackbarAtom } from '../../../atomStore';
 
 const OutrasInformacoes = (props) => {
     const {
-        outras_informacoes,
         dados,
         numContrato,
         mudancaContrato,
@@ -48,7 +45,7 @@ const OutrasInformacoes = (props) => {
                         alignItems: 'flex-start',
                     }}
                 >
-                    {outras_informacoes !== ''
+                    {dados?.outras_informacoes !== ''
                         ?
                             <Box 
                                 sx={{ 
@@ -61,7 +58,7 @@ const OutrasInformacoes = (props) => {
                                 elevation={3}
                             >
                                 <Typography sx={{ margin: '1rem', whiteSpace: 'pre-line' }} component="pre">
-                                    {formataInformacoes(outras_informacoes)}
+                                    {formataInformacoes(dados?.outras_informacoes)}
                                 </Typography>
                             </Box>
                         :   

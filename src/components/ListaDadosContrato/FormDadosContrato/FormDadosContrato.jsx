@@ -1,46 +1,47 @@
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { 
-    Dialog,
-    DialogTitle,
-    DialogContent,
-    DialogActions,
-    Button,
+    Box,
+    FormControl,
+    InputLabel,
+    Select,
+    MenuItem,
+    FormHelperText,
 } from '@mui/material';
-import CloseIcon from '@mui/icons-material/Close';
-import CheckIcon from '@mui/icons-material/Check';
-import CircularProgress from '@mui/material/CircularProgress';
-import BoxDadosContrato from '../../BoxDadosContrato';
-import DialogConfirmacao from '../../DialogConfirmacao';
 import { editaDadosContrato } from '../../../commom/utils/api';
 import { useSetAtom } from 'jotai';
 import { snackbarAtom } from '../../../atomStore';
+import { formataCpfCnpj } from '../../../commom/utils/utils';
+import { contratoLabels } from '../../../commom/utils/constants';
+import CampoValores from '../../CampoValores';
+import CampoProcessoSei from '../../CampoProcessoSei';
+import CampoNumContrato from '../../CampoNumContrato';
+import CampoEmpresa from '../../CampoEmpresa';
+import CampoTexto from '../../CampoTexto';
+import CampoCatSubcat from '../../CampoCategoria';
+import { useQueryClient } from '@tanstack/react-query';
 
 const FormDadosContrato = (props) => {
     const {
         dados,
         numContrato,
-        openDadosCon,
         setOpenDadosCon,
         mudancaContrato,
         setMudancaContrato,
+        setCarregando,
+        formId,
     } = props;
+    const queryClient = useQueryClient()
 
     const [errors, setErrors] = useState({});
     const [error, setError] = useState(false);
     const [focusError, setFocusError] = useState('')
-    const [carregandoEnvio, setCarregandoEnvio] = useState(false);
     const departamentos = JSON.parse(localStorage.getItem('departamentos'));
-    const [openConfirmacao, setOpenConfirmacao] = useState({
-        open: false,
-        id: numContrato
-    });
 
     const setSnackbar = useSetAtom(snackbarAtom)
 
     const enviaDadosContrato = async (e, formInterno, id) => {
-        setCarregandoEnvio(true);
+        setCarregando(true);
         const res = await editaDadosContrato(e, dados, formInterno, id)
-        console.log(res)
         if(res.status === 200) {
             setOpenDadosCon(false);
             setSnackbar({
@@ -49,6 +50,7 @@ const FormDadosContrato = (props) => {
                 message: 'Contrato editado com sucesso!',
                 color: 'success'
             });
+            queryClient.invalidateQueries(['contratoDados'])
         } else if(res.status === 422) {
             setErrors(res.errors);
             setFocusError(Object.keys(errors)[0])
@@ -65,67 +67,127 @@ const FormDadosContrato = (props) => {
                 color: 'error'
             });
         }
-        setCarregandoEnvio(false);
+        setCarregando(false);
         setMudancaContrato(!mudancaContrato);
     }
 
+    const empresaRef = useRef({
+        id: dados.empresa_id, 
+        nome: dados.empresa, 
+        telefone: dados.empresa_telefone,
+        email: dados.empresa_email, 
+        cnpj: dados.empresa_cnpj,
+        cnpj_formatado: formataCpfCnpj(dados.empresa_cnpj)
+    })
+
+    useEffect(() => {
+        if(focusError === "") return
+        document.querySelector(`input[name=${focusError}]`)?.scrollIntoView({behavior: 'smooth', block: 'center'})
+    },[focusError])
+
     return (
-        <>
-        <Dialog open={openDadosCon} fullWidth maxWidth="md">
-            <DialogTitle>
-                Editar dados de contrato
-            </DialogTitle>
-
-            <DialogContent>
-                <BoxDadosContrato 
-                    errors={errors}
-                    setErrors={setErrors}
-                    error={error}
-                    setError={setError}
-                    dados={dados}
-                    departamentos={departamentos}
-                    enviaDadosContrato={enviaDadosContrato}
-                    numContrato={numContrato}
-                    focusError={focusError}
-                    setFocusError={setFocusError}
-                    acao="editar"
-                />
-            </DialogContent>
-
-            <DialogActions sx={{ margin: '1rem' }}>
-                <Button 
-                    sx={{ textTransform: 'none', mr: '1rem', color: '#821f1f' }}
-                    onClick={() => { 
-                        setOpenDadosCon(false); 
-                    }}
+        <Box
+            component="form"
+            id={formId}
+            className="flex flex-col gap-4 py-2"
+            onSubmit={(e) => {
+                e.preventDefault()
+                const formData = new FormData(e.target)
+                formData.append('empresa_id', empresaRef.current.id)
+                enviaDadosContrato(e, formData, numContrato)
+            }}
+        >
+            <FormControl 
+                error={errors.hasOwnProperty('departamento_id')}
+                fullWidth 
+                required
+            >
+                <InputLabel id="departamento_id-label">{contratoLabels.departamento}</InputLabel>
+                <Select
+                    labelId="departamento_id-label"
+                    id="departamento_id"
+                    label={contratoLabels.departamento}
+                    defaultValue={dados?.departamento_id ?? ""}
+                    name="departamento_id"
+                    required
+                    fullWidth
                 >
-                    <CloseIcon sx={{ mr: '0.2rem' }} fontSize="small" /> Cancelar
-                </Button>
-
-                <Button 
-                    sx={{ textTransform: 'none' }} 
-                    variant="contained"
-                    onClick={() => setOpenConfirmacao({ open: true, id: numContrato })}
-                    disabled={error}
-                >
-                    {carregandoEnvio
-                        ? <CircularProgress size={16} sx={{ color: '#FFFFFF', mr: '0.7rem' }} />
-                        : <CheckIcon sx={{ mr: '0.2rem' }} fontSize="small" /> 
+                    { departamentos !== undefined
+                        ? Object.entries(departamentos)?.map((departamento, index) => (
+                            <MenuItem value={departamento[0]} key={index}>{departamento[1]}</MenuItem>
+                        ))
+                        : <MenuItem value="" key={0}></MenuItem>
                     }
-                    Editar
-                </Button>
-            </DialogActions>
-        </Dialog>
-        
-        <DialogConfirmacao 
-            formId='contrato-form'
-            openConfirmacao={openConfirmacao}
-            setOpenConfirmacao={setOpenConfirmacao}
-            acao="editar"
-            formInterno={dados}
-            texto="contrato"
-        />
-        </>
+                </Select>
+                <FormHelperText>
+                    {errors?.hasOwnProperty('departamento_id') ? errors?.departamento_id : " "}
+                </FormHelperText>
+            </FormControl>
+
+            <CampoProcessoSei 
+                defaultValue={dados.processo_sei ?? ""}
+                error={errors.hasOwnProperty('processo_sei')}
+                helperText={errors.hasOwnProperty('processo_sei') ? errors.processo_sei : " "}
+                label={contratoLabels.processo_sei}
+                name="processo_sei"
+            />
+            
+            <CampoEmpresa
+                ref={empresaRef}
+             />
+
+            <CampoCatSubcat
+                defaultValue={{categoria: dados?.categoria_id, subcategoria: dados?.subcategoria_id}}
+                errors={errors}
+             />
+
+            <CampoTexto
+                defaultValue={dados?.objeto}
+                name="objeto"
+                errors={errors}
+                labels={contratoLabels}
+            />
+            {/* TODO: MOSTRAR HELPER TEXT E ERROR BORDER EM NUMERO_CONTRATO */}
+            <CampoNumContrato 
+                defaultValue={dados.numero_contrato ?? ""}
+                error={error.hasOwnProperty('numero_contrato')}
+                helperText={error.hasOwnProperty('numero_contrato') ? errors.numero_contrato : " "}
+                label={contratoLabels.numero_contrato}
+                fullWidth
+            />
+
+            <CampoValores
+                index=""
+                className="form__campo"
+                label={contratoLabels.valor_contrato}
+                defaultValue={dados.valor_contrato ?? ""}
+                name="valor_contrato"
+                checaErros={() => {}}
+                error={errors.hasOwnProperty('valor_contrato.error')}
+                helperText={errors.hasOwnProperty('valor_contrato.error') ? errors.valor_contrato : " "}
+                fullWidth
+            />
+
+            <CampoValores
+                index=""
+                className="form__campo"
+                label={contratoLabels.valor_mensal_estimativo}
+                defaultValue={dados.valor_mensal_estimativo ?? ""}
+                name="valor_mensal_estimativo"
+                checaErros={() => {}}
+                error={errors.hasOwnProperty('valor_mensal_estimativo')}
+                helperText={errors.hasOwnProperty('valor_mensal_estimativo') ? errors.valor_mensal_estimativo : " "}
+                fullWidth
+            />
+
+            <CampoTexto
+                defaultValue={dados?.condicao_pagamento}
+                name="condicao_pagamento"
+                errors={errors}
+                helperText={"Ex: Em até 30 dias após o adimplemento."}
+                labels={contratoLabels}
+            />
+        </Box>
     );
 }
 

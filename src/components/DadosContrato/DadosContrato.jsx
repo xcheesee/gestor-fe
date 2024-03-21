@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { 
     Backdrop,
     CircularProgress,
@@ -24,7 +24,7 @@ import ListaAditamentosPrazo from '../ListaAditamentosPrazo';
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import ListaReajustes from '../ListaReajustes';
-import { getContrato, throwableGetData, /*getContrTot, getRecursos*/ } from '../../commom/utils/api';
+import { throwableGetData } from '../../commom/utils/api';
 import { formataCpfCnpj } from '../../commom/utils/utils';
 import { CardEmpresa } from '../CampoEmpresa';
 import DelContratoEle from '../DelContratoEle';
@@ -35,7 +35,6 @@ import ListaDevolucoes from '../ListaDevolucoes';
 import TotalizadorCardEle from '../TotalizadorCardEle';
 import CurrencyExchangeOutlinedIcon from '@mui/icons-material/CurrencyExchangeOutlined';
 import ReceiptLongOutlinedIcon from '@mui/icons-material/ReceiptLongOutlined';
-import BarChartOutlinedIcon from '@mui/icons-material/BarChartOutlined';
 import { useQuery } from '@tanstack/react-query';
 
 const TabPanel = (props) => {
@@ -67,9 +66,7 @@ const a11yProps = (index) => {
 
 const DadosContrato = () => {
     const [value, setValue] = useState(0);
-    const [dados, setDados] = useState({});
     const [mudancaContrato, setMudancaContrato] = useState(false);
-    const [estaCarregado, setEstaCarregado] = useState(false);
     const { numContrato } = useParams();
     
     const navigate = useNavigate();
@@ -79,20 +76,19 @@ const DadosContrato = () => {
         queryKey: ['totalizadores'],
     })
 
-    useEffect(() => {
-        (async () => {
-            setEstaCarregado(false)
-            const contrato = await getContrato(numContrato)
-            if (contrato.status === 404) {
-                navigate("../404", { replace: true });
-            } else if(contrato.status === 401) {
+    const contratoDados = useQuery({
+        queryFn: async () => (await throwableGetData({path: `contrato/${numContrato}`})).data,
+        queryKey: ['contratoDados', numContrato],
+        refetchOnWindowFocus: false,
+        onError: (res) => {
+            if(res.status === 404) {
+                navigate("../404", { replace: true })
+            } else if(res.status === 401) {
                 localStorage.removeItem('access_token');
                 navigate("../contrato", { replace: true });
             }
-            setDados(contrato?.data)
-            setEstaCarregado(true)
-        })();
-    }, [numContrato, navigate, mudancaContrato])
+        }
+    })
 
     const handleChange = (event, newValue) => {
         setValue(newValue);
@@ -103,7 +99,7 @@ const DadosContrato = () => {
             nome: 'Contrato',
             element: 
                 <ListaDadosContrato
-                    dados={dados}
+                    dados={contratoDados.data}
                     numContrato={numContrato}
                     mudancaContrato={mudancaContrato}
                     setMudancaContrato={setMudancaContrato}
@@ -163,7 +159,7 @@ const DadosContrato = () => {
     return (
         <>
             <Backdrop 
-                open={!estaCarregado}
+                open={contratoDados.isFetching}
                 sx={{ zIndex: '200' }}
                 transitionDuration={850}
             >
@@ -175,15 +171,17 @@ const DadosContrato = () => {
             <Fade in={true} timeout={750}>
                 <Box sx={{ padding: '0 1rem' }}>
                     <Box sx={{ padding: '1rem', maxWidth: '80rem', margin: '2rem auto', boxSizing: 'border-box' }} component={Paper} elevation={5}>
-                    <Link to="/contrato">
-                        <Button sx={{ textTransform: 'none' }} size="large">
-                            <ArrowBackIosIcon /> Voltar
-                        </Button>
-                    </Link>
+                        <Link to="/contrato">
+                            <Button sx={{ textTransform: 'none' }} size="large">
+                                <ArrowBackIosIcon /> Voltar
+                            </Button>
+                        </Link>
+
                         <Box sx={{ display: 'flex', flexDirection: 'column', margin: '1rem', gap: '2rem' }}>
                             <Typography variant="h2" component="h1" sx={{ fontSize: '2rem' }}>
-                                Contrato # <strong>{estaCarregado ? dados?.id : " "}</strong>
+                                Contrato # <strong>{contratoDados.data?.id ?? " "}</strong>
                             </Typography>
+
                             <Box 
                                 className=" overflow-x-scroll overflow-y-hidden"
                                 id="totalizador-container"
@@ -271,15 +269,16 @@ const DadosContrato = () => {
                             <Typography variant="h2" sx={{ fontSize: '2rem' }}>
                                 Dados da empresa
                             </Typography>
-                            {dados?.empresa_id !== null 
+
+                            {contratoDados.data?.empresa_id !== null 
                                 ?<CardEmpresa 
                                     centered
                                     displayOnly
                                     empresa={{
-                                        nome: dados?.empresa,
-                                        cnpj_formatado: formataCpfCnpj(dados?.empresa_cnpj),
-                                        email: dados?.empresa_email,
-                                        telefone: dados?.empresa_telefone
+                                        nome: contratoDados.data?.empresa,
+                                        cnpj_formatado: formataCpfCnpj(contratoDados.data?.empresa_cnpj),
+                                        email: contratoDados.data?.empresa_email,
+                                        telefone: contratoDados.data?.empresa_telefone
                                     }} 
                                 />
                                 :<Typography className='text-red-500 font-bold'>Nenhum dado de empresa disponível para este contrato!</Typography>
@@ -290,14 +289,13 @@ const DadosContrato = () => {
                                 //totais={totais}
                             />
 
-
                             <OutrasInformacoes 
-                                outras_informacoes={dados?.outras_informacoes}
-                                dados={dados}
+                                dados={contratoDados?.data}
                                 numContrato={numContrato}
                                 mudancaContrato={mudancaContrato}
                                 setMudancaContrato={setMudancaContrato}
                             />
+
                             <Box className='flex justify-end'>
                                 <DelContratoEle numContrato={numContrato} />
                             </Box>

@@ -30,6 +30,11 @@ export const contratoLabels = {
     data_prazo_maximo: "Prazo Máximo",
 }
 
+export const termoRecebimentoLabels = {
+    termo_recebimento_provisorio: "Termo de Recebimento (Provisório)",
+    termo_recebimento_definitivo: "Termo de Recebimento (Definitivo)"
+}
+
 export const certidaoLabels = {
     certidoes: "Certidão",
     validade_certidoes: "Validade",

@@ -10,11 +10,10 @@ export default function FormDialog({
     acao,
     carregando,
     setOpenConfirmar,
+    maxWidth="sm",
 }) {
-    //const [openConfirmar, setOpenConfirmar] = useState(false)
     return(
-        <>
-        <Dialog open={open} fullWidth>
+        <Dialog open={open} fullWidth maxWidth={maxWidth}>
             <DialogTitle>{title}</DialogTitle>
 
             <DialogContent>{children} </DialogContent>
@@ -41,15 +40,5 @@ export default function FormDialog({
                 </Button>
             </DialogActions>
         </Dialog>
-
-        {/*<DialogConf 
-            title={`${acao} ${tipoForm}`}
-            body={<Typography>Deseja {acao} o(a) {tipoForm}?</Typography>}
-            formId={formId}
-            open={openConfirmar}
-            setOpen={setOpenConfirmar}
-            acao='Enviar'
-        />*/}
-        </>
     )
 }

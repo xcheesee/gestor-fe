@@ -4,7 +4,6 @@ import Header from './components/Header';
 import Login from './pages/Login';
 import Principal from './pages/Principal';
 import DadosContrato from './components/DadosContrato';
-import NovoContrato from './pages/NovoContrato';
 import PaginaNaoEncontrada from './components/PaginaNaoEncontrada';
 import Auth from './components/Auth';
 import Footer from './components/Footer';
@@ -41,12 +40,6 @@ function App() {
         <Route path="/contrato/:numContrato" element={ 
           <Auth> 
             <DadosContrato /> 
-          </Auth>
-        } />
-
-        <Route path="/novo-contrato" element={ 
-          <Auth> 
-            <NovoContrato /> 
           </Auth>
         } />
 
