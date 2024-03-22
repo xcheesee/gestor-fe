@@ -15,9 +15,12 @@ import { formataData, formataValores, mascaraContrato, mascaraProcessoSei, prime
 import { contratoLabels, termoRecebimentoLabels } from '../../commom/utils/constants';
 import FormDialog from '../FormDialog';
 import FormTermoRecebimento from './FormTermoRecebimento';
-import { useMutation } from '@tanstack/react-query';
-import { throwablePutForm } from '../../commom/utils/api';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { editaDadosContrato, throwablePutForm } from '../../commom/utils/api';
 import DialogConf from '../DialogConf';
+import { useSetAtom } from 'jotai';
+import { snackbarAtom } from '../../atomStore';
+import { useErrorSnackbar } from '../../commom/utils/hooks';
 
 const TabPanel = (props) => {
     const { children, value, index, ...other } = props;
@@ -123,8 +126,8 @@ const TabProcessoContratacao = (props) => {
 
 const TabTermoRecebimento = (props) => {
     const valores = {
-        termo_recebimento_provisorio: props.termo_recebimento_provisorio,
-        termo_recebimento_definitivo: props.termo_recebimento_definitivo,
+        termo_recebimento_provisorio: formataData(props.termo_recebimento_provisorio),
+        termo_recebimento_definitivo: formataData(props.termo_recebimento_definitivo),
     }
     return <TabValues entry={valores} labels={termoRecebimentoLabels} label="termo_recebimento"/>
 }
@@ -137,6 +140,10 @@ const ListaDadosContrato = (props) => {
         setMudancaContrato,
     } = props;
 
+    const setSnackbar = useSetAtom(snackbarAtom)
+    const errorSnackbar = useErrorSnackbar()
+    const queryClient = useQueryClient() 
+
     const [value, setValue] = useState(0);
     const [openProcCon, setOpenProcCon] = useState(false);
     const [openDadosCon, setOpenDadosCon] = useState(false);
@@ -146,7 +153,8 @@ const ListaDadosContrato = (props) => {
         open: false,
         acao: "",
     })
-
+    const [errors, setErrors] = useState({})
+ 
     const termoRecebimentoFormId = 'termo-form'
     const contratacaoFormId = "form-processo-contrato"
     const contratoFormId = 'form-contrato'
@@ -159,7 +167,20 @@ const ListaDadosContrato = (props) => {
     }
 
     const editTermoRecebimento = useMutation({
-        mutationFn: ({formData}) => throwablePutForm({form: formData, path: "", id: numContrato})
+        mutationFn: ({formData}) => editaDadosContrato({}, dados,  formData, numContrato),
+        onMutate: () => setCarregando(true),
+        onSuccess: () => {
+            setOpenFormRecebimento(false)
+            setSnackbar({
+                open: true,
+                severity: 'success',
+                message: 'Termo de recebimento editado com sucesso!',
+                color: 'success'
+            });
+            queryClient.invalidateQueries(['contratoDados', numContrato])
+        },
+        onError: (res) => errorSnackbar.Put(res),
+        onSettled: () => setCarregando(false)
     })
 
 
@@ -316,6 +337,8 @@ const ListaDadosContrato = (props) => {
                        <FormTermoRecebimento
                             submitFn={editTermoRecebimento.mutate}
                             formId={termoRecebimentoFormId}
+                            dados={dados}
+                            errors={errors}
                        /> 
                     </FormDialog>
                 </TabPanel>
