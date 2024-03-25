@@ -49,7 +49,6 @@ const ListaCertidoes = ({ numContrato }) => {
                 open: true,
                 severity: 'success',
                 message: 'Certidão enviada com sucesso!',
-                color: 'success'
             });
             queryClient.invalidateQueries({queryKey: ['certidoes', numContrato]})
         },
@@ -67,7 +66,6 @@ const ListaCertidoes = ({ numContrato }) => {
                 open: true,
                 severity: 'success',
                 message: 'Certidão editada com sucesso!',
-                color: 'success'
             });
             queryClient.invalidateQueries({queryKey: ['certidoes', numContrato]})
         },

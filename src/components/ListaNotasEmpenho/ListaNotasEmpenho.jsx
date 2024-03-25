@@ -59,7 +59,6 @@ const ListaNotasEmpenho = ({numContrato}) => {
                 open: true,
                 severity: 'success',
                 message: 'Nota de Empenho enviada com sucesso!',
-                color: 'success'
             });
             queryClient.invalidateQueries({queryKey: ['notasEmpenho', numContrato]})
             queryClient.invalidateQueries({queryKey: ['mesesExecutados']})
@@ -78,7 +77,6 @@ const ListaNotasEmpenho = ({numContrato}) => {
                 open: true,
                 severity: 'success',
                 message: 'Nota de Empenho editada com sucesso!',
-                color: 'success'
             });
             queryClient.invalidateQueries({queryKey: ['notasEmpenho', numContrato]})
             queryClient.invalidateQueries({queryKey: ['mesesExecutados']})

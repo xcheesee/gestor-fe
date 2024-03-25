@@ -42,7 +42,6 @@ export default function ListaReajustes ({ numContrato }) {
                 open: true,
                 severity: 'success',
                 message: 'Reajuste editado com sucesso!',
-                color: 'success'
             });
             queryClient.invalidateQueries(['reajuste'])
             queryClient.invalidateQueries(['mesesExecutados'])
@@ -60,7 +59,6 @@ export default function ListaReajustes ({ numContrato }) {
                 open: true,
                 severity: 'success',
                 message: 'Reajuste criado com sucesso!',
-                color: 'success'
             });
             queryClient.invalidateQueries(['reajuste', numContrato])
             queryClient.invalidateQueries(['mesesExecutados'])

@@ -63,7 +63,6 @@ const ListaLocais = ({ numContrato }) => {
                 open: true,
                 severity: 'success',
                 message: 'Regionalização enviado com sucesso!',
-                color: 'success'
             });
             queryClient.invalidateQueries({queryKey: ['locaisContrato', numContrato]})
         },
@@ -81,7 +80,6 @@ const ListaLocais = ({ numContrato }) => {
                 open: true,
                 severity: 'success',
                 message: 'Regionalização editada com sucesso!',
-                color: 'success'
             });
             queryClient.invalidateQueries({queryKey: ['locaisContrato', numContrato]})
         },
