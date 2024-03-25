@@ -120,7 +120,7 @@ const FormEditExecFinanceira = ({
         onSuccess: () => {
             queryClient.invalidateQueries(['mesesExecutados', execucao.id])
             queryClient.invalidateQueries(['execucoes', numContrato])
-            setSnackbar(prev => ({...prev, open: true, severity: "success", message: "Meses de execucao enviados.", color: "success"}))
+            setSnackbar(prev => ({...prev, open: true, severity: "success", message: "Meses de execucao enviados."}))
             setOpenEditExecFinanceira(false)
         },
         onError: (e) => {

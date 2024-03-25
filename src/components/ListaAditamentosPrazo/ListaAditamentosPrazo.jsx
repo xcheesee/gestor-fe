@@ -39,7 +39,6 @@ function ListaAditamentosPrazo({ numContrato }) {
               open: true,
               severity: 'success',
               message: 'Aditamento enviado com sucesso!',
-              color: 'success'
           });
 
       },
@@ -57,7 +56,6 @@ function ListaAditamentosPrazo({ numContrato }) {
               open: true,
               severity: 'success',
               message: 'Aditamento editado com sucesso!',
-              color: 'success'
           });
       },
       onError: (res) => { errorSnackbar.Put(res) },

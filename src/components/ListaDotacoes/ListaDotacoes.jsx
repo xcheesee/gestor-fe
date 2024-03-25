@@ -137,7 +137,6 @@ const ListaDotacoes = ({ numContrato }) => {
                 open: true,
                 severity: 'success',
                 message: 'Dotação editada com sucesso!',
-                color: 'success'
             });
             setFormDotacao({
                 ...formDotacao,
@@ -182,7 +181,6 @@ const ListaDotacoes = ({ numContrato }) => {
                 open: true,
                 severity: 'success',
                 message: 'Fonte de recurso editada com sucesso!',
-                color: 'success'
             });
             setFormRecurso({
                 ...formRecurso,
@@ -225,7 +223,6 @@ const ListaDotacoes = ({ numContrato }) => {
                 open: true,
                 severity: 'success',
                 message: 'Dotação enviada com sucesso!',
-                color: 'success'
             });
             setOpenFormDotacao({
                 open: false,
@@ -267,7 +264,6 @@ const ListaDotacoes = ({ numContrato }) => {
                 open: true,
                 severity: 'success',
                 message: 'Fonte de recurso enviada com sucesso!',
-                color: 'success'
             });
             setOpenFormRecurso({
                 open: false,

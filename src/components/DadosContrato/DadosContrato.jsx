@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { 
     Backdrop,
     CircularProgress,
@@ -36,6 +36,9 @@ import TotalizadorCardEle from '../TotalizadorCardEle';
 import CurrencyExchangeOutlinedIcon from '@mui/icons-material/CurrencyExchangeOutlined';
 import ReceiptLongOutlinedIcon from '@mui/icons-material/ReceiptLongOutlined';
 import { useQuery } from '@tanstack/react-query';
+import { useInitialRender } from '../../commom/utils/hooks';
+import { useSetAtom } from 'jotai';
+import { snackbarAtom } from '../../atomStore';
 
 const TabPanel = (props) => {
     const { children, value, index, ...other } = props;
@@ -67,9 +70,11 @@ const a11yProps = (index) => {
 const DadosContrato = () => {
     const [value, setValue] = useState(0);
     const [mudancaContrato, setMudancaContrato] = useState(false);
+
     const { numContrato } = useParams();
-    
+    const initialRender = useInitialRender()
     const navigate = useNavigate();
+    const setSnackbar = useSetAtom(snackbarAtom)
 
     const dadosTotalizador = useQuery({
         queryFn: () => throwableGetData({path: 'totalizadores_contrato', contratoId: numContrato}),
@@ -89,6 +94,12 @@ const DadosContrato = () => {
             }
         }
     })
+
+    function avisoDataDefinitiva(contrato) {
+        const {termo_recebimento_provisorio, termo_recebimento_definitivo, estado_id} = contrato
+        return !!termo_recebimento_provisorio && !termo_recebimento_definitivo && (estado_id == 4)
+    }
+
 
     const handleChange = (event, newValue) => {
         setValue(newValue);
@@ -154,6 +165,17 @@ const DadosContrato = () => {
             element: <ListaReajustes numContrato={numContrato}/>,
         },
     ]
+    
+    useEffect(() => {
+        if(!contratoDados.isFetching && avisoDataDefinitiva(contratoDados.data)) {
+            setSnackbar(prev => ({...prev, 
+                open: true,
+                severity: 'warning',
+                message: <p>Apenas data de recebimento provisória definida até o momento.<br/>Lembre-se de preencher a data de recebimento definitivo o quanto antes.</p>
+            }))
+        }
+        console.log(contratoDados.isFetching)
+    }, [contratoDados.isFetching])
 
 
     return (

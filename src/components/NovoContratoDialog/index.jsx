@@ -126,7 +126,6 @@ export default function NovoContratoDialog({novoDialog, setNovoDialog}) {
                                     ...prev,
                                     severity: "error",
                                     text: `Nao foi possivel criar o Contrato no momento. Erro: ${res.status}`,
-                                    color: 'error',
                                     open: true
                                 }))
                             }

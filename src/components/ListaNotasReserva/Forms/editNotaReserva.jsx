@@ -27,7 +27,7 @@ export function FormEditNotaReserva({
             queryClient.invalidateQueries({queryKey: ['notas_reserva']})
             queryClient.invalidateQueries({queryKey: ['mesesExecutados']})
             queryClient.invalidateQueries({queryKey: ['totalizadores']})
-            setSnackbar(prev => ({...prev, open: true, severity: "success", message: "Nota de Reserva editada.", color: "success"}))
+            setSnackbar(prev => ({...prev, open: true, severity: "success", message: "Nota de Reserva editada."}))
         },
         onError: (res) =>  {
             errorSnackbar.Put(res)

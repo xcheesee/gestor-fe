@@ -48,7 +48,6 @@ const FormDadosContrato = (props) => {
                 open: true,
                 severity: 'success',
                 message: 'Contrato editado com sucesso!',
-                color: 'success'
             });
             queryClient.invalidateQueries(['contratoDados'])
         } else if(res.status === 422) {
@@ -64,7 +63,6 @@ const FormDadosContrato = (props) => {
                         <br/>
                         Erro: ${res.message}
                     </div>,
-                color: 'error'
             });
         }
         setCarregando(false);

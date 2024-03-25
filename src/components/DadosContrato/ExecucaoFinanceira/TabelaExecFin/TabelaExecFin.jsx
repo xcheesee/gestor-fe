@@ -164,7 +164,6 @@ export default function TabelaExecFin({id, execucao, tabelaRef, setTabelaRef, da
                             ...prev,
                             open: true,
                             severity: 'error',
-                            color: 'error',
                             message: <div>Valor informado ultrapassa o permitido.<br/>(Notas Empenho + Aditamentos + Reajustes + Saldo Mes Anterior)</div>
                         }))
                         return false

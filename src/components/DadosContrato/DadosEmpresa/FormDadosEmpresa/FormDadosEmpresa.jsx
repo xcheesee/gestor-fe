@@ -13,6 +13,8 @@ import BoxContatoEmpresa from '../../../BoxContatoEmpresa';
 import DialogConfirmacao from '../../../DialogConfirmacao';
 import * as EmailValidator from 'email-validator';
 import { editaDadosContrato } from '../../../../commom/utils/api';
+import { useSetAtom } from 'jotai';
+import { snackbarAtom } from '../../../../atomStore';
 
 const FormDadosEmpresa = (props) => {
     const {
@@ -20,10 +22,11 @@ const FormDadosEmpresa = (props) => {
         numContrato,
         openDadosEmpresa,
         setOpenDadosEmpresa,
-        setSnackbar,
+        //setSnackbar,
         mudancaContrato,
         setMudancaContrato
     } = props;
+    const setSnackbar = useSetAtom(snackbarAtom)
 
     const [errors, setErrors] = useState({});
     const [error, setError] = useState(false);

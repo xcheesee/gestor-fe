@@ -12,8 +12,11 @@ import DialogConfirm from '../DialogConfirm';
 import DialogConfirmSair from '../DialogConfirmSair';
 import DialogErroEnvio from '../DialogErroEnvio';
 import { useParams, useNavigate } from 'react-router-dom';
+import { useSetAtom } from 'jotai';
+import { snackbarAtom } from '../../atomStore';
 
-const EditarContrato = ({ setSnackbar }) => {
+const EditarContrato = () => {
+    const setSnackbar = useSetAtom(snackbarAtom)
     const [error, setError] = useState(false);
     const [errors, setErrors] = useState({});
     const [openConfirm, setOpenConfirm] = useState(false);
@@ -108,7 +111,6 @@ const EditarContrato = ({ setSnackbar }) => {
                             open: true,
                             severity: 'success',
                             text: 'Contrato editado com sucesso!',
-                            color: 'success'
                         });
                         return res.json()
                             .then(data => {
@@ -123,7 +125,6 @@ const EditarContrato = ({ setSnackbar }) => {
                             open: false,
                             severity: 'error',
                             text: 'Não foi possível editar o contrato',
-                            color: 'error'
                         });
                         return res.json()
                             .then(data => setErrors(data.errors));
@@ -135,7 +136,6 @@ const EditarContrato = ({ setSnackbar }) => {
                             open: false,
                             severity: 'error',
                             text: 'Não foi possível editar o contrato',
-                            color: 'error'
                         });
                     }
                 })

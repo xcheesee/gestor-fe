@@ -46,7 +46,6 @@ const FormOutrasInformacoes = (props) => {
                 open: true,
                 severity: 'success',
                 message: 'Informações adicionais editadas com sucesso!',
-                color: 'success'
             }));
             setOpenOutrasInformacoes(false);
         } else if (res.status === 422) { 
@@ -59,7 +58,6 @@ const FormOutrasInformacoes = (props) => {
                 open: true,
                 severity: 'error',
                 message: `Erro ${res.status} - Não foi possível editar as informações adicionais`,
-                color: 'error'
             }));
         }
         setMudancaContrato(!mudancaContrato);

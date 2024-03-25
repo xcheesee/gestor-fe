@@ -42,7 +42,6 @@ const FormProcessoContratacao = (props) => {
                 open: true,
                 severity: 'success',
                 message: 'Processo de contratação editado com sucesso!',
-                color: 'success'
             });
             queryClient.invalidateQueries(['contratoDados'])
         } else if(res.status === 422) {
@@ -52,7 +51,6 @@ const FormProcessoContratacao = (props) => {
                 open: true,
                 severity: 'error',
                 message: <div>Não foi possível editar o processo de contratação. <br/> Erro {res.message}</div>,
-                color: 'error'
             });
         }
         setCarregando(false)

@@ -44,7 +44,7 @@ export default function ListaNotasReserva({
             queryClient.invalidateQueries({queryKey: ['notas_reserva']})
             queryClient.invalidateQueries({queryKey: ['mesesExecutados']})
             queryClient.invalidateQueries({queryKey: ['totalizadores']})
-            setSnackbar(prev => ({...prev, open: true, severity: "success", message: "Nota de Reserva enviada.", color: "success"}))
+            setSnackbar(prev => ({...prev, open: true, severity: "success", message: "Nota de Reserva enviada."}))
         },
         onError: (res) =>  {
             errorSnackbar.Post(res)
@@ -59,7 +59,7 @@ export default function ListaNotasReserva({
             queryClient.invalidateQueries({queryKey: ['notas_reserva']})
             queryClient.invalidateQueries({queryKey: ['mesesExecutados']})
             queryClient.invalidateQueries({queryKey: ['totalizadores']})
-            setSnackbar(prev => ({...prev, open: true, severity: "success", message: "Nota de Reserva editada.", color: "success"}))
+            setSnackbar(prev => ({...prev, open: true, severity: "success", message: "Nota de Reserva editada."}))
         },
         onError: (res) =>  errorSnackbar.Put(res),
         onSettled: () => setCarregando(false)

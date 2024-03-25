@@ -59,7 +59,6 @@ const ListaFiscalizacoes = ({ numContrato }) => {
                 open: true,
                 severity: 'success',
                 message: 'Fiscalização enviado com sucesso!',
-                color: 'success'
             });
             queryClient.invalidateQueries({queryKey: ['fiscalizacoes', numContrato]})
         },
@@ -77,7 +76,6 @@ const ListaFiscalizacoes = ({ numContrato }) => {
                 open: true,
                 severity: 'success',
                 message: 'Fiscalização editada com sucesso!',
-                color: 'success'
             });
             queryClient.invalidateQueries({queryKey: ['fiscalizacoes', numContrato]})
         },

@@ -55,7 +55,6 @@ const ListaGarantias = ({ numContrato }) => {
                 open: true,
                 severity: 'success',
                 message: 'Garantia enviada com sucesso!',
-                color: 'success'
             });
             queryClient.invalidateQueries({queryKey: ['garantias', numContrato]})
         },
@@ -73,7 +72,6 @@ const ListaGarantias = ({ numContrato }) => {
                 open: true,
                 severity: 'success',
                 message: 'Garantia editada com sucesso!',
-                color: 'success'
             });
             queryClient.invalidateQueries({queryKey: ['garantias', numContrato]})
         },

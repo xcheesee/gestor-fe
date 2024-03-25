@@ -25,7 +25,7 @@ export default function DialogDelete({
         onSuccess: () => {
             setOpen(false)
             setCarregando(false)
-            setSnackbar(prev => ({...prev, open: true, severity: "success", message: `${tipo_op} excluído(a).`, color: "success"}))
+            setSnackbar(prev => ({...prev, open: true, severity: "success", message: `${tipo_op} excluído(a).`}))
             queryKeys.forEach(key => {
                 queryClient.invalidateQueries([key])
             })

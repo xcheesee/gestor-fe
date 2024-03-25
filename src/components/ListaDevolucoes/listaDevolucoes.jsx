@@ -43,7 +43,7 @@ export default function ListaDevolucoes({
         onSuccess: (res) => {
             queryClient.invalidateQueries({queryKey: ['devolucoes']})
             queryClient.invalidateQueries({queryKey: ['totalizadores']})
-            setSnackbar(prev => ({...prev, open: true, severity: "success", message: "Devolução enviada.", color: "success"}))
+            setSnackbar(prev => ({...prev, open: true, severity: "success", message: "Devolução enviada."}))
         },
         onError: (res) =>  errorSnackbar.Post(res),
         onSettled: () => setCarregando(false)
@@ -55,7 +55,7 @@ export default function ListaDevolucoes({
         onSuccess: (res) => {
             queryClient.invalidateQueries({queryKey: ['devolucoes']})
             queryClient.invalidateQueries({queryKey: ['totalizadores']})
-            setSnackbar(prev => ({...prev, open: true, severity: "success", message: "Devolução editada.", color: "success"}))
+            setSnackbar(prev => ({...prev, open: true, severity: "success", message: "Devolução editada."}))
         },
         onError: (res) =>  {
             errorSnackbar.Put(res)

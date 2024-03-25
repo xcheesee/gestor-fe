@@ -39,7 +39,6 @@ function ListaAditamentosValor ({ numContrato }) {
                 open: true,
                 message: <div>Nao foi possivel recuperar os aditamentos de valor<br/>Erro: {res.message}</div>,
                 severity: 'error',
-                color: 'error'
             })
             return []
         }
@@ -55,7 +54,6 @@ function ListaAditamentosValor ({ numContrato }) {
                 open: true,
                 severity: 'success',
                 message: 'Aditamento enviado com sucesso!',
-                color: 'success'
             });
 
         },
@@ -73,7 +71,6 @@ function ListaAditamentosValor ({ numContrato }) {
                 open: true,
                 severity: 'success',
                 message: 'Aditamento editado com sucesso!',
-                color: 'success'
             });
         },
         onError: (res) => { errorSnackbar.Put(res) },

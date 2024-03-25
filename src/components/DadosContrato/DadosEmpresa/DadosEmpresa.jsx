@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { Box, Typography, Fade, Paper, Button } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
 import FormDadosEmpresa from './FormDadosEmpresa/FormDadosEmpresa';
+import { useSetAtom } from 'jotai';
+import { snackbarAtom } from '../../../atomStore';
 
 const DadosEmpresa = (props) => {
     const {
@@ -11,12 +13,13 @@ const DadosEmpresa = (props) => {
         estaCarregado,
         dados,
         numContrato,
-        setSnackbar,
+        //setSnackbar,
         mudancaContrato,
         setMudancaContrato
     } = props;
 
     const [openDadosEmpresa, setOpenDadosEmpresa] = useState(false);
+    //const setSnackbar = useSetAtom(snackbarAtom)
 
     return (
         <Box>
@@ -97,7 +100,7 @@ const DadosEmpresa = (props) => {
                 numContrato={numContrato}
                 openDadosEmpresa={openDadosEmpresa}
                 setOpenDadosEmpresa={setOpenDadosEmpresa}
-                setSnackbar={setSnackbar}
+                //setSnackbar={setSnackbar}
                 mudancaContrato={mudancaContrato}
                 setMudancaContrato={setMudancaContrato}
             />

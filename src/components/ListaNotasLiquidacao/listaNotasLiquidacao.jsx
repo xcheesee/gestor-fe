@@ -45,7 +45,7 @@ export default function ListaNotasLiquidacao({
             queryClient.invalidateQueries({queryKey: ['totalizadores']})
             queryClient.invalidateQueries({queryKey: ['notas_liquidacao']})
             queryClient.invalidateQueries({queryKey: ['mesesExecutados']})
-            setSnackbar(prev => ({...prev, open: true, severity: "success", message: "Nota de Liquidação enviada.", color: "success"}))
+            setSnackbar(prev => ({...prev, open: true, severity: "success", message: "Nota de Liquidação enviada."}))
         },
         onError: (res) =>  {
             errorSnackbar.Post(res)
@@ -60,7 +60,7 @@ export default function ListaNotasLiquidacao({
             queryClient.invalidateQueries({queryKey: ['notas_liquidacao']})
             queryClient.invalidateQueries({queryKey: ['totalizadores']})
             queryClient.invalidateQueries({queryKey: ['mesesExecutados']})
-            setSnackbar(prev => ({...prev, open: true, severity: "success", message: "Nota de Liquidação editada.", color: "success"}))
+            setSnackbar(prev => ({...prev, open: true, severity: "success", message: "Nota de Liquidação editada."}))
         },
         onError: (res) =>  {
             errorSnackbar.Put(res)

@@ -175,7 +175,6 @@ const ListaDadosContrato = (props) => {
                 open: true,
                 severity: 'success',
                 message: 'Termo de recebimento editado com sucesso!',
-                color: 'success'
             });
             queryClient.invalidateQueries(['contratoDados', numContrato])
         },

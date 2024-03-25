@@ -1,5 +1,5 @@
 import { useSetAtom } from "jotai"
-import { useCallback } from "react"
+import { useCallback, useEffect, useRef } from "react"
 import { snackbarAtom } from "../../atomStore"
 
 export const useExcelTableRef = ({dadosIniciais, setTabelaRef}) => {
@@ -32,7 +32,7 @@ export const useErrorSnackbar = () => {
                         :<></>
                     }
                 </div>,
-            color: 'error'
+            //color: 'error'
         })
         return
     }
@@ -51,7 +51,7 @@ export const useErrorSnackbar = () => {
                         :<></>
                     }
                 </div>,
-            color: 'error'
+            //color: 'error'
         }))
 
 
@@ -70,7 +70,7 @@ export const useErrorSnackbar = () => {
                         :<></>
                     }
                 </div>,
-            color: 'error'
+            //color: 'error'
         }))
 
     const Delete = (e) => (setSnackbar({
@@ -87,9 +87,20 @@ export const useErrorSnackbar = () => {
                         :<></>
                     }
                 </div>,
-            color: 'error'
+            //color: 'error'
         }))
     
     return {Get, Post, Put, Delete}
 
+}
+
+export function useInitialRender () {
+    const initialRenderRef = useRef(true) 
+    useEffect(() => {
+        if(initialRenderRef.current) {
+            initialRenderRef.current = false
+        }
+    })
+
+    return initialRenderRef.current
 }
