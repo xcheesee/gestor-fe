@@ -131,7 +131,7 @@ export function calculaSaldo(dadosExecucao) {
 
 export function TabValues ({ entry, labels, label}) {
   return(
-    <Box className="flex flex-col gap-8">
+    <Box className="flex flex-col gap-8 lg:px-4">
         {Object.entries(entry)
             ?.filter((keyVal) => !(keyVal[0] === "id" || keyVal[0] === "contrato_id"))
             ?.map((keyVal, index) => 

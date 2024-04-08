@@ -52,7 +52,7 @@ export default function ListaCardElement({
                                 {tipo_lista} # {dados.id}
                             </Divider>
 
-                            <Box className="grid lg:grid-cols-[1fr_max-content] overflow-auto gap-8">
+                            <Box className="grid lg:grid-cols-[1fr_max-content] overflow-auto gap-8 lg:px-4">
                                 <TabDados  {...dados} />
                                 <BotoesTab 
                                     editar={(e) => { setEditForm({

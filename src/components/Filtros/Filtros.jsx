@@ -259,6 +259,7 @@ const Filtros = (props) => {
                         <Button sx={{ textTransform: 'none', mr: '1rem' }} onClick={limpaFiltros}>
                             Limpar
                         </Button>
+
                         <Button
                             sx={{ color: (theme) => theme.palette.color.main, textTransform: 'none' }}
                             variant="contained"
