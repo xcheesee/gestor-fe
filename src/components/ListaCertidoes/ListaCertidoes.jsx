@@ -34,7 +34,7 @@ const ListaCertidoes = ({ numContrato }) => {
     const errorSnackbar = useErrorSnackbar()
 
     const [carregando, setCarregando] = useState(false);
-    const [errors, setErrors] = useState({});
+    //const [errors, setErrors] = useState({});
 
     const certidoes = useQuery({
         queryKey: ['certidoes', numContrato],

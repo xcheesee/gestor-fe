@@ -174,7 +174,6 @@ const DadosContrato = () => {
                 message: <p>Apenas data de recebimento provisória definida até o momento.<br/>Lembre-se de preencher a data de recebimento definitivo o quanto antes.</p>
             }))
         }
-        console.log(contratoDados.isFetching)
     }, [contratoDados.isFetching])
 
 
@@ -205,45 +204,46 @@ const DadosContrato = () => {
                             </Typography>
 
                             <Box 
-                                className=" overflow-x-scroll overflow-y-hidden"
+                                className="max-h-80 overflow-auto"
                                 id="totalizador-container"
                             >
                                 <Box className="grid grid-cols-12 gap-2">
                                     <TotalizadorCardEle 
-                                        className="col-span-4 bg-[#54ada4]"
+                                        className="lg:col-span-4 col-span-12 bg-[#54ada4]"
                                         title="Total Reservado"
                                         val={dadosTotalizador?.data?.totalResevado.toLocaleString('pt-BR', { minimumFractionDigits: 2}) ?? ""}
                                     />
                                     <TotalizadorCardEle 
-                                        className="col-span-4 bg-[#54ada4]"
+                                        className="lg:col-span-4 col-span-12 bg-[#54ada4]"
                                         title="Total Empenhado"
                                         val={dadosTotalizador?.data?.totalEmpenhado.toLocaleString('pt-BR', { minimumFractionDigits: 2}) ?? ""}
                                     />
                                     <TotalizadorCardEle 
-                                        className="col-span-4 bg-[#54ada4]"
+                                        className="lg:col-span-4 col-span-12 bg-[#54ada4]"
                                         title="Saldo"
                                         val={dadosTotalizador?.data?.saldo.toLocaleString('pt-BR', { minimumFractionDigits: 2}) ?? ""}
                                     />
                                     <TotalizadorCardEle 
-                                        className="col-span-6 bg-[#2c756f]"
+                                        className="lg:col-span-6 col-span-12 bg-[#2c756f]"
                                         title="Realizado (Liquidado)"
                                         val={dadosTotalizador?.data?.realizado.toLocaleString('pt-BR', { minimumFractionDigits: 2}) ?? ""}
-                                        icon={<ReceiptLongOutlinedIcon className='text-[5rem] text-white' />}
+                                        icon={<ReceiptLongOutlinedIcon className='text-[5rem] max-lg:hidden text-white' />}
                                     />
                                     <TotalizadorCardEle 
-                                        className="col-span-6 bg-[#2c756f]"
+                                        className="lg:col-span-6 col-span-12 bg-[#2c756f]"
                                         title="Devoluções"
                                         val={dadosTotalizador?.data?.totalDevolucoes.toLocaleString('pt-BR', { minimumFractionDigits: 2}) ?? ""}
-                                        icon={<CurrencyExchangeOutlinedIcon className='text-[5rem] text-white' />}
+                                        icon={<CurrencyExchangeOutlinedIcon className='text-[5rem] max-lg:hidden text-white' />}
                                     />
                                 </Box>
                             </Box>
 
-                            <Box sx={{ display: 'flex', width: '100%' }} className='rounded overflow-hidden' component={Paper} elevation={5}>
+                            <Box sx={{ display: 'flex' }} className='rounded overflow-auto' component={Paper} elevation={5}>
                                 <Box sx={{ display: 'flex' }}>
                                     <Tabs 
                                         orientation="vertical" 
                                         value={value} 
+                                        className='w-[180px]'
                                         onChange={handleChange} 
                                         aria-label="abas de navegação"
                                         TabIndicatorProps={{
@@ -264,7 +264,7 @@ const DadosContrato = () => {
                                                         alignItems: 'flex-start', 
                                                         textAlign: 'left', 
                                                         textTransform: 'none',
-                                                        width: '11.25rem',
+                                                        //width: '11.25rem',
                                                     }} 
                                                     label={tab.nome}
                                                     {...a11yProps(index)}

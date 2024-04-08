@@ -131,12 +131,12 @@ export function calculaSaldo(dadosExecucao) {
 
 export function TabValues ({ entry, labels, label}) {
   return(
-    <Box>
+    <Box className="flex flex-col gap-8">
         {Object.entries(entry)
             ?.filter((keyVal) => !(keyVal[0] === "id" || keyVal[0] === "contrato_id"))
             ?.map((keyVal, index) => 
             (
-                <Box className="mx-4 my-8" key={`tab-${label}-${index}`}>
+                <Box className="" key={`tab-${label}-${index}`}>
                     <Typography className="pb-2">{labels[keyVal[0]]}</Typography>
                     <Box className="ml-4 font-bold text-base">{keyVal[1] || "- - -"}</Box>
                 </Box>

@@ -159,8 +159,8 @@ const Filtros = (props) => {
             <Collapse in={visibilidade}>
                 <Box 
                     sx={{ 
-                        display: 'grid',
-                        gridTemplateColumns: '1fr 1fr',
+                        //display: 'grid',
+                        //gridTemplateColumns: '1fr 1fr',
                         columnGap: '1rem',
                         rowGap: '1rem',
                         margin: '2rem auto',
@@ -168,8 +168,9 @@ const Filtros = (props) => {
                         padding: '2rem',
                         border: '1px solid #cdcdcd', 
                         borderRadius: '3px',
-                        width: '80%'
+                        //width: '80%'
                     }}
+                    className="grid lg:grid-cols-2 lg:w-[80%]"
                 >
                     <ReactInputMask
                         mask="9999.9999/9999999-9"
@@ -207,7 +208,7 @@ const Filtros = (props) => {
                     {() => (
                         <TextField 
                             label="CNPJ"
-                            className='col-span-2'
+                            className='lg:col-span-2'
                             name='cnpj_empresa'
                             size="small"
                             fullWidth
@@ -254,7 +255,7 @@ const Filtros = (props) => {
                         size={'lg'}
                     />
                     
-                    <Box sx={{ gridColumnStart: 2, justifySelf: 'end' }}>
+                    <Box sx={{ justifySelf: 'end' }} className="lg:col-start-2" >
                         <Button sx={{ textTransform: 'none', mr: '1rem' }} onClick={limpaFiltros}>
                             Limpar
                         </Button>

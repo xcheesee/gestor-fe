@@ -186,7 +186,7 @@ const ListaDadosContrato = (props) => {
     return (
         <>
         <Fade in={true} timeout={400}>
-            <Box component={Paper} elevation={3} sx={{ padding: '1rem', pt: 0 }}>
+            <Box component={Paper} elevation={3} sx={{ padding: '1rem', pt: 0 }} className='min-w-[500px]'>
                 <Box sx={{ mb: '1rem' }}>
                     <Tabs value={value} onChange={handleChange}>
                         <Tab label="Contrato" {...a11yProps(0)} sx={{ padding: '0 1rem', textTransform: 'none' }} />

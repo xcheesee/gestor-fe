@@ -11,7 +11,7 @@ const MenuInicial = ({ title }) => {
                     <Typography className='text-3xl pb-4 font-light'>{title}</Typography>
                 </Box>
                 <Box className='px-4 flex flex-col'>
-                    <Box className="grid grid-cols-2 gap-4">
+                    <Box className="grid md:grid-cols-2 gap-4">
                         <MenuButton path='/contrato'>
                             <TextSnippetIcon fontSize="large" className="mx-2"/> Contratos
                         </MenuButton>
