@@ -12,8 +12,8 @@ import {
 } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import CheckIcon from '@mui/icons-material/Check';
-import CampoAno from '../../../CampoAno';
-import CampoValores from '../../../CampoValores';
+import CampoAno from '../../../Inputs/CampoAno';
+import CampoValores from '../../../Inputs/CampoValores';
 import { meses } from '../../../../commom/utils/constants';
 import { postAnoExecFin } from '../../../../commom/utils/api';
 import { useSetAtom } from 'jotai';

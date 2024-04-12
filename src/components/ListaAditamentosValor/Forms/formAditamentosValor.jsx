@@ -1,6 +1,6 @@
 import { Box, FormControl, FormHelperText, InputAdornment, InputLabel, Select, TextField, MenuItem } from "@mui/material"
-import CampoValores from "../../CampoValores"
-import CampoData from "../../CampoData"
+import CampoValores from "../../Inputs/CampoValores"
+import CampoData from "../../Inputs/CampoData"
 import { brlToFloat } from "../../../commom/utils/utils"
 import { useState } from "react"
 

@@ -1,13 +1,13 @@
 import { useState } from "react";
 import { Box, MenuItem, TextField } from "@mui/material";
-import CampoMasked from "../../CampoMasked";
-import CampoValores from "../../CampoValores";
+import CampoMasked from "../../Inputs/CampoMasked";
+import CampoValores from "../../Inputs/CampoValores";
 import { tipos_notas_reserva } from "../../../commom/utils/constants";
 import { brlToFloat } from "../../../commom/utils/utils";
-import { useQueryClient } from "@tanstack/react-query";
-import { useSetAtom } from "jotai";
-import { snackbarAtom } from "../../../atomStore";
-import { useErrorSnackbar } from "../../../commom/utils/hooks";
+//import { useQueryClient } from "@tanstack/react-query";
+//import { useSetAtom } from "jotai";
+//import { snackbarAtom } from "../../../atomStore";
+//import { useErrorSnackbar } from "../../../commom/utils/hooks";
 
 export function FormNotaReserva({
     formId,

@@ -1,7 +1,7 @@
 import React  from 'react';
 import { TextField } from '@mui/material';
 import PropTypes from 'prop-types';
-import { NumberFormatCustom } from '../../commom/utils/utils';
+import { NumberFormatCustom } from '../../../commom/utils/utils';
 import { PatternFormat } from 'react-number-format';
 
 

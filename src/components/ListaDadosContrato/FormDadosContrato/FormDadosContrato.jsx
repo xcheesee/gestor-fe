@@ -13,12 +13,11 @@ import { useSetAtom } from 'jotai';
 import { snackbarAtom } from '../../../atomStore';
 import { formataCpfCnpj } from '../../../commom/utils/utils';
 import { contratoLabels } from '../../../commom/utils/constants';
-import CampoValores from '../../CampoValores';
-import CampoProcessoSei from '../../CampoProcessoSei';
-import CampoNumContrato from '../../CampoNumContrato';
-import CampoEmpresa from '../../CampoEmpresa';
-//import CampoTexto from '../../CampoTexto';
-import CampoCatSubcat from '../../CampoCategoria';
+import CampoValores from '../../Inputs/CampoValores';
+import CampoProcessoSei from '../../Inputs/CampoProcessoSei';
+import CampoNumContrato from '../../Inputs/CampoNumContrato';
+import CampoEmpresa from '../../Inputs/CampoEmpresa';
+import CampoCatSubcat from '../../Inputs/CampoCategoria';
 import { useQueryClient } from '@tanstack/react-query';
 
 const FormDadosContrato = (props) => {

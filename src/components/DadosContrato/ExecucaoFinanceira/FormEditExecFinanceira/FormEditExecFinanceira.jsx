@@ -23,13 +23,12 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import { brlToFloat, calculaSaldo, formataValores } from '../../../../commom/utils/utils';
 import { meses } from '../../../../commom/utils/constants';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import TabelaExecFin from '../TabelaExecFin';
-import { getMesesExecutados, postMesesExecFin, throwableGetData } from '../../../../commom/utils/api';
+import { postMesesExecFin, throwableGetData } from '../../../../commom/utils/api';
 import { useSetAtom } from 'jotai';
 import { snackbarAtom } from '../../../../atomStore';
 import { useErrorSnackbar } from '../../../../commom/utils/hooks';
-import CampoValores from '../../../CampoValores';
-import DialogDelete from '../../../DialogDelete';
+import CampoValores from '../../../Inputs/CampoValores';
+import DialogDelete from '../../../Dialogs/DialogDelete';
 
 function createTableRow(tipo, dados) {
     return [tipo, ...dados]

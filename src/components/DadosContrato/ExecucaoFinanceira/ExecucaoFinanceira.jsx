@@ -10,14 +10,14 @@ import FormEditExecFinanceira from './FormEditExecFinanceira';
 import ExecucaoFinanceiraCard from './ExecucaoFinanceiraCard';
 import { getExecucoesFinanceiras } from '../../../commom/utils/api';
 import { useQuery } from '@tanstack/react-query';
-import DialogConf from '../../DialogConf/dialogConf';
+import DialogConf from '../../Dialogs/DialogConf';
 
 const ExecucaoFinanceira = ({ numContrato }) => {
     const [errors, setErrors] = useState({});
     const [carregando, setCarregando] = useState(false);
     const [openEditExecFinanceira, setOpenEditExecFinanceira] = useState(false);
     const [currExecucao, setCurrExecucao] = useState({})
-    const [acao, setAcao] = useState('adicionarExecFin');
+    //const [acao, setAcao] = useState('adicionarExecFin');
     const [openConfirmacao, setOpenConfirmacao] = useState({
         open: false,
         acao: ''
@@ -39,7 +39,7 @@ const ExecucaoFinanceira = ({ numContrato }) => {
             open: true,
             acao: 'adicionar'
         });
-        setAcao('adicionarExecFin');
+        //setAcao('adicionarExecFin');
     }
 
     async function handleClickEditarAno (execucao) {

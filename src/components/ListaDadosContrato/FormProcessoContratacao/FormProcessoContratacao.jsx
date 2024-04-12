@@ -1,4 +1,4 @@
-import { editaDadosContrato, throwableGetData, throwablePostForm } from '../../../commom/utils/api';
+import { editaDadosContrato, throwableGetData } from '../../../commom/utils/api';
 import { useSetAtom } from 'jotai';
 import { snackbarAtom } from '../../../atomStore';
 import React, { useState } from 'react';
@@ -11,10 +11,10 @@ import {
     FormHelperText,
     CircularProgress,
 } from '@mui/material';
-import CampoData from '../../CampoData';
+import CampoData from '../../Inputs/CampoData';
 import { contratoLabels } from '../../../commom/utils/constants';
-import CampoDataControlada from '../../CampoDataControlada';
-import MaxPrazoInput from '../../MaxPrazoInput';
+import CampoDataControlada from '../../Inputs/CampoDataControlada';
+import MaxPrazoInput from '../../Inputs/MaxPrazoInput';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 
 const FormProcessoContratacao = (props) => {

@@ -2,7 +2,7 @@ import { Button, ButtonBase, IconButton, Menu, MenuItem, Paper, Typography } fro
 import { Box } from "@mui/system";
 import { useQuery } from "@tanstack/react-query";
 import React, { useState } from "react";
-import { getFormData } from "../../commom/utils/api";
+import { getFormData } from "../../../commom/utils/api";
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import DeleteIcon from '@mui/icons-material/Delete';
 import "./style.css"

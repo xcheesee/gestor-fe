@@ -26,7 +26,7 @@ import { useParams, useNavigate, Link } from 'react-router-dom';
 import ListaReajustes from '../ListaReajustes';
 import { throwableGetData } from '../../commom/utils/api';
 import { formataCpfCnpj } from '../../commom/utils/utils';
-import { CardEmpresa } from '../CampoEmpresa';
+import { CardEmpresa } from '../Inputs/CampoEmpresa';
 import DelContratoEle from '../DelContratoEle';
 import ListaFiscalizacoes from '../ListaFiscalizacoes';
 import ListaNotasReserva from '../ListaNotasReserva';
@@ -36,7 +36,7 @@ import TotalizadorCardEle from '../TotalizadorCardEle';
 import CurrencyExchangeOutlinedIcon from '@mui/icons-material/CurrencyExchangeOutlined';
 import ReceiptLongOutlinedIcon from '@mui/icons-material/ReceiptLongOutlined';
 import { useQuery } from '@tanstack/react-query';
-import { useInitialRender } from '../../commom/utils/hooks';
+//import { useInitialRender } from '../../commom/utils/hooks';
 import { useSetAtom } from 'jotai';
 import { snackbarAtom } from '../../atomStore';
 
@@ -72,7 +72,7 @@ const DadosContrato = () => {
     const [mudancaContrato, setMudancaContrato] = useState(false);
 
     const { numContrato } = useParams();
-    const initialRender = useInitialRender()
+    //const initialRender = useInitialRender()
     const navigate = useNavigate();
     const setSnackbar = useSetAtom(snackbarAtom)
 
@@ -97,7 +97,7 @@ const DadosContrato = () => {
 
     function avisoDataDefinitiva(contrato) {
         const {termo_recebimento_provisorio, termo_recebimento_definitivo, estado_id} = contrato
-        return !!termo_recebimento_provisorio && !termo_recebimento_definitivo && (estado_id == 4)
+        return !!termo_recebimento_provisorio && !termo_recebimento_definitivo && (estado_id === 4)
     }
 
 

@@ -1,10 +1,10 @@
 import { Box, Divider, Fade, Paper, Typography } from "@mui/material";
 import { useState } from "react";
 import BotaoAdicionar from "../BotaoAdicionar";
-import FormDialog from "../FormDialog";
+import FormDialog from "../Dialogs/FormDialog";
 import BotoesTab from "../BotoesTab";
-import DialogDelete from "../DialogDelete";
-import DialogConf from "../DialogConf";
+import DialogDelete from "../Dialogs/DialogDelete";
+import DialogConf from "../Dialogs/DialogConf";
 
 export default function ListaCardElement({
     formId,

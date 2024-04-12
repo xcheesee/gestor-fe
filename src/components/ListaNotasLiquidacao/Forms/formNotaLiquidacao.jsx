@@ -1,6 +1,6 @@
 import { Box, MenuItem, TextField } from "@mui/material";
-import CampoMasked from "../../CampoMasked";
-import CampoValores from "../../CampoValores";
+import CampoMasked from "../../Inputs/CampoMasked";
+import CampoValores from "../../Inputs/CampoValores";
 import { useState } from "react";
 import { meses } from "../../../commom/utils/constants";
 import { brlToFloat } from "../../../commom/utils/utils";

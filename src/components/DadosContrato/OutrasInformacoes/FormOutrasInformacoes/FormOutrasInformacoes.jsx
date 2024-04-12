@@ -15,7 +15,7 @@ import { editaDadosContrato } from '../../../../commom/utils/api';
 import { useSetAtom } from 'jotai';
 import { snackbarAtom } from '../../../../atomStore';
 import { useErrorSnackbar } from '../../../../commom/utils/hooks';
-import DialogConf from '../../../DialogConf/dialogConf';
+import DialogConf from '../../../Dialogs/DialogConf';
 import { useQueryClient } from '@tanstack/react-query';
 
 const FormOutrasInformacoes = (props) => {
@@ -54,7 +54,7 @@ const FormOutrasInformacoes = (props) => {
             queryClient.invalidateQueries(['contratoDados', numContrato])
         } else if (res.status === 422) { 
             setErrors(res.errors)
-            //errorSnackbar.Post(e)
+            errorSnackbar.Post(e)
         } else {
             setCarregandoEnvio(false);
             setSnackbar(prev => ({

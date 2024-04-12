@@ -1,7 +1,7 @@
 import React from 'react';
 import { Box } from '@mui/material';
 
-import CampoTipoDotacao from '../../CampoTipoDotacao';
+import CampoTipoDotacao from '../../Inputs/CampoTipoDotacao';
 import CampoRecurso from '../CampoRecurso';
 
 const FormDotacoes = (props) => {
@@ -35,7 +35,7 @@ const FormDotacoes = (props) => {
                 
             }}>
             <CampoTipoDotacao dotacao={formDotacao}/>
-            {openFormDotacao.acao == 'adicionar' ? <CampoRecurso errors={errors} /> : <></>}
+            { openFormDotacao.acao === 'adicionar' && <CampoRecurso errors={errors} /> }
             <Box className="text-red-500 font-bold text-center">{errors?.dotacao_recurso?.message ?? "" }</Box>
         </Box>
     );

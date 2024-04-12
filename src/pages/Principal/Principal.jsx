@@ -15,7 +15,7 @@ import { irParaTopo } from '../../commom/utils/utils';
 import { getContratos } from '../../commom/utils/api';
 import ContratoTable from '../../components/ContratoTable';
 import VoltarArrowBtn from '../../components/VoltarArrowBtn';
-import NovoContratoDialog from '../../components/NovoContratoDialog';
+import NovoContratoDialog from '../../components/Dialogs/NovoContratoDialog';
 import { useQuery } from '@tanstack/react-query';
 
 const Principal = () => {

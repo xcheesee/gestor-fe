@@ -26,9 +26,8 @@ import { dotacoesLabels } from '../../commom/utils/constants';
 import { useSetAtom } from 'jotai';
 import { snackbarAtom } from '../../atomStore';
 import { useErrorSnackbar } from '../../commom/utils/hooks';
-//import DialogConf from '../DialogConf';
-import DialogDelete from '../DialogDelete';
-import DialogConf from '../DialogConf';
+import DialogDelete from '../Dialogs/DialogDelete';
+import DialogConf from '../Dialogs/DialogConf';
 
 const retornaNumDotacao = (numero_dotacao, descricao) => {
     return (
@@ -59,7 +58,7 @@ const ListaDotacoes = ({ numContrato }) => {
         queryFn: () => getFormData(`dotacoes/${numContrato}`)
     })
 
-    const [acao, setAcao] = useState('editar');
+    //const [acao, setAcao] = useState('editar');
     const [carregando, setCarregando] = useState(false);
     const [errors, setErrors] = useState({});
     const [openFormDotacao, setOpenFormDotacao] = useState({
@@ -127,7 +126,7 @@ const ListaDotacoes = ({ numContrato }) => {
             open: true,
             acao: 'editar'
         });
-        setAcao('editar');
+        //setAcao('editar');
     }
 
     const editaDotacao = async (id, formDotacao) => {
@@ -171,7 +170,7 @@ const ListaDotacoes = ({ numContrato }) => {
             open: true,
             acao: 'editar'
         });
-        setAcao('editar');
+        //setAcao('editar');
     }
 
     const editaRecurso = async (id, formRecurso) => {
@@ -213,7 +212,7 @@ const ListaDotacoes = ({ numContrato }) => {
             open: true,
             acao: 'adicionar'
         });
-        setAcao('adicionar');
+        //setAcao('adicionar');
     }
 
     const enviaDotacao = async (form) => {
@@ -254,7 +253,7 @@ const ListaDotacoes = ({ numContrato }) => {
             dotacao_id: id,
             origem_recurso_id: ''
         });
-        setAcao('adicionar');
+        //setAcao('adicionar');
     }
 
     const enviaRecurso = async (form) => {

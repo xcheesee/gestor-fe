@@ -12,13 +12,13 @@ import {
 } from "@mui/material";
 import { useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { checkSeiStatus, getFormattedFormData, sendNovoFormData } from "../../commom/utils/api";
-import { contratoLabels } from "../../commom/utils/constants";
-import { irParaTopo } from "../../commom/utils/utils";
-import CampoProcessoSei from "../CampoProcessoSei";
-import VoltarArrowBtn from "../VoltarArrowBtn";
+import { checkSeiStatus, getFormattedFormData, sendNovoFormData } from "../../../commom/utils/api";
+import { contratoLabels } from "../../../commom/utils/constants";
+import { irParaTopo } from "../../../commom/utils/utils";
+import CampoProcessoSei from "../../Inputs/CampoProcessoSei";
+import VoltarArrowBtn from "../../VoltarArrowBtn";
 import { useSetAtom } from "jotai";
-import { snackbarAtom } from "../../atomStore";
+import { snackbarAtom } from "../../../atomStore";
 
 export default function NovoContratoDialog({novoDialog, setNovoDialog}) {
     const [sendingForm, setSendingForm] = useState(false)

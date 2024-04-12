@@ -27,7 +27,7 @@ import ManageSearchIcon from '@mui/icons-material/ManageSearch';
 import AccountBoxIcon from '@mui/icons-material/AccountBox';
 import { useNavigate, useLocation, Link } from 'react-router-dom';
 import LockIcon from '@mui/icons-material/Lock'
-import DialogAltSenh from '../DialogAltSenh';
+import DialogAltSenh from '../Dialogs/DialogAltSenh';
 import { mascaraContrato, mascaraProcessoSei } from '../../commom/utils/utils';
 import { getContratosVencidos, newPwRequest } from '../../commom/utils/api';
 

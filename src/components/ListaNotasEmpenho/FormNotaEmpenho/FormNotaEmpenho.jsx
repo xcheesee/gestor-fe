@@ -1,8 +1,8 @@
 import { meses } from "../../../commom/utils/constants"
 import { brlToFloat } from "../../../commom/utils/utils"
 import { Box, TextField, MenuItem } from "@mui/material"
-import CampoAno from "../../CampoAno"
-import CampoValores from "../../CampoValores"
+import CampoAno from "../../Inputs/CampoAno"
+import CampoValores from "../../Inputs/CampoValores"
 import { useState } from "react"
                 
 const tipos_empenho = {

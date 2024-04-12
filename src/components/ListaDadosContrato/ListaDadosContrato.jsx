@@ -13,11 +13,11 @@ import FormProcessoContratacao from './FormProcessoContratacao';
 import EditIcon from '@mui/icons-material/Edit';
 import { formataData, formataValores, mascaraContrato, mascaraProcessoSei, primeiraLetraMaiuscula, TabValues } from '../../commom/utils/utils';
 import { contratoLabels, termoRecebimentoLabels } from '../../commom/utils/constants';
-import FormDialog from '../FormDialog';
+import FormDialog from '../Dialogs/FormDialog';
 import FormTermoRecebimento from './FormTermoRecebimento';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { editaDadosContrato, throwablePutForm } from '../../commom/utils/api';
-import DialogConf from '../DialogConf';
+import { editaDadosContrato } from '../../commom/utils/api';
+import DialogConf from '../Dialogs/DialogConf';
 import { useSetAtom } from 'jotai';
 import { snackbarAtom } from '../../atomStore';
 import { useErrorSnackbar } from '../../commom/utils/hooks';
@@ -151,7 +151,7 @@ const ListaDadosContrato = (props) => {
         open: false,
         acao: "",
     })
-    const [errors, setErrors] = useState({})
+    //const [errors, setErrors] = useState({})
  
     const termoRecebimentoFormId = 'termo-form'
     const contratacaoFormId = "form-processo-contrato"
@@ -335,7 +335,7 @@ const ListaDadosContrato = (props) => {
                             submitFn={editTermoRecebimento.mutate}
                             formId={termoRecebimentoFormId}
                             dados={dados}
-                            errors={errors}
+                            //errors={errors}
                        /> 
                     </FormDialog>
                 </TabPanel>

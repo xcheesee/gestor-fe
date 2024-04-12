@@ -1,9 +1,9 @@
 import { Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions, Button, CircularProgress } from "@mui/material";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useSetAtom } from "jotai";
-import { snackbarAtom } from "../../atomStore";
-import { throwableDeleteForm } from "../../commom/utils/api";
-import { useErrorSnackbar } from "../../commom/utils/hooks";
+import { snackbarAtom } from "../../../atomStore";
+import { throwableDeleteForm } from "../../../commom/utils/api";
+import { useErrorSnackbar } from "../../../commom/utils/hooks";
 
 export default function DialogDelete({
     tipo_op="", 

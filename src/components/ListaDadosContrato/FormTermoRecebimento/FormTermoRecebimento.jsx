@@ -1,4 +1,4 @@
-import CampoData from "../../CampoData"
+import CampoData from "../../Inputs/CampoData"
 import { termoRecebimentoLabels } from "../../../commom/utils/constants"
 import { Box } from "@mui/material"
 

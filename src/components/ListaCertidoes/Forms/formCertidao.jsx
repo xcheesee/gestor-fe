@@ -1,6 +1,6 @@
 import { useState } from "react"
 import { Box, TextField } from "@mui/material"
-import CampoData from "../../CampoData"
+import CampoData from "../../Inputs/CampoData"
 
 export default function FormCertidao({
     numContrato,

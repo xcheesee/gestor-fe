@@ -1,9 +1,9 @@
 import { Box, CircularProgress, MenuItem, TextField } from "@mui/material";
 import { useQuery } from "@tanstack/react-query";
-import { throwableGetData } from "../../commom/utils/api";
+import { throwableGetData } from "../../../commom/utils/api";
 import { useState } from "react";
-import LoadingInput from "../LoadingInput/loadingInput";
-import { contratoLabels } from "../../commom/utils/constants";
+import LoadingInput from "../../LoadingInput/loadingInput";
+import { contratoLabels } from "../../../commom/utils/constants";
 
 export default function CampoCatSubcat({
     errors={},
