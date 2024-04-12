@@ -5,16 +5,18 @@ import {
     DialogContent,
     DialogActions,
     Button,
+    Typography,
 } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import CheckIcon from '@mui/icons-material/Check';
 import CircularProgress from '@mui/material/CircularProgress';
 import BoxOutrasInformacoes from '../../../BoxOutrasInformacoes';
-import DialogConfirmacao from '../../../DialogConfirmacao';
 import { editaDadosContrato } from '../../../../commom/utils/api';
 import { useSetAtom } from 'jotai';
 import { snackbarAtom } from '../../../../atomStore';
 import { useErrorSnackbar } from '../../../../commom/utils/hooks';
+import DialogConf from '../../../DialogConf/dialogConf';
+import { useQueryClient } from '@tanstack/react-query';
 
 const FormOutrasInformacoes = (props) => {
     const {
@@ -26,6 +28,7 @@ const FormOutrasInformacoes = (props) => {
         setMudancaContrato
     } = props;
     const setSnackbar = useSetAtom(snackbarAtom)
+    const queryClient = useQueryClient()
 
     const [errors, setErrors] = useState({});
     const [carregandoEnvio, setCarregandoEnvio] = useState(false);
@@ -48,6 +51,7 @@ const FormOutrasInformacoes = (props) => {
                 message: 'Informações adicionais editadas com sucesso!',
             }));
             setOpenOutrasInformacoes(false);
+            queryClient.invalidateQueries(['contratoDados', numContrato])
         } else if (res.status === 422) { 
             setErrors(res.errors)
             //errorSnackbar.Post(e)
@@ -105,13 +109,13 @@ const FormOutrasInformacoes = (props) => {
             </DialogActions>
         </Dialog>
 
-        <DialogConfirmacao 
-            openConfirmacao={openConfirmacao}
-            setOpenConfirmacao={setOpenConfirmacao}
-            acao="editar"
+        <DialogConf 
+            title="Editar informações adicionais"
+            body={<Typography className='px-2'>Deseja Editar as informações adicionais?</Typography>}
             formId="outras_infos_form"
-            //formInterno={infoAdicionaisEditado}
-            texto="informações adicionais"
+            open={openConfirmacao.open}
+            setOpen={setOpenConfirmacao}
+            acao={"Editar"}
         />
         </>
     );

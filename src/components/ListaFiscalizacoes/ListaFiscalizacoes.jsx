@@ -41,12 +41,6 @@ const ListaFiscalizacoes = ({ numContrato }) => {
         queryFn: () => throwableGetData({path: `gestaofiscalizacoes`, contratoId: numContrato}),
         onError: (res) => {
             errorSnackbar.Get(res)
-            //setSnackbar({
-            //    open: true,
-            //    message: <div>Nao foi possivel recuperar fiscalização<br/>Erro: {res.message}</div>,
-            //    severity: 'error',
-            //    color: 'error'
-            //})
             return []
         }
     })

@@ -1,17 +1,11 @@
 import React, { useState } from 'react';
 import { 
     Box,
-    Divider,
-    Paper,
     CircularProgress,
-    Fade
 } from '@mui/material';
-import DialogConfirmacao from '../DialogConfirmacao';
-import BotoesTab from '../BotoesTab';
-import BotaoAdicionar from '../BotaoAdicionar';
 import FormGarantia from './Forms/formGarantia';
 import { formataData, formataValores, TabValues } from '../../commom/utils/utils';
-import { getGarantias, throwableDeleteForm, throwablePostForm, throwablePutForm } from '../../commom/utils/api';
+import { getGarantias, throwablePostForm, throwablePutForm } from '../../commom/utils/api';
 import { garantiaLabels } from '../../commom/utils/constants';
 import { useSetAtom } from 'jotai';
 import { snackbarAtom } from '../../atomStore';
@@ -40,7 +34,7 @@ const ListaGarantias = ({ numContrato }) => {
     const errorSnackbar = useErrorSnackbar()
 
     const [carregando, setCarregando] = useState(false);
-    const [errors, setErrors] = useState({});
+    //const [errors, setErrors] = useState({});
 
     const garantias = useQuery({
         queryFn: async () => await getGarantias({numContrato}),

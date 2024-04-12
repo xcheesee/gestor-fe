@@ -34,9 +34,8 @@ export function CardEmpresa({empresa, centered=false, displayOnly=false, onClick
                     </ButtonBase>
                 }
                 
-                {displayOnly 
-                    ?""
-                    :<IconButton className="z-50" onClick={handleDelClick}>
+                {!displayOnly 
+                    &&<IconButton className="z-50" onClick={handleDelClick}>
                         <DeleteIcon />
                     </IconButton>
                 }
@@ -52,8 +51,7 @@ const  CampoEmpresa = React.forwardRef((props, ref) => {
     const empresaDados = useQuery({
         queryKey: ['empresas'],
         queryFn: () => getFormData("empresas"),
-        onSuccess: (res) => {
-        }
+        onSuccess: (res) => { },
     })
     const openAnchor = Boolean(anchorEl)
     function handleBtnClick (e) {

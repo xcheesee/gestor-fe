@@ -8,7 +8,7 @@ import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import DeleteIcon from '@mui/icons-material/Delete';
 import "./style.css"
 
-export function CardDotacao({dotacao, centered=false, displayOnly=false, onClick=() => {}, handleDelClick=() => {}}) {
+function CardDotacao({dotacao, centered=false, displayOnly=false, onClick=() => {}, handleDelClick=() => {}}) {
     const toCenter = centered ? "text-center" : ""
     function CardBody() {
         return(

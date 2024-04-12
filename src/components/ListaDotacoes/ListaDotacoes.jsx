@@ -17,8 +17,7 @@ import BotoesTab from '../BotoesTab';
 import BotaoAdicionar from '../BotaoAdicionar';
 import FormDotacoes from './FormDotacoes';
 import FormRecursos from './FormRecursos';
-import DialogConfirmacao from '../DialogConfirmacao';
-import { getFormData, throwableGetData, throwablePostForm, throwablePutForm } from '../../commom/utils/api';
+import { getFormData, throwablePostForm, throwablePutForm } from '../../commom/utils/api';
 import CloseIcon from '@mui/icons-material/Close';
 import CheckIcon from '@mui/icons-material/Check';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
@@ -27,8 +26,9 @@ import { dotacoesLabels } from '../../commom/utils/constants';
 import { useSetAtom } from 'jotai';
 import { snackbarAtom } from '../../atomStore';
 import { useErrorSnackbar } from '../../commom/utils/hooks';
-import DialogConf from '../DialogConf';
+//import DialogConf from '../DialogConf';
 import DialogDelete from '../DialogDelete';
+import DialogConf from '../DialogConf';
 
 const retornaNumDotacao = (numero_dotacao, descricao) => {
     return (
@@ -73,7 +73,8 @@ const ListaDotacoes = ({ numContrato }) => {
     const [openConfirmacao, setOpenConfirmacao] = useState({
         open: false,
         id: '',
-        elemento: 'dotacao'
+        elemento: 'Dotação',
+        acao: ""
     });
     const [formDotacao, setFormDotacao] = useState({
         dotacao_tipo_id: '',
@@ -310,7 +311,7 @@ const ListaDotacoes = ({ numContrato }) => {
                                 Dotação # {dotacao.id}
                             </Divider>
 
-                            <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+                            <Box sx={{ display: 'flex', justifyContent: 'space-between', gap: '32px' }}>
                                 <Box sx={{ width: '50%' }}>
                                     <TabDotacoes
                                         numero_dotacao={dotacao.numero_dotacao}
@@ -437,7 +438,8 @@ const ListaDotacoes = ({ numContrato }) => {
                                 setOpenConfirmacao({
                                     open: true,
                                     id: formDotacao.id,
-                                    elemento: 'dotacao'
+                                    elemento: 'Dotação',
+                                    acao: "Editar"
                                 });
                             }
                         }}
@@ -492,7 +494,8 @@ const ListaDotacoes = ({ numContrato }) => {
                                 setOpenConfirmacao({
                                     open: true,
                                     id: formRecurso.id,
-                                    elemento: 'recurso'
+                                    elemento: 'Fonte de Recurso',
+                                    acao: "Editar"
                                 })
                             }
                         }}
@@ -528,17 +531,13 @@ const ListaDotacoes = ({ numContrato }) => {
                 deletePath={openDelete.path}
             />
 
-            <DialogConfirmacao 
-                openConfirmacao={openConfirmacao}
-                setOpenConfirmacao={setOpenConfirmacao}
-                acao={acao}
+            <DialogConf 
+                title={`${openConfirmacao.acao} ${openConfirmacao.elemento}`}
+                body={<Typography>Deseja {openConfirmacao.acao} a {openConfirmacao.elemento}</Typography>}
                 formId={dotacaoFormId}
-                carregando={carregando}
-                texto={
-                    openConfirmacao.elemento === 'dotacao'
-                    ? "dotação"
-                    : "fonte de recurso"
-                }
+                open={openConfirmacao.open}
+                setOpen={setOpenConfirmacao}
+                acao={openConfirmacao.acao}
             />
         </Box>
     );

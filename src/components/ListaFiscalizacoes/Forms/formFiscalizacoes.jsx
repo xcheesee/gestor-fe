@@ -1,6 +1,6 @@
-import { Box, Dialog, DialogTitle, DialogContent, DialogActions, Typography, Button } from "@mui/material"
+import { Box, Dialog, DialogTitle, DialogContent, DialogActions, Typography, Button, TextField } from "@mui/material"
 import { useRef, useState } from "react"
-import CampoTexto from "../../CampoTexto"
+//import CampoTexto from "../../CampoTexto"
 import { fiscLabels } from "../../../commom/utils/constants"
 
 export default function FormFiscalizacoes({
@@ -63,6 +63,7 @@ export default function FormFiscalizacoes({
             <Box
                 component="form"
                 id={formId}
+                className="py-2"
                 onSubmit={(e) => {
                     e.preventDefault()
                     const formData = new FormData(e.target)
@@ -77,10 +78,12 @@ export default function FormFiscalizacoes({
                             onError: (res) => setErrors(res.errors)
                         })
                 }}>
-                <CampoTexto
-                    defaultValue={dados.nome_gestor}
+
+                <TextField
+                    defaultValue={dados?.nome_gestor ?? ""}
                     name="nome_gestor"
-                    changeFn={(e) => {
+                    onChange={(e) => {
+                        gestorRef.current = e.target.value
                         firstWarningRef.current.fiscal = false
                         firstWarningRef.current.suplente = false
                     }}
@@ -92,26 +95,29 @@ export default function FormFiscalizacoes({
                             labelsRef.current = names.labels
                         }
                     }}
-                    labels={fiscLabels}
+                    label={fiscLabels.nome_gestor}
                     error={errors?.hasOwnProperty('nome_gestor')}
-                    helperText={errors?.nome_gestor ?? ""}
+                    helperText={errors?.nome_gestor ?? " "}
                     ref={gestorRef}
-                    
+                    fullWidth
                 />
-                <CampoTexto
-                    defaultValue={dados.email_gestor}
+
+                <TextField
+                    defaultValue={dados?.email_gestor ?? ""}
                     name="email_gestor"
-                    labels={fiscLabels}
+                    label={fiscLabels.email_gestor}
                     error={errors?.hasOwnProperty('email_gestor')}
-                    helperText={errors?.email_gestor ?? ""}
-                    
+                    helperText={errors?.email_gestor ?? " "}
+                    fullWidth
                 />
-                <CampoTexto
-                    defaultValue={dados.nome_fiscal}
+
+                <TextField
+                    defaultValue={dados?.nome_fiscal ?? ""}
                     name="nome_fiscal"
                     error={errors?.hasOwnProperty('nome_fiscal')}
-                    helperText={errors?.nome_fiscal ?? ""}
-                    changeFn={(e) => {
+                    helperText={errors?.nome_fiscal ?? " "}
+                    onChange={(e) => {
+                        fiscalRef.current = e.target.value
                         firstWarningRef.current.gestor = false
                         firstWarningRef.current.suplente = false
                     }}
@@ -123,25 +129,28 @@ export default function FormFiscalizacoes({
                             labelsRef.current = names.labels
                         }
                     }}
-                    labels={fiscLabels}
+                    label={fiscLabels.nome_fiscal}
                     ref={fiscalRef}
-                    
+                    fullWidth
                 />
-                <CampoTexto
-                    defaultValue={dados.email_fiscal}
+
+                <TextField
+                    defaultValue={dados?.email_fiscal ?? ""}
                     name="email_fiscal"
                     error={errors?.hasOwnProperty('email_fiscal')}
-                    helperText={errors?.email_fiscal ?? ""}
-                    labels={fiscLabels}
-                    
+                    helperText={errors?.email_fiscal ?? " "}
+                    label={fiscLabels.email_fiscal}
+                    fullWidth
                 />
-                <CampoTexto
-                    defaultValue={dados.nome_suplente}
+
+                <TextField
+                    defaultValue={dados?.nome_suplente ?? ""} 
                     name="nome_suplente"
                     error={errors?.hasOwnProperty('nome_suplente')}
-                    helperText={errors?.nome_suplente ?? ""}
-                    labels={fiscLabels}
-                    changeFn={(e) => {
+                    helperText={errors?.nome_suplente ?? " "}
+                    label={fiscLabels.nome_suplente}
+                    onChange={(e) => {
+                        suplenteRef.current = e.target.value
                         firstWarningRef.current.fiscal = false
                         firstWarningRef.current.gestor = false
                     }}
@@ -154,15 +163,16 @@ export default function FormFiscalizacoes({
                         }
                     }}
                     ref={suplenteRef}
-                    
+                    fullWidth 
                 />
-                <CampoTexto
-                    defaultValue={dados.email_suplente}
+
+                <TextField
+                    defaultValue={dados?.email_suplente ?? ""}
                     name="email_suplente"
                     error={errors?.hasOwnProperty('email_suplente')}
-                    helperText={errors?.email_suplente ?? ""}
-                    labels={fiscLabels}
-                    
+                    helperText={errors?.email_suplente ?? " "}
+                    label={fiscLabels.email_suplente}
+                    fullWidth 
                 />
             </Box>
 

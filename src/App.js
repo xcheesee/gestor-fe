@@ -57,7 +57,6 @@ function App() {
             severity={snackbar.severity}
             elevation={6} 
             sx={{ width: '100%' }}
-            //color={snackbar.color}
         >
           {snackbar.message}
         </Alert>

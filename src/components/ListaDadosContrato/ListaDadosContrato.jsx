@@ -53,8 +53,6 @@ const TabContrato = ({ dados }) => {
     const valores = {
         departamento: dados?.departamento,
         processo_sei: mascaraProcessoSei(dados?.processo_sei),
-        //credor: dados?.credor,
-        //cnpj_cpf: formataCpfCnpj(dados?.cnpj_cpf),
         categoria: primeiraLetraMaiuscula(dados?.categoria), 
         subcategoria: primeiraLetraMaiuscula(dados?.subcategoria), 
         objeto: dados?.objeto,

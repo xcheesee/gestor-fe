@@ -28,7 +28,7 @@ export default function DialogConf({
             <DialogActions>
                 <Button 
                     sx={{ textTransform: 'none', color: '#821f1f' }} 
-                    onClick={ () => { setOpen({open: false, acao: ""}) } }
+                    onClick={ () => { setOpen(prev => ({...prev, open: false})) } }
                 >
                     Cancelar
                 </Button>
@@ -36,7 +36,7 @@ export default function DialogConf({
                     sx={{ textTransform: 'none' }}  
                     type='submit'
                     form={formId}
-                    onClick={(e) => { setOpen({open: false, acao: ""}); }}
+                    onClick={() => { setOpen(prev => ({...prev, open: false})); }}
                 >
                     {acao}
                 </Button>

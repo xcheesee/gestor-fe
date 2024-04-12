@@ -7,11 +7,10 @@ import {
 import AddIcon from '@mui/icons-material/Add';
 import FormExecFinanceira from './FormExecFinanceira';
 import FormEditExecFinanceira from './FormEditExecFinanceira';
-import DialogConfirmacao from '../../DialogConfirmacao';
 import ExecucaoFinanceiraCard from './ExecucaoFinanceiraCard';
 import { getExecucoesFinanceiras } from '../../../commom/utils/api';
 import { useQuery } from '@tanstack/react-query';
-import DialogDelete from '../../DialogDelete';
+import DialogConf from '../../DialogConf/dialogConf';
 
 const ExecucaoFinanceira = ({ numContrato }) => {
     const [errors, setErrors] = useState({});
@@ -21,7 +20,7 @@ const ExecucaoFinanceira = ({ numContrato }) => {
     const [acao, setAcao] = useState('adicionarExecFin');
     const [openConfirmacao, setOpenConfirmacao] = useState({
         open: false,
-        id: ''
+        acao: ''
     });
     const [openFormExecFinanceira, setOpenFormExecFinanceira] = useState({
         open: false,
@@ -131,15 +130,13 @@ const ExecucaoFinanceira = ({ numContrato }) => {
                 numContrato={numContrato}
             />
 
-            <DialogConfirmacao 
-                openConfirmacao={openConfirmacao}
-                setOpenConfirmacao={setOpenConfirmacao}
-                acao={acao}
-                fnExcluir={() => {}}
-                fnEditar={() => {}}
-                carregando={carregando}
-                texto="ano de execução financeira"
+            <DialogConf 
+                title={`Enviar Execução Financeira`}
+                body={<Typography>Deseja Enviar a Execução Financeira?</Typography>}
                 formId={formId}
+                open={openConfirmacao.open}
+                setOpen={setOpenConfirmacao}
+                acao={"Enviar"}
             />
         </Box>
     );

@@ -30,7 +30,7 @@ export function mascaraDevolucao(numDevolucao) {
   if (numDevolucao !== null && numDevolucao !== "" && numDevolucao !== undefined) {
     return `${numDevolucao}`.replace(/([\d]{2})([\d]{4})/gm, '$1.$2')
   }
-  return "---"
+  return "- - -"
 }
 
 export const irParaTopo = () => window.scrollTo(0, 0);
@@ -47,7 +47,7 @@ export const primeiraLetraMaiuscula = (string) => {
   if (typeof string === "string") {
       return string[0].toUpperCase() + string.substring(1);
   } else {
-      return "---";
+      return "- - -";
   }
 }
 
@@ -90,13 +90,13 @@ export function brlToFloat(num) {
   return formatted
 }
 
-export function saveLocalStorageInput(numeroContrato, campo, valor) {
-  return localStorage.setItem(`contrato-${numeroContrato}-${campo}`, valor)
-}
-
-export function getLocalStorageInput(numeroContrato, campo) {
-  return localStorage.getItem(`contrato-${numeroContrato}-${campo}`)
-}
+//export function saveLocalStorageInput(numeroContrato, campo, valor) {
+//  return localStorage.setItem(`contrato-${numeroContrato}-${campo}`, valor)
+//}
+//
+//export function getLocalStorageInput(numeroContrato, campo) {
+//  return localStorage.getItem(`contrato-${numeroContrato}-${campo}`)
+//}
 
 export function calculaSaldo(dadosExecucao) {
   if(!dadosExecucao) return []

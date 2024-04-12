@@ -28,11 +28,9 @@ export const useErrorSnackbar = () => {
                     Erro: {e.message}
                     <br/>
                     {e.errors
-                        ?Object.values(e.errors).map( (erro, i) => (<div key={`erro-${i}`}>{erro}</div>))
-                        :<></>
+                        &&Object.values(e.errors).map( (erro, i) => (<div key={`erro-${i}`}>{erro}</div>))
                     }
                 </div>,
-            //color: 'error'
         })
         return
     }
@@ -47,11 +45,9 @@ export const useErrorSnackbar = () => {
                     Erro: {e.message}
                     <br/>
                     {e.errors
-                        ?Object.values(e.errors).map( (erro, i) => (<div key={`erro-${i}`}>{erro}</div>))
-                        :<></>
+                        && Object.values(e.errors).map( (erro, i) => (<div key={`erro-${i}`}>{erro}</div>))
                     }
                 </div>,
-            //color: 'error'
         }))
 
 
@@ -66,11 +62,9 @@ export const useErrorSnackbar = () => {
                     Erro: {e.message}
                     <br/>
                     {e.errors
-                        ?Object.values(e.errors).map( (erro, i) => (<div key={`erro-${i}`}>{erro}</div>))
-                        :<></>
+                        &&Object.values(e.errors).map( (erro, i) => (<div key={`erro-${i}`}>{erro}</div>))
                     }
                 </div>,
-            //color: 'error'
         }))
 
     const Delete = (e) => (setSnackbar({
@@ -83,11 +77,9 @@ export const useErrorSnackbar = () => {
                     Erro: {e.message}
                     <br/>
                     {e.errors
-                        ?Object.values(e.errors).map( (erro, i) => (<div key={`erro-${i}`}>{erro}</div>))
-                        :<></>
+                        &&Object.values(e.errors).map( (erro, i) => (<div key={`erro-${i}`}>{erro}</div>))
                     }
                 </div>,
-            //color: 'error'
         }))
     
     return {Get, Post, Put, Delete}

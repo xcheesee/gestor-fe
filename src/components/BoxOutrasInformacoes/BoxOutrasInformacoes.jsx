@@ -29,10 +29,8 @@ const BoxOutrasInformacoes = (props) => {
             }}
         >
             {
-            acao === 'editar'
-            ?
-                ""
-            :
+            acao !== 'editar'
+            &&
                 <Divider sx={{ mb: '1.25rem' }} textAlign="left"> 
                     <Typography variant="h5" sx={{ fontWeight: 'light' }}>
                         Outras informações
@@ -47,7 +45,7 @@ const BoxOutrasInformacoes = (props) => {
                 className="form__campo"
                 label={label}
                 // inputRef={outras_informacoes}
-                defaultValue={defaultValue ? defaultValue : dados?.outras_informacoes}
+                defaultValue={defaultValue ?? dados?.outras_informacoes}
                 name="outras_informacoes"
                 sx={{ margin: '1rem 0' }}
                 error={errors.hasOwnProperty('outras_informacoes')}

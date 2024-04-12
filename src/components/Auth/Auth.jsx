@@ -18,23 +18,25 @@ const Auth = (props) => {
 
     if (localStorage.getItem('access_token')) {
         return props.children;
-    } else {
-        return (
-            <Dialog open={true} fullWidth>
-                <DialogTitle>
-                    Sessão expirada
-                </DialogTitle>
-                <DialogContent>
-                    <DialogContentText>
-                        Efetue o login para continuar
-                    </DialogContentText>
-                </DialogContent>
-                <DialogActions>
-                    <Button onClick={handleClick}>Ok</Button>
-                </DialogActions>
-            </Dialog>
-        );
-    }
+    } 
+
+    return (
+        <Dialog open={true} fullWidth>
+            <DialogTitle>
+                Sessão expirada
+            </DialogTitle>
+
+            <DialogContent>
+                <DialogContentText>
+                    Efetue o login para continuar
+                </DialogContentText>
+            </DialogContent>
+
+            <DialogActions>
+                <Button onClick={handleClick}>Ok</Button>
+            </DialogActions>
+        </Dialog>
+    );
 }
 
 export default Auth;

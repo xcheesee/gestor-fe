@@ -61,10 +61,11 @@ const FormExecFinanceira = (props) => {
 
     const confirmar = () => {
         if (openFormExecFinanceira.acao === 'adicionar') {
-            setOpenConfirmacao({
+            setOpenConfirmacao(prev => ({
+                ...prev,
                 open: true,
                 //id: formExecFinanceira.id
-            });
+            }));
         }
     }
 

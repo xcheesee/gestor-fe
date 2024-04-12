@@ -6,6 +6,7 @@ import {
     Select,
     MenuItem,
     FormHelperText,
+    TextField,
 } from '@mui/material';
 import { editaDadosContrato } from '../../../commom/utils/api';
 import { useSetAtom } from 'jotai';
@@ -16,7 +17,7 @@ import CampoValores from '../../CampoValores';
 import CampoProcessoSei from '../../CampoProcessoSei';
 import CampoNumContrato from '../../CampoNumContrato';
 import CampoEmpresa from '../../CampoEmpresa';
-import CampoTexto from '../../CampoTexto';
+//import CampoTexto from '../../CampoTexto';
 import CampoCatSubcat from '../../CampoCategoria';
 import { useQueryClient } from '@tanstack/react-query';
 
@@ -139,11 +140,12 @@ const FormDadosContrato = (props) => {
                 errors={errors}
              />
 
-            <CampoTexto
+            <TextField
                 defaultValue={dados?.objeto}
                 name="objeto"
                 errors={errors}
-                labels={contratoLabels}
+                label={contratoLabels.objeto}
+                fullWidth
             />
             {/* TODO: MOSTRAR HELPER TEXT E ERROR BORDER EM NUMERO_CONTRATO */}
             <CampoNumContrato 
@@ -178,12 +180,13 @@ const FormDadosContrato = (props) => {
                 fullWidth
             />
 
-            <CampoTexto
+            <TextField
                 defaultValue={dados?.condicao_pagamento}
                 name="condicao_pagamento"
                 errors={errors}
                 helperText={"Ex: Em até 30 dias após o adimplemento."}
-                labels={contratoLabels}
+                label={contratoLabels.condicao_pagamento}
+                fullWidth
             />
         </Box>
     );
