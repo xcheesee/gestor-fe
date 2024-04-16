@@ -9,9 +9,6 @@ import {
   QueryClient,
   QueryClientProvider,
 } from '@tanstack/react-query'
-import { registerAllModules } from 'handsontable/registry'
-
-registerAllModules();
 
 const theme = createTheme(
   {

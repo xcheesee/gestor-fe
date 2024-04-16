@@ -1,12 +1,10 @@
 import { Box, Fade, IconButton, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from "@mui/material";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import SortArrow from "../SortArrow";
 import { formataData, irParaTopo, mascaraContrato, mascaraProcessoSei } from "../../commom/utils/utils";
 import ManageSearchIcon from '@mui/icons-material/ManageSearch';
 
 const ContratoTable = ({dados, url, ordena, carregandoSort, isLoading}) => {
-    const navigate = useNavigate()
-
     const StyledTableHeadCell = ({ onClick, children}) => (
         <TableCell 
             sx={{ 

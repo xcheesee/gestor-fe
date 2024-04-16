@@ -5,11 +5,11 @@ import CampoAno from "../../Inputs/CampoAno"
 import CampoValores from "../../Inputs/CampoValores"
 import { useState } from "react"
                 
-const tipos_empenho = {
-    cancelamento: "Cancelamento",
-    complemento: "Complemento",
-    novo_empenho: "Novo Empenho"
-}
+//const tipos_empenho = {
+//    cancelamento: "Cancelamento",
+//    complemento: "Complemento",
+//    novo_empenho: "Novo Empenho"
+//}
 
 export default function FormNotaEmpenho({
     numContrato,

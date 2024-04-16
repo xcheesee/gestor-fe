@@ -1,5 +1,4 @@
 import './App.css';
-import 'handsontable/dist/handsontable.full.min.css';
 import Header from './components/Header';
 import Login from './pages/Login';
 import Principal from './pages/Principal';

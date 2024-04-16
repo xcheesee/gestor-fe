@@ -25,7 +25,6 @@ const CampoValores = (props) => {
     helperText="", 
     error=false, 
     fullWidth=true,
-    ...other
   } = props;  
 
   if(value === null) {

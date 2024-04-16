@@ -224,23 +224,6 @@ const FormEditExecFinanceira = ({
                     </Typography>
                 </Box>
 
-                {/*<Box 
-                    sx={{  alignItems: 'center'}}
-                    className='pt-8 px-8'
-                >
-                    {dadosExecucao.isLoading
-                        ?<Box className="w-full h-52 flex justify-center items-center">
-                            <CircularProgress size={32} sx={{ color: 'gray' }} />
-                        </Box>
-                        :<TabelaExecFin 
-                            id="hotExec" 
-                            execucao={execucao}
-                            tabelaRef={tabelaRef}
-                            setTabelaRef={setTabelaRef}
-                            dadosExecucao={dadosExecucao?.data}
-                        />
-                    }
-                </Box>*/}
                 {
                     dadosExecucao.isLoading 
                         ?<Box className="w-full h-full grid place-content-center pt-16">

@@ -1,18 +1,18 @@
 import { useSetAtom } from "jotai"
-import { useCallback, useEffect, useRef } from "react"
+import { useEffect, useRef } from "react"
 import { snackbarAtom } from "../../atomStore"
 
-export const useExcelTableRef = ({dadosIniciais, setTabelaRef}) => {
-
-    const ref = useCallback( (node) => {
-        if (node !== null) {
-            setTabelaRef(node.hotInstance)
-            node.hotInstance.loadData(dadosIniciais)
-        }
-    },[])
-
-    return ref
-}
+//export const useExcelTableRef = ({dadosIniciais, setTabelaRef}) => {
+//
+//    const ref = useCallback( (node) => {
+//        if (node !== null) {
+//            setTabelaRef(node.hotInstance)
+//            node.hotInstance.loadData(dadosIniciais)
+//        }
+//    },[])
+//
+//    return ref
+//}
 
 export const useErrorSnackbar = () => {
     const setSnackbar = useSetAtom(snackbarAtom)

@@ -1,7 +1,7 @@
 import { Box, MenuItem, TextField } from "@mui/material"
 import SubprefeituraInput from "../SubprefeituraInput";
 import DistritoInput from "../DistritoInput";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 export default function FormRegionalizacao({
     numContrato,
