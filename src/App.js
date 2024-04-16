@@ -4,7 +4,7 @@ import Header from './components/Header';
 import Login from './pages/Login';
 import Principal from './pages/Principal';
 import DadosContrato from './components/DadosContrato';
-import PaginaNaoEncontrada from './components/PaginaNaoEncontrada';
+import PaginaNaoEncontrada from './pages/PaginaNaoEncontrada';
 import Auth from './components/Auth';
 import Footer from './components/Footer';
 import { Routes, Route } from 'react-router-dom';
