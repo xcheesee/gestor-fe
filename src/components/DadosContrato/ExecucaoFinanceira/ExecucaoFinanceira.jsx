@@ -17,7 +17,6 @@ const ExecucaoFinanceira = ({ numContrato }) => {
     const [carregando, setCarregando] = useState(false);
     const [openEditExecFinanceira, setOpenEditExecFinanceira] = useState(false);
     const [currExecucao, setCurrExecucao] = useState({})
-    //const [acao, setAcao] = useState('adicionarExecFin');
     const [openConfirmacao, setOpenConfirmacao] = useState({
         open: false,
         acao: ''
@@ -39,7 +38,6 @@ const ExecucaoFinanceira = ({ numContrato }) => {
             open: true,
             acao: 'adicionar'
         });
-        //setAcao('adicionarExecFin');
     }
 
     async function handleClickEditarAno (execucao) {
